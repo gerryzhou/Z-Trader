@@ -253,20 +253,53 @@ namespace NinjaTrader.Strategy
 			return words[0];
 		}
 		
-		public void FileTest(int barNo) {
-		 if(barNo > 0) return;
-         FileStream F = new FileStream("C:\\Users\\GZhou\\Documents\\NinjaTrader 7\\bin\\Custom\\Cmd\\" + barNo.ToString() + ".dat", FileMode.OpenOrCreate, 
-            FileAccess.ReadWrite);
-         
-         for (int i = 1; i <= 20; i++) {
-            F.WriteByte((byte)i);
-         }
-         F.Position = 0;
-         for (int i = 0; i <= 20; i++) {
-            Print(F.ReadByte() + " ");
-         }
-         F.Close();
+		public void FileTest(long barNo) {
+			Print("FileTest: barNo=" + barNo);
+		 //if(barNo > 0) return;
+			FileStream F = new FileStream("C:\\inetpub\\wwwroot\\nt_files\\log\\" + barNo.ToString() + ".dat", FileMode.OpenOrCreate, 
+            	FileAccess.ReadWrite);
+			
+			for (int i = 1; i <= 20; i++) {
+				F.WriteByte((byte)i);
+			}
+			F.Position = 0;
+			for (int i = 0; i <= 20; i++) {
+				Print(F.ReadByte() + " ");
+			}
+			F.Close();
          //Console.ReadKey();
-      }
+		}
+		
+		public string GetFileNameByDateTime(DateTime dt, string path, string ext) {
+			Print("GetFileNameByDateTime: " + dt.ToString());
+			//path = "C:\\inetpub\\wwwroot\\nt_files\\log\\";
+			//ext = "log";
+			long flong = DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day + 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year;
+			string fname = path + flong.ToString() + "." + ext;
+			Print(", FileName=" + fname);
+			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);
+
+		 	//if(barNo > 0) return;
+//			FileStream F = new FileStream(fname, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+			
+			using (System.IO.StreamWriter file = 
+				new System.IO.StreamWriter(@fname, true))
+			{
+				for (int i = 0; i <= 20; i++) {
+					file.WriteLine("Line " + i + ":" + i);
+				}
+			}
+			return fname;
+		}
+		
+		public void PrintLog(bool pntcon, string fpath, string text) {
+			Print("PrintLog: " + fpath);
+			if(pntcon) Print(text);
+			using (System.IO.StreamWriter file = 
+				new System.IO.StreamWriter(@fpath, true))
+			{
+				file.WriteLine(text);
+			}
+		}
     }
 }
