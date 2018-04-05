@@ -1,11 +1,13 @@
 #region Using declarations
 using System;
+using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
 using NinjaTrader.Indicator;
@@ -132,7 +134,18 @@ namespace NinjaTrader.Strategy
 			// Triggers the exit on close function 30 seconds prior to session end
 			ExitOnClose = true;
 			ExitOnCloseSeconds = 30;
-			log_file = GetFileNameByDateTime(DateTime.Now, "C:\\inetpub\\wwwroot\\nt_files\\log\\", "log");
+			
+//			FileInfo[] cmdFiles = GetCmdFile(@"C:\inetpub\wwwroot\nt_files\cmd\");
+//			Dictionary<string,string> dictParam = ReadParaFile(cmdFiles[0]);
+//			MoveCmdFiles(cmdFiles, @"C:\inetpub\wwwroot\nt_files\cmd_bak\");
+//			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", "log");
+//			foreach(string pa in dictParam.Keys) {
+//				string val;
+//				dictParam.TryGetValue(pa, out val);
+//				Print("key,val=" + pa + "," + val);
+//			}
+			
+			
 			//PrintLog(true, log_file,
 			//Print("FileName=" + DateTime.Now.Minute + "," + 100*DateTime.Now.Hour + "," + 10000*DateTime.Now.Day + "," + 1000000*DateTime.Now.Month + "," + DateTime.Now.Year);
 			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);

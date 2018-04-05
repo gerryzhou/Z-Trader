@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Net.Mail;
+using System.Collections.Generic;
+using System.Linq;
+
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
 using NinjaTrader.Indicator;
@@ -292,6 +295,72 @@ namespace NinjaTrader.Strategy
 			return fname;
 		}
 		
+		public FileInfo[] GetCmdFile(string srcDir) {
+			Print("GetCmdFile src: " + srcDir);
+		    DirectoryInfo DirInfo = new DirectoryInfo(srcDir);
+
+//            var filesInOrder = from f in DirInfo.EnumerateFiles()
+//                               orderbydescending f.CreationTime
+//                               select f;
+			
+//			var filesInOrder = DirInfo.GetFiles("*.*",SearchOption.AllDirectories).OrderBy(f => f.LastWriteTime)
+//								.ToList();
+			//DirectoryInfo dir = new DirectoryInfo (folderpath);
+
+			FileInfo[] filesInOrder = DirInfo.GetFiles().OrderByDescending(p => p.CreationTime).ToArray();
+			
+            foreach (FileInfo item in filesInOrder)
+            {
+                Print("cmdFile=" + item.FullName);
+            }
+			
+			return filesInOrder;
+		}
+		
+		public void MoveCmdFiles(FileInfo[] src, string dest) {
+			Print("MoveCmdFile src,dest: " + src.Length + "," + dest);
+			foreach (FileInfo item in src)
+            {
+				string destFile = dest+item.Name;
+				if (File.Exists(destFile))
+				{
+					File.Delete(destFile);
+				}
+				item.MoveTo(destFile);
+				//File.Move(src, dest);
+			}
+		}
+		
+		public Dictionary<string,string> ReadParaFile(FileInfo src) {
+			Dictionary<string,string> paraMap = new Dictionary<string,string>();
+			
+			Print("ReadParaFile src: " + src);
+			if (!src.Exists)
+			{
+				return paraMap;
+			}
+	
+			int counter = 0;  
+			string line;
+
+			// Read the file and display it line by line.  
+			System.IO.StreamReader file =   
+				new System.IO.StreamReader(src.FullName);//@"c:\test.txt");
+			while((line = file.ReadLine()) != null)  
+			{
+				string[] pa = line.Split(':');
+				paraMap.Add(pa[0], pa[1]);
+				Print(line);  
+				counter++;
+			}
+
+			file.Close();
+			Print("There were {0} lines." + counter);
+			// Suspend the screen.
+			//System.Console.ReadLine();
+			return paraMap;
+		}
+		
 		public void PrintLog(bool pntcon, string fpath, string text) {
 			Print("PrintLog: " + fpath);
 			if(pntcon) Print(text);
@@ -300,6 +369,7 @@ namespace NinjaTrader.Strategy
 			{
 				file.WriteLine(text);
 			}
-		}
+		}	
+
     }
 }
