@@ -20,7 +20,7 @@ namespace NinjaTrader.Strategy
 	/// Two questions: 
 	/// 1) the volality of the current market
 	/// 2) counter swing/trend or follow swing/trend? (Trending, Reversal or Range)
-    /// </summary>
+	/// </summary>
     [Description("Enter the description of your strategy here")]
     public class GSZigZag : GSZigZagBase
     {

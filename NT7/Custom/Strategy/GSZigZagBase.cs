@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Reflection;
 
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
@@ -54,7 +55,7 @@ namespace NinjaTrader.Strategy
         protected double enSwingMaxPnts = 16; //16 Default setting for EnSwingMaxPnts
 		protected double enPullbackMinPnts = 5; //6 Default setting for EnPullbackMinPnts
         protected double enPullbackMaxPnts = 9; //10 Default setting for EnPullbackMaxPnts
-		protected double enOffsetPnts = 2;//Price offset for entry
+		protected double enOffsetPnts = 0.5;//Price offset for entry
 		protected double enOffset2Pnts = 0.5;//Price offset for entry
 		protected int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
 		protected double enResistPrc = 2700; // Resistance price for entry order
@@ -107,7 +108,7 @@ namespace NinjaTrader.Strategy
         /// This method is used to configure the strategy and is called once before any strategy method is called.
         /// </summary>
         protected override void Initialize()
-        {
+        {			
 			Add(GIZigZag(NinjaTrader.Data.DeviationType.Points, retracePnts, false, false, false, true));
 			AccName = GetTsTAccName(Account.Name);
 //            SetProfitTarget("EnST1", CalculationMode.Ticks, ProfitTargetAmt);
@@ -135,27 +136,50 @@ namespace NinjaTrader.Strategy
 			ExitOnClose = true;
 			ExitOnCloseSeconds = 30;
 			
-//			FileInfo[] cmdFiles = GetCmdFile(@"C:\inetpub\wwwroot\nt_files\cmd\");
-//			Dictionary<string,string> dictParam = ReadParaFile(cmdFiles[0]);
-//			MoveCmdFiles(cmdFiles, @"C:\inetpub\wwwroot\nt_files\cmd_bak\");
-//			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", "log");
-//			foreach(string pa in dictParam.Keys) {
-//				string val;
-//				dictParam.TryGetValue(pa, out val);
-//				Print("key,val=" + pa + "," + val);
-//			}
-			
-			
+		
+			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
 			//PrintLog(true, log_file,
 			//Print("FileName=" + DateTime.Now.Minute + "," + 100*DateTime.Now.Hour + "," + 10000*DateTime.Now.Day + "," + 1000000*DateTime.Now.Month + "," + DateTime.Now.Year);
 			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);
         }
 		
+		protected void LoadCmdFile()
+		{
+			FileInfo[] cmdFiles = GetCmdFile(@"C:\inetpub\wwwroot\nt_files\cmd\" + AccName + Path.DirectorySeparatorChar);
+			if (cmdFiles.Length > 0) {
+				Dictionary<string,string> dictParam = ReadParaFile(cmdFiles[0]);
+				MoveCmdFiles(cmdFiles, @"C:\inetpub\wwwroot\nt_files\cmd_bak\" + AccName + Path.DirectorySeparatorChar);
+				Type t = typeof(GSZigZagBase);
+				foreach(string pa in dictParam.Keys) {
+					string val;
+					dictParam.TryGetValue(pa, out val);
+
+					PropertyInfo pi = t.GetProperty(pa);
+					Print("key,val, type=" + pa + "," + val + "," + pi.PropertyType.Name);
+					if(pi.PropertyType == typeof(System.Int32)) {						
+						Print("Int32 detected");
+						int ival = System.Int32.Parse(val);
+						pi.SetValue(this, ival, null);
+					}
+					if(pi.PropertyType == typeof(System.Double)) {
+						Print("Double detected");
+						double dval = System.Double.Parse(val);
+						pi.SetValue(this, dval, null);
+						Print("ProfitTargetAmt=" + ProfitTargetAmt + ", dval=" + dval);
+					}
+					if(pi.PropertyType == typeof(System.Boolean)) {
+						Print("Boolean detected");
+						bool bval = System.Boolean.Parse(val);
+						pi.SetValue(this, bval, null);
+					}
+				}
+			}			
+		}
 		/// <summary>
 		/// Print zig zag size.
 		/// </summary>
 		public void PrintZZSize()
-		{
+		{ 
 			String str_Plus = " ++ ";
 			String str_Minus = " -- ";
 			String str_Minutes = "m";
@@ -391,6 +415,12 @@ namespace NinjaTrader.Strategy
         protected override void OnBarUpdate()
         {
 			//FileTest(CurrentBar);
+			LoadCmdFile();
+			PrintLog(true, log_file, "TimeStart=" + TimeStart + "," + 
+				"TimeEnd=" + TimeEnd + "," + 
+				"ProfitTargetAmt=" + ProfitTargetAmt + "," + 
+				"StopLossAmt=" + StopLossAmt + "," + 
+				"EnTrailing=" + EnTrailing );
 			
 			if(!Historical) PrintLog(true, log_file, CurrentBar + "- GSZZ1 OnBarUpdate - " + Time[0].ToShortTimeString());
 			if(CurrentBar < BarsRequired+2) return;
@@ -513,7 +543,7 @@ namespace NinjaTrader.Strategy
 
 		protected void NewShortLimitOrder(string msg)
 		{
-			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]+EnOffset2Pnts : High[0]+EnOffsetPnts;
+			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]+EnOffsetPnts : High[0]+EnOffsetPnts;
 			//enCounterPBBars
 			if(entryOrder == null) {
 				if(PrintOut > -1)
@@ -531,7 +561,7 @@ namespace NinjaTrader.Strategy
 		
 		protected void NewLongLimitOrder(string msg)
 		{
-			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]-EnOffset2Pnts :  Low[0]-EnOffsetPnts;
+			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]-EnOffsetPnts :  Low[0]-EnOffsetPnts;
 
 			if(entryOrder == null) {
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, zzEntrySignal);

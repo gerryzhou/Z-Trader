@@ -273,12 +273,12 @@ namespace NinjaTrader.Strategy
          //Console.ReadKey();
 		}
 		
-		public string GetFileNameByDateTime(DateTime dt, string path, string ext) {
+		public string GetFileNameByDateTime(DateTime dt, string path, string accName, string ext) {
 			Print("GetFileNameByDateTime: " + dt.ToString());
 			//path = "C:\\inetpub\\wwwroot\\nt_files\\log\\";
 			//ext = "log";
 			long flong = DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day + 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year;
-			string fname = path + flong.ToString() + "." + ext;
+			string fname = path + accName + Path.DirectorySeparatorChar + accName + "_" + flong.ToString() + "." + ext;
 			Print(", FileName=" + fname);
 			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);
 
@@ -307,7 +307,7 @@ namespace NinjaTrader.Strategy
 //								.ToList();
 			//DirectoryInfo dir = new DirectoryInfo (folderpath);
 
-			FileInfo[] filesInOrder = DirInfo.GetFiles().OrderByDescending(p => p.CreationTime).ToArray();
+			FileInfo[] filesInOrder = DirInfo.GetFiles().OrderByDescending(p => p.LastWriteTime).ToArray();
 			
             foreach (FileInfo item in filesInOrder)
             {
@@ -363,7 +363,7 @@ namespace NinjaTrader.Strategy
 		
 		public void PrintLog(bool pntcon, string fpath, string text) {
 			Print("PrintLog: " + fpath);
-			if(pntcon) Print(text);
+			if(pntcon) Print(text); // return;
 			using (System.IO.StreamWriter file = 
 				new System.IO.StreamWriter(@fpath, true))
 			{
