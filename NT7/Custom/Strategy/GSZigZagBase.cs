@@ -56,7 +56,7 @@ namespace NinjaTrader.Strategy
 		protected double enPullbackMinPnts = 5; //6 Default setting for EnPullbackMinPnts
         protected double enPullbackMaxPnts = 9; //10 Default setting for EnPullbackMaxPnts
 		protected double enOffsetPnts = 0.5;//Price offset for entry
-		protected double enOffset2Pnts = 0.5;//Price offset for entry
+		//protected double enOffset2Pnts = 0.5;//Price offset for entry
 		protected int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
 		protected double enResistPrc = 2700; // Resistance price for entry order
 		protected double enSupportPrc = 2600; // Support price for entry order
@@ -986,13 +986,13 @@ namespace NinjaTrader.Strategy
             set { enOffsetPnts = Math.Max(0, value); }
         }
 		
-        [Description("Offeset points for limit price entry, pullback entry")]
-        [GridCategory("Parameters")]
-        public double EnOffset2Pnts
-        {
-            get { return enOffset2Pnts; }
-            set { enOffset2Pnts = Math.Max(0, value); }
-        }
+//        [Description("Offeset points for limit price entry, pullback entry")]
+//        [GridCategory("Parameters")]
+//        public double EnOffset2Pnts
+//        {
+//            get { return enOffset2Pnts; }
+//            set { enOffset2Pnts = Math.Max(0, value); }
+//        }
 		
 		[Description("Use trailing entry every bar")]
         [GridCategory("Parameters")]
