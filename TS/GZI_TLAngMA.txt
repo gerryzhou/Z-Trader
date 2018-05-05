@@ -1,0 +1,89 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}. There is no need to erase these instructions  
+  when using EasyLanguage in order for it to function properly, because this text will 
+  be ignored.} 
+
+{ STEP 1: Replace <FORMULA1> through <FORMULA4> with the formulas you wish to plot.  
+  Note that Value1 through Value4 are numeric variables, temporary holding places for 
+  the results of your numeric formulas.  To assign non-generic names to your plots, you 
+  may replace "Plot1" through "Plot4"  (leaving the quotes) with names you choose.  The 
+  specified names will appear in the chart analysis data window. }
+inputs: 
+	DefaultPrice1(Close of Data(1)),
+	DefaultPrice2(Close of Data(1)),
+	{NormRatio(2),}
+	FastLength(4),
+	MidLength(14),
+	SlowLength(30),
+	TLLength(4), 
+	ColorTLAngMaFa(Red), 
+	ColorTLAngMaMd(Cyan), 
+	ColorTLAngMaSl(Yellow), 
+	ColorMaTLAngSl(Magenta), 
+	ColorBase(Darkgray), 	
+	Displace( 0 ) ;
+
+variables:
+	Price1(DefaultPrice1),
+	Price2(DefaultPrice2),
+	FastAvgTLAngMa(0),
+	MidAvgTLAngMa(0),
+	SlowAvgTLAngMa(0),
+	
+	FastAvgMaTLAng(0),
+	MidAvgMaTLAng(0),
+	SlowAvgMaTLAng(0),
+	double NormRatio(-1),
+	int DataNum(1) ;
+
+{Value1 = LinearRegAngleFC( NormRatio*Price, TLLength ) ;}
+
+once (Currentbar = 1) Begin NormRatio = GZF_GetSymbolPropDouble(symbol, "NORMRATIO") ; End ;
+if LastBarOnChart then once print(symbol, ", NormRatio=", NormRatio);
+	
+{switch(FastAvgTLAngMa[1])
+	Begin 
+		Case > 0 :
+			Price = High ; Break ;
+		Case < 0 :
+			Price = Low ; Break ;
+		Default : 
+			Price = Close ;
+	End ;}
+DataNum = 1 ;
+Price1 = Close of Data(DataNum) ;
+DataNum = 2 ;
+if Barstatus(DataNum) <> -1 then
+	Price2 = Close of Data(DataNum) ;
+FastAvgTLAngMa = GZF_TLAngMA(Price1, NormRatio, FastLength, TLLength); {AverageFC( Value1, FastLength ) ;}
+MidAvgTLAngMa = GZF_TLAngMA(Price2, NormRatio, FastLength, TLLength); 
+SlowAvgTLAngMa = GZF_TLAngMA(Price1, NormRatio, SlowLength, TLLength); {AverageFC( Value1, SlowLength ) ;}
+
+MidAvgMaTLAng = GZF_MATLAng(Price1, NormRatio, MidLength, TLLength);
+SlowAvgMaTLAng = GZF_MATLAng(Price1, NormRatio, SlowLength, TLLength);
+
+Plot1( 90, "TLAngMAUp" ) ;
+Plot2( 0, "TLAngMAFlat" ) ;
+Plot3( -90, "TLAngMADn" ) ;
+SetPlotColor( 1, ColorBase ) ;
+SetPlotColor( 2, ColorBase ) ;
+SetPlotColor( 3, ColorBase ) ;
+
+Plot4( FastAvgTLAngMa, "TLAngMAFa" ) ;
+SetPlotColor( 4, ColorTLAngMaFa ) ;
+
+Plot5( MidAvgTLAngMa, "TLAngMAMd" ) ;
+SetPlotColor( 5, ColorTLAngMaMd ) ;
+
+Plot6( SlowAvgTLAngMa, "TLAngMASl" ) ;
+SetPlotColor( 6, ColorTLAngMaSl ) ;
+
+Plot7( SlowAvgMaTLAng, "MATLAngSl" ) ;
+SetPlotColor( 7, ColorMaTLAngSl ) ;
+
+{ OPTIONAL STEPS: To specify alert criteria that will sound an audible alert when 
+  triggered, replace FALSE with your criteria.  To specify a brief alert description 
+  that will be included in the alert notification pop-up window, insert your 
+  description between the quotes ( " ).  Note that Condition1 is a logical variable, a 
+  temporary holding place for the true-false result of the criteria. }
+  

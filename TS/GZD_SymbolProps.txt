@@ -1,0 +1,132 @@
+Using elsystem.collections ;
+
+input:
+in_symbol(Stringsimple),
+in_prop(Stringsimple),
+out_str(Stringref),
+out_num(Numericref),
+out_bool(Truefalseref) ;
+
+{consts:
+string Fut_ES("ES"),
+string Fut_ES("GC"),
+string Fut_ES("CL"),
+string Fut_ES("AD") ;}
+
+variables:
+Dictionary fut_dict(Null),
+string in_key(in_symbol+"_"+in_prop) ;
+
+Once If fut_dict = Null then Begin
+	fut_dict = Dictionary.Create() ;
+	
+	fut_dict.add("ES_MARGIN", 4500) ;
+	fut_dict.add("ES_NORMRATIO", 2.0) ;
+	fut_dict.add("ES_TIMESTART", 2000) ;
+	fut_dict.add("ES_TIMEEND", 1500) ;
+	fut_dict.add("ES_LIQATINIT", true) ;
+	
+	fut_dict.add("GC_MARGIN", 9200) ;
+	fut_dict.add("GC_NORMRATIO", 1.6) ;
+	fut_dict.add("GC_TIMESTART", 1900) ;
+	fut_dict.add("GC_TIMEEND", 1600) ;
+	fut_dict.add("GC_LIQATINIT", true) ;
+	
+	fut_dict.add("CL_MARGIN", 5700) ;
+	fut_dict.add("CL_NORMRATIO", 20.0) ;
+	fut_dict.add("CL_TIMESTART", 2030) ;
+	fut_dict.add("CL_TIMEEND", 1430) ;
+	fut_dict.add("CL_LIQATINIT", true) ;
+	
+	fut_dict.add("AD_MARGIN", 2800) ;
+	fut_dict.add("AD_NORMRATIO", 10000.0) ;
+	fut_dict.add("AD_TIMESTART", 2000) ;
+	fut_dict.add("AD_TIMEEND", 1500) ;
+	fut_dict.add("AD_LIQATINIT", true) ;
+	
+	fut_dict.add("DX_MARGIN", 1400) ;
+	fut_dict.add("DX_NORMRATIO", 40.0) ;
+	fut_dict.add("DX_TIMESTART", 2000) ;
+	fut_dict.add("DX_TIMEEND", 1500) ;
+	fut_dict.add("DX_LIQATINIT", true) ;
+	
+	fut_dict.add("SM_MARGIN", 2700) ;
+	fut_dict.add("SM_NORMRATIO", 1.5) ; {3 Min}
+	fut_dict.add("SM_TIMESTART", 1900) ;
+	fut_dict.add("SM_TIMEEND", 1330) ;
+	fut_dict.add("SM_LIQATINIT", true) ;
+	
+	fut_dict.add("C_MARGIN", 2400) ;
+	fut_dict.add("C_NORMRATIO", 1.6) ; {10 Min}
+	fut_dict.add("C_TIMESTART", 1900) ;
+	fut_dict.add("C_TIMEEND", 1330) ;
+	fut_dict.add("C_LIQATINIT", true) ;
+	
+	fut_dict.add("NG_MARGIN", 2800) ;
+	fut_dict.add("NG_NORMRATIO", 100.0) ; {10 Min}
+	fut_dict.add("NG_TIMESTART", 500) ;
+	fut_dict.add("NG_TIMEEND", 1630) ;
+	fut_dict.add("NG_LIQATINIT", true) ;
+	
+	fut_dict.add("OJ_MARGIN", 2000) ;
+	fut_dict.add("OJ_NORMRATIO", 5.0) ;
+	fut_dict.add("OJ_TIMESTART", 830) ;
+	fut_dict.add("OJ_TIMEEND", 1330) ;
+	fut_dict.add("OJ_LIQATINIT", true) ;
+	
+	fut_dict.add("SB_MARGIN", 1600) ;
+	fut_dict.add("SB_NORMRATIO", 20.0) ; {10 Min}
+	fut_dict.add("SB_TIMESTART", 300) ;
+	fut_dict.add("SB_TIMEEND", 1330) ;
+	fut_dict.add("SB_LIQATINIT", true) ;
+	
+	fut_dict.add("CC_MARGIN", 1400) ;
+	fut_dict.add("CC_NORMRATIO", 0.4) ; {3 Min}
+	fut_dict.add("CC_TIMESTART", 430) ;
+	fut_dict.add("CC_TIMEEND", 1330) ;
+	fut_dict.add("CC_LIQATINIT", true) ;
+	
+	fut_dict.add("KC_MARGIN", 4500) ;
+	fut_dict.add("KC_NORMRATIO", 4.0) ; {5 Min}
+	fut_dict.add("KC_TIMESTART", 400) ;
+	fut_dict.add("KC_TIMEEND", 1330) ;
+	fut_dict.add("KC_LIQATINIT", true) ;
+	
+	fut_dict.add("LC_MARGIN", 1700) ;
+	fut_dict.add("LC_NORMRATIO", 10.0) ; {15 Min, NOT suitable for reversal entry}
+	fut_dict.add("LC_TIMESTART", 1900) ;
+	fut_dict.add("LC_TIMEEND", 1600) ;
+	fut_dict.add("LC_LIQATINIT", true) ;
+	
+	fut_dict.add("FC_MARGIN", 2500) ;
+	fut_dict.add("FC_NORMRATIO", 10.0) ; {3 Min}
+	fut_dict.add("FC_TIMESTART", 1015) ;
+	fut_dict.add("FC_TIMEEND", 1330) ;
+	fut_dict.add("FC_LIQATINIT", true) ;
+	
+	fut_dict.add("LH_MARGIN", 1700) ;
+	fut_dict.add("LH_NORMRATIO", 12.0) ; {5 Min}
+	fut_dict.add("LH_TIMESTART", 1900) ;
+	fut_dict.add("LH_TIMEEND", 1600) ;
+	fut_dict.add("LH_LIQATINIT", true) ;
+	
+End ;
+
+in_key = Upperstr(in_key) ;
+
+If fut_dict.Contains(in_key) then
+	switch(upperstr(in_prop)) Begin
+		Case "MARGIN", "TIMESTART", "TIMEEND" : 
+			out_num = fut_dict.Items[in_key] astype int ;
+			Break ;
+		Case "NORMRATIO" : 
+			out_num = fut_dict.Items[in_key] astype double ;
+			Break ;
+		Case "LIQATINIT" : 
+			out_bool = fut_dict.Items[in_key] astype bool ;
+			Break ;
+	End ;
+
+
+GZD_SymbolProps = "NULL" ;
+
