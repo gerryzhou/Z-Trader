@@ -30,16 +30,19 @@ namespace NinjaTrader.Strategy
     {
         #region Variables
 		
+		//command to change mode 0=liquidate; 1=start/resume trading; 2=cancel order; -1=stop trading;
+		protected int algo_mode = 1;		
+			
 		protected double retracePnts = 6; // Default setting for RetracePnts
 		
-		protected double profitTargetAmt = 450; //36 Default(450-650 USD) setting for ProfitTargetAmt
-		protected double profitTgtIncTic = 8; //8 Default tick Amt for ProfitTarget increase Amt
+		protected double profitTargetAmt = 350; //36 Default(450-650 USD) setting for ProfitTargetAmt
+		protected double profitTgtIncTic = 6; //8 Default tick Amt for ProfitTarget increase Amt
 		protected double profitLockMinTic = 16; //24 Default ticks Amt for Min Profit locking
 		protected double profitLockMaxTic = 30; //80 Default ticks Amt for Max Profit locking
         protected double stopLossAmt = 200; //16 Default setting for StopLossAmt
 		protected double stopLossIncTic = 4; //4 Default tick Amt for StopLoss increase Amt
 		protected double breakEvenAmt = 150; //150 the profits amount to trigger setting breakeven order
-		protected double trailingSLAmt = 300; //300 Default setting for trailing Stop Loss Amt
+		protected double trailingSLAmt = 100; //300 Default setting for trailing Stop Loss Amt
 		protected double dailyLossLmt = -200; //-300 the daily loss limit amount
 		
         protected int timeStart = 90100; //93300 Default setting for TimeStart
@@ -444,16 +447,31 @@ namespace NinjaTrader.Strategy
 				DrawGapText(gap, "gap-");
 			}
 			
-			CheckPerformance();
-			ChangeSLPT();
-			CheckEnOrder(gap);
 			if(printOut > -1) {				
 				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":GI gap=" + gap + "," + Position.MarketPosition.ToString() + "=" + Position.Quantity.ToString()+ ", price=" + Position.AvgPrice + ", BarsSinceEx=" + bsx + ", BarsSinceEn=" + bse);
-			}	
-						
-			if(NewOrderAllowed())
-			{
-				PutTrade(gap);
+			}
+			
+			CheckPerformance();
+			
+			switch(algo_mode) {
+				case 0: //liquidate
+					CloseAllPositions();
+					break;
+				case 1: //trading
+					ChangeSLPT();
+					CheckEnOrder(gap);
+								
+					if(NewOrderAllowed())
+					{
+						PutTrade(gap);
+					}
+					break;
+				case 2: //cancel order
+					CancelAllOrders();
+					break;
+				case -1: //stop trading
+					PrintLog(true, log_file, CurrentBar + "- Stop trading cmd:" + Time[0].ToString());
+					break;
 			}
 			
 			if(backTest && printOut > 1 && IsLastBarOnChart() > 0) {
@@ -742,6 +760,26 @@ namespace NinjaTrader.Strategy
             return false;
         }
 		
+		public bool CloseAllPositions() 
+		{
+			PrintLog(true, log_file, "CloseAllPosition called");
+			if(Position.MarketPosition == MarketPosition.Long)
+				ExitLong();
+			if(Position.MarketPosition == MarketPosition.Short)
+				ExitShort();
+			return true;
+		}
+		
+		public bool CancelAllOrders() 
+		{
+			PrintLog(true, log_file, CurrentBar + "- CancelAllOrders called");
+			if(stopLossOrder != null)
+				CancelOrder(stopLossOrder);
+			if(profitTargetOrder != null)
+				CancelOrder(profitTargetOrder);
+			return true;
+		}
+		
 		protected override void OnExecution(IExecution execution)
 		{
 			// Remember to check the underlying IOrder object for null before trying to access its properties
@@ -801,6 +839,14 @@ namespace NinjaTrader.Strategy
 		}
 		
         #region Properties
+		
+		[Description("Algo mode")]
+        [GridCategory("Parameters")]
+        public int AlgoMode
+        {
+            get { return algo_mode; }
+            set { algo_mode = value; }
+        }
 		
 		[Description("ZigZag retrace points")]
         [GridCategory("Parameters")]

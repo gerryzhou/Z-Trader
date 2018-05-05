@@ -182,7 +182,7 @@ namespace NinjaTrader.Strategy
 			int time_now = ToTime(Time[0]);
 			bool isTime= false;
 			if(time_start >= session_start) {
-				if(time_now >= session_start || time_now <= time_end)
+				if(time_now >= time_start || time_now <= time_end)
 					isTime = true;
 			}
 			else if (time_now >= time_start && time_now <= time_end) {

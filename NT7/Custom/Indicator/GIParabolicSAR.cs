@@ -46,7 +46,7 @@ namespace NinjaTrader.Indicator
         /// </summary>
         protected override void Initialize()
         {
-            Add(new Plot(Color.Orange, PlotStyle.Dot, "Parabolic SAR"));
+            Add(new Plot(Color.Orange, PlotStyle.Dot, "GIPb SAR"));
             Overlay					= true;	// Plots the indicator on top of price
         }
 
