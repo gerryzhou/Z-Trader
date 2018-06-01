@@ -171,6 +171,10 @@ namespace NinjaTrader.Strategy
 			return new DateTime(year, month, day, hr, min, sec);
 		}
 		
+		public string Get24HDateTime(DateTime dt) {
+			return dt.ToString("MM/dd/yyyy HH:mm:ss");
+		}
+		
 		/// <summary>
 		/// Check if now is the time allowed to put trade
 		/// </summary>

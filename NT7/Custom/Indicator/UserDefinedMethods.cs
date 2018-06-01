@@ -22,5 +22,18 @@ namespace NinjaTrader.Indicator
 	
     partial class Indicator
     {
+		public int IsLastBarOnChart() {
+			try{
+				if(Input.Count - CurrentBar <= 2) {
+					return Input.Count;
+				} else {
+					return -1;
+				}
+			}
+			catch(Exception ex){
+				Print("IsLastBarOnChart:" + ex.Message);
+				return -1;
+			}
+		}
     }
 }
