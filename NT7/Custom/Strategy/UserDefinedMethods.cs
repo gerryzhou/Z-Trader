@@ -23,7 +23,7 @@ namespace NinjaTrader.Strategy
 	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 	
 	partial class Strategy
-    {
+    {		
 		public int IsLastBarOnChart() {
 			try{
 				if(Input.Count - CurrentBar <= 2) {
@@ -253,7 +253,7 @@ namespace NinjaTrader.Strategy
 			}
 			return tbr_count;
 		}
-		
+				
 		public String GetTsTAccName(String tst_acc) {
 			char[] delimiterChars = {'!'};
 			string[] words = tst_acc.Split(delimiterChars);

@@ -5,11 +5,14 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml.Serialization;
+using System.Collections.Generic;
+using System.Reflection;
+
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
 using NinjaTrader.Indicator;
 using NinjaTrader.Gui.Chart;
-using NinjaTrader.Strategy;
+
 #endregion
 
 // This namespace holds all strategies and is required. Do not change it.
@@ -89,6 +92,12 @@ namespace NinjaTrader.Strategy
         {
 			Add(GIParabolicSAR(0.002, 0.2, 0.002, Color.Cyan));
 			//Add(GIParabolicSAR(0.001, 0.2, 0.001, Color.Orange));
+			EMA(High, 50).Plots[0].Pen.Color = Color.Orange;
+			EMA(Low, 50).Plots[0].Pen.Color = Color.Green;
+
+            Add(EMA(High, 50));
+            Add(EMA(Low, 50));
+			
             SetProfitTarget(300);
             SetStopLoss(150, false);
 
@@ -103,6 +112,7 @@ namespace NinjaTrader.Strategy
 			//	zz = latestZZs[latestZZs.Length-1].Size;
 			return zz;
 		}
+			
         /// <summary>
         /// Called on each bar update event (incoming tick)
         /// </summary>
@@ -150,8 +160,7 @@ namespace NinjaTrader.Strategy
 				case -1: //stop trading
 					PrintLog(true, log_file, CurrentBar + "- Stop trading cmd:" + Get24HDateTime(Time[0]));
 					break;
-			}
-			
+			}			
         }
 		
 		protected void PutTrade(double gap) {
