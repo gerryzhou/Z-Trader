@@ -10,6 +10,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using NinjaTrader.Data;
 using NinjaTrader.Gui.Chart;
 using NinjaTrader.Strategy;
@@ -51,19 +54,11 @@ namespace NinjaTrader.Indicator
 		private const string tagZZLine	= "tagZZLine-" ;// the tag of the line object for the current ZZ line;
         private IText curGapText			= null; // The text for the ZZ ended by last bar of the chart; 
 		private const string tagCurGapText	= "tagCurGapText-"; // the tag of the line object for curGapText;
-		protected int printOut = 1; //0,1,2,3 more print
+		protected int printOut = 3; //0,1,2,3 more print
 		protected bool drawTxt = false; //
 		protected string log_file = ""; //
 		
-		protected ZigZagSwing[]		latestZZs;
-		
-		protected int ZZ_Count_0_6 = 0;
-		protected int ZZ_Count_6_10 = 0;
-		protected int ZZ_Count_10_16 = 0;
-		protected int ZZ_Count_16_22 = 0;
-		protected int ZZ_Count_22_30 = 0;
-		protected int ZZ_Count_30_ = 0;
-		protected int ZZ_Count = 0;
+		protected List<ZigZagSwing>		zzSwings;
 		
 		#endregion
 
@@ -76,15 +71,19 @@ namespace NinjaTrader.Indicator
             Overlay					= true;	// Plots the indicator on top of price
 			reverseBar = new IntSeries(this, MaximumBarsLookBack.Infinite);
 			reverseValue = new DataSeries(this, MaximumBarsLookBack.Infinite);
+			zzSwings = new List<ZigZagSwing>();
 			String AccName = "Sim101";
 			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
         }
 
         /// <summary>
         /// Called on each bar update event (incoming tick)
+		/// BarNO started with 0;
         /// </summary>
         protected override void OnBarUpdate()
         {
+			//Print("BarNo, Time=" + CurrentBar + "," + Time[0].ToShortTimeString());
+			zzSwings.Add(new ZigZagSwing(-1,-1,0,0));
 			if (CurrentBar < 3) 
 				return;
 			
@@ -185,13 +184,16 @@ namespace NinjaTrader.Indicator
 			}
 			
 			prevBar = CurrentBar;
+			
 			if(IsLastBarOnChart() > 0) {
 				if(zigZagLine != null) RemoveDrawObject(zigZagLine);
 				double zzGap;
 				zigZagLine = DrawZigZag(CurrentBar, xp, tagZZLine, out zzGap);
 				if(curGapText != null) RemoveDrawObject(curGapText);
 				curGapText = DrawGapText(zzGap, tagCurGapText);
-			}				
+				PrintZZSwings(zzSwings, log_file, printOut);
+				PrintTwoBarRatio();
+			}
 		}
 
 		protected ILine DrawZigZag(int endBar, double endValue, string tag, out double gap) {
@@ -199,12 +201,13 @@ namespace NinjaTrader.Indicator
 			ILine zzLine = null;
 			int startBar = GetLastReverseBar(endBar);
 			gap = 0;
-			if(startBar > 0 && CurrentBar > 20) {
-				Print("DrawLine " + CurrentBar + ", CurrentBar-startBar, Value[CurrentBar-startBar], 0, reverseValue[0]=" + (CurrentBar-startBar) + "," + Value[CurrentBar-startBar] + "," + 0 + "," + reverseValue[0]);
+			if(startBar > 0 && CurrentBar > BarsRequired) {
+				Print("DrawLine CurrentBar, zzSwings= " + CurrentBar + "," + zzSwings.Count + ", CurrentBar-startBar, Value[CurrentBar-startBar], 0, reverseValue[0]=" + (CurrentBar-startBar) + "," + Value[CurrentBar-startBar] + "," + 0 + "," + reverseValue[0]);
 			//DrawLine("My line" + CurrentBar, CurrentBar-startBar, sarSeries[CurrentBar-startBar], 0, sarSeries[0], Color.Blue);
 				zzLine = DrawLine(tag + CurrentBar, CurrentBar-startBar, reverseValue[CurrentBar-startBar], 0, endValue, Color.Blue);
 				gap = endValue - reverseValue[CurrentBar-startBar] ;
 			}
+			SetZZSwing(zzSwings, endBar, startBar, endBar, gap);
 			return zzLine;
 		}
 		
@@ -248,130 +251,7 @@ namespace NinjaTrader.Indicator
 				//PrintLog(true, log_file, CurrentBar + "::" + this.ToString() + " GaP= " + gap + " - " + Time[0].ToShortTimeString());
 			return gapText; 
 		}
-
-		/// <summary>
-		/// Draw the ZZ size for the latest ZZs
-		/// </summary>
-		/// <param name="zzs"></param>
-		/// <param name="tag"></param>
-		/// <returns></returns>
-		public bool DrawCurZZSizeText(double zzs, string tag)
-		{
-			int idx_hilo = -1; // the last ZZ hi or ZZ lo index;
-			Color up_color = Color.Green;
-			Color dn_color = Color.Red;
-			Color sm_color = Color.Black;
-			Color draw_color = sm_color;
-			
-			double zzSize = -1;//the previous zz size
-			double zzSizeAbs = Math.Abs(zzSize);
-//			IText it = null;
-//			//PrintLog(true, log_file, CurrentBar + " DrawZZSizeText called:" + zzs.Length);			
-//			
-//			for (int idx = zzs.Length-1; idx >= 0; idx--)
-//			{
-//				zzSize = zzs[idx].Size;
-//				PrintLog(true, log_file, CurrentBar + " DrawZZSizeText zzSize:" + zzSize);
-//				
-//				if(zzSize == 0) return false;
-//				
-//				zzSizeAbs = Math.Abs(zzSize);
-//				idx_hilo = zzs[idx].Bar_End;
-//				PrintLog(true, log_file, CurrentBar + " DrawZZSizeText idx_hilo:" + idx_hilo);
-//				draw_color = sm_color;
-//				if(printOut > 3)
-//					PrintLog(true, log_file, CurrentBar + " DrawZZSizeText called");
-//				
-//				if (dictZZText.ContainsKey(idx_hilo)) {
-//					dictZZText.TryGetValue(idx_hilo, out it);
-//					dictZZText.Remove(idx_hilo);
-//					RemoveDrawObject(it);
-//				}
-//
-//				if(zzSize < 0) {					
-//					if(printOut > 3)
-//						PrintLog(true, log_file, idx_hilo + " DrawZZSize2 called");
-//					if(zzSizeAbs >= 10) draw_color = dn_color;
-//					it = DrawText(tag+idx_hilo.ToString(), GetTimeDate(Time[CurrentBar-idx_hilo], 1)+"\r\n#"+idx_hilo.ToString()+"\r\n"+zzSize, CurrentBar-idx_hilo, double.Parse(High[CurrentBar-idx_hilo].ToString())+2.5, draw_color);
-//					dictZZText.Add(idx_hilo,it);
-//					break;
-//				} else if(zzSize > 0) {
-//					if(printOut > 3)
-//						PrintLog(true, log_file, idx_hilo + " DrawZZSize2 called");
-//					if(zzSizeAbs >= 10) draw_color = up_color;
-//					it = DrawText(tag+idx_hilo.ToString(), GetTimeDate(Time[CurrentBar-idx_hilo], 1)+"\r\n#"+idx_hilo.ToString()+"\r\n"+zzSize, CurrentBar-idx_hilo, double.Parse(Low[CurrentBar-idx_hilo].ToString())-2.5, draw_color);
-//					dictZZText.Add(idx_hilo,it);
-//					break;
-//				}
-//				it.Locked = false;
-//			}
-			return true; 
-		}
-		
-		/// <summary>
-		/// Print zig zag size.
-		/// </summary>
-		public void PrintZZSize()
-		{ 
-			String str_Plus = " ++ ";
-			String str_Minus = " -- ";
-			String str_Minutes = "m";
-			//Update();
-			//PrintLog(true, log_file, CurrentBar + " PrintZZSize called from GS");
-			double zzSize = 0;
-			double zzSizeAbs = -1;
-			double zzS = 0;
-			int lastZZIdx = BarsRequired;
-			for (int idx = BarsRequired; idx <= Input.Count; idx++)
-			{
-				//zzS = zigZagSizeSeries.Get(idx);
-				
-				zzSize = -1;//zigZagSizeZigZag.Get(idx);
-				zzSizeAbs = Math.Abs(zzSize);
-				String str_suffix = "";
-				//Print(idx.ToString() + " - ZZSizeSeries=" + zzS);
-				if(zzSize>0) str_suffix = str_Plus;
-				else if(zzSize<0) str_suffix = str_Minus;
-				
-				if(zzSizeAbs > 0 && zzSizeAbs <6){
-					ZZ_Count_0_6 ++;
-				}
-				else if(zzSizeAbs >= 6 && zzSizeAbs <10){
-					ZZ_Count_6_10 ++;
-				}
-				else if(zzSizeAbs >= 10 && zzSizeAbs <16){
-					ZZ_Count_10_16 ++;
-					if(printOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
-				}
-				else if(zzSizeAbs >= 16 && zzSizeAbs <22){
-					ZZ_Count_16_22 ++;
-					if(printOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
-				}
-				else if(zzSizeAbs >= 22 && zzSizeAbs <30){
-					ZZ_Count_22_30 ++;
-					if(printOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
-				}
-				else if(zzSizeAbs >= 30){
-					ZZ_Count_30_ ++;
-					if(printOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=30" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
-				}
-				if(zzSize != 0) {
-					//DrawZZSizeText(idx, "txt-");
-					if(zzSizeAbs < 10)
-						if(printOut > 2)
-							PrintLog(true, log_file, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "]" );
-					lastZZIdx = idx;
-				}
-			}
-			ZZ_Count = ZZ_Count_0_6 + ZZ_Count_6_10 + ZZ_Count_10_16 + ZZ_Count_16_22 + ZZ_Count_22_30 + ZZ_Count_30_ ;
-			if(printOut > 2)
-				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Count \t" + ZZ_Count + "\r\n ZZ_Count_0_6 \t" + ZZ_Count_0_6 + "\r\n ZZ_Count_6_10 \t" + ZZ_Count_6_10 + "\r\n ZZ_Count_10_16 \t" + ZZ_Count_10_16 + "\r\n ZZ_Count_16_22 \t" + ZZ_Count_16_22 + "\r\n ZZ_Count_22_30 \t" + ZZ_Count_22_30 + "\r\n ZZ_Count_30_ \t" + ZZ_Count_30_);
-		}
-		
+	
 		protected double GetCurZZ(){
 			double zz = 0;
 			//if(latestZZs.Length > 0)
@@ -379,13 +259,6 @@ namespace NinjaTrader.Indicator
 			return zz;
 		}
 				
-		protected double GetLastZZ(){
-			double zz = 0;
-			//if(latestZZs.Length > 0)
-			//	zz = latestZZs[latestZZs.Length-1].Size;
-			return zz;
-		}
-
         #region Properties
         /// <summary>
         /// The initial acceleration factor

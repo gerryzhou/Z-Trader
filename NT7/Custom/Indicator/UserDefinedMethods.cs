@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Drawing;
+using System.Collections.Generic;
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
 using NinjaTrader.Gui.Chart;
@@ -16,14 +17,40 @@ namespace NinjaTrader.Indicator
     /// </summary>
 	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 		
-	public struct ZigZagSwing {
+	public class ZigZagSwing {
 		public int Bar_Start;
 		public int Bar_End;
 		public double Size;
+		public double TwoBar_Ratio;
+		public ZigZagSwing(int bar_start, int bar_end, double size, double twobar_ratio) {
+			this.Bar_Start = bar_start;
+			this.Bar_End = bar_end;
+			this.Size = size;
+			this.TwoBar_Ratio = twobar_ratio;
+		}
 	}
 	
     partial class Indicator
     {
+		protected int ZZ_Count_0_6 = 0;
+		protected int ZZ_Count_6_10 = 0;
+		protected int ZZ_Count_10_16 = 0;
+		protected int ZZ_Count_16_22 = 0;
+		protected int ZZ_Count_22_30 = 0;
+		protected int ZZ_Count_30_ = 0;
+		protected int ZZ_Count = 0;
+
+		/// <summary>
+		/// Two Bar ZZ Swing ratio = curSize/prevSize
+		/// </summary>
+		protected List<double> ZZ_Ratio_0_6 = null;
+		protected List<double> ZZ_Ratio_6_10 = null;
+		protected List<double> ZZ_Ratio_10_16 = null;
+		protected List<double> ZZ_Ratio_16_22 = null;
+		protected List<double> ZZ_Ratio_22_30 = null;
+		protected List<double> ZZ_Ratio_30_ = null;
+		protected List<double> ZZ_Ratio = null;
+		
 		public int IsLastBarOnChart() {
 			try{
 				if(Input.Count - CurrentBar <= 2) {
@@ -254,6 +281,203 @@ namespace NinjaTrader.Indicator
 			return tbr_count;
 		}
 
+		/// <summary>
+		/// Get the zigzag swing obj fo the barNo.
+		/// </summary>
+		/// <param name="barNo">barNo</param>
+		/// <param name="zzSwings">the list of zzSwings</param>
+		/// <returns>obj of the zzSwing</returns>
+		public ZigZagSwing GetZZSwing(List<ZigZagSwing> zzSwings, int barNo)
+		{
+			return zzSwings[barNo];			
+		}		
+		
+		/// <summary>
+		/// Set the zigzag swing obj fo the barNo.
+		/// </summary>
+		/// <param name="barNo">current bar to save the zzSwing</param>
+		/// <param name="Bar_Start">start barNo of the zzSwing</param>
+		/// <param name="Bar_End">end barNo of the zzSwing</param>
+		/// <param name="Size">size of the zzSwing</param>
+		public void SetZZSwing(List<ZigZagSwing> zzSwings, int barNo, int bar_Start, int bar_End, double size)
+		{
+//			ZigZagSwing zzSwing = new ZigZagSwing();
+//			 
+//			zzSwing.Bar_Start = bar_Start;
+//			zzSwing.Bar_End = bar_End;
+//			zzSwing.Size = size;
+//			
+//			zzSwings.Insert(barNo, zzSwing);
+			zzSwings[barNo].Bar_Start = bar_Start;
+			zzSwings[barNo].Bar_End = bar_End;
+			zzSwings[barNo].Size = size;
+			ZigZagSwing zzS = GetLastZZSwing(zzSwings, barNo);
+			if(zzS != null && zzS.Size != 0) {
+				zzSwings[barNo].TwoBar_Ratio = Math.Round(Math.Abs(size/zzS.Size), 2);
+				Print("CurBar, pervBar, curSize, prevSize=" + barNo + "," + zzS.Bar_End + "," + size + "," + zzS.Size);
+			}
+			SaveTwoBarRatio(zzSwings[barNo]);
+		}
+
+		protected ZigZagSwing GetLastZZSwing(List<ZigZagSwing> zzSwings, int curBarNo){
+			ZigZagSwing zzS = null;
+			for(int idx=curBarNo-1; idx>BarsRequired; idx--) {
+				if(zzSwings[idx] != null && zzSwings[idx].Size != 0) {
+					//Print("CurBar, idx, curSize, prevSize=" + curBarNo + "," + idx+ "," + zzSwings[curBarNo].Size + "," + zzSwings[idx].Size);
+					zzS = zzSwings[idx];
+					break;
+				}
+			}			
+			return zzS;
+		}
+
+		protected void SaveTwoBarRatio(ZigZagSwing zzS){
+			if( ZZ_Ratio_0_6 == null) 
+				ZZ_Ratio_0_6 = new List<double>();
+			if( ZZ_Ratio_6_10 == null) 
+				ZZ_Ratio_6_10 = new List<double>();
+			if( ZZ_Ratio_10_16 == null) 
+				ZZ_Ratio_10_16 = new List<double>();
+			if( ZZ_Ratio_16_22 == null) 
+				ZZ_Ratio_16_22 = new List<double>();
+			if( ZZ_Ratio_22_30 == null) 
+				ZZ_Ratio_22_30 = new List<double>();
+			if( ZZ_Ratio_30_ == null) 
+				ZZ_Ratio_30_ = new List<double>();
+			if( ZZ_Ratio == null) 
+				ZZ_Ratio = new List<double>();
+
+			double zzSizeAbs = Math.Abs(zzS.Size);
+			if(zzSizeAbs > 0 && zzSizeAbs <6){
+				ZZ_Ratio_0_6.Add(zzS.TwoBar_Ratio);
+			}
+			else if(zzSizeAbs >= 6 && zzSizeAbs <10){
+				ZZ_Ratio_6_10.Add(zzS.TwoBar_Ratio);
+			}
+			else if(zzSizeAbs >= 10 && zzSizeAbs <16){
+				ZZ_Ratio_10_16.Add(zzS.TwoBar_Ratio);
+			}
+			else if(zzSizeAbs >= 16 && zzSizeAbs <22){
+				ZZ_Ratio_16_22.Add(zzS.TwoBar_Ratio);
+			}
+			else if(zzSizeAbs >= 22 && zzSizeAbs <30){
+				ZZ_Ratio_22_30.Add(zzS.TwoBar_Ratio);
+			}
+			else if(zzSizeAbs >= 30){
+				ZZ_Ratio_30_.Add(zzS.TwoBar_Ratio);
+			}
+			if(zzS.Size != 0) {
+				ZZ_Ratio.Add(zzS.TwoBar_Ratio);
+			}
+		}
+		
+		/// <summary>
+		/// Print zig zag swing.
+		/// </summary>
+		public void PrintZZSwings(List<ZigZagSwing> zzSwings, string log_file, int printOut)
+		{ 
+			String str_Plus = " ++ ";
+			String str_Minus = " -- ";
+			String str_Minutes = "m";
+			//Update();
+			//PrintLog(true, log_file, CurrentBar + " PrintZZSize called from GS");
+			double zzSize = 0;
+			double zzSizeAbs = -1;
+			int barStart, barEnd;
+			for(int idx = BarsRequired; idx < zzSwings.Count; idx++) {
+				zzSize = zzSwings[idx].Size;
+				barStart = zzSwings[idx].Bar_Start;
+				barEnd = zzSwings[idx].Bar_End;
+
+				zzSizeAbs = Math.Abs(zzSize);
+				String str_suffix = "";
+				//Print(idx.ToString() + " - ZZSizeSeries=" + zzS);
+				if(zzSize>0) str_suffix = str_Plus;
+				else if(zzSize<0) str_suffix = str_Minus;
+				
+				if(zzSizeAbs > 0 && zzSizeAbs <6){
+					ZZ_Count_0_6 ++;
+				}
+				else if(zzSizeAbs >= 6 && zzSizeAbs <10){
+					ZZ_Count_6_10 ++;
+				}
+				else if(zzSizeAbs >= 10 && zzSizeAbs <16){
+					ZZ_Count_10_16 ++;
+					if(printOut > 1)
+						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+				}
+				else if(zzSizeAbs >= 16 && zzSizeAbs <22){
+					ZZ_Count_16_22 ++;
+					if(printOut > 1)
+						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+				}
+				else if(zzSizeAbs >= 22 && zzSizeAbs <30){
+					ZZ_Count_22_30 ++;
+					if(printOut > 1)
+						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+				}
+				else if(zzSizeAbs >= 30){
+					ZZ_Count_30_ ++;
+					if(printOut > 1)
+						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=30" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+				}
+				if(zzSize != 0) {
+					//DrawZZSizeText(idx, "txt-");
+					if(zzSizeAbs < 10)
+						if(printOut > 2)
+							PrintLog(true, log_file, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "]" );
+					//lastZZIdx = idx;
+				}
+			}
+			ZZ_Count = ZZ_Count_0_6 + ZZ_Count_6_10 + ZZ_Count_10_16 + ZZ_Count_16_22 + ZZ_Count_22_30 + ZZ_Count_30_ ;
+			if(printOut > 2)
+				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Count \t" + ZZ_Count + "\r\n ZZ_Count_0_6 \t" + ZZ_Count_0_6 + "\r\n ZZ_Count_6_10 \t" + ZZ_Count_6_10 + "\r\n ZZ_Count_10_16 \t" + ZZ_Count_10_16 + "\r\n ZZ_Count_16_22 \t" + ZZ_Count_16_22 + "\r\n ZZ_Count_22_30 \t" + ZZ_Count_22_30 + "\r\n ZZ_Count_30_ \t" + ZZ_Count_30_);
+		}
+		
+		protected void PrintTwoBarRatio(){
+			if( ZZ_Ratio_0_6 != null) {
+				Print("========ZZ_Ratio_0_6 count=" + ZZ_Ratio_0_6.Count + "=========");
+				foreach(double val in ZZ_Ratio_0_6) {
+					Print(val + "\r");
+				}
+			}
+			if( ZZ_Ratio_6_10 != null) {
+				Print("========ZZ_Ratio_6_10 count=" + ZZ_Ratio_6_10.Count + "=========");
+				foreach(double val in ZZ_Ratio_6_10) {
+					Print(val + "\r");
+				}
+			}
+			if( ZZ_Ratio_10_16 != null) {
+				Print("========ZZ_Ratio_10_16 count=" + ZZ_Ratio_10_16.Count + "=========");
+				foreach(double val in ZZ_Ratio_10_16) {
+					Print(val + "\r");
+				}
+			}
+			if( ZZ_Ratio_16_22 != null) {
+				Print("========ZZ_Ratio_16_22 count=" + ZZ_Ratio_16_22.Count + "=========");
+				foreach(double val in ZZ_Ratio_16_22) {
+					Print(val + "\r");
+				}
+			}
+			if( ZZ_Ratio_22_30 != null) {
+				Print("========ZZ_Ratio_22_30 count=" + ZZ_Ratio_22_30.Count + "=========");
+				foreach(double val in ZZ_Ratio_22_30) {
+					Print(val + "\r");
+				}
+			}
+			if( ZZ_Ratio_30_ != null) {
+				Print("========ZZ_Ratio_30_ count=" + ZZ_Ratio_30_.Count + "=========");
+				foreach(double val in ZZ_Ratio_30_) {
+					Print(val + "\r");
+				}
+			}
+			if( ZZ_Ratio != null) {
+				Print("========ZZ_Ratio count=" + ZZ_Ratio.Count + "=========");
+				foreach(double val in ZZ_Ratio) {
+					Print(val + "\r");
+				}
+			}
+		}
 		
 		public string GetFileNameByDateTime(DateTime dt, string path, string accName, string ext) {
 			Print("GetFileNameByDateTime: " + dt.ToString());
