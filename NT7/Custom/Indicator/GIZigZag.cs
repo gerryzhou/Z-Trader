@@ -439,9 +439,7 @@ namespace NinjaTrader.Indicator
 			//double[] zzSize = new double[zzCount];
 			for(int i=0; i<zzCount; i++) {
 				//zzSize[i] = 0;
-				ZZSW[i].Bar_Start = -1;
-				ZZSW[i].Bar_End = -1;
-				ZZSW[i].Size = 0;
+				ZZSW[i] = new ZigZagSwing(-1,-1,0,0);
 			}
 			
 			int zzCnt = 0;

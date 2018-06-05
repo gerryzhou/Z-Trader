@@ -446,7 +446,7 @@ namespace NinjaTrader.Strategy
 				DrawZZSizeText(latestZZs, "zz-");
 				DrawGapText(gap, "gap-");
 			}
-			
+		
 			if(printOut > -1) {				
 				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":GI gap=" + gap + "," + Position.MarketPosition.ToString() + "=" + Position.Quantity.ToString()+ ", price=" + Position.AvgPrice + ", BarsSinceEx=" + bsx + ", BarsSinceEn=" + bse);
 			}
@@ -473,7 +473,7 @@ namespace NinjaTrader.Strategy
 					PrintLog(true, log_file, CurrentBar + "- Stop trading cmd:" + Time[0].ToString());
 					break;
 			}
-			
+				
 			if(backTest && printOut > 1 && IsLastBarOnChart() > 0) {
 				bool GIZZ = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
 				PrintZZSize();
