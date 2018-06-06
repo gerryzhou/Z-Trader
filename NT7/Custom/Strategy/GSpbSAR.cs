@@ -128,6 +128,7 @@ namespace NinjaTrader.Strategy
 			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetReverseBar=" + GIParabolicSAR(0.002, 0.2, 0.002, Color.Orange).GetReverseBar());
 			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetReverseValue=" + GIParabolicSAR(0.002, 0.2, 0.002, Color.Orange).GetReverseValue());
 			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXp=" + GIParabolicSAR(0.002, 0.2, 0.002, Color.Orange).GetXp());
+			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap=" + GIParabolicSAR(0.002, 0.2, 0.002, Color.Orange).GetCurZZGap());
 			//Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXpBar[0]=" + GIParabolicSAR(0.002, 0.2, 0.002, Color.Orange).GetXpBar()[0]);
 			//Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXpSeries[0]=" + GIParabolicSAR(0.002, 0.2, 0.002, Color.Orange).GetSarSeries()[0]);
 			//Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXpBar[1]=" + GIParabolicSAR(0.002, 0.2, 0.002, Color.Orange).GetXpBar()[1]);
@@ -137,10 +138,10 @@ namespace NinjaTrader.Strategy
             {
                 DrawLine("My line" + CurrentBar, 0, 0, 0, 0, Color.Blue);
                 //EnterLongLimit(DefaultQuantity, 0, "enLn");
-            }
+            }			
 			
 			CheckPerformance();
-			double gap = 0;
+			double gap = GIParabolicSAR(0.002, 0.2, 0.002, Color.Cyan).GetCurZZGap();
 			switch(algo_mode) {
 				case 0: //liquidate
 					CloseAllPositions();

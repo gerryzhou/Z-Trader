@@ -48,6 +48,7 @@ namespace NinjaTrader.Indicator
 		//private IntSeries xpBar	; // Bar number of the xp bar for current bar
 		private bool afIncreased			= false;
 		
+		private double curZZGap				= 0;
 		private Color dotColor				= Color.Orange;
 		
 		private ILine zigZagLine			= null; // The current ZigZag ended by the last bar of the chart;
@@ -187,27 +188,27 @@ namespace NinjaTrader.Indicator
 			
 			if(IsLastBarOnChart() > 0) {
 				if(zigZagLine != null) RemoveDrawObject(zigZagLine);
-				double zzGap;
-				zigZagLine = DrawZigZag(CurrentBar, xp, tagZZLine, out zzGap);
+				//double zzGap;
+				zigZagLine = DrawZigZag(CurrentBar, xp, tagZZLine);
 				if(curGapText != null) RemoveDrawObject(curGapText);
-				curGapText = DrawGapText(zzGap, tagCurGapText);
-				PrintZZSwings(zzSwings, log_file, printOut);
-				PrintTwoBarRatio();
+				curGapText = DrawGapText(curZZGap, tagCurGapText);
+				//PrintZZSwings(zzSwings, log_file, printOut);
+				//PrintTwoBarRatio();
 			}
 		}
 
-		protected ILine DrawZigZag(int endBar, double endValue, string tag, out double gap) {
+		protected ILine DrawZigZag(int endBar, double endValue, string tag) {
 			Print("DrawZigZag called");
 			ILine zzLine = null;
 			int startBar = GetLastReverseBar(endBar);
-			gap = 0;
+			//gap = 0;
 			if(startBar > 0 && CurrentBar > BarsRequired) {
 				Print("DrawLine CurrentBar, zzSwings= " + CurrentBar + "," + zzSwings.Count + ", CurrentBar-startBar, Value[CurrentBar-startBar], 0, reverseValue[0]=" + (CurrentBar-startBar) + "," + Value[CurrentBar-startBar] + "," + 0 + "," + reverseValue[0]);
 			//DrawLine("My line" + CurrentBar, CurrentBar-startBar, sarSeries[CurrentBar-startBar], 0, sarSeries[0], Color.Blue);
 				zzLine = DrawLine(tag + CurrentBar, CurrentBar-startBar, reverseValue[CurrentBar-startBar], 0, endValue, Color.Blue);
-				gap = endValue - reverseValue[CurrentBar-startBar] ;
+				curZZGap = endValue - reverseValue[CurrentBar-startBar] ;
 			}
-			SetZZSwing(zzSwings, endBar, startBar, endBar, gap);
+			SetZZSwing(zzSwings, endBar, startBar, endBar, curZZGap);
 			return zzLine;
 		}
 		
@@ -347,6 +348,10 @@ namespace NinjaTrader.Indicator
 		public bool GetAfIncreased() {
 			return afIncreased;
 		}
+
+		public double GetCurZZGap() {
+			return curZZGap;
+		}				
 		
 		public ILine GetCurZZLine() {
 			return zigZagLine;
@@ -401,10 +406,10 @@ namespace NinjaTrader.Indicator
 				//sarSeries.Set(xp);
 				//xpBar.Set(CurrentBar);
 				prevSAR = todaySAR;
-				double zzGap ;
-				ILine zzLn = DrawZigZag(reverseBar[0], reverseValue[0], tagZZLine, out zzGap);
+				//double zzGap ;
+				ILine zzLn = DrawZigZag(reverseBar[0], reverseValue[0], tagZZLine);
 				if(zzLn != null)
-					DrawGapText(zzGap, tagCurGapText);
+					DrawGapText(curZZGap, tagCurGapText);
 			}
 			else {
 				todaySAR = prevSAR;
