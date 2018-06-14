@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Linq;
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
 using NinjaTrader.Gui.Chart;
@@ -32,13 +33,13 @@ namespace NinjaTrader.Indicator
 	
     partial class Indicator
     {
-		protected int ZZ_Count_0_6 = 0;
-		protected int ZZ_Count_6_10 = 0;
-		protected int ZZ_Count_10_16 = 0;
-		protected int ZZ_Count_16_22 = 0;
-		protected int ZZ_Count_22_30 = 0;
-		protected int ZZ_Count_30_ = 0;
-		protected int ZZ_Count = 0;
+//		protected int ZZ_Count_0_6 = 0;
+//		protected int ZZ_Count_6_10 = 0;
+//		protected int ZZ_Count_10_16 = 0;
+//		protected int ZZ_Count_16_22 = 0;
+//		protected int ZZ_Count_22_30 = 0;
+//		protected int ZZ_Count_30_ = 0;
+//		protected int ZZ_Count = 0;
 
 		/// <summary>
 		/// Two Bar ZZ Swing ratio = curSize/prevSize
@@ -50,6 +51,28 @@ namespace NinjaTrader.Indicator
 		protected List<double> ZZ_Ratio_22_30 = null;
 		protected List<double> ZZ_Ratio_30_ = null;
 		protected List<double> ZZ_Ratio = null;
+
+		/// <summary>
+		/// ZZ Swing sum for each day
+		/// </summary>
+		protected Dictionary<string,double> ZZ_Count_0_6 = null;
+		protected Dictionary<string,double> ZZ_Count_6_10 = null;
+		protected Dictionary<string,double> ZZ_Count_10_16 = null;
+		protected Dictionary<string,double> ZZ_Count_16_22 = null;
+		protected Dictionary<string,double> ZZ_Count_22_30 = null;
+		protected Dictionary<string,double> ZZ_Count_30_ = null;
+		protected Dictionary<string,double> ZZ_Count = null;
+		
+		/// <summary>
+		/// ZZ Swing sum for each day
+		/// </summary>
+		protected Dictionary<string,double> ZZ_Sum_0_6 = null;
+		protected Dictionary<string,double> ZZ_Sum_6_10 = null;
+		protected Dictionary<string,double> ZZ_Sum_10_16 = null;
+		protected Dictionary<string,double> ZZ_Sum_16_22 = null;
+		protected Dictionary<string,double> ZZ_Sum_22_30 = null;
+		protected Dictionary<string,double> ZZ_Sum_30_ = null;
+		protected Dictionary<string,double> ZZ_Sum = null;
 		
 		public int IsLastBarOnChart() {
 			try{
@@ -58,8 +81,7 @@ namespace NinjaTrader.Indicator
 				} else {
 					return -1;
 				}
-			}
-			catch(Exception ex){
+			} catch(Exception ex){
 				Print("IsLastBarOnChart:" + ex.Message);
 				return -1;
 			}
@@ -376,11 +398,41 @@ namespace NinjaTrader.Indicator
 		/// </summary>
 		public void PrintZZSwings(List<ZigZagSwing> zzSwings, string log_file, int printOut)
 		{ 
+			if( ZZ_Count_0_6 == null) 
+				ZZ_Count_0_6 = new Dictionary<string,double>();
+			if( ZZ_Count_6_10 == null) 
+				ZZ_Count_6_10 = new Dictionary<string,double>();
+			if( ZZ_Count_10_16 == null) 
+				ZZ_Count_10_16 = new Dictionary<string,double>();
+			if( ZZ_Count_16_22 == null) 
+				ZZ_Count_16_22 = new Dictionary<string,double>();
+			if( ZZ_Count_22_30 == null) 
+				ZZ_Count_22_30 = new Dictionary<string,double>();
+			if( ZZ_Count_30_ == null) 
+				ZZ_Count_30_ = new Dictionary<string,double>();
+			if( ZZ_Count == null) 
+				ZZ_Count = new Dictionary<string,double>();
+			
+			if( ZZ_Sum_0_6 == null)			
+				ZZ_Sum_0_6 = new Dictionary<string,double>();
+			if( ZZ_Sum_6_10 == null) 
+				ZZ_Sum_6_10 = new Dictionary<string,double>();
+			if( ZZ_Sum_10_16 == null) 
+				ZZ_Sum_10_16 = new Dictionary<string,double>();
+			if( ZZ_Sum_16_22 == null) 
+				ZZ_Sum_16_22 = new Dictionary<string,double>();
+			if( ZZ_Sum_22_30 == null) 
+				ZZ_Sum_22_30 = new Dictionary<string,double>();
+			if( ZZ_Sum_30_ == null) 
+				ZZ_Sum_30_ = new Dictionary<string,double>();
+			if( ZZ_Sum == null) 
+				ZZ_Sum = new Dictionary<string,double>();
+			
 			String str_Plus = " ++ ";
 			String str_Minus = " -- ";
 			String str_Minutes = "m";
-			//Update();
-			//PrintLog(true, log_file, CurrentBar + " PrintZZSize called from GS");
+			Update();
+			
 			double zzSize = 0;
 			double zzSizeAbs = -1;
 			int barStart, barEnd;
@@ -394,30 +446,46 @@ namespace NinjaTrader.Indicator
 				//Print(idx.ToString() + " - ZZSizeSeries=" + zzS);
 				if(zzSize>0) str_suffix = str_Plus;
 				else if(zzSize<0) str_suffix = str_Minus;
+				if(zzSize != 0)				
+					PrintLog(true, log_file, CurrentBar + " PrintZZSize called from GS:" + zzSize + "," + barStart + "," + barEnd);
+				DateTime dt = (zzSize==0||barStart<0||barEnd<0) ? Time[0] : Time[CurrentBar-barEnd];
+				string key = "";
 				
 				if(zzSizeAbs > 0 && zzSizeAbs <6){
-					ZZ_Count_0_6 ++;
+					key = GetDictKeyByDateTime(dt, "zz0-6", "");
+					AddDictVal(ZZ_Count_0_6,key,1);
+					AddDictVal(ZZ_Sum_0_6,key,zzSizeAbs);
 				}
 				else if(zzSizeAbs >= 6 && zzSizeAbs <10){
-					ZZ_Count_6_10 ++;
+					key = GetDictKeyByDateTime(dt, "zz6-10", "");
+					AddDictVal(ZZ_Count_6_10,key,1);
+					AddDictVal(ZZ_Sum_6_10,key,zzSizeAbs);
 				}
 				else if(zzSizeAbs >= 10 && zzSizeAbs <16){
-					ZZ_Count_10_16 ++;
+					key = GetDictKeyByDateTime(dt, "zz10-16", "");
+					AddDictVal(ZZ_Count_10_16,key,1);
+					AddDictVal(ZZ_Sum_10_16,key,zzSizeAbs);
 					if(printOut > 1)
 						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 16 && zzSizeAbs <22){
-					ZZ_Count_16_22 ++;
+					key = GetDictKeyByDateTime(dt, "zz16-22", "");
+					AddDictVal(ZZ_Count_16_22,key,1);
+					AddDictVal(ZZ_Sum_16_22,key,zzSizeAbs);
 					if(printOut > 1)
 						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 22 && zzSizeAbs <30){
-					ZZ_Count_22_30 ++;
+					key = GetDictKeyByDateTime(dt, "zz22-30", "");
+					AddDictVal(ZZ_Count_22_30,key,1);
+					AddDictVal(ZZ_Sum_22_30,key,zzSizeAbs);
 					if(printOut > 1)
 						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 30){
-					ZZ_Count_30_ ++;
+					key = GetDictKeyByDateTime(dt, "zz30-", "");
+					AddDictVal(ZZ_Count_30_,key,1);
+					AddDictVal(ZZ_Sum_30_,key,zzSizeAbs);
 					if(printOut > 1)
 						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=30" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
@@ -427,11 +495,17 @@ namespace NinjaTrader.Indicator
 						if(printOut > 2)
 							PrintLog(true, log_file, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "]" );
 					//lastZZIdx = idx;
+					key = GetDictKeyByDateTime(dt, "zzCount", "");
+					AddDictVal(ZZ_Count,key,1);
+					AddDictVal(ZZ_Sum,key,zzSizeAbs);
 				}
 			}
-			ZZ_Count = ZZ_Count_0_6 + ZZ_Count_6_10 + ZZ_Count_10_16 + ZZ_Count_16_22 + ZZ_Count_22_30 + ZZ_Count_30_ ;
-			if(printOut > 2)
-				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Count \t" + ZZ_Count + "\r\n ZZ_Count_0_6 \t" + ZZ_Count_0_6 + "\r\n ZZ_Count_6_10 \t" + ZZ_Count_6_10 + "\r\n ZZ_Count_10_16 \t" + ZZ_Count_10_16 + "\r\n ZZ_Count_16_22 \t" + ZZ_Count_16_22 + "\r\n ZZ_Count_22_30 \t" + ZZ_Count_22_30 + "\r\n ZZ_Count_30_ \t" + ZZ_Count_30_);
+			double ZZ_Count_Total = SumDictVal(ZZ_Count);
+			double ZZ_Sum_Total = SumDictVal(ZZ_Sum);
+			if(printOut > 2) {
+				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Count \t" + ZZ_Count_Total + "\r\n ZZ_Count_0_6 \t" + SumDictVal(ZZ_Count_0_6) + "\r\n ZZ_Count_6_10 \t" + SumDictVal(ZZ_Count_6_10) + "\r\n ZZ_Count_10_16 \t" + SumDictVal(ZZ_Count_10_16) + "\r\n ZZ_Count_16_22 \t" + SumDictVal(ZZ_Count_16_22) + "\r\n ZZ_Count_22_30 \t" + SumDictVal(ZZ_Count_22_30) + "\r\n ZZ_Count_30_ \t" + SumDictVal(ZZ_Count_30_));
+				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Sum \t" + ZZ_Sum_Total + "\r\n ZZ_Sum_0_6 \t" + SumDictVal(ZZ_Sum_0_6) + "\r\n ZZ_Sum_6_10 \t" + SumDictVal(ZZ_Sum_6_10) + "\r\n ZZ_Sum_10_16 \t" + SumDictVal(ZZ_Sum_10_16) + "\r\n ZZ_Sum_16_22 \t" + SumDictVal(ZZ_Sum_16_22) + "\r\n ZZ_Sum_22_30 \t" + SumDictVal(ZZ_Sum_22_30) + "\r\n ZZ_Sum_30_ \t" + SumDictVal(ZZ_Sum_30_));
+			}
 		}
 		
 		protected void PrintTwoBarRatio(){
@@ -499,6 +573,31 @@ namespace NinjaTrader.Indicator
 				}
 			}
 			return fname;
+		}
+
+		public string GetDictKeyByDateTime(DateTime dt, string prefix, string sufix) {
+			string kname = prefix + "_" + dt.Year + "-" + dt.Month + "-" + dt.Day + "_" + sufix;
+			Print("GetDictKeyByDateTime: " + dt.ToString() + ", DictKey=" + kname);
+			return kname;
+		}
+		
+		public bool AddDictVal(Dictionary<string,double> dict, string key, double val) {
+			double dict_val;
+			if(dict.TryGetValue(key,out dict_val)) {
+				dict[key] = dict_val + val;
+			} else {
+				dict.Add(key, val);
+			}
+			return true;
+		}
+		
+		public double SumDictVal(Dictionary<string,double> dict) {
+			double sum=0;
+			foreach(var item in dict){
+				sum = sum + item.Value;
+			}
+
+			return sum;
 		}
 		
 		public void PrintLog(bool pntcon, string fpath, string text) {
