@@ -117,7 +117,7 @@ namespace NinjaTrader.Strategy
 			// Triggers the exit on close function 30 seconds prior to session end
 			ExitOnClose = true;
 			ExitOnCloseSeconds = 30;
-			
+						
 			//log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
         }
 

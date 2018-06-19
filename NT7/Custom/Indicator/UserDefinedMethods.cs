@@ -17,6 +17,8 @@ namespace NinjaTrader.Indicator
     /// This file holds all user defined indicator methods.
     /// </summary>
 	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
+	
+	public enum PriceActionType {UpWide, UpTight, DnWide, DnTight, RngWide, RngTight};
 		
 	public class ZigZagSwing {
 		public int Bar_Start;
@@ -31,16 +33,25 @@ namespace NinjaTrader.Indicator
 		}
 	}
 	
+	/// <summary>
+	/// Supervised Pattern Recognization
+	/// 20100610;8301045:UpTight;11011245:RngWide;13011459:DnWide;
+	/// </summary>
+	public class SpvPC {
+		public int Date;
+		//Market condition for TimeRange;
+		//HHMMHHMM=TimeStart*10000+TimeEnd;
+		public Dictionary<int,PriceActionType> Mkt_Ctx; 
+		
+		public SpvPC (int date, Dictionary<int,PriceActionType> mktCtx) {
+			this.Date = date;
+			this.Mkt_Ctx = mktCtx;
+		}
+	}
+	
     partial class Indicator
     {
-//		protected int ZZ_Count_0_6 = 0;
-//		protected int ZZ_Count_6_10 = 0;
-//		protected int ZZ_Count_10_16 = 0;
-//		protected int ZZ_Count_16_22 = 0;
-//		protected int ZZ_Count_22_30 = 0;
-//		protected int ZZ_Count_30_ = 0;
-//		protected int ZZ_Count = 0;
-
+		#region ZZ Vars
 		/// <summary>
 		/// Two Bar ZZ Swing ratio = curSize/prevSize
 		/// </summary>
@@ -78,6 +89,16 @@ namespace NinjaTrader.Indicator
 //		protected double ZZ_Avg_Daily_Sum;
 //		protected double ZZ_Avg_Weekly_Count;
 //		protected double ZZ_Avg_Weekly_Sum;
+		#endregion
+		
+		#region SpvPC Vars
+		/// <summary>
+		/// Loaded from supervised file;
+		/// Key=Date;
+		/// </summary>		
+		protected Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPC = null;
+		
+		#endregion
 		
 		protected double Day_Count = 0;
 		protected double Week_Count = 0;
@@ -105,6 +126,8 @@ namespace NinjaTrader.Indicator
 			}
 			
 		}
+		
+		#region Time Functions
 		
 		public string GetTimeDate(String str_timedate, int time_date) {
 			char[] delimiterChars = { ' '};
@@ -263,6 +286,9 @@ namespace NinjaTrader.Indicator
 			return isTime;
 		}
 
+		#endregion
+		
+		#region Pattern Functions
 		/// <summary>
 		/// Check the first reversal bar for the pullback under current ZigZag gap
 		/// </summary>
@@ -597,6 +623,10 @@ namespace NinjaTrader.Indicator
 			}
 		}
 		
+		#endregion
+		
+		#region File and Dict functions
+		
 		public string GetFileNameByDateTime(DateTime dt, string path, string accName, string symbol, string ext) {
 			Print("GetFileNameByDateTime: " + dt.ToString());
 			//path = "C:\\inetpub\\wwwroot\\nt_files\\log\\";
@@ -644,6 +674,79 @@ namespace NinjaTrader.Indicator
 
 			return sum;
 		}
+		
+		#endregion
+
+		#region Supervised pattern recognition
+		
+		public FileInfo[] GetSpvFile(string srcDir, string symbol) {
+			Print("GetSupervisedFile src: " + srcDir);
+		    DirectoryInfo DirInfo = new DirectoryInfo(srcDir);
+
+//            var filesInOrder = from f in DirInfo.EnumerateFiles()
+//                               orderbydescending f.CreationTime
+//                               select f;
+			
+//			var filesInOrder = DirInfo.GetFiles("*.*",SearchOption.AllDirectories).OrderBy(f => f.LastWriteTime)
+//								.ToList();
+			//DirectoryInfo dir = new DirectoryInfo (folderpath);
+
+			FileInfo[] filesInOrder = DirInfo.GetFiles().OrderByDescending(p => p.LastWriteTime).ToArray();
+			
+            foreach (FileInfo item in filesInOrder)
+            {
+                Print("cmdFile=" + item.FullName);
+            }
+			
+			return filesInOrder;
+		}
+		
+		public Dictionary<string,Dictionary<int,PriceActionType>> ReadSpvFile(string srcDir, string symbol) {
+			Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPC = new Dictionary<string,Dictionary<int,PriceActionType>>();
+			string src = srcDir + symbol + ".txt";
+			Print("ReadSpvPCFile src: " + src);
+//			if (!src.Exists)
+//			{
+//				return paraMap;
+//			}
+	
+			int counter = 0;  
+			string line;
+
+			// Read the file and display it line by line.  
+			System.IO.StreamReader file =   
+				new System.IO.StreamReader(src);//@"c:\test.txt");
+			while((line = file.ReadLine()) != null)  
+			{
+				string[] pa = line.Split(';');
+				Dictionary<int,PriceActionType> mkt_ctxs = new Dictionary<int,PriceActionType>();
+				for(int i=1; i<pa.Length; i++) {
+					string[] mkt_ctx = pa[i].Split(':');
+					int dt;
+					int.TryParse(mkt_ctx[0], out dt);
+					mkt_ctxs.Add(dt,(PriceActionType)Enum.Parse(typeof(PriceActionType), mkt_ctx[1]));
+				}
+				if(mkt_ctxs.Count > 0) {
+					Dict_SpvPC.Add(pa[0], mkt_ctxs);
+				}
+				Print(line);
+				counter++;
+			}
+
+			file.Close();
+			Print("There were {0} lines." + counter);
+			// Suspend the screen.
+			//System.Console.ReadLine();
+			foreach(var pair in Dict_SpvPC) {
+				Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
+				Dictionary<int,PriceActionType> mkcnd = (Dictionary<int,PriceActionType>)pair.Value;
+				foreach(var cnd in mkcnd) {
+					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
+				}
+			}
+			return Dict_SpvPC;
+		}		
+		#endregion
 		
 		public void PrintLog(bool pntcon, string fpath, string text) {
 			//Print("PrintLog: " + fpath);

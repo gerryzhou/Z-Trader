@@ -79,6 +79,7 @@ namespace NinjaTrader.Indicator
 			reverseValue = new DataSeries(this, MaximumBarsLookBack.Infinite);
 			zzSwings = new List<ZigZagSwing>();
 			//String AccName = GetTsTAccName(Account.Name);//"Sim101";
+			ReadSpvFile(@"C:\inetpub\wwwroot\nt_files\pattern\", "ES ##-##");
 			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, symbol, "log");
         }
 
