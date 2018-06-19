@@ -74,6 +74,14 @@ namespace NinjaTrader.Indicator
 		protected Dictionary<string,double> ZZ_Sum_30_ = null;
 		protected Dictionary<string,double> ZZ_Sum = null;
 		
+//		protected double ZZ_Avg_Daily_Count;
+//		protected double ZZ_Avg_Daily_Sum;
+//		protected double ZZ_Avg_Weekly_Count;
+//		protected double ZZ_Avg_Weekly_Sum;
+		
+		protected double Day_Count = 0;
+		protected double Week_Count = 0;
+		
 		public int IsLastBarOnChart() {
 			try{
 				if(Input.Count - CurrentBar <= 2) {
@@ -85,6 +93,17 @@ namespace NinjaTrader.Indicator
 				Print("IsLastBarOnChart:" + ex.Message);
 				return -1;
 			}
+		}
+		
+		public void DayWeekMonthCount() {
+			if(CurrentBar < BarsRequired) return;
+			if(Time[0].Day != Time[1].Day) {
+				Day_Count ++;
+			}
+			if(Time[0].DayOfWeek == DayOfWeek.Sunday &&  Time[1].DayOfWeek != DayOfWeek.Sunday) {
+				Week_Count ++;
+			}
+			
 		}
 		
 		public string GetTimeDate(String str_timedate, int time_date) {
@@ -502,9 +521,34 @@ namespace NinjaTrader.Indicator
 			}
 			double ZZ_Count_Total = SumDictVal(ZZ_Count);
 			double ZZ_Sum_Total = SumDictVal(ZZ_Sum);
+			double ZZ_Count_Avg = ZZ_Count_Total/Day_Count;
+			double ZZ_Sum_Avg = ZZ_Sum_Total/Day_Count;
+			
 			if(printOut > 2) {
-				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Count \t" + ZZ_Count_Total + "\r\n ZZ_Count_0_6 \t" + SumDictVal(ZZ_Count_0_6) + "\r\n ZZ_Count_6_10 \t" + SumDictVal(ZZ_Count_6_10) + "\r\n ZZ_Count_10_16 \t" + SumDictVal(ZZ_Count_10_16) + "\r\n ZZ_Count_16_22 \t" + SumDictVal(ZZ_Count_16_22) + "\r\n ZZ_Count_22_30 \t" + SumDictVal(ZZ_Count_22_30) + "\r\n ZZ_Count_30_ \t" + SumDictVal(ZZ_Count_30_));
-				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Sum \t" + ZZ_Sum_Total + "\r\n ZZ_Sum_0_6 \t" + SumDictVal(ZZ_Sum_0_6) + "\r\n ZZ_Sum_6_10 \t" + SumDictVal(ZZ_Sum_6_10) + "\r\n ZZ_Sum_10_16 \t" + SumDictVal(ZZ_Sum_10_16) + "\r\n ZZ_Sum_16_22 \t" + SumDictVal(ZZ_Sum_16_22) + "\r\n ZZ_Sum_22_30 \t" + SumDictVal(ZZ_Sum_22_30) + "\r\n ZZ_Sum_30_ \t" + SumDictVal(ZZ_Sum_30_));
+				PrintLog(true, log_file, CurrentBar + "-" + Instrument.FullName 
+					+ "\r\n ZZ_Count_Avg \t ZZ_Count \t ZZ_Count_Days \t"
+					+ "\r\n" + String.Format("{0:0.##}", ZZ_Count_Avg) 
+					+ "\t" + ZZ_Count_Total 
+					+ "\t" + Day_Count 
+					
+					+ "\r\n ZZ_Count_0_6 \t" + SumDictVal(ZZ_Count_0_6)
+					+ "\r\n ZZ_Count_6_10 \t" + SumDictVal(ZZ_Count_6_10)
+					+ "\r\n ZZ_Count_10_16 \t" + SumDictVal(ZZ_Count_10_16)
+					+ "\r\n ZZ_Count_16_22 \t" + SumDictVal(ZZ_Count_16_22)
+					+ "\r\n ZZ_Count_22_30 \t" + SumDictVal(ZZ_Count_22_30) 
+					+ "\r\n ZZ_Count_30_ \t" + SumDictVal(ZZ_Count_30_));
+				PrintLog(true, log_file, CurrentBar + "-" + Instrument.FullName 
+					+ "\r\n ZZ_Sum_Avg \t ZZ_Sum \t ZZ_Sum_Days \t"
+					+ "\r\n" + String.Format("{0:0.##}", ZZ_Sum_Avg) 
+					+ "\t " + ZZ_Sum_Total 
+					+ "\t " + Day_Count
+					
+					+ "\r\n ZZ_Sum_0_6 \t" + SumDictVal(ZZ_Sum_0_6) 
+					+ "\r\n ZZ_Sum_6_10 \t" + SumDictVal(ZZ_Sum_6_10) 
+					+ "\r\n ZZ_Sum_10_16 \t" + SumDictVal(ZZ_Sum_10_16) 
+					+ "\r\n ZZ_Sum_16_22 \t" + SumDictVal(ZZ_Sum_16_22)
+					+ "\r\n ZZ_Sum_22_30 \t" + SumDictVal(ZZ_Sum_22_30) 
+					+ "\r\n ZZ_Sum_30_ \t" + SumDictVal(ZZ_Sum_30_));
 			}
 		}
 		
@@ -553,12 +597,12 @@ namespace NinjaTrader.Indicator
 			}
 		}
 		
-		public string GetFileNameByDateTime(DateTime dt, string path, string accName, string ext) {
+		public string GetFileNameByDateTime(DateTime dt, string path, string accName, string symbol, string ext) {
 			Print("GetFileNameByDateTime: " + dt.ToString());
 			//path = "C:\\inetpub\\wwwroot\\nt_files\\log\\";
 			//ext = "log";
 			long flong = DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day + 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year;
-			string fname = path + accName + Path.DirectorySeparatorChar + accName + "_" + flong.ToString() + "." + ext;
+			string fname = path + accName + Path.DirectorySeparatorChar + accName + "_" + symbol + "_" + flong.ToString() + "." + ext;
 			Print(", FileName=" + fname);
 			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);
 
@@ -594,6 +638,7 @@ namespace NinjaTrader.Indicator
 		public double SumDictVal(Dictionary<string,double> dict) {
 			double sum=0;
 			foreach(var item in dict){
+				Print("SumDictVal:" + item.Key);
 				sum = sum + item.Value;
 			}
 
@@ -601,7 +646,7 @@ namespace NinjaTrader.Indicator
 		}
 		
 		public void PrintLog(bool pntcon, string fpath, string text) {
-			Print("PrintLog: " + fpath);
+			//Print("PrintLog: " + fpath);
 			if(pntcon) Print(text); // return;
 			using (System.IO.StreamWriter file = 
 				new System.IO.StreamWriter(@fpath, true))
