@@ -18,7 +18,7 @@ namespace NinjaTrader.Indicator
     /// </summary>
 	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 	
-	public enum PriceActionType {UpWide, UpTight, DnWide, DnTight, RngWide, RngTight};
+	public enum PriceActionType {UpWide, UpTight, DnWide, DnTight, RngWide, RngTight, UnKnown};
 		
 	public class ZigZagSwing {
 		public int Bar_Start;
@@ -37,13 +37,13 @@ namespace NinjaTrader.Indicator
 	/// Supervised Pattern Recognization
 	/// 20100610;8301045:UpTight;11011245:RngWide;13011459:DnWide;
 	/// </summary>
-	public class SpvPC {
+	public class SpvPR {
 		public int Date;
 		//Market condition for TimeRange;
 		//HHMMHHMM=TimeStart*10000+TimeEnd;
 		public Dictionary<int,PriceActionType> Mkt_Ctx; 
 		
-		public SpvPC (int date, Dictionary<int,PriceActionType> mktCtx) {
+		public SpvPR (int date, Dictionary<int,PriceActionType> mktCtx) {
 			this.Date = date;
 			this.Mkt_Ctx = mktCtx;
 		}
@@ -91,12 +91,12 @@ namespace NinjaTrader.Indicator
 //		protected double ZZ_Avg_Weekly_Sum;
 		#endregion
 		
-		#region SpvPC Vars
+		#region SpvPR Vars
 		/// <summary>
 		/// Loaded from supervised file;
 		/// Key=Date;
 		/// </summary>		
-		protected Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPC = null;
+		protected Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPR = null;
 		
 		#endregion
 		
@@ -265,7 +265,12 @@ namespace NinjaTrader.Indicator
 		public string Get24HDateTime(DateTime dt) {
 			return dt.ToString("MM/dd/yyyy HH:mm:ss");
 		}
-		
+
+		public int GetYearByDateTime(DateTime dt) {
+			int year = dt.Year*10000 + dt.Month*100 + dt.Day;
+			return year;
+		}
+				
 		/// <summary>
 		/// Check if now is the time allowed to put trade
 		/// </summary>
@@ -702,9 +707,10 @@ namespace NinjaTrader.Indicator
 		}
 		
 		public Dictionary<string,Dictionary<int,PriceActionType>> ReadSpvFile(string srcDir, string symbol) {
-			Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPC = new Dictionary<string,Dictionary<int,PriceActionType>>();
+			//Dictionary<string,Dictionary<int,PriceActionType>> 
+			Dict_SpvPR = new Dictionary<string,Dictionary<int,PriceActionType>>();
 			string src = srcDir + symbol + ".txt";
-			Print("ReadSpvPCFile src: " + src);
+			Print("ReadSpvPRFile src: " + src);
 //			if (!src.Exists)
 //			{
 //				return paraMap;
@@ -727,7 +733,7 @@ namespace NinjaTrader.Indicator
 					mkt_ctxs.Add(dt,(PriceActionType)Enum.Parse(typeof(PriceActionType), mkt_ctx[1]));
 				}
 				if(mkt_ctxs.Count > 0) {
-					Dict_SpvPC.Add(pa[0], mkt_ctxs);
+					Dict_SpvPR.Add(pa[0], mkt_ctxs);
 				}
 				Print(line);
 				counter++;
@@ -737,14 +743,83 @@ namespace NinjaTrader.Indicator
 			Print("There were {0} lines." + counter);
 			// Suspend the screen.
 			//System.Console.ReadLine();
-			foreach(var pair in Dict_SpvPC) {
+			foreach(var pair in Dict_SpvPR) {
 				Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
 				Dictionary<int,PriceActionType> mkcnd = (Dictionary<int,PriceActionType>)pair.Value;
 				foreach(var cnd in mkcnd) {
 					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
 				}
 			}
-			return Dict_SpvPC;
+			return Dict_SpvPR;
+		}
+		
+		public PriceActionType GetPriceActType(DateTime dt) {
+			
+			PriceActionType pat = PriceActionType.UnKnown;
+			
+			int key_year = GetYearByDateTime(dt);
+			int t = dt.Hour*100 + dt.Minute;
+			
+			Dictionary<int,PriceActionType> mkt_ctxs = null;
+			if(Dict_SpvPR != null)
+				Dict_SpvPR.TryGetValue(key_year.ToString(), out mkt_ctxs);
+			Print("key_year, time, Dict_SpvPR, mkt_ctxs=" + key_year.ToString() + "," + t.ToString() + "," + Dict_SpvPR + "," + mkt_ctxs);
+			if(mkt_ctxs != null) {
+				foreach(var mkt_ctx in mkt_ctxs) {
+					Print("time,mkt_ctx=" + mkt_ctx.Key + "," + mkt_ctx.Value);
+					int start = mkt_ctx.Key/10000;
+					int end = mkt_ctx.Key % 10000;
+					
+					if(t >= start && t <= end) {
+						pat = (PriceActionType)mkt_ctx.Value;
+						break;
+					}
+				}
+			}
+			
+//			Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPR = new Dictionary<string,Dictionary<int,PriceActionType>>();
+//			string src = srcDir + symbol + ".txt";
+//			Print("ReadSpvPRFile src: " + src);
+////			if (!src.Exists)
+////			{
+////				return paraMap;
+////			}
+//	
+//			int counter = 0;  
+//			string line;
+//
+//			// Read the file and display it line by line.  
+//			System.IO.StreamReader file =   
+//				new System.IO.StreamReader(src);//@"c:\test.txt");
+//			while((line = file.ReadLine()) != null)  
+//			{
+//				string[] pa = line.Split(';');
+//				Dictionary<int,PriceActionType> mkt_ctxs = new Dictionary<int,PriceActionType>();
+//				for(int i=1; i<pa.Length; i++) {
+//					string[] mkt_ctx = pa[i].Split(':');
+//					int dt;
+//					int.TryParse(mkt_ctx[0], out dt);
+//					mkt_ctxs.Add(dt,(PriceActionType)Enum.Parse(typeof(PriceActionType), mkt_ctx[1]));
+//				}
+//				if(mkt_ctxs.Count > 0) {
+//					Dict_SpvPR.Add(pa[0], mkt_ctxs);
+//				}
+//				Print(line);
+//				counter++;
+//			}
+//
+//			file.Close();
+//			Print("There were {0} lines." + counter);
+//			// Suspend the screen.
+//			//System.Console.ReadLine();
+//			foreach(var pair in Dict_SpvPR) {
+//				Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
+//				Dictionary<int,PriceActionType> mkcnd = (Dictionary<int,PriceActionType>)pair.Value;
+//				foreach(var cnd in mkcnd) {
+//					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
+//				}
+//			}
+			return pat;
 		}		
 		#endregion
 		

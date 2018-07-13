@@ -216,6 +216,8 @@ namespace NinjaTrader.Indicator
 				zzLine = DrawLine(tag + CurrentBar, CurrentBar-startBar, reverseValue[CurrentBar-startBar], 0, endValue, Color.Blue);
 				curZZGap = endValue - reverseValue[CurrentBar-startBar] ;
 			}
+			PriceActionType pat = GetPriceActType(Time[0]);
+			Print("Time, Pat=" + Time[0] + "," + pat.ToString());
 			SetZZSwing(zzSwings, endBar, startBar, endBar, curZZGap);
 			return zzLine;
 		}
@@ -331,6 +333,11 @@ namespace NinjaTrader.Indicator
 		#endregion
 
         #region Other Properties
+		
+//		public GIParabolicSAR getGIParabolicSAR() {
+//			return base.checkGIParabolicSAR;
+//		}
+		
 		public bool GetLongPosition() {
 			return longPosition;
 		}

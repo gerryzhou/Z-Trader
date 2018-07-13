@@ -78,6 +78,8 @@ namespace NinjaTrader.Strategy
 		private IText it_gap = null; //the Text draw for gap on current bar
 		private string log_file = ""; //
 		
+		private GIParabolicSAR giParabSAR = null;//new GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan);
+		
 		/// <summary>
 		/// Order handling
 		/// </summary>
@@ -99,8 +101,10 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void Initialize()
         {
-			//AccName = GetTsTAccName(Account.Name);
-			Add(GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Cyan));
+			AccName = GetTsTAccName(Account.Name);
+			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan);
+			Add(giParabSAR);
+			//Add(GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan));
 			//Add(GIParabolicSAR(0.001, 0.2, 0.001, Color.Orange));
 			EMA(High, 50).Plots[0].Pen.Color = Color.Orange;
 			EMA(Low, 50).Plots[0].Pen.Color = Color.Green;
@@ -133,7 +137,8 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void OnBarUpdate()
         {
-			Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange)[0] + "-------------");
+			//Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + giParabSAR[0] + "-------------");
+			Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan)[0] + "-------------");
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetAf=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetAf());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetAfIncreased=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetAfIncreased());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetLongPosition=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetLongPosition());
@@ -143,11 +148,11 @@ namespace NinjaTrader.Strategy
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetReverseBar=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetReverseBar());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetReverseValue=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetReverseValue());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXp=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetXp());
-			double gap = GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap();
-			bool isReversalBar = GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).IsReversalBar();
+			double gap = giParabSAR.GetCurZZGap(); //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange).GetCurZZGap();
+			bool isReversalBar = giParabSAR.IsReversalBar();//GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange).IsReversalBar();
 			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
 			
-			if (GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange)[0] > 0)
+			if (giParabSAR[0] > 0) //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange)[0] > 0)
             {
                 DrawLine("My line" + CurrentBar, 0, 0, 0, 0, Color.Blue);
                 //EnterLongLimit(DefaultQuantity, 0, "enLn");
