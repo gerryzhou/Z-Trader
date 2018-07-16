@@ -18,7 +18,7 @@ namespace NinjaTrader.Indicator
     /// </summary>
 	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 	
-	public enum PriceActionType {UpWide, UpTight, DnWide, DnTight, RngWide, RngTight, UnKnown};
+	public enum PriceActionType {UpTight, UpWide, DnTight, DnWide, RngTight, RngWide, UnKnown};
 		
 	public class ZigZagSwing {
 		public int Bar_Start;
@@ -97,6 +97,16 @@ namespace NinjaTrader.Indicator
 		/// Key=Date;
 		/// </summary>		
 		protected Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPR = null;
+		
+		/// <summary>
+		/// Bitwise op to tell which Price Action allowed to be the supervised entry approach
+		/// 0111 1111: [0 UnKnown RngWide RngTight DnWide DnTight UpWide UpTight]
+		/// UnKnown:spvPRBits&0100 000(64), RngWide:spvPRBits&0010 0000(32), RngTight:spvPRBits&0001 0000(16)
+		/// DnWide:spvPRBits&0000 1000(8), DnTight:spvPRBits&0000 0100(4)
+		/// UpWide:spvPRBits&0000 0010(2), UpTight:spvPRBits&0000 0001(1)
+		/// </summary>
+
+		protected int SpvPRBits = 0;
 		
 		#endregion
 		
@@ -386,7 +396,7 @@ namespace NinjaTrader.Indicator
 			ZigZagSwing zzS = GetLastZZSwing(zzSwings, barNo);
 			if(zzS != null && zzS.Size != 0) {
 				zzSwings[barNo].TwoBar_Ratio = Math.Round(Math.Abs(size/zzS.Size), 2);
-				Print("CurBar, pervBar, curSize, prevSize=" + barNo + "," + zzS.Bar_End + "," + size + "," + zzS.Size);
+				//Print("CurBar, pervBar, curSize, prevSize=" + barNo + "," + zzS.Bar_End + "," + size + "," + zzS.Size);
 			}
 			SaveTwoBarRatio(zzSwings[barNo]);
 		}
@@ -638,7 +648,7 @@ namespace NinjaTrader.Indicator
 			//ext = "log";
 			long flong = DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day + 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year;
 			string fname = path + accName + Path.DirectorySeparatorChar + accName + "_" + symbol + "_" + flong.ToString() + "." + ext;
-			Print(", FileName=" + fname);
+			//Print(", FileName=" + fname);
 			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);
 
 		 	//if(barNo > 0) return;
@@ -656,7 +666,7 @@ namespace NinjaTrader.Indicator
 
 		public string GetDictKeyByDateTime(DateTime dt, string prefix, string sufix) {
 			string kname = prefix + "_" + dt.Year + "-" + dt.Month + "-" + dt.Day + "_" + sufix;
-			Print("GetDictKeyByDateTime: " + dt.ToString() + ", DictKey=" + kname);
+			//Print("GetDictKeyByDateTime: " + dt.ToString() + ", DictKey=" + kname);
 			return kname;
 		}
 		
@@ -673,7 +683,7 @@ namespace NinjaTrader.Indicator
 		public double SumDictVal(Dictionary<string,double> dict) {
 			double sum=0;
 			foreach(var item in dict){
-				Print("SumDictVal:" + item.Key);
+				//Print("SumDictVal:" + item.Key);
 				sum = sum + item.Value;
 			}
 
@@ -740,15 +750,15 @@ namespace NinjaTrader.Indicator
 			}
 
 			file.Close();
-			Print("There were {0} lines." + counter);
+			//Print("There were {0} lines." + counter);
 			// Suspend the screen.
 			//System.Console.ReadLine();
 			foreach(var pair in Dict_SpvPR) {
-				Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
+				//Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
 				Dictionary<int,PriceActionType> mkcnd = (Dictionary<int,PriceActionType>)pair.Value;
-				foreach(var cnd in mkcnd) {
-					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
-				}
+//				foreach(var cnd in mkcnd) {
+//					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
+//				}
 			}
 			return Dict_SpvPR;
 		}
@@ -763,10 +773,10 @@ namespace NinjaTrader.Indicator
 			Dictionary<int,PriceActionType> mkt_ctxs = null;
 			if(Dict_SpvPR != null)
 				Dict_SpvPR.TryGetValue(key_year.ToString(), out mkt_ctxs);
-			Print("key_year, time, Dict_SpvPR, mkt_ctxs=" + key_year.ToString() + "," + t.ToString() + "," + Dict_SpvPR + "," + mkt_ctxs);
+			//Print("key_year, time, Dict_SpvPR, mkt_ctxs=" + key_year.ToString() + "," + t.ToString() + "," + Dict_SpvPR + "," + mkt_ctxs);
 			if(mkt_ctxs != null) {
 				foreach(var mkt_ctx in mkt_ctxs) {
-					Print("time,mkt_ctx=" + mkt_ctx.Key + "," + mkt_ctx.Value);
+					//Print("time,mkt_ctx=" + mkt_ctx.Key + "," + mkt_ctx.Value);
 					int start = mkt_ctx.Key/10000;
 					int end = mkt_ctx.Key % 10000;
 					
@@ -776,51 +786,49 @@ namespace NinjaTrader.Indicator
 					}
 				}
 			}
-			
-//			Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPR = new Dictionary<string,Dictionary<int,PriceActionType>>();
-//			string src = srcDir + symbol + ".txt";
-//			Print("ReadSpvPRFile src: " + src);
-////			if (!src.Exists)
-////			{
-////				return paraMap;
-////			}
-//	
-//			int counter = 0;  
-//			string line;
-//
-//			// Read the file and display it line by line.  
-//			System.IO.StreamReader file =   
-//				new System.IO.StreamReader(src);//@"c:\test.txt");
-//			while((line = file.ReadLine()) != null)  
-//			{
-//				string[] pa = line.Split(';');
-//				Dictionary<int,PriceActionType> mkt_ctxs = new Dictionary<int,PriceActionType>();
-//				for(int i=1; i<pa.Length; i++) {
-//					string[] mkt_ctx = pa[i].Split(':');
-//					int dt;
-//					int.TryParse(mkt_ctx[0], out dt);
-//					mkt_ctxs.Add(dt,(PriceActionType)Enum.Parse(typeof(PriceActionType), mkt_ctx[1]));
-//				}
-//				if(mkt_ctxs.Count > 0) {
-//					Dict_SpvPR.Add(pa[0], mkt_ctxs);
-//				}
-//				Print(line);
-//				counter++;
-//			}
-//
-//			file.Close();
-//			Print("There were {0} lines." + counter);
-//			// Suspend the screen.
-//			//System.Console.ReadLine();
-//			foreach(var pair in Dict_SpvPR) {
-//				Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
-//				Dictionary<int,PriceActionType> mkcnd = (Dictionary<int,PriceActionType>)pair.Value;
-//				foreach(var cnd in mkcnd) {
-//					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
-//				}
-//			}
 			return pat;
-		}		
+		}
+		
+		/// <summary>
+		/// Check if the price action type allowed for supervised PR 
+		/// </summary>
+		/// <returns></returns>
+		public bool IsSpvAllowed4PAT(PriceActionType pat) {
+			int i;
+			switch(pat) {
+				case PriceActionType.UpTight: //
+					i = (1 & SpvPRBits);
+					//Print("IsSpvAllowed4PAT:" + pat.ToString() + ", (1 & SpvPRBits)=" + i);
+					return (1 & SpvPRBits) > 0;
+				case PriceActionType.UpWide: //wide up channel
+					i = (2 & SpvPRBits);
+					//Print("IsSpvAllowed4PAT:" + pat.ToString() + ", (2 & SpvPRBits)=" + i);
+					return (2 & SpvPRBits) > 0;
+				case PriceActionType.DnTight: //
+					i = (4 & SpvPRBits);
+					//Print("IsSpvAllowed4PAT:" + pat.ToString() + ", (4 & SpvPRBits)=" + i);
+					return (4 & SpvPRBits) > 0;
+				case PriceActionType.DnWide: //wide dn channel
+					i = (8 & SpvPRBits);
+					//Print("IsSpvAllowed4PAT:" + pat.ToString() + ", (8 & SpvPRBits)=" + i);
+					return (8 & SpvPRBits) > 0;
+				case PriceActionType.RngTight: //
+					i = (16 & SpvPRBits);
+					//Print("IsSpvAllowed4PAT:" + pat.ToString() + ", (16 & SpvPRBits)=" + i);
+					return (16 & SpvPRBits) > 0;
+				case PriceActionType.RngWide: //
+					i = (32 & SpvPRBits);
+					//Print("IsSpvAllowed4PAT:" + pat.ToString() + ", (32 & SpvPRBits)=" + i);
+					return (32 & SpvPRBits) > 0;
+				case PriceActionType.UnKnown: //
+					i = (64 & SpvPRBits);
+					//Print("IsSpvAllowed4PAT:" + pat.ToString() + ", (64 & SpvPRBits)=" + i);
+					return (64 & SpvPRBits) > 0;					
+				default:
+					return false;
+			}			
+		}
+		
 		#endregion
 		
 		public void PrintLog(bool pntcon, string fpath, string text) {

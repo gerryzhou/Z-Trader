@@ -50,7 +50,7 @@ namespace NinjaTrader.Indicator
 		
 		private double curZZGap				= 0;
 		private	int pbSARCrossBarsAgo		= 0 ;
-		private int barsSinceLastCross		= 0 ;
+		//private int barsSinceLastCross		= 0 ; dup with pbSARCrossBarsAgo
 		private Color dotColor				= Color.Orange;
 		
 		private ILine zigZagLine			= null; // The current ZigZag ended by the last bar of the chart;
@@ -65,13 +65,15 @@ namespace NinjaTrader.Indicator
 		
 		protected List<ZigZagSwing>		zzSwings;
 		
+		protected PriceActionType curPriceActType = PriceActionType.UnKnown;
+		
 		#endregion
 
         /// <summary>
         /// This method is used to configure the indicator and is called once before any bar data is loaded.
         /// </summary>
         protected override void Initialize()
-        {			
+        {
 			symbol = Instrument.FullName;
             Add(new Plot(dotColor, PlotStyle.Dot, "GI pbSAR"));
             Overlay					= true;	// Plots the indicator on top of price
@@ -206,7 +208,7 @@ namespace NinjaTrader.Indicator
 		}
 
 		protected ILine DrawZigZag(int endBar, double endValue, string tag) {
-			Print("DrawZigZag called");
+			//Print("DrawZigZag called");
 			ILine zzLine = null;
 			int startBar = GetLastReverseBar(endBar);
 			//gap = 0;
@@ -216,20 +218,10 @@ namespace NinjaTrader.Indicator
 				zzLine = DrawLine(tag + CurrentBar, CurrentBar-startBar, reverseValue[CurrentBar-startBar], 0, endValue, Color.Blue);
 				curZZGap = endValue - reverseValue[CurrentBar-startBar] ;
 			}
-			PriceActionType pat = GetPriceActType(Time[0]);
-			Print("Time, Pat=" + Time[0] + "," + pat.ToString());
+			curPriceActType = GetPriceActType(Time[0]);
+			//Print("Time, Pat=" + Time[0] + "," + curPriceActType.ToString());
 			SetZZSwing(zzSwings, endBar, startBar, endBar, curZZGap);
 			return zzLine;
-		}
-		
-		protected int GetLastReverseBar(int curBar) {
-			Print("GetLastReverseBar called");
-			for(int i=curBar-1; i>=3; i--) {
-				//Print("CurrentBar, reverseBar[CurrentBar-i]=" + CurrentBar + "," + reverseBar[CurrentBar-i]);
-				if(reverseBar[CurrentBar-i] > 0)
-					return reverseBar[CurrentBar-i];
-			}
-			return -1;
 		}
 		
 		/// <summary>
@@ -269,7 +261,7 @@ namespace NinjaTrader.Indicator
 			//	zz = latestZZs[latestZZs.Length-1].Size;
 			return zz;
 		}
-				
+
         #region Properties
         /// <summary>
         /// The initial acceleration factor
@@ -357,22 +349,37 @@ namespace NinjaTrader.Indicator
 		public double GetAf() {
 			return af;
 		}
+		
 		public double GetTodaySAR() {
 			return todaySAR;
 		}
+		
 		public double GetPrevSAR() {
 			return prevSAR;
 		}
+		
 		public int GetReverseBar() {
 			return reverseBar.Get(CurrentBar);
 		}
+		
+		public int GetLastReverseBar(int curBar) {
+			//Print("GetLastReverseBar called");
+			for(int i=curBar-1; i>=BarsRequired; i--) {
+				//Print("CurrentBar, reverseBar[CurrentBar-i]=" + CurrentBar + "," + reverseBar[CurrentBar-i]);
+				if(reverseBar[CurrentBar-i] > 0)
+					return reverseBar[CurrentBar-i];
+			}
+			return -1;
+		}
+		
 		public double GetReverseValue() {
 			return reverseValue.Get(CurrentBar);
 		}
+		
 		public bool IsReversalBar() {
-//			if(CurrentBar > BarsRequired) 
-//				return false;
-//			else
+			if(CurrentBar <= BarsRequired) 
+				return false;
+			else
 				return reverseBar.Get(CurrentBar) == CurrentBar;
 		}
 		
@@ -389,12 +396,24 @@ namespace NinjaTrader.Indicator
 		}				
 		
 		public int GetpbSARCrossBarsAgo() {
-			return pbSARCrossBarsAgo;
+			int lastRevBar = GetLastReverseBar(CurrentBar);
+			//Print("CurrentBar, lastRevBar=" + CurrentBar + "," + lastRevBar);
+			if(IsReversalBar() || lastRevBar<0) return 0;
+			else return CurrentBar-lastRevBar;			
 		}
 		
 		public ILine GetCurZZLine() {
 			return zigZagLine;
 		}
+		
+		public PriceActionType getCurPriceActType() {
+			return curPriceActType;
+		}
+		
+		public void setSpvPRBits(int spvPRBits) {
+			SpvPRBits = spvPRBits;
+		}		
+		
 		#endregion	
 		
 		#region Miscellaneous
