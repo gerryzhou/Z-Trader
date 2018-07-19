@@ -35,17 +35,37 @@ namespace NinjaTrader.Indicator
 	
 	/// <summary>
 	/// Supervised Pattern Recognization
-	/// 20100610;8301045:UpTight;11011245:RngWide;13011459:DnWide;
+	/// 20100610;8301045:UpTight#10-16-3-5;11011245:RngWide#4-6;13011459:DnWide;
 	/// </summary>
 	public class SpvPR {
 		public int Date;
 		//Market condition for TimeRange;
 		//HHMMHHMM=TimeStart*10000+TimeEnd;
-		public Dictionary<int,PriceActionType> Mkt_Ctx; 
+		public Dictionary<int,PriceAction> Mkt_Ctx; 
 		
-		public SpvPR (int date, Dictionary<int,PriceActionType> mktCtx) {
+		public SpvPR (int date, Dictionary<int,PriceAction> mktCtx) {
 			this.Date = date;
 			this.Mkt_Ctx = mktCtx;
+		}
+	}
+	
+	/// <summary>
+	/// PriceAction include PriceAtionType and the volatility measurement
+	/// min and max ticks of up/down expected
+	/// shrinking, expanding, or paralleling motion;
+	/// </summary>
+	public class PriceAction {
+		public PriceActionType paType;
+		public int minUpTicks;
+		public int maxUpTicks;
+		public int minDownTicks;
+		public int maxDownTicks;
+		public PriceAction(PriceActionType pat, int min_UpTicks, int max_UpTicks, int min_DnTicks, int max_DnTicks) {
+			this.paType = pat;
+			this.minUpTicks = min_UpTicks;
+			this.maxUpTicks = max_UpTicks;
+			this.minDownTicks = min_DnTicks;
+			this.maxDownTicks = max_DnTicks;
 		}
 	}
 	
@@ -94,9 +114,9 @@ namespace NinjaTrader.Indicator
 		#region SpvPR Vars
 		/// <summary>
 		/// Loaded from supervised file;
-		/// Key=Date;
+		/// Key1=Date; Key2=Time;
 		/// </summary>		
-		protected Dictionary<string,Dictionary<int,PriceActionType>> Dict_SpvPR = null;
+		protected Dictionary<string,Dictionary<int,PriceAction>> Dict_SpvPR = null;
 		
 		/// <summary>
 		/// Bitwise op to tell which Price Action allowed to be the supervised entry approach
@@ -276,9 +296,9 @@ namespace NinjaTrader.Indicator
 			return dt.ToString("MM/dd/yyyy HH:mm:ss");
 		}
 
-		public int GetYearByDateTime(DateTime dt) {
-			int year = dt.Year*10000 + dt.Month*100 + dt.Day;
-			return year;
+		public int GetDateByDateTime(DateTime dt) {
+			int date = dt.Year*10000 + dt.Month*100 + dt.Day;
+			return date;
 		}
 				
 		/// <summary>
@@ -716,9 +736,15 @@ namespace NinjaTrader.Indicator
 			return filesInOrder;
 		}
 		
-		public Dictionary<string,Dictionary<int,PriceActionType>> ReadSpvFile(string srcDir, string symbol) {
+		/// <summary>
+		/// 20170522;9501459:UpTight#10-16-3-5
+		/// </summary>
+		/// <param name="srcDir"></param>
+		/// <param name="symbol"></param>
+		/// <returns></returns>
+		public Dictionary<string,Dictionary<int,PriceAction>> ReadSpvFile(string srcDir, string symbol) {
 			//Dictionary<string,Dictionary<int,PriceActionType>> 
-			Dict_SpvPR = new Dictionary<string,Dictionary<int,PriceActionType>>();
+			Dict_SpvPR = new Dictionary<string,Dictionary<int,PriceAction>>();
 			string src = srcDir + symbol + ".txt";
 			Print("ReadSpvPRFile src: " + src);
 //			if (!src.Exists)
@@ -734,16 +760,27 @@ namespace NinjaTrader.Indicator
 				new System.IO.StreamReader(src);//@"c:\test.txt");
 			while((line = file.ReadLine()) != null)  
 			{
-				string[] pa = line.Split(';');
-				Dictionary<int,PriceActionType> mkt_ctxs = new Dictionary<int,PriceActionType>();
-				for(int i=1; i<pa.Length; i++) {
-					string[] mkt_ctx = pa[i].Split(':');
-					int dt;
-					int.TryParse(mkt_ctx[0], out dt);
-					mkt_ctxs.Add(dt,(PriceActionType)Enum.Parse(typeof(PriceActionType), mkt_ctx[1]));
+				string[] line_pa = line.Split(';');
+				Dictionary<int,PriceAction> mkt_ctxs = new Dictionary<int,PriceAction>();
+				for(int i=1; i<line_pa.Length; i++) {
+					int t, minUp, maxUp, minDn, maxDn;
+					
+					string[] mkt_ctx = line_pa[i].Split(':');
+					int.TryParse(mkt_ctx[0], out t);//parse the time of the PA;
+					
+					string[] pa = mkt_ctx[1].Split('#');
+					PriceActionType pat = (PriceActionType)Enum.Parse(typeof(PriceActionType), pa[0]);//parse the PA type;
+					
+					string[] v = pa[1].Split('-');
+					int.TryParse(v[0], out minUp);
+					int.TryParse(v[1], out maxUp);
+					int.TryParse(v[2], out minDn);
+					int.TryParse(v[3], out maxDn);					
+					
+					mkt_ctxs.Add(t, new PriceAction(pat, minUp, maxUp, minDn, maxDn));
 				}
 				if(mkt_ctxs.Count > 0) {
-					Dict_SpvPR.Add(pa[0], mkt_ctxs);
+					Dict_SpvPR.Add(line_pa[0], mkt_ctxs);
 				}
 				Print(line);
 				counter++;
@@ -755,7 +792,7 @@ namespace NinjaTrader.Indicator
 			//System.Console.ReadLine();
 			foreach(var pair in Dict_SpvPR) {
 				//Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
-				Dictionary<int,PriceActionType> mkcnd = (Dictionary<int,PriceActionType>)pair.Value;
+				Dictionary<int,PriceAction> mkcnd = (Dictionary<int,PriceAction>)pair.Value;
 //				foreach(var cnd in mkcnd) {
 //					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
 //				}
@@ -763,16 +800,16 @@ namespace NinjaTrader.Indicator
 			return Dict_SpvPR;
 		}
 		
-		public PriceActionType GetPriceActType(DateTime dt) {
+		public PriceAction GetPriceAction(DateTime dt) {
 			
-			PriceActionType pat = PriceActionType.UnKnown;
+			PriceAction pa = new PriceAction(PriceActionType.UnKnown, -1, -1, -1, -1);
 			
-			int key_year = GetYearByDateTime(dt);
+			int key_date = GetDateByDateTime(dt);
 			int t = dt.Hour*100 + dt.Minute;
 			
-			Dictionary<int,PriceActionType> mkt_ctxs = null;
+			Dictionary<int,PriceAction> mkt_ctxs = null;
 			if(Dict_SpvPR != null)
-				Dict_SpvPR.TryGetValue(key_year.ToString(), out mkt_ctxs);
+				Dict_SpvPR.TryGetValue(key_date.ToString(), out mkt_ctxs);
 			//Print("key_year, time, Dict_SpvPR, mkt_ctxs=" + key_year.ToString() + "," + t.ToString() + "," + Dict_SpvPR + "," + mkt_ctxs);
 			if(mkt_ctxs != null) {
 				foreach(var mkt_ctx in mkt_ctxs) {
@@ -781,12 +818,12 @@ namespace NinjaTrader.Indicator
 					int end = mkt_ctx.Key % 10000;
 					
 					if(t >= start && t <= end) {
-						pat = (PriceActionType)mkt_ctx.Value;
+						pa = mkt_ctx.Value;
 						break;
 					}
 				}
 			}
-			return pat;
+			return pa;
 		}
 		
 		/// <summary>

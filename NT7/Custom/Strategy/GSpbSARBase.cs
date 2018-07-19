@@ -84,7 +84,7 @@ namespace NinjaTrader.Strategy
 		
 		private GIParabolicSAR giParabSAR = null;//new GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan);
 		private int barsSinceLastCross = -1;
-		private PriceActionType curBarPat = PriceActionType.UnKnown;//PriceAtionType of current bar
+		private PriceAction curBarPriceAction = new PriceAction(PriceActionType.UnKnown, -1,-1,-1,-1);//PriceAtionType of current bar
 		
 		private int spvPRBits = 0;
 		
@@ -148,12 +148,12 @@ namespace NinjaTrader.Strategy
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXp=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetXp());
 			double gap = giParabSAR.GetCurZZGap(); //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange).GetCurZZGap();
 			bool isReversalBar = giParabSAR.IsReversalBar();//GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange).IsReversalBar();
-			curBarPat = giParabSAR.getCurPriceActType();
+			curBarPriceAction = giParabSAR.getCurPriceAction();
 			barsSinceLastCross = giParabSAR.GetpbSARCrossBarsAgo();
 			if(isReversalBar) {				
-				SetTradeContext(curBarPat);
+				SetTradeContext(curBarPriceAction);
 				//Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan)[0] + "-------------");
-				Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPat.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
+				Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
 			}
 			
 			if (giParabSAR[0] > 0) //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange)[0] > 0)
@@ -175,7 +175,7 @@ namespace NinjaTrader.Strategy
 								
 					if(NewOrderAllowed() && PatternMatched())
 					{
-						Print("----------------PutTrade, isReversalBar=" + isReversalBar + ",giParabSAR.IsSpvAllowed4PAT(curBarPat)=" + giParabSAR.IsSpvAllowed4PAT(curBarPat));
+						Print("----------------PutTrade, isReversalBar=" + isReversalBar + ",giParabSAR.IsSpvAllowed4PAT(curBarPat)=" + giParabSAR.IsSpvAllowed4PAT(curBarPriceAction.paType));
 						PutTrade(gap, isReversalBar);
 					}
 					break;
@@ -190,8 +190,8 @@ namespace NinjaTrader.Strategy
 
 		#region	Trade Functions
 		
-		protected void SetTradeContext(PriceActionType pat) {
-			switch(pat) {
+		protected void SetTradeContext(PriceAction pa) {
+			switch(pa.paType) {
 				case PriceActionType.UpTight: //
 					tradeStyle = 1;
 					tradeDirection = 1;
@@ -377,8 +377,8 @@ namespace NinjaTrader.Strategy
 
 		protected bool PatternMatched()
 		{
-			Print("CurrentBar, barsMaxLastCross, barsAgoMaxPbSAREn,=" + CurrentBar + "," + barsAgoMaxPbSAREn + "," + barsSinceLastCross);
-			if (giParabSAR.IsSpvAllowed4PAT(curBarPat) && barsSinceLastCross < barsAgoMaxPbSAREn) 
+			//Print("CurrentBar, barsMaxLastCross, barsAgoMaxPbSAREn,=" + CurrentBar + "," + barsAgoMaxPbSAREn + "," + barsSinceLastCross);
+			if (giParabSAR.IsSpvAllowed4PAT(curBarPriceAction.paType) && barsSinceLastCross < barsAgoMaxPbSAREn) 
 				return true;
 			else return false;
 			//barsAgoMaxPbSAREn Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed

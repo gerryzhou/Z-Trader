@@ -65,7 +65,7 @@ namespace NinjaTrader.Indicator
 		
 		protected List<ZigZagSwing>		zzSwings;
 		
-		protected PriceActionType curPriceActType = PriceActionType.UnKnown;
+		protected PriceAction curPriceAction = new PriceAction(PriceActionType.UnKnown, -1, -1, -1, -1);
 		
 		#endregion
 
@@ -218,7 +218,7 @@ namespace NinjaTrader.Indicator
 				zzLine = DrawLine(tag + CurrentBar, CurrentBar-startBar, reverseValue[CurrentBar-startBar], 0, endValue, Color.Blue);
 				curZZGap = endValue - reverseValue[CurrentBar-startBar] ;
 			}
-			curPriceActType = GetPriceActType(Time[0]);
+			curPriceAction = GetPriceAction(Time[0]);
 			//Print("Time, Pat=" + Time[0] + "," + curPriceActType.ToString());
 			SetZZSwing(zzSwings, endBar, startBar, endBar, curZZGap);
 			return zzLine;
@@ -406,8 +406,8 @@ namespace NinjaTrader.Indicator
 			return zigZagLine;
 		}
 		
-		public PriceActionType getCurPriceActType() {
-			return curPriceActType;
+		public PriceAction getCurPriceAction() {
+			return curPriceAction;
 		}
 		
 		public void setSpvPRBits(int spvPRBits) {
