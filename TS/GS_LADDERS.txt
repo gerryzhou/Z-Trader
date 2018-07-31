@@ -1,0 +1,381 @@
+using elsystem ;
+using tsdata.common ;
+using tsdata.trading ;
+using tsdata.marketdata ;
+using elsystem.drawing;
+using elsystem.drawingobjects;
+{Scalping after morning bk(ladders approach-- count on 2-4 points swings); 
+following the ½ rule, find the round number: xx10, xx15, xx20, xx30 (or xxx2, xxx4, xxx6,xxx8 …..), etc., 
+the extended range is about the double or half of the current swing size; 
+reversed at the double/half/round points; V+Inverted V combination wave; 
+post-trending ranging following the consolidation double/half rule; }
+
+{ Trend identify: pbSAR[0]-pbSAR[5] > 0 && |pbSAR[0-5]| > setThreshold, upTrend;
+Entry: if the price crossed a ladder price and it crossed a PivotHL, or the double/half of the PivotHL, 
+entry at the second reversal bar;
+PivotHighVS(Instance, Price, LeftStrength, RightStrength, Length)
+
+ }
+inputs:
+	double pbSAR_AfStep( 0.002 ) [DisplayName = "AfStep", ToolTip = 
+	 "Acceleration Factor Step.  Enter the step amount for the parabolic acceleration factor."],
+	double pbSAR_AfLimit( 0.2 ) [DisplayName = "AfLimit", ToolTip = 
+	 "Acceleration Factor Limit.  Enter the maximum acceleration factor for the parabolic calculation."],
+	bool UsePlotColoring( true ) [DisplayName = "UsePlotColoring", ToolTip = 
+	 "Enter true to use a different plot color if the SAR value is above or below price.  Enter false to use the same plot color."],
+	int PriceAbvParabColor( Cyan ) [DisplayName = "PriceAbvParabColor", ToolTip = 
+	 "Price Above Parabolic Color.  Enter the color for plot when Price is greater than the SAR value."],
+	int PriceBlwParabColor( Magenta )
+	 [DisplayName = "PriceBlwParabColor", ToolTip = 
+	 "Price Above Parabolic Color.  Enter the color for plot when Price is less than the SAR value."],
+	bool ColorCellBGOnAlert( true ) [DisplayName = "ColorCellBGOnAlert", ToolTip = 
+	 "Color Cell Background On Alert.  Enter true to color RadarScreen cell background when alert occurs;  enter false to not color cell background."],
+	int BackgroundColorAlertCell( DarkGray )
+	 [DisplayName = "BackgroundColorAlertCell", ToolTip = 
+	 "Enter the color to use for RadarScreen cell background when alert occurs."],
+	AlgoMode( 1 ) [DisplayName = "AlgoMode", ToolTip = 
+	 "command to change mode 0=liquidate; 1=start/resume trading; 2=cancel order; -1=stop trading;"],	 
+	double HighPivotPrice( High ) [DisplayName = "HighPivotPrice", ToolTip = 
+	 "Enter an EasyLanguage expression to use in the calculation of high ZigZag pivots."],
+	double LowPivotPrice( Low ) [DisplayName = "LowPivotPrice", ToolTip = 
+	 "Enter an EasyLanguage expression to use in the calculation of low ZigZag pivots."],
+	double RetracePnts( 4 ) [DisplayName = "RetracePnts", ToolTip = 
+	 "Retracement Points.  Enter the amount of retracement of the price specified in the price input that will cause a new zigzag line to be drawn. "], 
+	double ThresholdPnts( 6 ) [DisplayName = "ThresholdPnts", ToolTip = 
+	 "Threshold Points.  Enter the amount of threshold of the price specified in the price input that defines a small pullback zigzag line. "], 
+	double EnSwingMinPnts( 6 ) [DisplayName = "EnSwingMinPnts", ToolTip = 
+	 "Min Threshold Points. Enter the min amount of threshold of the swing size of zigzag line for initailization of an entry. "], 
+	double EnSwingMaxPnts( 10 ) [DisplayName = "EnSwingMaxPnts", ToolTip = 
+	 "Max Threshold Points. Enter the max amount of threshold of the swing size of zigzag line for initailization of an entry. "], 
+	EnOffsetPnts( 0.75 ) [DisplayName = "EnOffsetPnts", ToolTip = 
+	 "Offset Points for entry limit price.  Enter the amount of offset for limit price entry. "], //0.75, 0.5
+	ProfitTargetAmt( 300 ) [DisplayName = "ProfitTargetAmt", ToolTip = 
+	 "Profit Target Amount.  Enter the amount of the profit target.  Enter 0 for no profit target."], //best 300, 350
+	StopLossAmt( 175 ) [DisplayName = "StopLossAmt", ToolTip = 
+	 "Stop Loss Amount.  Enter the amount of the stop loss.  Enter 0 for no stop loss."], //best 175, 225, 250, 200, 150
+	BreakEvenAmt( 200 ), //best 200, 175
+	int BarsSincePT(1) [DisplayName = "BarsSincePT", ToolTip = 
+	 "Bars Since reached profit target.  Enter the amount of the bars ago when the position exit with profit."],
+	int BarsSinceSL(1) [DisplayName = "BarsSinceSL", ToolTip = 
+	 "Bars Since stopped out.  Enter the amount of the bars ago when the position stopped out."],
+	int BarsAgoMaxPbSAREn(5) [DisplayName = "BarsAgoMaxPbSAREn", ToolTip = 
+	 "Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed."],
+	int BarsMaxLastCross(54) [DisplayName = "BarsAgoMaxPbSAREn", ToolTip = 
+	 "Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry."],
+	int TimeStartH( 21 ) [DisplayName = "TimeStartH", ToolTip = 
+	 "Enter the hour of start time to check the signal.[0-23]"], //21:59, 22:01, 23:30, 23:59
+	int TimeStartM( 59 ) [DisplayName = "TimeStartM", ToolTip = 
+	 "Enter the minute of start time to check the signal.[0-60]"],
+	int TimeEndH( 14 ) [DisplayName = "TimeEndH", ToolTip = 
+	 "Enter the hour of end time to check the signal.[0-23]"], //14:59, 
+	int TimeEndM( 59 ) [DisplayName = "TimeEndM", ToolTip = 
+	 "Enter the hour of end time to check the signal.[0-60]"],
+	int FlatTimeStart( 1505 ) [DisplayName = "FlatTimeStart", ToolTip = 
+	 "Enter the start time to flat the position at close."],
+	int FlatTimeEnd( 1700 ) [DisplayName = "FlatTimeEnd", ToolTip = 
+	 "Enter the end time to flat the position at close."],	 
+	int TradeDirection (1),
+	int TradeStyle (1),
+	int PrintOut (1),
+	bool ShowBarNo( false ) [DisplayName = "Show Bar NO", ToolTip = 
+	 "Show up bar number."],
+	bool ShowTxt( false ) [DisplayName = "Show Text object", ToolTip = 
+	 "Show up text."],
+	int TxtColor( Magenta ) [DisplayName = "TxtColor", ToolTip = 
+	 "Enter the color to be used for the zigzag gap price."], 
+	int LineColor( Yellow ) [DisplayName = "LineColor", ToolTip = 
+	 "Enter the color to be used for the zigzag lines."], 
+	int LineWidth( 1 ) [DisplayName = "LineWidth", ToolTip = 
+	 "Enter the width, specified as a number, of the zigzag lines.  This value can have any integer value from 0 to 6."];
+
+variables:
+	algo_mode(AlgoMode), //command to change mode 0=liquidate; 1=start/resume trading; 2=cancel order; -1=stop trading;
+	double enOffset_pnts( EnOffsetPnts ),
+	double profitTarget_amt( ProfitTargetAmt ),
+	double stopLoss_amt( StopLossAmt ),
+	double breakEven_amt( BreakEvenAmt ),
+	{
+	int BarsSincePT(1) [DisplayName = "BarsSincePT", ToolTip = 
+	 "Bars Since reached profit target.  Enter the amount of the bars ago when the position exit with profit."],
+	int BarsSinceSL(1) [DisplayName = "BarsSinceSL", ToolTip = 
+	 "Bars Since stopped out.  Enter the amount of the bars ago when the position stopped out."],
+	int BarsAgoMaxPbSAREn(5) [DisplayName = "BarsAgoMaxPbSAREn", ToolTip = 
+	 "Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed."],
+	int BarsMaxLastCross(54) [DisplayName = "BarsAgoMaxPbSAREn", ToolTip = 
+	 "Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry."],
+	int TimeStartH( 21 ) [DisplayName = "TimeStartH", ToolTip = 
+	 "Enter the hour of start time to check the signal.[0-23]"], //21:59, 22:01, 23:30, 23:59
+	int TimeStartM( 59 ) [DisplayName = "TimeStartM", ToolTip = 
+	 "Enter the minute of start time to check the signal.[0-60]"],
+	int TimeEndH( 14 ) [DisplayName = "TimeEndH", ToolTip = 
+	 "Enter the hour of end time to check the signal.[0-23]"], //14:59, 
+	int TimeEndM( 59 ) [DisplayName = "TimeEndM", ToolTip = 
+	 "Enter the hour of end time to check the signal.[0-60]"],
+	int FlatTimeStart( 1505 ) [DisplayName = "FlatTimeStart", ToolTip = 
+	 "Enter the start time to flat the position at close."],
+	int FlatTimeEnd( 1700 ) [DisplayName = "FlatTimeEnd", ToolTip = 
+	 "Enter the end time to flat the position at close."],	 
+	int TradeDirection (1),
+	int TradeStyle (1), }
+	
+	int pbSAR_RetVal( 0 ),
+	double oParCl( 0 ),
+	double oParOp( 0 ),
+	double oPosition( 0 ),
+	double oTransition( 0 ),
+	int pbSARCrossBarsAgo( 0 ),
+	int barsSinceLastCross( 0 ),
+	intrabarpersist bool UseBNPoint( false ),
+	int DrawingObjectBarNumber( 0 ),
+	//TrendLine ZigZagTrendline( NULL ),
+	//TrendLine LastZZTrendline( NULL ),
+	DTPoint SwingDTPoint( NULL ),
+	DTPoint LastSwingDTPoint( NULL ),
+	BNPoint SwingBNPoint( NULL ),
+	BNPoint LastSwingBNPoint( NULL ),
+	BNPoint TLStartBNPoint( NULL ),
+	BNPoint TLEndBNPoint( NULL ),
+	double NewSwingPrice( 0 ), 
+	double SwingPrice( Close ), { used as a convenient 2-element array }
+	double CurPriceGap( 0 ), {The Price gap between end point and the start Point of current TrendLine}
+	int TLDir( 0 ), { TLDir = -1 implies prev TL dn, +1 implies prev TL up }
+	bool SaveSwing( false ), 
+	bool AddTL( false ), 
+	bool UpdateTL( false ),	
+	TxtID(-1),TxtID2(-1),TxtID3(-1),
+	//string LogFileName("C:\Users\GZhou\Documents\ts_log\TS_Log_" + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".log"),
+	//string LogFileName("C:\inetpub\wwwroot\nt_files\log\SIM666850F\TS_Log_" + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".log"),
+	string LogFileName("C:\inetpub\wwwroot\nt_files\log\" + GetAccountID() + "\TS_Log_" + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".log"),
+	string CmdFileName(" "),
+	string log_text(" ") ,
+	int barsBackLast(-1),
+	int entryCount(0),
+	double MapID(-1),
+	string Sym(""),
+	double Price(-1);
+
+[IntrabarOrderGeneration = false]
+
+method bool IsSignalFired(int barsBk, double pGap, double thGap)
+variables: bool isSignal, int dayofwk, int timeofsw, int barsBack, string date_time;
+begin
+	isSignal = false;
+	dayofwk = dayofweek(Date[barsBk]);
+	timeofsw = Time[barsBk];
+	if dayofwk > 1 and dayofwk <5 and absvalue(pGap) <= thGap then begin
+		If timeofsw > GF_GetTimeByHM(TimeStartH, TimeStartM) and timeofsw < GF_GetTimeByHM(TimeEndH, TimeEndM) then
+			isSignal = true;
+	end;
+	Return isSignal;
+end;
+
+method int GetTimeByHM(int time_h, int time_m)
+variables: int timeofhm;
+begin
+	timeofhm = -1;
+	If time_h >=0 and time_h <24 and time_m >= 0 and time_m < 60 then
+		timeofhm = 100*time_h + time_m;
+	Return timeofhm;
+end;
+
+{ Read parameters from file }
+method void ReadParamsFromFile(string param_file)
+variables: int timeofhm;
+begin
+	print("param_file=" + param_file);
+	MapID = MapSN.New;	//CmdFileName = "C:\inetpub\wwwroot\nt_files\cmd\" + GetAccountID() + "\ts_cmd_0422.cmd";
+  	Value1 = MapSN.ReadFile(MapID, CmdFileName);// + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".cmd");
+	Value2 = MapSN.Rewind(MapID);
+	while MapSN.Next(MapID, Sym, Price)
+		begin
+			SetParam(Sym, Price);
+		end;
+end;
+
+method void SetParam(string param, double val)
+variables: int timeofhm;
+begin
+	If PrintOut > 0 then
+		print(BarNumber, "--Sym,Price=", param, ",", val);
+	switch(param) begin
+		Case "AlgoMode": algo_mode = val; break;
+		Case "ProfitTargetAmt": profitTarget_amt = val; break;
+		Case "StopLossAmt": stopLoss_amt = val; break;
+		Case "BreakEvenAmt": breakEven_amt = val; break;
+		Case "EnOffsetPnts": enOffset_pnts = val; break;
+		{
+		Case "": break;
+		Case "": break;
+		Case "": break;}
+	end;
+end;
+
+//the overnight session start time: 170000 for ES
+method bool IsTradeTime(int time_start_h, int time_start_m, int time_end_h, int time_end_m, int session_start)
+variables: bool isTime, int time_now;
+begin
+	isTime= false;
+	time_now = Time[0];	
+	if(GetTimeByHM(time_start_h, time_start_m) >= session_start) then
+		begin
+			if(time_now >= GetTimeByHM(time_start_h, time_start_m) or time_now <= GetTimeByHM(time_end_h, time_end_m)) then
+				isTime = true;
+		end
+	else if (time_now >= GetTimeByHM(time_start_h, time_start_m) and time_now <= GetTimeByHM(time_end_h, time_end_m)) then
+		isTime = true;
+	print(Barnumber, " - time_now,time_start,time_end,session_start=", time_now, ",", GetTimeByHM(time_start_h, time_start_m), ",", GetTimeByHM(time_end_h, time_end_m), ",", session_start, " - isTradeTime=", isTime);
+	Return isTime;
+end;
+
+//The flat time when market closed: 1505 to 1700 for ES
+method bool IsFlatTime(int time_start, int time_end)
+variables: bool isTime, int time_now;
+begin
+	isTime= false;
+	time_now = Time[0];	
+	if(time_now >=time_start and time_now < time_end) then
+		isTime = true;
+	print(Barnumber, " - time_now,time_start,time_end=", time_now, ",", time_start, ",", time_end, ",", " - isFlatTime=", isTime);
+	Return isTime;
+end;
+
+method bool PutOrder(int BuOrSl)
+variables: bool isSignal, int barsBack, string date_time;
+begin
+	isSignal = false;
+	If marketposition = 0 and IsTradeTime(TimeStartH, TimeStartM, TimeEndH, TimeEndM, 1700) then begin
+		If BuOrSl > 0 and TradeDirection >= 0 then
+			Buy next bar at close-EnOffsetPnts limit;
+		If BuOrSl < 0 and TradeDirection <= 0 then
+			SellShort next bar at close+EnOffsetPnts limit;
+		isSignal = true;
+	end;
+	Return isSignal;
+end;
+
+method bool CheckPosition()
+variables: bool isSignal, int barsBack, string date_time;
+begin
+	isSignal = false;
+	If marketposition <> 0 then begin
+		If algo_mode = 0 or oTransition <> 0 or IsFlatTime(FlatTimeStart, FlatTimeEnd) then
+			CloseAllPositions()
+		Else 
+			begin
+				SetBreakEven(BreakEvenAmt);
+				SetStopLoss(StopLossAmt);
+				SetProfitTarget(ProfitTargetAmt);
+			end;
+{		If marketposition > 0 then
+			Buy next bar at close-0.5 limit;
+		If marketposition < 0 then
+			SellShort next bar at close+0.5 limit;}
+		isSignal = true;
+	end;
+	Return isSignal;
+end;
+
+method bool CloseAllPositions()
+variables: bool isSignal, int barsBack, string date_time;
+begin
+	isSignal = false;
+	If marketposition > 0 then 
+		Sell next bar on market
+	else if marketposition < 0 then 
+		BuyToCover next bar on market;
+	isSignal = true;
+	Return isSignal;
+end;
+
+SetExitOnClose;
+	If Currentbar = 1 Then Once
+		Begin		
+			log_text = "Start init GI_Ladders -------" + Symbol + "---------------" ;
+			print("LogFileName=" + LogFileName);
+			log_text = GF_ToLog(LogFileName, log_text, true, true, true) ;
+			
+			CmdFileName = "C:\inetpub\wwwroot\nt_files\cmd\" + GetAccountID() + "\ts_cmd_0422.cmd";
+			print("CmdFileName=" + CmdFileName);
+		End;
+		
+ReadParamsFromFile(CmdFileName);
+
+{
+for Index = 1 to MapSN.Count(MapID) begin
+//Number = ListN.Get(ID, Index);
+print("Sym,Price=", Sym, ",");
+end;
+}
+
+
+pbSAR_RetVal = ParabolicSAR( pbSAR_AfStep, pbSAR_AfLimit, oParCl, oParOp, oPosition, 
+ oTransition );
+ 
+{ 
+track the number of bars since the last crossover;  if oTransition is non-zero
+then there is a crossover on the current bar, so set CrossBarsAgo to 0 when this
+occurs, otherwise, increment CrossBarsAgo by 1 on every bar
+}
+if oTransition <> 0 then
+	begin
+		print(BarNumber, "crossBarsAgo,barsSinceLastCross=", numtostr(pbSARCrossBarsAgo, 0), ",", numtostr(barsSinceLastCross, 0));
+		barsSinceLastCross = pbSARCrossBarsAgo;
+		pbSARCrossBarsAgo = 0;
+		print(BarNumber, " crossBarsAgo[1], barsSinceLastCross[1]=", numtostr(pbSARCrossBarsAgo[1], 0), ",", numtostr(barsSinceLastCross[1], 0));
+	end
+else 
+	begin
+		//print(BarNumber, " oPosition=", numtostr(oPosition, 0));		
+		pbSARCrossBarsAgo += 1;
+	end;
+{
+if UsePlotColoring then
+begin
+	if oPosition = 1 then
+	begin
+		SetPlotColor( 1, PriceAbvParabColor );
+		SetPlotColor( 2, PriceAbvParabColor );
+	end
+	else
+	begin
+		SetPlotColor( 1, PriceBlwParabColor );	
+		SetPlotColor( 2, PriceBlwParabColor );
+	end;
+end;
+}
+
+Print("algo_mode=" , algo_mode);
+Print("profitTarget_amt=" , profitTarget_amt);
+Print("stopLoss_amt=" , stopLoss_amt);
+Print("breakEven_amt=" , breakEven_amt);
+
+CheckPosition();
+if oTransition = 1 and barsSinceLastCross < BarsMaxLastCross then 
+begin
+	If TradeStyle >= 0 then
+		PutOrder(1)
+	Else 
+		PutOrder(-1);
+	Alert( !( "Bullish reversal" ) );	
+end
+else if oTransition = -1 and barsSinceLastCross < BarsMaxLastCross then 
+begin
+	If TradeStyle >= 0 then
+		PutOrder(-1)
+	Else 
+		PutOrder(1);
+	Alert( !( "Bearish reversal" ) );
+end
+else if oTransition = 0 then 
+begin
+	If pbSARCrossBarsAgo < BarsAgoMaxPbSAREn and barsSinceLastCross < BarsMaxLastCross then
+	begin
+		If TradeStyle >= 0 then
+			PutOrder(oPosition)
+		Else 
+			PutOrder(-oPosition);
+		Print( "PutOrder, TradeStyle:", numtostr(oPosition, 0), ",", numtostr(TradeStyle,0) );
+	end;
+end
+//else
+//	print(barnumber, ":", MarketPosition);
