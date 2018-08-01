@@ -1,5 +1,5 @@
-﻿Algo_Mode,1
-AlgoMode,0
+﻿CmdParam,17
+AlgoMode,1
 ProfitTargetAmt,375
 StopLossAmt,150
 BreakEvenAmt,250
@@ -13,5 +13,5 @@ TimeEndH,14
 TimeEndM,59
 FlatTimeStart,1505
 FlatTimeEnd,1700
-TradeDirection,1
-TradeStyle,1
+TradeDirection,0
+TradeStyle,0
