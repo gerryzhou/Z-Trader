@@ -89,34 +89,23 @@ inputs:
 	 "Enter the width, specified as a number, of the zigzag lines.  This value can have any integer value from 0 to 6."];
 
 variables:
-	algo_mode(AlgoMode), //command to change mode 0=liquidate; 1=start/resume trading; 2=cancel order; -1=stop trading;
+	int algo_mode(AlgoMode), //command to change mode 0=liquidate; 1=start/resume trading; 2=cancel order; -1=stop trading;
 	double enOffset_pnts( EnOffsetPnts ),
 	double profitTarget_amt( ProfitTargetAmt ),
 	double stopLoss_amt( StopLossAmt ),
-	double breakEven_amt( BreakEvenAmt ),
-	{
-	int BarsSincePT(1) [DisplayName = "BarsSincePT", ToolTip = 
-	 "Bars Since reached profit target.  Enter the amount of the bars ago when the position exit with profit."],
-	int BarsSinceSL(1) [DisplayName = "BarsSinceSL", ToolTip = 
-	 "Bars Since stopped out.  Enter the amount of the bars ago when the position stopped out."],
-	int BarsAgoMaxPbSAREn(5) [DisplayName = "BarsAgoMaxPbSAREn", ToolTip = 
-	 "Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed."],
-	int BarsMaxLastCross(54) [DisplayName = "BarsAgoMaxPbSAREn", ToolTip = 
-	 "Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry."],
-	int TimeStartH( 21 ) [DisplayName = "TimeStartH", ToolTip = 
-	 "Enter the hour of start time to check the signal.[0-23]"], //21:59, 22:01, 23:30, 23:59
-	int TimeStartM( 59 ) [DisplayName = "TimeStartM", ToolTip = 
-	 "Enter the minute of start time to check the signal.[0-60]"],
-	int TimeEndH( 14 ) [DisplayName = "TimeEndH", ToolTip = 
-	 "Enter the hour of end time to check the signal.[0-23]"], //14:59, 
-	int TimeEndM( 59 ) [DisplayName = "TimeEndM", ToolTip = 
-	 "Enter the hour of end time to check the signal.[0-60]"],
-	int FlatTimeStart( 1505 ) [DisplayName = "FlatTimeStart", ToolTip = 
-	 "Enter the start time to flat the position at close."],
-	int FlatTimeEnd( 1700 ) [DisplayName = "FlatTimeEnd", ToolTip = 
-	 "Enter the end time to flat the position at close."],	 
-	int TradeDirection (1),
-	int TradeStyle (1), }
+	double breakEven_amt( BreakEvenAmt ),	
+	int bars_sincePT(BarsSincePT),
+	int bars_sinceSL(BarsSinceSL),
+	int bars_agoMaxPbSAREn(BarsAgoMaxPbSAREn),
+	int bars_maxLastCross(BarsMaxLastCross),
+	int time_startH( TimeStartH ), //21:59, 22:01, 23:30, 23:59
+	int time_startM( TimeStartM ),
+	int time_endH( TimeEndH ), //14:59, 
+	int time_endM( TimeEndM ),
+	int flat_timeStart( FlatTimeStart ),
+	int flat_timeEnd( FlatTimeEnd ),
+	int trade_direction (TradeDirection),
+	int trade_style (TradeStyle),
 	
 	int pbSAR_RetVal( 0 ),
 	double oParCl( 0 ),
@@ -163,7 +152,7 @@ begin
 	dayofwk = dayofweek(Date[barsBk]);
 	timeofsw = Time[barsBk];
 	if dayofwk > 1 and dayofwk <5 and absvalue(pGap) <= thGap then begin
-		If timeofsw > GF_GetTimeByHM(TimeStartH, TimeStartM) and timeofsw < GF_GetTimeByHM(TimeEndH, TimeEndM) then
+		If timeofsw > GF_GetTimeByHM(time_startH, time_startM) and timeofsw < GF_GetTimeByHM(time_endH, time_endM) then
 			isSignal = true;
 	end;
 	Return isSignal;
@@ -180,18 +169,22 @@ end;
 
 { Read parameters from file }
 method void ReadParamsFromFile(string param_file)
-variables: int timeofhm;
 begin
 	print("param_file=" + param_file);
-	MapID = MapSN.New;	//CmdFileName = "C:\inetpub\wwwroot\nt_files\cmd\" + GetAccountID() + "\ts_cmd_0422.cmd";
-  	Value1 = MapSN.ReadFile(MapID, CmdFileName);// + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".cmd");
-	Value2 = MapSN.Rewind(MapID);
-	while MapSN.Next(MapID, Sym, Price)
-		begin
-			SetParam(Sym, Price);
-		end;
+	try
+		MapID = MapSN.New;	//CmdFileName = "C:\inetpub\wwwroot\nt_files\cmd\" + GetAccountID() + "\ts_cmd_0422.cmd";
+  		Value1 = MapSN.ReadFile(MapID, CmdFileName);// + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".cmd");
+		Value2 = MapSN.Rewind(MapID);
+		//SetParam("AlgoMode", MapSN.Get(MapID, "AlgoMode"));
+		while MapSN.Next(MapID, Sym, Price)
+			begin
+				SetParam(Sym, Price);
+			end;
+	Catch (Exception ex)
+		Print(ex.Message, newline, param_file);
+	end;
 end;
-
+	
 method void SetParam(string param, double val)
 variables: int timeofhm;
 begin
@@ -203,8 +196,21 @@ begin
 		Case "StopLossAmt": stopLoss_amt = val; break;
 		Case "BreakEvenAmt": breakEven_amt = val; break;
 		Case "EnOffsetPnts": enOffset_pnts = val; break;
+		Case "BarsSincePT": bars_sincePT = val; break;
+		Case "BarsSinceSL": bars_sinceSL = val; break;
+		Case "BarsAgoMaxPbSAREn": bars_agoMaxPbSAREn = val; break;
+		Case "BarsMaxLastCross": bars_maxLastCross = val; break;							
+		Case "TimeStartH": time_startH = val; break;
+		Case "TimeStartM": time_startM = val; break;
+		Case "TimeEndH": time_endH = val; break;							
+		Case "TimeEndM": time_endM = val; break;
+		Case "FlatTimeStart": flat_timeStart = val; break;
+		Case "FlatTimeEnd": flat_timeEnd = val; break;							
+		Case "TradeDirection": trade_direction = val; break;
+		Case "TradeStyle": trade_style = val; break;
+					
 		{
-		Case "": break;
+		Case "":  = val; break;
 		Case "": break;
 		Case "": break;}
 	end;
@@ -240,14 +246,22 @@ begin
 end;
 
 method bool PutOrder(int BuOrSl)
-variables: bool isSignal, int barsBack, string date_time;
+variables: bool isSignal, int barsBack, string logText;
 begin
 	isSignal = false;
-	If marketposition = 0 and IsTradeTime(TimeStartH, TimeStartM, TimeEndH, TimeEndM, 1700) then begin
-		If BuOrSl > 0 and TradeDirection >= 0 then
-			Buy next bar at close-EnOffsetPnts limit;
-		If BuOrSl < 0 and TradeDirection <= 0 then
-			SellShort next bar at close+EnOffsetPnts limit;
+	If marketposition = 0 and IsTradeTime(time_startH, time_startM, time_endH, time_endM, 1700) then begin
+		log_text = "PutOrder: TradeDirection, TradeStyle=" + numtostr(trade_direction, 0) + "," + numtostr(trade_style,0);
+		log_text = GF_ToLog(LogFileName, log_text, true, true, true);
+		If BuOrSl > 0 and trade_direction >= 0 then begin
+			log_text = "Buy next bar at limit = " + numtostr(close-enOffset_pnts, 0);
+			log_text = GF_ToLog(LogFileName, log_text, true, true, true) ;
+			Buy next bar at close-enOffset_pnts limit;
+		end;
+		If BuOrSl < 0 and trade_direction <= 0 then begin
+			log_text = "SellShort next bar at limit = " + numtostr(close+enOffset_pnts, 0);
+			log_text = GF_ToLog(LogFileName, log_text, true, true, true) ;
+			SellShort next bar at close+enOffset_pnts limit;
+		end;
 		isSignal = true;
 	end;
 	Return isSignal;
@@ -258,13 +272,13 @@ variables: bool isSignal, int barsBack, string date_time;
 begin
 	isSignal = false;
 	If marketposition <> 0 then begin
-		If algo_mode = 0 or oTransition <> 0 or IsFlatTime(FlatTimeStart, FlatTimeEnd) then
+		If algo_mode = 0 or oTransition <> 0 or IsFlatTime(flat_timeStart, flat_timeEnd) then
 			CloseAllPositions()
 		Else 
 			begin
-				SetBreakEven(BreakEvenAmt);
-				SetStopLoss(StopLossAmt);
-				SetProfitTarget(ProfitTargetAmt);
+				SetBreakEven(breakEven_amt);
+				SetStopLoss(stopLoss_amt);
+				SetProfitTarget(profitTarget_amt);
 			end;
 {		If marketposition > 0 then
 			Buy next bar at close-0.5 limit;
@@ -276,13 +290,19 @@ begin
 end;
 
 method bool CloseAllPositions()
-variables: bool isSignal, int barsBack, string date_time;
+variables: bool isSignal, int barsBack, string logText;
 begin
 	isSignal = false;
-	If marketposition > 0 then 
-		Sell next bar on market
-	else if marketposition < 0 then 
+	If marketposition > 0 then begin
+		log_text = "CloseAllPositions: Sell next bar on market";
+		log_text = GF_ToLog(LogFileName, log_text, true, true, true) ;
+		Sell next bar on market;
+	end
+	else if marketposition < 0 then begin
+		log_text = "CloseAllPositions: BuyToCover next bar on market";
+		log_text = GF_ToLog(LogFileName, log_text, true, true, true) ;
 		BuyToCover next bar on market;
+	end;
 	isSignal = true;
 	Return isSignal;
 end;
@@ -348,19 +368,21 @@ Print("algo_mode=" , algo_mode);
 Print("profitTarget_amt=" , profitTarget_amt);
 Print("stopLoss_amt=" , stopLoss_amt);
 Print("breakEven_amt=" , breakEven_amt);
+Print("trade_direction=" , trade_direction);
+Print("trade_style=" , trade_style);
 
 CheckPosition();
-if oTransition = 1 and barsSinceLastCross < BarsMaxLastCross then 
+if oTransition = 1 and barsSinceLastCross < bars_maxLastCross then 
 begin
-	If TradeStyle >= 0 then
+	If trade_style >= 0 then
 		PutOrder(1)
 	Else 
 		PutOrder(-1);
 	Alert( !( "Bullish reversal" ) );	
 end
-else if oTransition = -1 and barsSinceLastCross < BarsMaxLastCross then 
+else if oTransition = -1 and barsSinceLastCross < bars_maxLastCross then 
 begin
-	If TradeStyle >= 0 then
+	If trade_style >= 0 then
 		PutOrder(-1)
 	Else 
 		PutOrder(1);
@@ -368,13 +390,13 @@ begin
 end
 else if oTransition = 0 then 
 begin
-	If pbSARCrossBarsAgo < BarsAgoMaxPbSAREn and barsSinceLastCross < BarsMaxLastCross then
+	If pbSARCrossBarsAgo < bars_agoMaxPbSAREn and barsSinceLastCross < bars_maxLastCross then
 	begin
-		If TradeStyle >= 0 then
+		If trade_style >= 0 then
 			PutOrder(oPosition)
 		Else 
 			PutOrder(-oPosition);
-		Print( "PutOrder, TradeStyle:", numtostr(oPosition, 0), ",", numtostr(TradeStyle,0) );
+		//Print( "PutOrder, TradeStyle:", numtostr(oPosition, 0), ",", numtostr(TradeStyle,0) );
 	end;
 end
 //else
