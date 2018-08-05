@@ -202,7 +202,7 @@ namespace NinjaTrader.Indicator
 				zigZagLine = DrawZigZag(CurrentBar, xp, tagZZLine);
 				if(curGapText != null) RemoveDrawObject(curGapText);
 				curGapText = DrawGapText(curZZGap, tagCurGapText);
-				PrintZZSwings(zzSwings, log_file, printOut);
+				PrintZZSwings(zzSwings, log_file, printOut, 530, 1130);
 				//PrintTwoBarRatio();
 			}
 		}
@@ -213,7 +213,8 @@ namespace NinjaTrader.Indicator
 			int startBar = GetLastReverseBar(endBar);
 			//gap = 0;
 			if(startBar > 0 && CurrentBar > BarsRequired) {
-				Print("DrawLine CurrentBar, zzSwings= " + CurrentBar + "," + zzSwings.Count + ", CurrentBar-startBar, Value[CurrentBar-startBar], 0, reverseValue[0]=" + (CurrentBar-startBar) + "," + Value[CurrentBar-startBar] + "," + 0 + "," + reverseValue[0]);
+				if(printOut > 3)
+					Print("DrawLine CurrentBar, zzSwings= " + CurrentBar + "," + zzSwings.Count + ", CurrentBar-startBar, Value[CurrentBar-startBar], 0, reverseValue[0]=" + (CurrentBar-startBar) + "," + Value[CurrentBar-startBar] + "," + 0 + "," + reverseValue[0]);
 			//DrawLine("My line" + CurrentBar, CurrentBar-startBar, sarSeries[CurrentBar-startBar], 0, sarSeries[0], Color.Blue);
 				zzLine = DrawLine(tag + CurrentBar, CurrentBar-startBar, reverseValue[CurrentBar-startBar], 0, endValue, Color.Blue);
 				curZZGap = endValue - reverseValue[CurrentBar-startBar] ;

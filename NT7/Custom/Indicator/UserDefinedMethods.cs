@@ -19,7 +19,27 @@ namespace NinjaTrader.Indicator
 	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 	
 	public enum PriceActionType {UpTight, UpWide, DnTight, DnWide, RngTight, RngWide, UnKnown};
-		
+	
+	/// <summary>
+	/// PriceAction include PriceAtionType and the volatility measurement
+	/// min and max ticks of up/down expected
+	/// shrinking, expanding, or paralleling motion;
+	/// </summary>
+	public class PriceAction {
+		public PriceActionType paType;
+		public int minUpTicks;
+		public int maxUpTicks;
+		public int minDownTicks;
+		public int maxDownTicks;
+		public PriceAction(PriceActionType pat, int min_UpTicks, int max_UpTicks, int min_DnTicks, int max_DnTicks) {
+			this.paType = pat;
+			this.minUpTicks = min_UpTicks;
+			this.maxUpTicks = max_UpTicks;
+			this.minDownTicks = min_DnTicks;
+			this.maxDownTicks = max_DnTicks;
+		}
+	}
+	
 	public class ZigZagSwing {
 		public int Bar_Start;
 		public int Bar_End;
@@ -48,27 +68,7 @@ namespace NinjaTrader.Indicator
 			this.Mkt_Ctx = mktCtx;
 		}
 	}
-	
-	/// <summary>
-	/// PriceAction include PriceAtionType and the volatility measurement
-	/// min and max ticks of up/down expected
-	/// shrinking, expanding, or paralleling motion;
-	/// </summary>
-	public class PriceAction {
-		public PriceActionType paType;
-		public int minUpTicks;
-		public int maxUpTicks;
-		public int minDownTicks;
-		public int maxDownTicks;
-		public PriceAction(PriceActionType pat, int min_UpTicks, int max_UpTicks, int min_DnTicks, int max_DnTicks) {
-			this.paType = pat;
-			this.minUpTicks = min_UpTicks;
-			this.maxUpTicks = max_UpTicks;
-			this.minDownTicks = min_DnTicks;
-			this.maxDownTicks = max_DnTicks;
-		}
-	}
-	
+
     partial class Indicator
     {
 		#region ZZ Vars
@@ -300,7 +300,17 @@ namespace NinjaTrader.Indicator
 			int date = dt.Year*10000 + dt.Month*100 + dt.Day;
 			return date;
 		}
+		
+		//time=10000*H + 100*M + S
+		public int GetTimeByHM(int hour, int min) {
+			return 10000*hour + 100*min;
+		}
 				
+		public bool IsTimeInSpan(DateTime dt, int start, int end) {
+			int t = 100*dt.Hour + dt.Minute;
+			if(start <= t && t <= end) return true;
+			else return false;
+		}
 		/// <summary>
 		/// Check if now is the time allowed to put trade
 		/// </summary>
@@ -476,7 +486,7 @@ namespace NinjaTrader.Indicator
 		/// <summary>
 		/// Print zig zag swing.
 		/// </summary>
-		public void PrintZZSwings(List<ZigZagSwing> zzSwings, string log_file, int printOut)
+		public void PrintZZSwings(List<ZigZagSwing> zzSwings, string log_file, int printOut, int timeStartHM, int timeEndHM)
 		{ 
 			if( ZZ_Count_0_6 == null) 
 				ZZ_Count_0_6 = new Dictionary<string,double>();
@@ -527,43 +537,48 @@ namespace NinjaTrader.Indicator
 				if(zzSize>0) str_suffix = str_Plus;
 				else if(zzSize<0) str_suffix = str_Minus;
 				if(zzSize != 0)				
-					PrintLog(true, log_file, CurrentBar + " PrintZZSize called from GS:" + zzSize + "," + barStart + "," + barEnd);
-				DateTime dt = (zzSize==0||barStart<0||barEnd<0) ? Time[0] : Time[CurrentBar-barEnd];
+					PrintLog(printOut>3, log_file, CurrentBar + " PrintZZSize called from GS:" + zzSize + "," + barStart + "," + barEnd);
+				DateTime dt_start = (zzSize==0||barStart<0||barEnd<0) ? Time[0] : Time[CurrentBar-barStart];
+				DateTime dt_end = (zzSize==0||barStart<0||barEnd<0) ? Time[0] : Time[CurrentBar-barEnd];
+				
+				if (!IsTimeInSpan(dt_start, timeStartHM, timeEndHM))
+					continue;
+				
 				string key = "";
 				
 				if(zzSizeAbs > 0 && zzSizeAbs <6){
-					key = GetDictKeyByDateTime(dt, "zz0-6", "");
+					key = GetDictKeyByDateTime(dt_end, "zz0-6", "");
 					AddDictVal(ZZ_Count_0_6,key,1);
 					AddDictVal(ZZ_Sum_0_6,key,zzSizeAbs);
 				}
 				else if(zzSizeAbs >= 6 && zzSizeAbs <10){
-					key = GetDictKeyByDateTime(dt, "zz6-10", "");
+					key = GetDictKeyByDateTime(dt_end, "zz6-10", "");
 					AddDictVal(ZZ_Count_6_10,key,1);
 					AddDictVal(ZZ_Sum_6_10,key,zzSizeAbs);
 				}
 				else if(zzSizeAbs >= 10 && zzSizeAbs <16){
-					key = GetDictKeyByDateTime(dt, "zz10-16", "");
+					key = GetDictKeyByDateTime(dt_end, "zz10-16", "");
 					AddDictVal(ZZ_Count_10_16,key,1);
 					AddDictVal(ZZ_Sum_10_16,key,zzSizeAbs);
 					if(printOut > 1)
 						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 16 && zzSizeAbs <22){
-					key = GetDictKeyByDateTime(dt, "zz16-22", "");
+					key = GetDictKeyByDateTime(dt_end, "zz16-22", "");
 					AddDictVal(ZZ_Count_16_22,key,1);
 					AddDictVal(ZZ_Sum_16_22,key,zzSizeAbs);
 					if(printOut > 1)
 						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 22 && zzSizeAbs <30){
-					key = GetDictKeyByDateTime(dt, "zz22-30", "");
+					key = GetDictKeyByDateTime(dt_end, "zz22-30", "");
 					AddDictVal(ZZ_Count_22_30,key,1);
 					AddDictVal(ZZ_Sum_22_30,key,zzSizeAbs);
 					if(printOut > 1)
 						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 30){
-					key = GetDictKeyByDateTime(dt, "zz30-", "");
+					key = GetDictKeyByDateTime(dt_end, "zz30-", "");
 					AddDictVal(ZZ_Count_30_,key,1);
 					AddDictVal(ZZ_Sum_30_,key,zzSizeAbs);
 					if(printOut > 1)
@@ -575,15 +590,30 @@ namespace NinjaTrader.Indicator
 						if(printOut > 2)
 							PrintLog(true, log_file, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "]" );
 					//lastZZIdx = idx;
-					key = GetDictKeyByDateTime(dt, "zzCount", "");
+					key = GetDictKeyByDateTime(dt_end, "zzCount", "");
 					AddDictVal(ZZ_Count,key,1);
 					AddDictVal(ZZ_Sum,key,zzSizeAbs);
 				}
 			}
+			
 			double ZZ_Count_Total = SumDictVal(ZZ_Count);
 			double ZZ_Sum_Total = SumDictVal(ZZ_Sum);
 			double ZZ_Count_Avg = ZZ_Count_Total/Day_Count;
 			double ZZ_Sum_Avg = ZZ_Sum_Total/Day_Count;
+			
+			double zzCount_0_6 = SumDictVal(ZZ_Count_0_6);
+			double zzCount_6_10 = SumDictVal(ZZ_Count_6_10);
+			double zzCount_10_16 = SumDictVal(ZZ_Count_10_16);
+			double zzCount_16_22 = SumDictVal(ZZ_Count_16_22);
+			double zzCount_22_30 = SumDictVal(ZZ_Count_22_30);
+			double zzCount_30_ = SumDictVal(ZZ_Count_30_);
+			
+			double zzSum_0_6 = SumDictVal(ZZ_Sum_0_6);
+			double zzSum_6_10 = SumDictVal(ZZ_Sum_6_10);
+			double zzSum_10_16 = SumDictVal(ZZ_Sum_10_16);
+			double zzSum_16_22 = SumDictVal(ZZ_Sum_16_22);
+			double zzSum_22_30 = SumDictVal(ZZ_Sum_22_30);
+			double zzSum_30_ = SumDictVal(ZZ_Sum_30_);
 			
 			if(printOut > 2) {
 				PrintLog(true, log_file, CurrentBar + "-" + Instrument.FullName 
@@ -592,24 +622,25 @@ namespace NinjaTrader.Indicator
 					+ "\t" + ZZ_Count_Total 
 					+ "\t" + Day_Count 
 					
-					+ "\r\n ZZ_Count_0_6 \t" + SumDictVal(ZZ_Count_0_6)
-					+ "\r\n ZZ_Count_6_10 \t" + SumDictVal(ZZ_Count_6_10)
-					+ "\r\n ZZ_Count_10_16 \t" + SumDictVal(ZZ_Count_10_16)
-					+ "\r\n ZZ_Count_16_22 \t" + SumDictVal(ZZ_Count_16_22)
-					+ "\r\n ZZ_Count_22_30 \t" + SumDictVal(ZZ_Count_22_30) 
-					+ "\r\n ZZ_Count_30_ \t" + SumDictVal(ZZ_Count_30_));
+					+ "\r\n ZZ_Count_0_6 \t" + zzCount_0_6 + "\t" + String.Format("{0:0.#}", 100*zzCount_0_6/ZZ_Count_Total) + "%"
+					+ "\r\n ZZ_Count_6_10 \t" + zzCount_6_10 + "\t" + String.Format("{0:0.#}", 100*zzCount_6_10/ZZ_Count_Total) + "%"
+					+ "\r\n ZZ_Count_10_16 \t" + zzCount_10_16 + "\t" + String.Format("{0:0.#}", 100*zzCount_10_16/ZZ_Count_Total) + "%"
+					+ "\r\n ZZ_Count_16_22 \t" + zzCount_16_22 + "\t" + String.Format("{0:0.#}", 100*zzCount_16_22/ZZ_Count_Total) + "%"
+					+ "\r\n ZZ_Count_22_30 \t" + zzCount_22_30 + "\t" + String.Format("{0:0.#}", 100*zzCount_22_30/ZZ_Count_Total) + "%"
+					+ "\r\n ZZ_Count_30_ \t" + zzCount_30_ + "\t" + String.Format("{0:0.#}", 100*zzCount_30_/ZZ_Count_Total) + "%");
+				
 				PrintLog(true, log_file, CurrentBar + "-" + Instrument.FullName 
 					+ "\r\n ZZ_Sum_Avg \t ZZ_Sum \t ZZ_Sum_Days \t"
 					+ "\r\n" + String.Format("{0:0.##}", ZZ_Sum_Avg) 
 					+ "\t " + ZZ_Sum_Total 
 					+ "\t " + Day_Count
 					
-					+ "\r\n ZZ_Sum_0_6 \t" + SumDictVal(ZZ_Sum_0_6) 
-					+ "\r\n ZZ_Sum_6_10 \t" + SumDictVal(ZZ_Sum_6_10) 
-					+ "\r\n ZZ_Sum_10_16 \t" + SumDictVal(ZZ_Sum_10_16) 
-					+ "\r\n ZZ_Sum_16_22 \t" + SumDictVal(ZZ_Sum_16_22)
-					+ "\r\n ZZ_Sum_22_30 \t" + SumDictVal(ZZ_Sum_22_30) 
-					+ "\r\n ZZ_Sum_30_ \t" + SumDictVal(ZZ_Sum_30_));
+					+ "\r\n ZZ_Sum_0_6 \t" + zzSum_0_6 + "\t" + String.Format("{0:0.#}", 100*zzSum_0_6/ZZ_Sum_Total) + "%" 
+					+ "\r\n ZZ_Sum_6_10 \t" + zzSum_6_10 + "\t" + String.Format("{0:0.#}", 100*zzSum_6_10/ZZ_Sum_Total) + "%"  
+					+ "\r\n ZZ_Sum_10_16 \t" + zzSum_10_16 + "\t" + String.Format("{0:0.#}", 100*zzSum_10_16/ZZ_Sum_Total) + "%"  
+					+ "\r\n ZZ_Sum_16_22 \t" + zzSum_16_22 + "\t" + String.Format("{0:0.#}", 100*zzSum_16_22/ZZ_Sum_Total) + "%" 
+					+ "\r\n ZZ_Sum_22_30 \t" + zzSum_22_30 + "\t" + String.Format("{0:0.#}", 100*zzSum_22_30/ZZ_Sum_Total) + "%"  
+					+ "\r\n ZZ_Sum_30_ \t" + zzSum_30_ + "\t" + String.Format("{0:0.#}", 100*zzSum_30_/ZZ_Sum_Total) + "%" );
 			}
 		}
 		
@@ -760,6 +791,8 @@ namespace NinjaTrader.Indicator
 				new System.IO.StreamReader(src);//@"c:\test.txt");
 			while((line = file.ReadLine()) != null)  
 			{
+				if(line.StartsWith("//")) continue; //comments line, skip it;
+				
 				string[] line_pa = line.Split(';');
 				Dictionary<int,PriceAction> mkt_ctxs = new Dictionary<int,PriceAction>();
 				for(int i=1; i<line_pa.Length; i++) {

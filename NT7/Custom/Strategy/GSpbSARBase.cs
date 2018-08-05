@@ -44,8 +44,14 @@ namespace NinjaTrader.Strategy
 		private double trailingSLAmt = 100; //300 Default setting for trailing Stop Loss Amt
 		private double dailyLossLmt = -200; //-300 the daily loss limit amount
 		
-        private int timeStart = 10100; //93300 Default setting for timeStart
-        private int timeEnd = 145900; // Default setting for timeEnd
+		//time=H*10000+M*100+S, S is skipped here;
+        private int timeStartH = 1; //10100 Default setting for timeStart hour
+		private int timeStartM = 1; //10100 Default setting for timeStart minute
+		private int timeStart = -1; //10100 Default setting for timeStart
+        private int timeEndH = 14; // Default setting for timeEnd hour
+		private int timeEndM = 59; // Default setting for timeEnd minute
+		private int timeEnd = -1; // Default setting for timeEnd
+
 		private int minutesChkEnOrder = 20; //how long before checking an entry order filled or not
 		private int minutesChkPnL = 30; //how long before checking P&L
 		
@@ -112,6 +118,8 @@ namespace NinjaTrader.Strategy
 			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan);
 			Add(giParabSAR);
 			giParabSAR.setSpvPRBits(spvPRBits);
+			timeStart = giParabSAR.GetTimeByHM(timeStartH, timeStartM);
+			timeEnd = giParabSAR.GetTimeByHM(timeEndH, timeEndM);
 			//Add(GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan));
 			//Add(GIParabolicSAR(0.001, 0.2, 0.001, Color.Orange));
 			EMA(High, 50).Plots[0].Pen.Color = Color.Orange;
@@ -130,7 +138,7 @@ namespace NinjaTrader.Strategy
 			ExitOnClose = true;
 			ExitOnCloseSeconds = 30;
 						
-			//log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
+			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
         }
 
         protected override void OnBarUpdate()
@@ -153,7 +161,8 @@ namespace NinjaTrader.Strategy
 			if(isReversalBar) {				
 				SetTradeContext(curBarPriceAction);
 				//Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan)[0] + "-------------");
-				Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
+				if(printOut > 3)
+					Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
 			}
 			
 			if (giParabSAR[0] > 0) //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange)[0] > 0)
@@ -342,9 +351,19 @@ namespace NinjaTrader.Strategy
 			int bse = BarsSinceEntry();
 			double pnl = CheckAccPnL();//GetAccountValue(AccountItem.RealizedProfitLoss);
 			double plrt = CheckAccCumProfit();
-			if(printOut > -1)				
+			DateTime dayKey = new DateTime(Time[0].Year,Time[0].Month,Time[0].Day);
+			TradeCollection tc = (TradeCollection)Performance.AllTrades.ByDay[dayKey];
+			if(backTest && tc != null) {
+				pnl = tc.TradesPerformance.Currency.CumProfit;
+			}
+			
+			if(printOut > -1) {	
 				//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + Get24HDateTime(Time[0]));	
-
+				if(Performance.AllTrades.ByDay.Count == 2) {
+					Print("Performance.AllTrades.TradesPerformance.Currency.CumProfit is: " + Performance.AllTrades.TradesPerformance.Currency.CumProfit);
+					Print("Performance.AllTrades.ByDay[dayKey].TradesPerformance.Currency.CumProfit is: " + pnl);
+				}
+			}
 			if((backTest && !Historical) || (!backTest && Historical)) {
 				//PrintLog(true, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + Get24HDateTime(Time[0]));
 				return false;
@@ -352,9 +371,15 @@ namespace NinjaTrader.Strategy
 			if(!backTest && (plrt <= dailyLossLmt || pnl <= dailyLossLmt))
 			{
 				if(printOut > -1) {
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
+					PrintLog(true, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
 				}
 				return false;
+			}
+			if (backTest && pnl <= dailyLossLmt) {
+				if(printOut > -1) {
+					PrintLog(true, log_file, CurrentBar + "-" + AccName + ": backTest dailyLossLmt reached = " + pnl);
+				}
+				return false;				
 			}
 		
 			if (IsTradingTime(timeStart, timeEnd, 170000) && Position.Quantity == 0)
@@ -721,20 +746,36 @@ namespace NinjaTrader.Strategy
             set { dailyLossLmt = Math.Min(-100, value); }
         }
 		
-        [Description("Time start")]
+        [Description("Time start hour")]
         [GridCategory("Parameters")]
-        public int TimeStart
+        public int TimeStartH
         {
-            get { return timeStart; }
-            set { timeStart = Math.Max(0, value); }
+            get { return timeStartH; }
+            set { timeStartH = Math.Max(0, value); }
+        }
+		
+        [Description("Time start minute")]
+        [GridCategory("Parameters")]
+        public int TimeStartM
+        {
+            get { return timeStartM; }
+            set { timeStartM = Math.Max(0, value); }
+        }
+		
+        [Description("Time end hour")]
+        [GridCategory("Parameters")]
+        public int TimeEndH
+        {
+            get { return timeEndH; }
+            set { timeEndH = Math.Max(0, value); }
         }
 
-        [Description("Time end")]
+        [Description("Time end minute")]
         [GridCategory("Parameters")]
-        public int TimeEnd
+        public int TimeEndM
         {
-            get { return timeEnd; }
-            set { timeEnd = Math.Max(0, value); }
+            get { return timeEndM; }
+            set { timeEndM = Math.Max(0, value); }
         }
 		
         [Description("How long to check entry order filled or not")]
