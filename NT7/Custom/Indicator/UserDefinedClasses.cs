@@ -126,16 +126,14 @@ namespace NinjaTrader.Indicator
 			}
 
 			file.Close();
-			//Print("There were {0} lines." + counter);
-			// Suspend the screen.
-			//System.Console.ReadLine();
-			foreach(var pair in Dict_SpvPR) {
+
+//			foreach(var pair in Dict_SpvPR) {
 				//Print("mktCtx: key,val=" + pair.Key + "," + pair.Value + "," + pair.ToString());
-				Dictionary<int,PriceAction> mkcnd = (Dictionary<int,PriceAction>)pair.Value;
+//				Dictionary<int,PriceAction> mkcnd = (Dictionary<int,PriceAction>)pair.Value;
 //				foreach(var cnd in mkcnd) {
 //					Print("time,cnd=" + cnd.Key + "," + cnd.Value);
 //				}
-			}
+//			}
 			return Dict_SpvPR;
 		}
 		

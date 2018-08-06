@@ -137,8 +137,9 @@ namespace NinjaTrader.Strategy
 			// Triggers the exit on close function 30 seconds prior to session end
 			ExitOnClose = true;
 			ExitOnCloseSeconds = 30;
-						
-			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
+			
+			if(!backTest)
+				log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
         }
 
         protected override void OnBarUpdate()
@@ -163,7 +164,7 @@ namespace NinjaTrader.Strategy
 				SetTradeContext(curBarPriceAction);
 				//Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan)[0] + "-------------");
 				if(printOut > 3)
-					Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,GetCurGap,isReversalBar=" + zz_gap + "," + cur_gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
+					giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,GetCurGap,isReversalBar=" + zz_gap + "," + cur_gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
 			}
 			
 			if (giParabSAR[0] > 0) //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange)[0] > 0)
@@ -185,7 +186,7 @@ namespace NinjaTrader.Strategy
 								
 					if(NewOrderAllowed() && PatternMatched())
 					{
-						Print("----------------PutTrade, isReversalBar=" + isReversalBar + ",giParabSAR.IsSpvAllowed4PAT(curBarPat)=" + giParabSAR.IsSpvAllowed4PAT(curBarPriceAction.paType));
+						giParabSAR.PrintLog(true, !backTest, log_file, "----------------PutTrade, isReversalBar=" + isReversalBar + ",giParabSAR.IsSpvAllowed4PAT(curBarPat)=" + giParabSAR.IsSpvAllowed4PAT(curBarPriceAction.paType));
 						PutTrade(zz_gap, cur_gap, isReversalBar);
 					}
 					break;
@@ -193,7 +194,7 @@ namespace NinjaTrader.Strategy
 					CancelAllOrders();
 					break;
 				case -1: //stop trading
-					//PrintLog(true, log_file, CurrentBar + "- Stop trading cmd:" + Get24HDateTime(Time[0]));
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "- Stop trading cmd:" + Get24HDateTime(Time[0]));
 					break;
 			}			
         }
@@ -248,15 +249,15 @@ namespace NinjaTrader.Strategy
 				//+ curGap + "," + todaySAR + "," + prevSAR + "," + zzGap + "," + reverseBar + "," + last_reverseBar + "," + reverseValue ;
 				+ ":PutOrder-(curGap,zzGap,last_reverseBar)= " 
 				+ curGap + "," + zzGap + "," + last_reverseBar ;
-				PrintLog(true, log_file, logText);
+				giParabSAR.PrintLog(true, !backTest, log_file, logText);
 			}
 			
 //			double lastZZ = GetLastZZ();
 //			double lastZZAbs = Math.Abs(lastZZ);
 //			if(entryOrder == null)
-				//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--null");
+				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--null");
 //			else
-				//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--" + entryOrder.ToString());
+				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--" + entryOrder.ToString());
 			if(tradeStyle == 0) // scalping, counter trade the pullbackMinPnts
 			{
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
@@ -309,7 +310,7 @@ namespace NinjaTrader.Strategy
 			}
 			else if(tradeStyle == 2) //entry at pullback, wide channel: UpWide, DnWide, RngWide
 			{
-				//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder(tradeStyle,tradeDirection,gap,lastZZs[0],lastZZAbs,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + lastZZ + "," + lastZZAbs + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
+				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder(tradeStyle,tradeDirection,gap,lastZZs[0],lastZZAbs,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + lastZZ + "," + lastZZAbs + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
 				{
 //					if(gap < 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts)
@@ -325,7 +326,7 @@ namespace NinjaTrader.Strategy
 				}
 			}
 			else {
-				//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder no-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
+				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder no-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
 			}
 		}
 		
@@ -348,16 +349,16 @@ namespace NinjaTrader.Strategy
 //				string logText = CurrentBar + "-" + AccName + 
 //				":PutOrder-(curGap,todaySAR,prevSAR,zzGap,reverseBar,last_reverseBar,reverseValue)= " 
 //				+ curGap + "," + todaySAR + "," + prevSAR + "," + zzGap + "," + reverseBar + "," + last_reverseBar + "," + reverseValue ;
-//				PrintLog(true, log_file, logText);
+//				giParabSAR.PrintLog(true, !backTest, log_file, logText);
 //			}
 			//enCounterPBBars
 			if(entryOrder == null) {
 //				if(printOut > -1)
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + Get24HDateTime(Time[0]));			
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + Get24HDateTime(Time[0]));			
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 //				if(printOut > -1)
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));		
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));		
 				CancelOrder(entryOrder);
 				//entryOrder = EnterShortLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
@@ -372,11 +373,11 @@ namespace NinjaTrader.Strategy
 			if(entryOrder == null) {
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 //				if(printOut > -1)
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + Get24HDateTime(Time[0]));
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + Get24HDateTime(Time[0]));
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 //				if(printOut > -1)
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));
 				CancelOrder(entryOrder);
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
@@ -396,26 +397,26 @@ namespace NinjaTrader.Strategy
 			}
 			
 			if(printOut > -1) {	
-				//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + Get24HDateTime(Time[0]));	
+				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + Get24HDateTime(Time[0]));	
 				if(Performance.AllTrades.ByDay.Count == 2) {
-					Print("Performance.AllTrades.TradesPerformance.Currency.CumProfit is: " + Performance.AllTrades.TradesPerformance.Currency.CumProfit);
-					Print("Performance.AllTrades.ByDay[dayKey].TradesPerformance.Currency.CumProfit is: " + pnl);
+					giParabSAR.PrintLog(true, !backTest, log_file, "Performance.AllTrades.TradesPerformance.Currency.CumProfit is: " + Performance.AllTrades.TradesPerformance.Currency.CumProfit);
+					giParabSAR.PrintLog(true, !backTest, log_file, "Performance.AllTrades.ByDay[dayKey].TradesPerformance.Currency.CumProfit is: " + pnl);
 				}
 			}
 			if((backTest && !Historical) || (!backTest && Historical)) {
-				//PrintLog(true, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + Get24HDateTime(Time[0]));
+				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + Get24HDateTime(Time[0]));
 				return false;
 			}
 			if(!backTest && (plrt <= dailyLossLmt || pnl <= dailyLossLmt))
 			{
 				if(printOut > -1) {
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
+					giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
 				}
 				return false;
 			}
 			if (backTest && pnl <= dailyLossLmt) {
 				if(printOut > 3) {
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ": backTest dailyLossLmt reached = " + pnl);
+					giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": backTest dailyLossLmt reached = " + pnl);
 				}
 				return false;				
 			}
@@ -426,14 +427,14 @@ namespace NinjaTrader.Strategy
 				{
 					if(bsx == -1 || bsx > barsSincePtSl)
 					{
-						//PrintLog(true, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + Get24HDateTime(Time[0]));
+						//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + Get24HDateTime(Time[0]));
 						return true;
 					} //else 
-						//PrintLog(true, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + Get24HDateTime(Time[0]));
+						//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + Get24HDateTime(Time[0]));
 				} //else
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + Get24HDateTime(Time[0]));
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + Get24HDateTime(Time[0]));
 			}// else 
-				//PrintLog(true, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[timeStart,timeEnd,Position.Quantity]" + timeStart + "," + timeEnd + "," + Position.Quantity + " - " + Get24HDateTime(Time[0]));
+				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[timeStart,timeEnd,Position.Quantity]" + timeStart + "," + timeEnd + "," + Position.Quantity + " - " + Get24HDateTime(Time[0]));
 				
 			return false;
 		}
@@ -459,7 +460,7 @@ namespace NinjaTrader.Strategy
 			 // If not flat print out unrealized PnL
     		if (Position.MarketPosition != MarketPosition.Flat) 
 			{
-         		//PrintLog(true, log_file, AccName + "- Open PnL: " + pl);
+         		//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- Open PnL: " + pl);
 				//int nChkPnL = (int)(timeSinceEn/minutesChkPnL);
 				double curPTTics = -1;
 				double slPrc = stopLossOrder == null ? Position.AvgPrice : stopLossOrder.StopPrice;
@@ -470,13 +471,13 @@ namespace NinjaTrader.Strategy
 					if(profitTargetOrder != null) {
 						curPTTics = Math.Abs(profitTargetOrder.LimitPrice - Position.AvgPrice)/TickSize;
 					}
-					//PrintLog(true, log_file, AccName + "- update PT: PnL=" + pl + ",(trailingPTTic, curPTTics, $Amt, $Amt_cur)=(" + trailingPTTic + "," + curPTTics + "," + 12.5*trailingPTTic + "," + 12.5*curPTTics + ")");
+					//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- update PT: PnL=" + pl + ",(trailingPTTic, curPTTics, $Amt, $Amt_cur)=(" + trailingPTTic + "," + curPTTics + "," + 12.5*trailingPTTic + "," + 12.5*curPTTics + ")");
 					if(profitTargetOrder == null || trailingPTTic > curPTTics)
 						SetProfitTarget(CalculationMode.Ticks, trailingPTTic);
 				}
 				
 				if(pl >= breakEvenAmt) { //setup breakeven order
-					//PrintLog(true, log_file, AccName + "- setup SL Breakeven: (PnL, posAvgPrc)=(" + pl + "," + Position.AvgPrice + ")");
+					//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- setup SL Breakeven: (PnL, posAvgPrc)=(" + pl + "," + Position.AvgPrice + ")");
 					slPrc = Position.AvgPrice;
 					//SetStopLoss(0);
 				}
@@ -497,7 +498,7 @@ namespace NinjaTrader.Strategy
 						if(profitTargetOrder != null)
 							CancelOrder(profitTargetOrder);
 						SetTrailStop(trailingSLAmt);
-						//PrintLog(true, log_file, AccName + "- SetTrailStop over SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
+						//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- SetTrailStop over SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
 					}
 					else if(pl >= 12.5*(profitLockMaxTic + 2*profitTgtIncTic)) { // lock max profits
 						trailingSLTic = trailingSLTic + profitTgtIncTic;
@@ -505,7 +506,7 @@ namespace NinjaTrader.Strategy
 							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice+TickSize*trailingSLTic : Position.AvgPrice+TickSize*profitLockMaxTic;
 						if(Position.MarketPosition == MarketPosition.Short)
 							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice-TickSize*trailingSLTic :  Position.AvgPrice-TickSize*profitLockMaxTic;
-						//PrintLog(true, log_file, AccName + "- update SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
+						//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- update SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
 					else if(pl >= 12.5*(profitLockMinTic + 2*profitTgtIncTic)) { //lock min profits
@@ -514,7 +515,7 @@ namespace NinjaTrader.Strategy
 							slPrc = Position.AvgPrice+TickSize*profitLockMinTic;
 						if(Position.MarketPosition == MarketPosition.Short)
 							slPrc = Position.AvgPrice-TickSize*profitLockMinTic;
-						//PrintLog(true, log_file, AccName + "- update SL Min: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
+						//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- update SL Min: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
 				}
@@ -548,7 +549,7 @@ namespace NinjaTrader.Strategy
 		{
 			double pl = Performance.AllTrades.TradesPerformance.Currency.CumProfit;
 			double plrt = Performance.RealtimeTrades.TradesPerformance.Currency.CumProfit;
-			//PrintLog(true, log_file, CurrentBar + "-" + AccName + ": Cum all PnL= " + pl + ", Cum runtime PnL= " + plrt);
+			//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": Cum all PnL= " + pl + ", Cum runtime PnL= " + plrt);
 			return plrt;
 		}
 		
@@ -563,11 +564,11 @@ namespace NinjaTrader.Strategy
 				if ( (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))	
                 {
                     CancelOrder(entryOrder);
-                    //PrintLog(true, log_file, "Order cancelled for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
+                    //giParabSAR.PrintLog(true, !backTest, log_file, "Order cancelled for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
 					return true;
                 }
 				else {
-					//PrintLog(true, log_file, "Order working for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
+					//giParabSAR.PrintLog(true, !backTest, log_file, "Order working for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
 					barsSinceEnOrd++;
 				}
             }
@@ -580,7 +581,7 @@ namespace NinjaTrader.Strategy
 		
 		public bool CloseAllPositions() 
 		{
-			//PrintLog(true, log_file, "CloseAllPosition called");
+			//giParabSAR.PrintLog(true, !backTest, log_file, "CloseAllPosition called");
 			if(Position.MarketPosition == MarketPosition.Long)
 				ExitLong();
 			if(Position.MarketPosition == MarketPosition.Short)
@@ -590,7 +591,7 @@ namespace NinjaTrader.Strategy
 		
 		public bool CancelAllOrders() 
 		{
-			//PrintLog(true, log_file, CurrentBar + "- CancelAllOrders called");
+			//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "- CancelAllOrders called");
 			if(stopLossOrder != null)
 				CancelOrder(stopLossOrder);
 			if(profitTargetOrder != null)
@@ -607,7 +608,7 @@ namespace NinjaTrader.Strategy
 			// Remember to check the underlying IOrder object for null before trying to access its properties
 			if (execution.Order != null && execution.Order.OrderState == OrderState.Filled) {
 				if(printOut > -1)
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + " Exe=" + execution.Name + ",Price=" + execution.Price + "," + execution.Time.ToShortTimeString());
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + " Exe=" + execution.Name + ",Price=" + execution.Price + "," + execution.Time.ToShortTimeString());
 				if(drawTxt) {
 					IText it = DrawText(CurrentBar.ToString()+Time[0].ToShortTimeString(), Time[0].ToString().Substring(10)+"\r\n"+execution.Name+":"+execution.Price, 0, execution.Price, Color.Red);
 					it.Locked = false;
@@ -619,7 +620,7 @@ namespace NinjaTrader.Strategy
 		{
 		    if (entryOrder != null && entryOrder == order)
 		    {
-				//PrintLog(true, log_file, order.ToString() + "--" + order.OrderState);
+				//giParabSAR.PrintLog(true, !backTest, log_file, order.ToString() + "--" + order.OrderState);
 		        if (order.OrderState == OrderState.Cancelled || 
 					order.OrderState == OrderState.Filled || 
 					order.OrderState == OrderState.Rejected || 
@@ -632,7 +633,7 @@ namespace NinjaTrader.Strategy
 			
 			if (order.OrderState == OrderState.Working || order.OrderType == OrderType.Stop) {
 //				if(printOut > -1)
-					//PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + order.ToString());
+					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + order.ToString());
 			}
 			
 			if(profitTargetOrder == null && order.Name == "Profit target" && order.OrderState == OrderState.Working) {

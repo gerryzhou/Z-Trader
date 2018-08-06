@@ -88,6 +88,8 @@ namespace NinjaTrader.Strategy
 		
 		protected string AccName = null;
 		
+		protected GIZigZag giZigZag = null;
+		
 		protected IDataSeries zzHighValue;
 		protected IDataSeries zzLowValue;
 		protected DataSeries		zigZagSizeSeries;
@@ -111,9 +113,10 @@ namespace NinjaTrader.Strategy
         /// This method is used to configure the strategy and is called once before any strategy method is called.
         /// </summary>
         protected override void Initialize()
-        {			
-			Add(GIZigZag(NinjaTrader.Data.DeviationType.Points, retracePnts, false, false, false, true));
+        {
 			AccName = GetTsTAccName(Account.Name);
+			giZigZag = GIZigZag(NinjaTrader.Data.DeviationType.Points, retracePnts, false, false, false, true);
+			Add(giZigZag);			
 //            SetProfitTarget("EnST1", CalculationMode.Ticks, ProfitTargetAmt);
 //            SetStopLoss("EnST1", CalculationMode.Ticks, StopLossAmt, false);
 //			SetProfitTarget("EnLN1", CalculationMode.Ticks, ProfitTargetAmt);
@@ -141,7 +144,7 @@ namespace NinjaTrader.Strategy
 			
 		
 			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
-			//PrintLog(true, log_file,
+			//giZigZag.PrintLog(true, !backTest, log_file,
 			//Print("FileName=" + DateTime.Now.Minute + "," + 100*DateTime.Now.Hour + "," + 10000*DateTime.Now.Day + "," + 1000000*DateTime.Now.Month + "," + DateTime.Now.Year);
 			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);
         }
@@ -187,7 +190,7 @@ namespace NinjaTrader.Strategy
 			String str_Minus = " -- ";
 			String str_Minutes = "m";
 			//Update();
-			PrintLog(true, log_file, CurrentBar + " PrintZZSize called from GS");
+			giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + " PrintZZSize called from GS");
 			double zzSize = 0;
 			double zzSizeAbs = -1;
 			double zzS = 0;
@@ -211,34 +214,34 @@ namespace NinjaTrader.Strategy
 				else if(zzSizeAbs >= 10 && zzSizeAbs <16){
 					ZZ_Count_10_16 ++;
 					if(PrintOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
+						giZigZag.PrintLog(true, !backTest, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
 				}
 				else if(zzSizeAbs >= 16 && zzSizeAbs <22){
 					ZZ_Count_16_22 ++;
 					if(PrintOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
+						giZigZag.PrintLog(true, !backTest, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
 				}
 				else if(zzSizeAbs >= 22 && zzSizeAbs <30){
 					ZZ_Count_22_30 ++;
 					if(PrintOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
+						giZigZag.PrintLog(true, !backTest, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
 				}
 				else if(zzSizeAbs >= 30){
 					ZZ_Count_30_ ++;
 					if(PrintOut > 1)
-						PrintLog(true, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=30" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
+						giZigZag.PrintLog(true, !backTest, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "] >=30" + str_suffix + GetTimeDiff(Time[CurrentBar-lastZZIdx], Time[CurrentBar-idx]) + str_Minutes);
 				}
 				if(zzSize != 0) {
 					DrawZZSizeText(idx, "txt-");
 					if(zzSizeAbs < 10)
 						if(PrintOut > 2)
-							PrintLog(true, log_file, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "]" );
+							giZigZag.PrintLog(true, !backTest, log_file, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-lastZZIdx].ToString() + "-" + Time[CurrentBar-idx].ToString() + "]" );
 					lastZZIdx = idx;
 				}
 			}
 			ZZ_Count = ZZ_Count_0_6 + ZZ_Count_6_10 + ZZ_Count_10_16 + ZZ_Count_16_22 + ZZ_Count_22_30 + ZZ_Count_30_ ;
 			if(PrintOut > 2)
-				PrintLog(true, log_file, CurrentBar + "\r\n ZZ_Count \t" + ZZ_Count + "\r\n ZZ_Count_0_6 \t" + ZZ_Count_0_6 + "\r\n ZZ_Count_6_10 \t" + ZZ_Count_6_10 + "\r\n ZZ_Count_10_16 \t" + ZZ_Count_10_16 + "\r\n ZZ_Count_16_22 \t" + ZZ_Count_16_22 + "\r\n ZZ_Count_22_30 \t" + ZZ_Count_22_30 + "\r\n ZZ_Count_30_ \t" + ZZ_Count_30_);
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "\r\n ZZ_Count \t" + ZZ_Count + "\r\n ZZ_Count_0_6 \t" + ZZ_Count_0_6 + "\r\n ZZ_Count_6_10 \t" + ZZ_Count_6_10 + "\r\n ZZ_Count_10_16 \t" + ZZ_Count_10_16 + "\r\n ZZ_Count_16_22 \t" + ZZ_Count_16_22 + "\r\n ZZ_Count_22_30 \t" + ZZ_Count_22_30 + "\r\n ZZ_Count_30_ \t" + ZZ_Count_30_);
 		}
 
 		
@@ -257,7 +260,7 @@ namespace NinjaTrader.Strategy
 			Color draw_color = sm_color;
 			//Update();
 			if(PrintOut > 3)
-				PrintLog(true, log_file, barNo + " DrawZZSizeText called");
+				giZigZag.PrintLog(true, !backTest, log_file, barNo + " DrawZZSizeText called");
 //			double zzhi = getLastZZHighLow(CurrentBar, 1, out idx_hi); //zigZagHighZigZags.Get(idx);
 //			double zzlo = getLastZZHighLow(CurrentBar, -1, out idx_lo); // zigZagLowZigZags.Get(idx);
 			
@@ -282,7 +285,7 @@ namespace NinjaTrader.Strategy
 				if(zzSize < 0) {
 					idx_hilo = idx;
 					if(PrintOut > 3)
-						PrintLog(true, log_file, idx + " DrawZZSize called");
+						giZigZag.PrintLog(true, !backTest, log_file, idx + " DrawZZSize called");
 					if(zzSizeAbs >= 10) draw_color = dn_color;
 					it = DrawText(tag+idx.ToString(), GetTimeDate(Time[CurrentBar-idx], 1)+"\r\n#"+idx.ToString()+"\r\n"+zzSize, CurrentBar-idx, double.Parse(High[CurrentBar-idx].ToString())+2.5, draw_color);
 					break;
@@ -290,7 +293,7 @@ namespace NinjaTrader.Strategy
 				if(zzSize > 0) {
 					idx_hilo = idx;
 					if(PrintOut > 3)
-						PrintLog(true, log_file, idx + " DrawZZSize called");
+						giZigZag.PrintLog(true, !backTest, log_file, idx + " DrawZZSize called");
 					if(zzSizeAbs >= 10) draw_color = up_color;
 					it = DrawText(tag+idx.ToString(), GetTimeDate(Time[CurrentBar-idx], 1)+"\r\n#"+idx.ToString()+"\r\n"+zzSize, CurrentBar-idx, double.Parse(Low[CurrentBar-idx].ToString())-2.5, draw_color);
 					break;
@@ -317,21 +320,21 @@ namespace NinjaTrader.Strategy
 			double zzSize = -1;//the previous zz size
 			double zzSizeAbs = Math.Abs(zzSize);
 			IText it = null;
-			PrintLog(true, log_file, CurrentBar + " DrawZZSizeText called:" + zzs.Length);			
+			giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + " DrawZZSizeText called:" + zzs.Length);			
 			
 			for (int idx = zzs.Length-1; idx >= 0; idx--)
 			{
 				zzSize = zzs[idx].Size;
-				PrintLog(true, log_file, CurrentBar + " DrawZZSizeText zzSize:" + zzSize);
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + " DrawZZSizeText zzSize:" + zzSize);
 				
 				if(zzSize == 0) return false;
 				
 				zzSizeAbs = Math.Abs(zzSize);
 				idx_hilo = zzs[idx].Bar_End;
-				PrintLog(true, log_file, CurrentBar + " DrawZZSizeText idx_hilo:" + idx_hilo);
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + " DrawZZSizeText idx_hilo:" + idx_hilo);
 				draw_color = sm_color;
 				if(PrintOut > 3)
-					PrintLog(true, log_file, CurrentBar + " DrawZZSizeText called");
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + " DrawZZSizeText called");
 				
 				if (dictZZText.ContainsKey(idx_hilo)) {
 					dictZZText.TryGetValue(idx_hilo, out it);
@@ -341,14 +344,14 @@ namespace NinjaTrader.Strategy
 
 				if(zzSize < 0) {					
 					if(PrintOut > 3)
-						PrintLog(true, log_file, idx_hilo + " DrawZZSize2 called");
+						giZigZag.PrintLog(true, !backTest, log_file, idx_hilo + " DrawZZSize2 called");
 					if(zzSizeAbs >= 10) draw_color = dn_color;
 					it = DrawText(tag+idx_hilo.ToString(), GetTimeDate(Time[CurrentBar-idx_hilo], 1)+"\r\n#"+idx_hilo.ToString()+"\r\n"+zzSize, CurrentBar-idx_hilo, double.Parse(High[CurrentBar-idx_hilo].ToString())+2.5, draw_color);
 					dictZZText.Add(idx_hilo,it);
 					break;
 				} else if(zzSize > 0) {
 					if(PrintOut > 3)
-						PrintLog(true, log_file, idx_hilo + " DrawZZSize2 called");
+						giZigZag.PrintLog(true, !backTest, log_file, idx_hilo + " DrawZZSize2 called");
 					if(zzSizeAbs >= 10) draw_color = up_color;
 					it = DrawText(tag+idx_hilo.ToString(), GetTimeDate(Time[CurrentBar-idx_hilo], 1)+"\r\n#"+idx_hilo.ToString()+"\r\n"+zzSize, CurrentBar-idx_hilo, double.Parse(Low[CurrentBar-idx_hilo].ToString())-2.5, draw_color);
 					dictZZText.Add(idx_hilo,it);
@@ -373,7 +376,7 @@ namespace NinjaTrader.Strategy
 			Color draw_color = sm_color;
 			//Update();
 			if(PrintOut > 3)
-				PrintLog(true, log_file, CurrentBar + " DrawGapText called");
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + " DrawGapText called");
 //			double zzhi = getLastZZHighLow(CurrentBar, 1, out idx_hi); //zigZagHighZigZags.Get(idx);
 //			double zzlo = getLastZZHighLow(CurrentBar, -1, out idx_lo); // zigZagLowZigZags.Get(idx);
 			if(it_gap != null) RemoveDrawObject(it_gap);
@@ -408,7 +411,7 @@ namespace NinjaTrader.Strategy
 			}
 			if(it_gap != null) it_gap.Locked = false;
 			if(PrintOut > 0)
-				PrintLog(true, log_file, CurrentBar + "::" + this.ToString() + " GaP= " + gap + " - " + Time[0].ToShortTimeString());
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "::" + this.ToString() + " GaP= " + gap + " - " + Time[0].ToShortTimeString());
 			return gap; 
 		}
 		
@@ -419,13 +422,13 @@ namespace NinjaTrader.Strategy
         {
 			//FileTest(CurrentBar);
 			LoadCmdFile();
-			PrintLog(true, log_file, "TimeStart=" + TimeStart + "," + 
+			giZigZag.PrintLog(true, !backTest, log_file, "TimeStart=" + TimeStart + "," + 
 				"TimeEnd=" + TimeEnd + "," + 
 				"ProfitTargetAmt=" + ProfitTargetAmt + "," + 
 				"StopLossAmt=" + StopLossAmt + "," + 
 				"EnTrailing=" + EnTrailing );
 			
-			if(!Historical) PrintLog(true, log_file, CurrentBar + "- GSZZ1 OnBarUpdate - " + Time[0].ToShortTimeString());
+			if(!Historical) giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "- GSZZ1 OnBarUpdate - " + Time[0].ToShortTimeString());
 			if(CurrentBar < BarsRequired+2) return;
 			int bsx = BarsSinceExit();
 			int bse = BarsSinceEntry();
@@ -448,7 +451,7 @@ namespace NinjaTrader.Strategy
 			}
 		
 			if(printOut > -1) {				
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":GI gap=" + gap + "," + Position.MarketPosition.ToString() + "=" + Position.Quantity.ToString()+ ", price=" + Position.AvgPrice + ", BarsSinceEx=" + bsx + ", BarsSinceEn=" + bse);
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":GI gap=" + gap + "," + Position.MarketPosition.ToString() + "=" + Position.Quantity.ToString()+ ", price=" + Position.AvgPrice + ", BarsSinceEx=" + bsx + ", BarsSinceEn=" + bse);
 			}
 			
 			CheckPerformance();
@@ -470,7 +473,7 @@ namespace NinjaTrader.Strategy
 					CancelAllOrders();
 					break;
 				case -1: //stop trading
-					PrintLog(true, log_file, CurrentBar + "- Stop trading cmd:" + Time[0].ToString());
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "- Stop trading cmd:" + Time[0].ToString());
 					break;
 			}
 				
@@ -491,9 +494,9 @@ namespace NinjaTrader.Strategy
 			double lastZZ = GetLastZZ();
 			double lastZZAbs = Math.Abs(lastZZ);
 			if(entryOrder == null)
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--null");
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--null");
 			else
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--" + entryOrder.ToString());
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--" + entryOrder.ToString());
 			if(tradeStyle == 0) // scalping, counter trade the pullbackMinPnts
 			{
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
@@ -541,7 +544,7 @@ namespace NinjaTrader.Strategy
 			}
 			else if(tradeStyle == 2) //entry at pullback
 			{
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder(tradeStyle,tradeDirection,gap,lastZZs[0],lastZZAbs,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + lastZZ + "," + lastZZAbs + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder(tradeStyle,tradeDirection,gap,lastZZs[0],lastZZAbs,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + lastZZ + "," + lastZZAbs + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
 				{
 					if(gap < 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts && lastZZ > 0 && lastZZAbs >= enSwingMinPnts && lastZZAbs <= enSwingMaxPnts)
@@ -555,7 +558,7 @@ namespace NinjaTrader.Strategy
 				}
 			}
 			else {
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":PutOrder no-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder no-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
 			}
 		}
 
@@ -565,11 +568,11 @@ namespace NinjaTrader.Strategy
 			//enCounterPBBars
 			if(entryOrder == null) {
 				if(PrintOut > -1)
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + Time[0].ToString());			
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + Time[0].ToString());			
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 				if(PrintOut > -1)
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Time[0].ToString());		
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Time[0].ToString());		
 				CancelOrder(entryOrder);
 				//entryOrder = EnterShortLimit(0, true, DefaultQuantity, prc, zzEntrySignal);
 			}
@@ -584,11 +587,11 @@ namespace NinjaTrader.Strategy
 			if(entryOrder == null) {
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, zzEntrySignal);
 				if(PrintOut > -1)
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + Time[0].ToString());		
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + Time[0].ToString());		
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 				if(PrintOut > -1)
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Time[0].ToString());
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Time[0].ToString());
 				CancelOrder(entryOrder);
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, zzEntrySignal);
 			}
@@ -602,16 +605,16 @@ namespace NinjaTrader.Strategy
 			double pnl = CheckAccPnL();//GetAccountValue(AccountItem.RealizedProfitLoss);
 			double plrt = CheckAccCumProfit();
 			if(PrintOut > -1)				
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + Time[0].ToString());	
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + Time[0].ToString());	
 
 			if((backTest && !Historical) || (!backTest && Historical)) {
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + Time[0].ToString());
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + Time[0].ToString());
 				return false;
 			}
 			if(!backTest && (plrt <= dailyLossLmt || pnl <= dailyLossLmt))
 			{
 				if(PrintOut > -1) {
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
 				}
 				return false;
 			}
@@ -622,14 +625,14 @@ namespace NinjaTrader.Strategy
 				{
 					if(bsx == -1 || bsx > barsSincePtSl)
 					{
-						PrintLog(true, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + Time[0].ToString());
+						giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + Time[0].ToString());
 						return true;
 					} else 
-						PrintLog(true, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + Time[0].ToString());
+						giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + Time[0].ToString());
 				} else
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + Time[0].ToString());
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + Time[0].ToString());
 			} else 
-				PrintLog(true, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[TimeStart,TimeEnd,Position.Quantity]" + TimeStart + "," + TimeEnd + "," + Position.Quantity + " - " + Time[0].ToString());
+				giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[TimeStart,TimeEnd,Position.Quantity]" + TimeStart + "," + TimeEnd + "," + Position.Quantity + " - " + Time[0].ToString());
 				
 			return false;
 		}
@@ -646,7 +649,7 @@ namespace NinjaTrader.Strategy
 			 // If not flat print out unrealized PnL
     		if (Position.MarketPosition != MarketPosition.Flat) 
 			{
-         		PrintLog(true, log_file, AccName + "- Open PnL: " + pl);
+         		giZigZag.PrintLog(true, !backTest, log_file, AccName + "- Open PnL: " + pl);
 				//int nChkPnL = (int)(timeSinceEn/minutesChkPnL);
 				double curPTTics = -1;
 				double slPrc = stopLossOrder == null ? Position.AvgPrice : stopLossOrder.StopPrice;
@@ -657,13 +660,13 @@ namespace NinjaTrader.Strategy
 					if(profitTargetOrder != null) {
 						curPTTics = Math.Abs(profitTargetOrder.LimitPrice - Position.AvgPrice)/TickSize;
 					}
-					PrintLog(true, log_file, AccName + "- update PT: PnL=" + pl + ",(trailingPTTic, curPTTics, $Amt, $Amt_cur)=(" + trailingPTTic + "," + curPTTics + "," + 12.5*trailingPTTic + "," + 12.5*curPTTics + ")");
+					giZigZag.PrintLog(true, !backTest, log_file, AccName + "- update PT: PnL=" + pl + ",(trailingPTTic, curPTTics, $Amt, $Amt_cur)=(" + trailingPTTic + "," + curPTTics + "," + 12.5*trailingPTTic + "," + 12.5*curPTTics + ")");
 					if(profitTargetOrder == null || trailingPTTic > curPTTics)
 						SetProfitTarget(CalculationMode.Ticks, trailingPTTic);
 				}
 				
 				if(pl >= breakEvenAmt) { //setup breakeven order
-					PrintLog(true, log_file, AccName + "- setup SL Breakeven: (PnL, posAvgPrc)=(" + pl + "," + Position.AvgPrice + ")");
+					giZigZag.PrintLog(true, !backTest, log_file, AccName + "- setup SL Breakeven: (PnL, posAvgPrc)=(" + pl + "," + Position.AvgPrice + ")");
 					slPrc = Position.AvgPrice;
 					//SetStopLoss(0);
 				}
@@ -684,7 +687,7 @@ namespace NinjaTrader.Strategy
 						if(profitTargetOrder != null)
 							CancelOrder(profitTargetOrder);
 						SetTrailStop(trailingSLAmt);
-						PrintLog(true, log_file, AccName + "- SetTrailStop over SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
+						giZigZag.PrintLog(true, !backTest, log_file, AccName + "- SetTrailStop over SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
 					}
 					else if(pl >= 12.5*(profitLockMaxTic + 2*profitTgtIncTic)) { // lock max profits
 						trailingSLTic = trailingSLTic + profitTgtIncTic;
@@ -692,7 +695,7 @@ namespace NinjaTrader.Strategy
 							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice+TickSize*trailingSLTic : Position.AvgPrice+TickSize*profitLockMaxTic;
 						if(Position.MarketPosition == MarketPosition.Short)
 							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice-TickSize*trailingSLTic :  Position.AvgPrice-TickSize*profitLockMaxTic;
-						PrintLog(true, log_file, AccName + "- update SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
+						giZigZag.PrintLog(true, !backTest, log_file, AccName + "- update SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
 					else if(pl >= 12.5*(profitLockMinTic + 2*profitTgtIncTic)) { //lock min profits
@@ -701,7 +704,7 @@ namespace NinjaTrader.Strategy
 							slPrc = Position.AvgPrice+TickSize*profitLockMinTic;
 						if(Position.MarketPosition == MarketPosition.Short)
 							slPrc = Position.AvgPrice-TickSize*profitLockMinTic;
-						PrintLog(true, log_file, AccName + "- update SL Min: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
+						giZigZag.PrintLog(true, !backTest, log_file, AccName + "- update SL Min: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
 				}
@@ -735,7 +738,7 @@ namespace NinjaTrader.Strategy
 		{
 			double pl = Performance.AllTrades.TradesPerformance.Currency.CumProfit;
 			double plrt = Performance.RealtimeTrades.TradesPerformance.Currency.CumProfit;
-			PrintLog(true, log_file, CurrentBar + "-" + AccName + ": Cum all PnL= " + pl + ", Cum runtime PnL= " + plrt);
+			giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": Cum all PnL= " + pl + ", Cum runtime PnL= " + plrt);
 			return plrt;
 		}
 		
@@ -749,11 +752,11 @@ namespace NinjaTrader.Strategy
                 if ( IsTwoBarReversal(cur_gap, TickSize, enCounterPBBars) || (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))
                 {
                     CancelOrder(entryOrder);
-                    PrintLog(true, log_file, "Order cancelled for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
+                    giZigZag.PrintLog(true, !backTest, log_file, "Order cancelled for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
 					return true;
                 }
 				else {
-					PrintLog(true, log_file, "Order working for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
+					giZigZag.PrintLog(true, !backTest, log_file, "Order working for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
 					barsSinceEnOrd++;
 				}
             }
@@ -762,7 +765,7 @@ namespace NinjaTrader.Strategy
 		
 		public bool CloseAllPositions() 
 		{
-			PrintLog(true, log_file, "CloseAllPosition called");
+			giZigZag.PrintLog(true, !backTest, log_file, "CloseAllPosition called");
 			if(Position.MarketPosition == MarketPosition.Long)
 				ExitLong();
 			if(Position.MarketPosition == MarketPosition.Short)
@@ -772,7 +775,7 @@ namespace NinjaTrader.Strategy
 		
 		public bool CancelAllOrders() 
 		{
-			PrintLog(true, log_file, CurrentBar + "- CancelAllOrders called");
+			giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "- CancelAllOrders called");
 			if(stopLossOrder != null)
 				CancelOrder(stopLossOrder);
 			if(profitTargetOrder != null)
@@ -785,7 +788,7 @@ namespace NinjaTrader.Strategy
 			// Remember to check the underlying IOrder object for null before trying to access its properties
 			if (execution.Order != null && execution.Order.OrderState == OrderState.Filled) {
 				if(PrintOut > -1)
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + " Exe=" + execution.Name + ",Price=" + execution.Price + "," + execution.Time.ToShortTimeString());
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + " Exe=" + execution.Name + ",Price=" + execution.Price + "," + execution.Time.ToShortTimeString());
 				if(drawTxt) {
 					IText it = DrawText(CurrentBar.ToString()+Time[0].ToShortTimeString(), Time[0].ToString().Substring(10)+"\r\n"+execution.Name+":"+execution.Price, 0, execution.Price, Color.Red);
 					it.Locked = false;
@@ -797,7 +800,7 @@ namespace NinjaTrader.Strategy
 		{
 		    if (entryOrder != null && entryOrder == order)
 		    {
-				PrintLog(true, log_file, order.ToString() + "--" + order.OrderState);
+				giZigZag.PrintLog(true, !backTest, log_file, order.ToString() + "--" + order.OrderState);
 		        if (order.OrderState == OrderState.Cancelled || 
 					order.OrderState == OrderState.Filled || 
 					order.OrderState == OrderState.Rejected || 
@@ -810,7 +813,7 @@ namespace NinjaTrader.Strategy
 			
 			if (order.OrderState == OrderState.Working || order.OrderType == OrderType.Stop) {
 				if(PrintOut > -1)
-					PrintLog(true, log_file, CurrentBar + "-" + AccName + ":" + order.ToString());
+					giZigZag.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + order.ToString());
 			}
 			
 			if(profitTargetOrder == null && order.Name == "Profit target" && order.OrderState == OrderState.Working) {

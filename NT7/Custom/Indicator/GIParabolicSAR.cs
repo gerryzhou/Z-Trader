@@ -206,7 +206,7 @@ namespace NinjaTrader.Indicator
 				zigZagLine = DrawZigZag(CurrentBar, xp, tagZZLine);
 				if(curGapText != null) RemoveDrawObject(curGapText);
 				curGapText = DrawGapText(curZZGap, tagCurGapText);
-				PrintZZSwings(zzSwings, log_file, printOut, 530, 1130);
+				PrintZZSwings(zzSwings, log_file, printOut, backTest, 530, 1130);
 				//PrintTwoBarRatio();
 			}
 		}

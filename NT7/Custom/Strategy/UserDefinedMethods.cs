@@ -365,15 +365,15 @@ namespace NinjaTrader.Strategy
 			return paraMap;
 		}
 		
-		public void PrintLog(bool pntcon, string fpath, string text) {
-			Print("PrintLog: " + fpath);
-			if(pntcon) Print(text); // return;
-			using (System.IO.StreamWriter file = 
-				new System.IO.StreamWriter(@fpath, true))
-			{
-				file.WriteLine(text);
-			}
-		}	
+//		public void PrintLog(bool pntcon, string fpath, string text) {
+//			Print("PrintLog: " + fpath);
+//			if(pntcon) Print(text); // return;
+//			using (System.IO.StreamWriter file = 
+//				new System.IO.StreamWriter(@fpath, true))
+//			{
+//				file.WriteLine(text);
+//			}
+//		}	
 
     }
 }
