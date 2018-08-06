@@ -62,6 +62,7 @@ namespace NinjaTrader.Indicator
 		protected string accName = "";
 		protected string symbol = "";
 		protected string log_file = ""; //
+		private bool backTest = true; //if it runs for backtesting;
 		
 		protected List<ZigZagSwing>		zzSwings;
 		
@@ -80,8 +81,11 @@ namespace NinjaTrader.Indicator
 			reverseBar = new IntSeries(this, MaximumBarsLookBack.Infinite);
 			reverseValue = new DataSeries(this, MaximumBarsLookBack.Infinite);
 			zzSwings = new List<ZigZagSwing>();
-			//String AccName = GetTsTAccName(Account.Name);//"Sim101";
-			ReadSpvFile(@"C:\inetpub\wwwroot\nt_files\pattern\", "ES ##-##");
+			//String AccName = GetTsTAccName(Account.Name);//"Sim101";			
+			if(backTest)
+				ReadSpvPRList();
+			else
+				ReadSpvFile(@"C:\inetpub\wwwroot\nt_files\pattern\", "ES ##-##");
 			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, symbol, "log");
         }
 
@@ -256,19 +260,13 @@ namespace NinjaTrader.Indicator
 			return gapText; 
 		}
 	
-		protected double GetCurZZ(){
-			double zz = 0;
-			//if(latestZZs.Length > 0)
-			//	zz = latestZZs[latestZZs.Length-1].Size;
-			return zz;
-		}
-
         #region Properties
         /// <summary>
         /// The initial acceleration factor
         /// </summary>
         [Description("The initial acceleration factor")]
         [GridCategory("Parameters")]
+		[Gui.Design.DisplayNameAttribute("Init Acceleration factor")]
         public double AccelerationInit
         {
             get { return acceleration; }
@@ -322,6 +320,15 @@ namespace NinjaTrader.Indicator
 			get { return accName; }
 			set { accName = value; }
 		}
+		
+		[Description("If it runs for backtesting")]
+        [GridCategory("Parameters")]
+		[Gui.Design.DisplayNameAttribute("Back Testing")]
+        public bool BackTest
+        {
+            get { return backTest; }
+            set { backTest = value; }
+        }
 		
 		#endregion
 
@@ -395,6 +402,20 @@ namespace NinjaTrader.Indicator
 		public double GetCurZZGap() {
 			return curZZGap;
 		}				
+
+		/// <summary>
+		/// The gap between current price and last pbSAR reversal
+		/// </summary>
+		/// <returns></returns>
+		public double GetCurGap(){
+			double gap  = 0;
+			int lastRevBar = GetLastReverseBar(CurrentBar);
+			double lastRevVal = lastRevBar>0? reverseValue.Get(lastRevBar) : 0;
+			if(lastRevVal>0) {
+				gap = longPosition? High[0] - lastRevVal : Low[0] - lastRevVal;
+			}
+			return gap;
+		}
 		
 		public int GetpbSARCrossBarsAgo() {
 			int lastRevBar = GetLastReverseBar(CurrentBar);
@@ -495,20 +516,20 @@ namespace NinjaTrader.Indicator
         /// GI Parabolic SAR
         /// </summary>
         /// <returns></returns>
-        public GIParabolicSAR GIParabolicSAR(double accelerationInit, double accelerationMax, double accelerationStep, string accName, Color dotColor)
+        public GIParabolicSAR GIParabolicSAR(double accelerationInit, double accelerationMax, double accelerationStep, string accName, bool backTest, Color dotColor)
         {
-            return GIParabolicSAR(Input, accelerationInit, accelerationMax, accelerationStep, accName, dotColor);
+            return GIParabolicSAR(Input, accelerationInit, accelerationMax, accelerationStep, accName, backTest, dotColor);
         }
 
         /// <summary>
         /// GI Parabolic SAR
         /// </summary>
         /// <returns></returns>
-        public GIParabolicSAR GIParabolicSAR(Data.IDataSeries input, double accelerationInit, double accelerationMax, double accelerationStep, string accName, Color dotColor)
+        public GIParabolicSAR GIParabolicSAR(Data.IDataSeries input, double accelerationInit, double accelerationMax, double accelerationStep, string accName, bool backTest, Color dotColor)
         {
             if (cacheGIParabolicSAR != null)
                 for (int idx = 0; idx < cacheGIParabolicSAR.Length; idx++)
-                    if (Math.Abs(cacheGIParabolicSAR[idx].AccelerationInit - accelerationInit) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationMax - accelerationMax) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationStep - accelerationStep) <= double.Epsilon && cacheGIParabolicSAR[idx].AccName == accName && cacheGIParabolicSAR[idx].DotColor == dotColor && cacheGIParabolicSAR[idx].EqualsInput(input))
+                    if (Math.Abs(cacheGIParabolicSAR[idx].AccelerationInit - accelerationInit) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationMax - accelerationMax) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationStep - accelerationStep) <= double.Epsilon && cacheGIParabolicSAR[idx].AccName == accName && cacheGIParabolicSAR[idx].BackTest == backTest && cacheGIParabolicSAR[idx].DotColor == dotColor && cacheGIParabolicSAR[idx].EqualsInput(input))
                         return cacheGIParabolicSAR[idx];
 
             lock (checkGIParabolicSAR)
@@ -521,12 +542,14 @@ namespace NinjaTrader.Indicator
                 accelerationStep = checkGIParabolicSAR.AccelerationStep;
                 checkGIParabolicSAR.AccName = accName;
                 accName = checkGIParabolicSAR.AccName;
+                checkGIParabolicSAR.BackTest = backTest;
+                backTest = checkGIParabolicSAR.BackTest;
                 checkGIParabolicSAR.DotColor = dotColor;
                 dotColor = checkGIParabolicSAR.DotColor;
 
                 if (cacheGIParabolicSAR != null)
                     for (int idx = 0; idx < cacheGIParabolicSAR.Length; idx++)
-                        if (Math.Abs(cacheGIParabolicSAR[idx].AccelerationInit - accelerationInit) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationMax - accelerationMax) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationStep - accelerationStep) <= double.Epsilon && cacheGIParabolicSAR[idx].AccName == accName && cacheGIParabolicSAR[idx].DotColor == dotColor && cacheGIParabolicSAR[idx].EqualsInput(input))
+                        if (Math.Abs(cacheGIParabolicSAR[idx].AccelerationInit - accelerationInit) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationMax - accelerationMax) <= double.Epsilon && Math.Abs(cacheGIParabolicSAR[idx].AccelerationStep - accelerationStep) <= double.Epsilon && cacheGIParabolicSAR[idx].AccName == accName && cacheGIParabolicSAR[idx].BackTest == backTest && cacheGIParabolicSAR[idx].DotColor == dotColor && cacheGIParabolicSAR[idx].EqualsInput(input))
                             return cacheGIParabolicSAR[idx];
 
                 GIParabolicSAR indicator = new GIParabolicSAR();
@@ -541,6 +564,7 @@ namespace NinjaTrader.Indicator
                 indicator.AccelerationMax = accelerationMax;
                 indicator.AccelerationStep = accelerationStep;
                 indicator.AccName = accName;
+                indicator.BackTest = backTest;
                 indicator.DotColor = dotColor;
                 Indicators.Add(indicator);
                 indicator.SetUp();
@@ -566,18 +590,18 @@ namespace NinjaTrader.MarketAnalyzer
         /// </summary>
         /// <returns></returns>
         [Gui.Design.WizardCondition("Indicator")]
-        public Indicator.GIParabolicSAR GIParabolicSAR(double accelerationInit, double accelerationMax, double accelerationStep, string accName, Color dotColor)
+        public Indicator.GIParabolicSAR GIParabolicSAR(double accelerationInit, double accelerationMax, double accelerationStep, string accName, bool backTest, Color dotColor)
         {
-            return _indicator.GIParabolicSAR(Input, accelerationInit, accelerationMax, accelerationStep, accName, dotColor);
+            return _indicator.GIParabolicSAR(Input, accelerationInit, accelerationMax, accelerationStep, accName, backTest, dotColor);
         }
 
         /// <summary>
         /// GI Parabolic SAR
         /// </summary>
         /// <returns></returns>
-        public Indicator.GIParabolicSAR GIParabolicSAR(Data.IDataSeries input, double accelerationInit, double accelerationMax, double accelerationStep, string accName, Color dotColor)
+        public Indicator.GIParabolicSAR GIParabolicSAR(Data.IDataSeries input, double accelerationInit, double accelerationMax, double accelerationStep, string accName, bool backTest, Color dotColor)
         {
-            return _indicator.GIParabolicSAR(input, accelerationInit, accelerationMax, accelerationStep, accName, dotColor);
+            return _indicator.GIParabolicSAR(input, accelerationInit, accelerationMax, accelerationStep, accName, backTest, dotColor);
         }
     }
 }
@@ -592,21 +616,21 @@ namespace NinjaTrader.Strategy
         /// </summary>
         /// <returns></returns>
         [Gui.Design.WizardCondition("Indicator")]
-        public Indicator.GIParabolicSAR GIParabolicSAR(double accelerationInit, double accelerationMax, double accelerationStep, string accName, Color dotColor)
+        public Indicator.GIParabolicSAR GIParabolicSAR(double accelerationInit, double accelerationMax, double accelerationStep, string accName, bool backTest, Color dotColor)
         {
-            return _indicator.GIParabolicSAR(Input, accelerationInit, accelerationMax, accelerationStep, accName, dotColor);
+            return _indicator.GIParabolicSAR(Input, accelerationInit, accelerationMax, accelerationStep, accName, backTest, dotColor);
         }
 
         /// <summary>
         /// GI Parabolic SAR
         /// </summary>
         /// <returns></returns>
-        public Indicator.GIParabolicSAR GIParabolicSAR(Data.IDataSeries input, double accelerationInit, double accelerationMax, double accelerationStep, string accName, Color dotColor)
+        public Indicator.GIParabolicSAR GIParabolicSAR(Data.IDataSeries input, double accelerationInit, double accelerationMax, double accelerationStep, string accName, bool backTest, Color dotColor)
         {
             if (InInitialize && input == null)
                 throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
-            return _indicator.GIParabolicSAR(input, accelerationInit, accelerationMax, accelerationStep, accName, dotColor);
+            return _indicator.GIParabolicSAR(input, accelerationInit, accelerationMax, accelerationStep, accName, backTest, dotColor);
         }
     }
 }

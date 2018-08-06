@@ -60,13 +60,13 @@ namespace NinjaTrader.Strategy
 		private int barsToCheckPL = 2; // Bar count to check P&L since the entry
 		
 		private int barsAgoMaxPbSAREn = 5; //Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed
-		private int barsMaxLastCross = 54; //Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry
+		private int barsMaxLastCross = 24; //Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry
 		//private int barsPullback = 1; // Bars count for pullback
         private double enSwingMinPnts = 10; //10 Default setting for EnSwingMinPnts
         private double enSwingMaxPnts = 35; //16 Default setting for EnSwingMaxPnts
-		private double enPullbackMinPnts = 5; //6 Default setting for EnPullbackMinPnts
-        private double enPullbackMaxPnts = 29; //10 Default setting for EnPullbackMaxPnts
-		private double enOffsetPnts = 0.75;//Price offset for entry
+		private double enPullbackMinPnts = 1; //6 Default setting for EnPullbackMinPnts
+        private double enPullbackMaxPnts = 3; //10 Default setting for EnPullbackMaxPnts
+		private double enOffsetPnts = 0.25;//Price offset for entry
 		//private double enOffset2Pnts = 0.5;//Price offset for entry
 		private int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
 		private double enResistPrc = 2700; // Resistance price for entry order
@@ -82,7 +82,7 @@ namespace NinjaTrader.Strategy
 		private int tradeStyle = 0; // -1=counter trend; 1=trend following;
 		private bool backTest = true; //if it runs for backtesting;
 		
-		private int printOut = 1; //0,1,2,3 more print
+		private int printOut = 2; //0,1,2,3 more print
 
 		private bool drawTxt = false; // User defined variables (add any user defined variables below)
 		private IText it_gap = null; //the Text draw for gap on current bar
@@ -92,7 +92,7 @@ namespace NinjaTrader.Strategy
 		private int barsSinceLastCross = -1;
 		private PriceAction curBarPriceAction = new PriceAction(PriceActionType.UnKnown, -1,-1,-1,-1);//PriceAtionType of current bar
 		
-		private int spvPRBits = 0;
+		private int spvPRBits = 42;//39,63
 		
 		/// <summary>
 		/// Order handling
@@ -115,7 +115,7 @@ namespace NinjaTrader.Strategy
         protected override void Initialize()
         {
 			AccName = GetTsTAccName(Account.Name);
-			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan);
+			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, AccName, backTest, Color.Cyan);
 			Add(giParabSAR);
 			giParabSAR.setSpvPRBits(spvPRBits);
 			timeStart = giParabSAR.GetTimeByHM(timeStartH, timeStartM);
@@ -154,15 +154,16 @@ namespace NinjaTrader.Strategy
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetReverseBar=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetReverseBar());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetReverseValue=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetReverseValue());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXp=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetXp());
-			double gap = giParabSAR.GetCurZZGap(); //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange).GetCurZZGap();
+			double zz_gap = giParabSAR.GetCurZZGap(); //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange).GetCurZZGap();
 			bool isReversalBar = giParabSAR.IsReversalBar();//GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange).IsReversalBar();
+			double cur_gap = giParabSAR.GetCurGap();
 			curBarPriceAction = giParabSAR.getCurPriceAction();
 			barsSinceLastCross = giParabSAR.GetpbSARCrossBarsAgo();
 			if(isReversalBar) {				
 				SetTradeContext(curBarPriceAction);
 				//Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan)[0] + "-------------");
 				if(printOut > 3)
-					Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
+					Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,GetCurGap,isReversalBar=" + zz_gap + "," + cur_gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
 			}
 			
 			if (giParabSAR[0] > 0) //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange)[0] > 0)
@@ -180,12 +181,12 @@ namespace NinjaTrader.Strategy
 					break;
 				case 1: //trading
 					ChangeSLPT();
-					CheckEnOrder(gap);
+					CheckEnOrder(zz_gap);
 								
 					if(NewOrderAllowed() && PatternMatched())
 					{
 						Print("----------------PutTrade, isReversalBar=" + isReversalBar + ",giParabSAR.IsSpvAllowed4PAT(curBarPat)=" + giParabSAR.IsSpvAllowed4PAT(curBarPriceAction.paType));
-						PutTrade(gap, isReversalBar);
+						PutTrade(zz_gap, cur_gap, isReversalBar);
 					}
 					break;
 				case 2: //cancel order
@@ -232,8 +233,24 @@ namespace NinjaTrader.Strategy
 			}
 		}
 		
-		protected void PutTrade(double gap, bool isRevBar) {
-			double gapAbs = Math.Abs(gap);
+		protected void PutTrade(double zzGap, double curGap, bool isRevBar) {
+			double zzGapAbs = Math.Abs(zzGap);
+			double curGapAbs = Math.Abs(curGap);
+			//double todaySAR = giParabSAR.GetTodaySAR();		
+			//double prevSAR = giParabSAR.GetPrevSAR();		
+			//int reverseBar = giParabSAR.GetReverseBar();		
+			int last_reverseBar = giParabSAR.GetLastReverseBar(CurrentBar);		
+			//double reverseValue = giParabSAR.GetReverseValue();
+		
+			if(printOut > 1) {
+				string logText = CurrentBar + "-" + AccName
+				//":PutOrder-(curGap,todaySAR,prevSAR,zzGap,reverseBar,last_reverseBar,reverseValue)= " 
+				//+ curGap + "," + todaySAR + "," + prevSAR + "," + zzGap + "," + reverseBar + "," + last_reverseBar + "," + reverseValue ;
+				+ ":PutOrder-(curGap,zzGap,last_reverseBar)= " 
+				+ curGap + "," + zzGap + "," + last_reverseBar ;
+				PrintLog(true, log_file, logText);
+			}
+			
 //			double lastZZ = GetLastZZ();
 //			double lastZZAbs = Math.Abs(lastZZ);
 //			if(entryOrder == null)
@@ -244,14 +261,15 @@ namespace NinjaTrader.Strategy
 			{
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
 				{
-//					if(gap > 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts)
-						NewLongLimitOrder("scalping long");
+					if(curGapAbs >= enPullbackMinPnts && curGapAbs < enPullbackMaxPnts)
+						NewLongLimitOrder("scalping long", zzGap, curGap);
 				}
 				 
 				if(tradeDirection <= 0) //-1=short only, 0 is for both;
 				{
 //					if(gap < 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts)
-						NewShortLimitOrder("scalping short");
+					if(curGapAbs >= enPullbackMinPnts && curGapAbs < enPullbackMaxPnts)
+						NewShortLimitOrder("scalping short", zzGap, curGap);
 				}
 			}
 			else if(tradeStyle < 0) //counter trend trade, , counter trade the swingMinPnts
@@ -259,13 +277,15 @@ namespace NinjaTrader.Strategy
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
 				{
 //					if(gap < 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts)
-						NewLongLimitOrder("counter trade long");
+					if(curGapAbs >= enPullbackMinPnts && curGapAbs < enPullbackMaxPnts)
+						NewLongLimitOrder("counter trade long", zzGap, curGap);
 				}
 				
 				if(tradeDirection <= 0) //-1=short only, 0 is for both;
 				{
 //					if(gap > 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts)
-						NewShortLimitOrder("counter trade short");
+					if(curGapAbs >= enPullbackMinPnts && curGapAbs < enPullbackMaxPnts)
+						NewShortLimitOrder("counter trade short", zzGap, curGap);
 				}
 			}
 			// tradeStyle > 0, trend following, tradeStyle=1:entry at breakout; tradeStyle=2:entry at pullback;
@@ -275,14 +295,16 @@ namespace NinjaTrader.Strategy
 				{
 //					if(gap > 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts)
 //						if(enCounterPBBars < 0 || IsTwoBarReversal(gap, TickSize, enCounterPBBars))
-							NewLongLimitOrder("trend follow long entry at breakout");
+					if(curGapAbs <= enPullbackMinPnts)
+							NewLongLimitOrder("trend follow long entry at breakout", zzGap, curGap);
 				}
 				
 				if(tradeDirection <= 0) //-1=short only, 0 is for both;
 				{
 //					if(gap < 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts)
 //						if(enCounterPBBars < 0 || IsTwoBarReversal(gap, TickSize, enCounterPBBars))
-							NewShortLimitOrder("trend follow short entry at breakout");
+					if(curGapAbs <= enPullbackMinPnts)
+							NewShortLimitOrder("trend follow short entry at breakout", zzGap, curGap);
 				}
 			}
 			else if(tradeStyle == 2) //entry at pullback, wide channel: UpWide, DnWide, RngWide
@@ -291,13 +313,15 @@ namespace NinjaTrader.Strategy
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
 				{
 //					if(gap < 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts)
-						NewLongLimitOrder("trend follow long entry at pullback");
+					if(curGapAbs >= enPullbackMinPnts && curGapAbs < enPullbackMaxPnts)
+						NewLongLimitOrder("trend follow long entry at pullback", zzGap, curGap);
 				}
 				
 				if(tradeDirection <= 0) //-1=short only, 0 is for both;
 				{
 //					if(gap > 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts)
-						NewShortLimitOrder("trend follow short entry at pullback");
+					if(curGapAbs >= enPullbackMinPnts && curGapAbs < enPullbackMaxPnts)
+						NewShortLimitOrder("trend follow short entry at pullback", zzGap, curGap);
 				}
 			}
 			else {
@@ -309,9 +333,23 @@ namespace NinjaTrader.Strategy
 		
 		#region Order and P&L Functions
 		
-		protected void NewShortLimitOrder(string msg)
+		protected void NewShortLimitOrder(string msg, double zzGap, double curGap)
 		{
 			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]+enOffsetPnts : High[0]+enOffsetPnts;
+			
+//			double curGap = giParabSAR.GetCurGap();
+//			double todaySAR = giParabSAR.GetTodaySAR();		
+//			double prevSAR = giParabSAR.GetPrevSAR();		
+//			int reverseBar = giParabSAR.GetReverseBar();		
+//			int last_reverseBar = giParabSAR.GetLastReverseBar(CurrentBar);		
+//			double reverseValue = giParabSAR.GetReverseValue();
+//		
+//			if(printOut > 1) {
+//				string logText = CurrentBar + "-" + AccName + 
+//				":PutOrder-(curGap,todaySAR,prevSAR,zzGap,reverseBar,last_reverseBar,reverseValue)= " 
+//				+ curGap + "," + todaySAR + "," + prevSAR + "," + zzGap + "," + reverseBar + "," + last_reverseBar + "," + reverseValue ;
+//				PrintLog(true, log_file, logText);
+//			}
 			//enCounterPBBars
 			if(entryOrder == null) {
 //				if(printOut > -1)
@@ -327,10 +365,10 @@ namespace NinjaTrader.Strategy
 			barsSinceEnOrd = 0;
 		}
 		
-		protected void NewLongLimitOrder(string msg)
+		protected void NewLongLimitOrder(string msg, double zzGap, double curGap)
 		{
 			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]-enOffsetPnts :  Low[0]-enOffsetPnts;
-
+			
 			if(entryOrder == null) {
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 //				if(printOut > -1)
@@ -376,7 +414,7 @@ namespace NinjaTrader.Strategy
 				return false;
 			}
 			if (backTest && pnl <= dailyLossLmt) {
-				if(printOut > -1) {
+				if(printOut > 3) {
 					PrintLog(true, log_file, CurrentBar + "-" + AccName + ": backTest dailyLossLmt reached = " + pnl);
 				}
 				return false;				
