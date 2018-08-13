@@ -133,6 +133,8 @@ namespace NinjaTrader.Strategy
             SetStopLoss(StopLossAmt);
 			SetProfitTarget(ProfitTargetAmt);
 			DefaultQuantity = 1;
+			EntriesPerDirection = 1;
+			EntryHandling = EntryHandling.AllEntries; 
 			
             CalculateOnBarClose = true;
 			IncludeCommission = true;
@@ -142,8 +144,8 @@ namespace NinjaTrader.Strategy
 			ExitOnClose = true;
 			ExitOnCloseSeconds = 30;
 			
-		
-			log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
+			if(!backTest)
+				log_file = GetFileNameByDateTime(DateTime.Now, @"C:\inetpub\wwwroot\nt_files\log\", AccName, "log");
 			//giZigZag.PrintLog(true, !backTest, log_file,
 			//Print("FileName=" + DateTime.Now.Minute + "," + 100*DateTime.Now.Hour + "," + 10000*DateTime.Now.Day + "," + 1000000*DateTime.Now.Month + "," + DateTime.Now.Year);
 			//FileTest(DateTime.Now.Minute + 100*DateTime.Now.Hour+ 10000*DateTime.Now.Day+ 1000000*DateTime.Now.Month + (long)100000000*DateTime.Now.Year);
@@ -421,7 +423,8 @@ namespace NinjaTrader.Strategy
         protected override void OnBarUpdate()
         {
 			//FileTest(CurrentBar);
-			LoadCmdFile();
+			if(!backTest)
+				LoadCmdFile();
 			giZigZag.PrintLog(true, !backTest, log_file, "TimeStart=" + TimeStart + "," + 
 				"TimeEnd=" + TimeEnd + "," + 
 				"ProfitTargetAmt=" + ProfitTargetAmt + "," + 
@@ -433,9 +436,11 @@ namespace NinjaTrader.Strategy
 			int bsx = BarsSinceExit();
 			int bse = BarsSinceEntry();
 			
-			double gap = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).ZigZagGap[0];
+			double gap = giZigZag.ZigZagGap[0];
+			//double gap = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).ZigZagGap[0];
 			//lastZZs = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(CurrentBar, 3, retracePnts, 100);
-			latestZZs = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(CurrentBar, 1, retracePnts, 100);
+			//latestZZs = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(CurrentBar, 1, retracePnts, 100);
+			latestZZs = giZigZag.GetZigZag(CurrentBar, 1, retracePnts, 100);
 			//GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
 //			if(printOut > 2)
 //				for (int idx = 0; idx < 3; idx++)
@@ -478,7 +483,8 @@ namespace NinjaTrader.Strategy
 			}
 				
 			if(backTest && printOut > 1 && IsLastBarOnChart() > 0) {
-				bool GIZZ = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
+				//bool GIZZ = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
+				bool GIZZ = giZigZag.GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
 				PrintZZSize();
 			}
         }

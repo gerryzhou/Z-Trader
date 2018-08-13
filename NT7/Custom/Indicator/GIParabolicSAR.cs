@@ -309,12 +309,13 @@ namespace NinjaTrader.Indicator
 			set { dotColor = value; }
 		}
 		
+		
 		/// <summary>
-		/// The maximum acceleration
+		/// The account name
 		/// </summary>
-		[Description("The maximum acceleration")]
+		[Description("The account name")]
 		[GridCategory("Parameters")]
-		[Gui.Design.DisplayNameAttribute("Acceleration max")]
+		[Gui.Design.DisplayNameAttribute("Account name")]
 		public string AccName
 		{
 			get { return accName; }

@@ -59,14 +59,14 @@ namespace NinjaTrader.Strategy
         private int barsSincePtSl = 1; // Bar count since last P&L was filled
 		private int barsToCheckPL = 2; // Bar count to check P&L since the entry
 		
-		private int barsAgoMaxPbSAREn = 5; //Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed
+		private int barsAgoMaxPbSAREn = 6; //Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed
 		private int barsMaxLastCross = 24; //Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry
 		//private int barsPullback = 1; // Bars count for pullback
         private double enSwingMinPnts = 10; //10 Default setting for EnSwingMinPnts
         private double enSwingMaxPnts = 35; //16 Default setting for EnSwingMaxPnts
 		private double enPullbackMinPnts = 1; //6 Default setting for EnPullbackMinPnts
-        private double enPullbackMaxPnts = 3; //10 Default setting for EnPullbackMaxPnts
-		private double enOffsetPnts = 0.25;//Price offset for entry
+        private double enPullbackMaxPnts = 8; //10 Default setting for EnPullbackMaxPnts
+		private double enOffsetPnts = 1.25;//Price offset for entry
 		//private double enOffset2Pnts = 0.5;//Price offset for entry
 		private int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
 		private double enResistPrc = 2700; // Resistance price for entry order

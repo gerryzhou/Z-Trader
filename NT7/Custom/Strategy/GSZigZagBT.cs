@@ -16,102 +16,55 @@ using NinjaTrader.Strategy;
 namespace NinjaTrader.Strategy
 {
     /// <summary>
-    /// Enter the description of your strategy here
-	/// Two questions: 
-	/// 1) the volality of the current market
-	/// 2) counter swing/trend or follow swing/trend? (Trending, Reversal or Range)
+    /// ZigZag backtesting 
     /// </summary>
-    [Description("GSZigZag BackTesting")]
-    public class GSZigZagBT : GSZigZagBase
+    [Description("ZigZag backtesting ")]
+    public class GSZigZagBT : Strategy
     {
         #region Variables
         // Wizard generated variables
-
-		/// <summary>
-		/// Order handling
-		/// </summary>
-		//private IOrder entryOrder = null;
-
-		#endregion
+        private int printOut = 1; // Default setting for PrintOut
+        // User defined variables (add any user defined variables below)
+		private GIZigZagBase giZigZag = null;
+		
+		private string AccName = "";
+        #endregion
 
         /// <summary>
         /// This method is used to configure the strategy and is called once before any strategy method is called.
         /// </summary>
         protected override void Initialize()
         {
-			base.Initialize();
+			AccName = GetTsTAccName(Account.Name);
+			giZigZag = GIZigZagBase(AccName, true, NinjaTrader.Data.DeviationType.Points, 3, true);
+            Add(giZigZag);
+            SetProfitTarget(300);
+            SetStopLoss(175, false);
+
+            CalculateOnBarClose = true;
         }
-		
+
         /// <summary>
         /// Called on each bar update event (incoming tick)
         /// </summary>
         protected override void OnBarUpdate()
         {
-			base.OnBarUpdate();
-			/*
-			if(!Historical) Print(CurrentBar + "- GSZZ1 OnBarUpdate - " + Time[0].ToShortTimeString());
-			if(CurrentBar < BarsRequired+2) return;
-			int bsx = BarsSinceExit();
-			int bse = BarsSinceEntry();
-			
-			double gap = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).ZigZagGap[0];
-			//CheckPerformance();
-			//ChangeSLPT();
-			//CheckEnOrder();
-			if(PrintOut > 0)
-				Print("GI gap=" + gap + "," + Position.MarketPosition.ToString() + "=" + Position.Quantity.ToString()+ ", price=" + Position.AvgPrice + ", BarsSinceEx=" + bsx + ", BarsSinceEn=" + bse);
-			
-			DrawGapText(gap, "gap-");
-			double gapAbs = Math.Abs(gap);
-			if(NewOrderAllowed()) 
-			{
-//			if(!Historical && Position.Quantity == 0 && (bsx == -1 || bsx > barsSincePtSl)) {
-//-1, 0, 1 vs -1, 0, 1
-				if(tradeStyle == 0) // scalping, counter trade the pullbackMinPnts
-				{
-					if(tradeDirection >= 0) //1=long only, 0 is for both;
-					{
-						if(gap < 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts)
-							NewLongLimitOrder("scalping long");
-					}
-					else if(tradeDirection <= 0) //-1=short only, 0 is for both;
-					{
-						if(gap > 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts)
-							NewShortLimitOrder("scalping short");
-					}
-				}
-				else if(tradeStyle < 0) //counter trend trade, , counter trade the swingMinPnts
-				{
-					if(tradeDirection >= 0) //1=long only, 0 is for both;
-					{
-						if(gap < 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts)
-							NewLongLimitOrder("counter trade long");
-					}
-					else if(tradeDirection <= 0) //-1=short only, 0 is for both;
-					{
-						if(gap > 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts)
-							NewShortLimitOrder("counter trade short");
-					}
-				}
-				else // tradeStyle > 0, trend following
-				{
-					if(tradeDirection >= 0) //1=long only, 0 is for both;
-					{
-						if((gap > 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts) || (gap < 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts))
-							NewLongLimitOrder("trend follow long");
-					}
-					else if(tradeDirection <= 0) //-1=short only, 0 is for both;
-					{
-						if((gap < 0 && gapAbs >= enSwingMinPnts && gapAbs < enSwingMaxPnts) || (gap > 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts))
-							NewShortLimitOrder("trend follow short");
-					}
-				}
-			} */
+            // Condition set 1
+			Print(CurrentBar + ":" + Time[0] +  ":ZigZagHigh,ZigZagLow,HighBar,LowBar,trendDir=[" + giZigZag.ZigZagHigh[0] + "," + giZigZag.ZigZagLow[0] + "],[" + giZigZag.HighBar(1, 1, CurrentBar-BarsRequired) + "," + giZigZag.LowBar(1, 1, CurrentBar-BarsRequired)+"] " +giZigZag.GetTrendDir());
+//            if (GIZigZagBase("", true, DeviationType.Points, 1, true).ZigZagHigh[0] >= Variable0)
+//            {
+//                EnterShortLimit(DefaultQuantity, 0, "shortLmt");
+//            }
         }
-		
+
         #region Properties
-        
-		
+        [Description("Print out")]
+        [GridCategory("Parameters")]
+        public int PrintOut
+        {
+            get { return printOut; }
+            set { printOut = Math.Max(-1, value); }
+        }
         #endregion
     }
 }
