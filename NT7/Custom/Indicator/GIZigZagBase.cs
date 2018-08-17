@@ -37,6 +37,8 @@ namespace NinjaTrader.Indicator
 		private int				trendDir			= 0; // 1 = trend up, -1 = trend down, init = 0
 		private bool			useHighLow			= true;
 
+		private IntSeries		barZZMode; //0=noChange, -1=Bear Reversal, 1=Bull Reversal, -2=UpdateLow, 2=UpdateHigh, -3=isOverLowDeviation, 3=isOverHighDeviation;
+
 		protected List<ZigZagSwing>		zzSwings;
 		
 		protected string accName = "";
@@ -62,6 +64,7 @@ namespace NinjaTrader.Indicator
 			zigZagHighZigZags	= new DataSeries(this, MaximumBarsLookBack.Infinite); 
 			zigZagLowSeries		= new DataSeries(this, MaximumBarsLookBack.Infinite); 
 			zigZagLowZigZags	= new DataSeries(this, MaximumBarsLookBack.Infinite); 
+			barZZMode			= new IntSeries(this, MaximumBarsLookBack.Infinite);
 			
 			zzSwings = new List<ZigZagSwing>();
 			
@@ -156,6 +159,7 @@ namespace NinjaTrader.Indicator
 				zigZagHighZigZags.Set(0);
 				zigZagLowSeries.Set(0);
 				zigZagLowZigZags.Set(0);
+				barZZMode.Set(0);
 				return;
 			}
 
@@ -192,11 +196,16 @@ namespace NinjaTrader.Indicator
 
 			zigZagHighZigZags.Set(0);
 			zigZagLowZigZags.Set(0);
-
+			barZZMode.Set(0);
+			
 			if (!isSwingHigh && !isSwingLow)
 			{
 				zigZagHighSeries.Set(currentZigZagHigh);
 				zigZagLowSeries.Set(currentZigZagLow);
+				if(trendDir <= 0 && isOverHighDeviation) //Bull reversal, but does not reach a pivot yet;
+					barZZMode.Set(3);
+				else if(trendDir >= 0 && isOverLowDeviation) //Bear reversal, but does not reach a pivot yet;
+					barZZMode.Set(-3);
 				return;
 			}
 			
@@ -205,22 +214,26 @@ namespace NinjaTrader.Indicator
 				saveValue	= highSeries[1];
 				addHigh		= true;
 				trendDir	= 1;
+				barZZMode.Set(1); //bull reversal, ZZLow detected, which is LowBar() ago;
 			}	
 			else if (trendDir >= 0 && isSwingLow && isOverLowDeviation)
 			{	
 				saveValue	= lowSeries[1];
 				addLow		= true;
 				trendDir	= -1;
+				barZZMode.Set(-1); //bear reversal, ZZHigh detected, which is HighBar() ago;
 			}	
 			else if (trendDir == 1 && isSwingHigh && IsPriceGreater(highSeries[1], lastSwingPrice)) 
 			{
 				saveValue	= highSeries[1];
 				updateHigh	= true;
+				barZZMode.Set(2); //new high in bull trend detected, which is previous bar;
 			}
 			else if (trendDir == -1 && isSwingLow && IsPriceGreater(lastSwingPrice, lowSeries[1])) 
 			{
 				saveValue	= lowSeries[1];
 				updateLow	= true;
+				barZZMode.Set(-2); //new low in bear trend detected, which is previous bar;
 			}
 
 			if (addHigh || addLow || updateHigh || updateLow)
@@ -348,18 +361,35 @@ namespace NinjaTrader.Indicator
         #endregion
 		
 		#region Other properties
-		
+		/// <summary>
+		/// The problem: each reversal was detected at a three bars swing pivot, 
+		/// which caused missing the ZZ reversal when consectutive bars without pullback occured;
+		/// it happened at range bar chart;
+		/// </summary>
+		/// <returns></returns>
 		public double GetCurZZGap() {
 			double cur_gap = 0;
-			if(ZigZagHigh[0] != ZigZagHigh[1]) {
-			}
-			if(ZigZagLow[0] != ZigZagLow[1]) {
+			switch(barZZMode[0]) {
+				case 1: case 2: //bull reversal or bull trend continued;
+					cur_gap = High[0] - ZigZagLow[0];
+					break;
+				case -1: case -2: //bear reversal or bear trend continued;
+					cur_gap = Low[0] - ZigZagHigh[0];			
+					break;
+				default: 
+					if(trendDir > 0 && ZigZagLow[0] > 0) cur_gap = High[0] - ZigZagLow[0];
+					if(trendDir < 0 && ZigZagHigh[0] > 0) cur_gap = Low[0] - ZigZagHigh[0];					
+					break;
 			}
 			return cur_gap;
 		}
 		
 		public int GetTrendDir() {
 			return trendDir;
+		}
+		
+		public int GetBarZZMode(int barsAgo) {
+			return barZZMode[barsAgo];
 		}
 		
 		#endregion

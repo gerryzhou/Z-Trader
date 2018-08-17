@@ -49,8 +49,9 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void OnBarUpdate()
         {
+			double curGap = giZigZag.GetCurZZGap();
             // Condition set 1
-			Print(CurrentBar + ":" + Time[0] +  ":ZigZagHigh,ZigZagLow,HighBar,LowBar,trendDir=[" + giZigZag.ZigZagHigh[0] + "," + giZigZag.ZigZagLow[0] + "],[" + giZigZag.HighBar(1, 1, CurrentBar-BarsRequired) + "," + giZigZag.LowBar(1, 1, CurrentBar-BarsRequired)+"] " +giZigZag.GetTrendDir());
+			Print(CurrentBar + ":" + Time[0] +  ":ZZHi,ZZLo,HiBar,LoBar,trDir,CurZZGap,zzMode=[" + giZigZag.ZigZagHigh[0] + "," + giZigZag.ZigZagLow[0] + "],[" + giZigZag.HighBar(1, 1, CurrentBar-BarsRequired) + "," + giZigZag.LowBar(1, 1, CurrentBar-BarsRequired)+"] " + giZigZag.GetTrendDir() + "," + curGap + "<" + giZigZag.GetBarZZMode(0) + ">");
 //            if (GIZigZagBase("", true, DeviationType.Points, 1, true).ZigZagHigh[0] >= Variable0)
 //            {
 //                EnterShortLimit(DefaultQuantity, 0, "shortLmt");
