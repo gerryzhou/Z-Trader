@@ -135,7 +135,7 @@ variables:
 	//string LogFileName("C:\Users\GZhou\Documents\ts_log\TS_Log_" + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".log"),
 	//string LogFileName("C:\inetpub\wwwroot\nt_files\log\SIM666850F\TS_Log_" + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".log"),
 	string LogFileName("C:\inetpub\wwwroot\nt_files\log\" + GetAccountID() + "\TS_Log_" + Symbol + "_" + Datetime.Today.Format("%m-%d-%y").ToString() + ".log"),
-	string CmdFileName(" "),
+	string CmdFileName("C:\inetpub\wwwroot\nt_files\cmd\" + GetAccountID() + "\ts_cmd.cmd"),
 	string log_text(" ") ,
 	int barsBackLast(-1),
 	int entryCount(0),
@@ -188,7 +188,7 @@ end;
 method void SetParam(string param, double val)
 variables: int timeofhm;
 begin
-	If PrintOut > 0 then
+	If PrintOut > 1 then
 		print(BarNumber, "--Sym,Price=", param, ",", val);
 	switch(param) begin
 		Case "AlgoMode": algo_mode = val; break;
@@ -221,6 +221,8 @@ method bool IsTradeTime(int time_start_h, int time_start_m, int time_end_h, int 
 variables: bool isTime, int time_now;
 begin
 	isTime= false;
+	if(algo_mode = -1) then
+		return false;
 	time_now = Time[0];	
 	if(GetTimeByHM(time_start_h, time_start_m) >= session_start) then
 		begin
@@ -229,7 +231,8 @@ begin
 		end
 	else if (time_now >= GetTimeByHM(time_start_h, time_start_m) and time_now <= GetTimeByHM(time_end_h, time_end_m)) then
 		isTime = true;
-	print(Barnumber, " - time_now,time_start,time_end,session_start=", time_now, ",", GetTimeByHM(time_start_h, time_start_m), ",", GetTimeByHM(time_end_h, time_end_m), ",", session_start, " - isTradeTime=", isTime);
+	If PrintOut > 0 then	
+		print(Barnumber, " - time_now,time_start,time_end,session_start=", time_now, ",", GetTimeByHM(time_start_h, time_start_m), ",", GetTimeByHM(time_end_h, time_end_m), ",", session_start, " - isTradeTime=", isTime);
 	Return isTime;
 end;
 
@@ -241,7 +244,8 @@ begin
 	time_now = Time[0];	
 	if(time_now >=time_start and time_now < time_end) then
 		isTime = true;
-	print(Barnumber, " - time_now,time_start,time_end=", time_now, ",", time_start, ",", time_end, ",", " - isFlatTime=", isTime);
+	If PrintOut > 0 then	
+		print(Barnumber, " - time_now,time_start,time_end=", time_now, ",", time_start, ",", time_end, ",", " - isFlatTime=", isTime);
 	Return isTime;
 end;
 
@@ -313,8 +317,6 @@ SetExitOnClose;
 			log_text = "Start init GI_Ladders -------" + Symbol + "---------------" ;
 			print("LogFileName=" + LogFileName);
 			log_text = GF_ToLog(LogFileName, log_text, true, true, true) ;
-			
-			CmdFileName = "C:\inetpub\wwwroot\nt_files\cmd\" + GetAccountID() + "\ts_cmd_0422.cmd";
 			print("CmdFileName=" + CmdFileName);
 		End;
 		
@@ -363,13 +365,16 @@ begin
 	end;
 end;
 }
-
-Print("algo_mode=" , algo_mode);
-Print("profitTarget_amt=" , profitTarget_amt);
-Print("stopLoss_amt=" , stopLoss_amt);
-Print("breakEven_amt=" , breakEven_amt);
-Print("trade_direction=" , trade_direction);
-Print("trade_style=" , trade_style);
+If PrintOut > 0 then
+	begin		
+		Print("profitTarget_amt=" , profitTarget_amt);
+		Print("stopLoss_amt=" , stopLoss_amt);
+		Print("breakEven_amt=" , breakEven_amt);
+		Print("trade_direction=" , trade_direction);
+		Print("trade_style=" , trade_style);
+		Print("(timeStart,timeEnd)-TimeNow=(" , GetTimeByHM(time_startH, time_startM), "--", GetTimeByHM(time_endH, time_endM), ") -- ", Time[0]);
+		Print("algo_mode=" , algo_mode);
+	end;
 
 CheckPosition();
 if oTransition = 1 and barsSinceLastCross < bars_maxLastCross then 
