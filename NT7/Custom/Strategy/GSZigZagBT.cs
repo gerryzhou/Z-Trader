@@ -23,11 +23,10 @@ namespace NinjaTrader.Strategy
     {
         #region Variables
         // Wizard generated variables
-        private int printOut = 1; // Default setting for PrintOut
+        
         // User defined variables (add any user defined variables below)
-		private GIZigZagBase giZigZag = null;
+		private GIZigZagBase giZigZag = null;		
 		
-		private string AccName = "";
         #endregion
 
         /// <summary>
@@ -56,16 +55,7 @@ namespace NinjaTrader.Strategy
 //            {
 //                EnterShortLimit(DefaultQuantity, 0, "shortLmt");
 //            }
+			giZigZag.PrintLog(true, false, "", CurrentBar + "::" + Time[0] +  ":ZZHi,ZZLo,HiBar,LoBar,trDir,CurZZGap,zzMode=[" + giZigZag.ZigZagHigh[0] + "," + giZigZag.ZigZagLow[0] + "],[" + giZigZag.HighBar(1, 1, CurrentBar-BarsRequired) + "," + giZigZag.LowBar(1, 1, CurrentBar-BarsRequired)+"] " + giZigZag.GetTrendDir() + "," + curGap + "<" + giZigZag.GetBarZZMode(0) + ">");
         }
-
-        #region Properties
-        [Description("Print out")]
-        [GridCategory("Parameters")]
-        public int PrintOut
-        {
-            get { return printOut; }
-            set { printOut = Math.Max(-1, value); }
-        }
-        #endregion
     }
 }

@@ -20,10 +20,13 @@ namespace NinjaTrader.Strategy
     /// This file holds all user defined strategy methods.
     /// </summary>
  
-	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
+	//public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 	
 	partial class Strategy
-    {		
+    {
+		protected string AccName = "";
+		protected int printOut = 1; // Default setting for PrintOut
+		
 		public int IsLastBarOnChart() {
 			try{
 				if(Input.Count - CurrentBar <= 2) {
@@ -260,22 +263,22 @@ namespace NinjaTrader.Strategy
 			return words[0];
 		}
 		
-		public void FileTest(long barNo) {
-			Print("FileTest: barNo=" + barNo);
-		 //if(barNo > 0) return;
-			FileStream F = new FileStream("C:\\inetpub\\wwwroot\\nt_files\\log\\" + barNo.ToString() + ".dat", FileMode.OpenOrCreate, 
-            	FileAccess.ReadWrite);
-			
-			for (int i = 1; i <= 20; i++) {
-				F.WriteByte((byte)i);
-			}
-			F.Position = 0;
-			for (int i = 0; i <= 20; i++) {
-				Print(F.ReadByte() + " ");
-			}
-			F.Close();
-         //Console.ReadKey();
-		}
+//		public void FileTest(long barNo) {
+//			Print("FileTest: barNo=" + barNo);
+//		 //if(barNo > 0) return;
+//			FileStream F = new FileStream("C:\\inetpub\\wwwroot\\nt_files\\log\\" + barNo.ToString() + ".dat", FileMode.OpenOrCreate, 
+//            	FileAccess.ReadWrite);
+//			
+//			for (int i = 1; i <= 20; i++) {
+//				F.WriteByte((byte)i);
+//			}
+//			F.Position = 0;
+//			for (int i = 0; i <= 20; i++) {
+//				Print(F.ReadByte() + " ");
+//			}
+//			F.Close();
+//         //Console.ReadKey();
+//		}
 		
 		public string GetFileNameByDateTime(DateTime dt, string path, string accName, string ext) {
 			Print("GetFileNameByDateTime: " + dt.ToString());
@@ -365,6 +368,15 @@ namespace NinjaTrader.Strategy
 			return paraMap;
 		}
 		
+        #region Properties
+        [Description("Print out")]
+        [GridCategory("Parameters")]
+        public int PrintOut
+        {
+            get { return printOut; }
+            set { printOut = Math.Max(-1, value); }
+        }
+        #endregion		
 //		public void PrintLog(bool pntcon, string fpath, string text) {
 //			Print("PrintLog: " + fpath);
 //			if(pntcon) Print(text); // return;

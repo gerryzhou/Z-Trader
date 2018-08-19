@@ -201,11 +201,12 @@ namespace NinjaTrader.Indicator
 			prevBar = CurrentBar;
 			
 			if(IsLastBarOnChart() > 0) {
-				if(zigZagLine != null) RemoveDrawObject(zigZagLine);
+				if(zigZagLine != null && !Historical) RemoveDrawObject(zigZagLine);
 				//double zzGap;
 				zigZagLine = DrawZigZag(CurrentBar, xp, tagZZLine);
-				if(curGapText != null) RemoveDrawObject(curGapText);
-				curGapText = DrawGapText(curZZGap, tagCurGapText);
+				if(curGapText != null && !Historical) RemoveDrawObject(curGapText);
+				curGapText = DrawGapText(curZZGap, tagCurGapText, 0, Close[0], 0.5);
+				Print("curGapText=" + curGapText.Y + "," + curGapText.Time + "," + curGapText.Tag + "," + curGapText.BarsAgo + "," + curGapText.Text);
 				PrintZZSwings(zzSwings, log_file, printOut, backTest, 530, 1130);
 				//PrintTwoBarRatio();
 			}
@@ -227,37 +228,6 @@ namespace NinjaTrader.Indicator
 			//Print("Time, Pat=" + Time[0] + "," + curPriceActType.ToString());
 			SetZZSwing(zzSwings, endBar, startBar, endBar, curZZGap);
 			return zzLine;
-		}
-		
-		/// <summary>
-		/// Draw Gap from last ZZ to current bar
-		/// </summary>
-		/// <returns></returns>
-		public IText DrawGapText(double zzGap, string tag)
-		{
-			IText gapText = null;
-			double y = 0;
-			Color up_color = Color.Green;
-			Color dn_color = Color.Red;
-			Color sm_color = Color.Black;
-			Color draw_color = sm_color;
-			if(zzGap > 0) {
-				draw_color = up_color;
-//				y = double.Parse(Low[0].ToString())-1 ;
-				y = prevSAR-1 ;
-			}
-			else if (zzGap < 0) {
-				draw_color = dn_color;
-//				y = double.Parse(High[0].ToString())+1 ;
-				y = prevSAR+1 ;
-			}
-			
-			gapText = DrawText(tag+CurrentBar.ToString(), GetTimeDate(Time[0], 1)+"\r\n#"+ CurrentBar+"\r\nZ:"+zzGap, 0, y, draw_color);
-//			}
-			if(gapText != null) gapText.Locked = false;
-			//if(printOut > 0)
-				//PrintLog(true, log_file, CurrentBar + "::" + this.ToString() + " GaP= " + gap + " - " + Time[0].ToShortTimeString());
-			return gapText; 
 		}
 	
         #region Properties
@@ -491,7 +461,7 @@ namespace NinjaTrader.Indicator
 				//double zzGap ;
 				ILine zzLn = DrawZigZag(reverseBar[0], reverseValue[0], tagZZLine);
 				if(zzLn != null)
-					DrawGapText(curZZGap, tagCurGapText);
+					DrawGapText(curZZGap, tagCurGapText, 0, prevSAR, 1);
 			}
 			else {
 				todaySAR = prevSAR;

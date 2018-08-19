@@ -44,6 +44,12 @@ namespace NinjaTrader.Indicator
 		protected string accName = "";
 		protected string symbol = "";
 		private bool backTest = true; //if it runs for backtesting;private bool backTest = true; //if it runs for backtesting;
+
+		private ILine zigZagLine			= null; // The current ZigZag ended by the last bar of the chart;
+		private const string tagZZLine	= "tagZZLine-" ;// the tag of the line object for the current ZZ line;
+
+		private IText curGapText			= null; // The text for the ZZ ended by last bar of the chart; 
+		private const string tagCurGapText	= "tagCurGapText-"; // the tag of the line object for curGapText;
 		
 		protected int printOut = 3; //0,1,2,3 more print
 		protected bool drawTxt = false; //draw the zz text or not
@@ -153,6 +159,9 @@ namespace NinjaTrader.Indicator
         /// </summary>
         protected override void OnBarUpdate()
         {
+			DayWeekMonthCount();
+			zzSwings.Add(new ZigZagSwing(-1,-1,0,0));
+			
 			if (CurrentBar < 2) // need 3 bars to calculate Low/High
 			{
 				zigZagHighSeries.Set(0);
@@ -276,7 +285,46 @@ namespace NinjaTrader.Indicator
 
 			zigZagHighSeries.Set(currentZigZagHigh);
 			zigZagLowSeries.Set(currentZigZagLow);
-			Print(CurrentBar + "," + Time[0] +  ":ZigZagHigh,ZigZagLow,HighBar,LowBar,trendDir=[" + ZigZagHigh[0] + "," + ZigZagLow[0] + "],[" + HighBar(1, 1, CurrentBar-BarsRequired) + "," + LowBar(1, 1, CurrentBar-BarsRequired)+"] " +trendDir);
+			Print(CurrentBar + "," + Time[0] +  ":ZigZagHigh,ZigZagLow,HighBar,LowBar,trendDir=[" + ZigZagHigh[0] + "," + ZigZagLow[0] + "],[" + HighBar(1, 1, CurrentBar-BarsRequired) + "," + LowBar(1, 1, CurrentBar-BarsRequired) + "] " + trendDir);
+			
+			if(Math.Abs(barZZMode[0]) == 1) { //add ZigZagSwing object
+				int startBar=-1, endBar=-1;
+				if(barZZMode[0] == 1) {
+					startBar = CurrentBar - HighBar(1, 1, CurrentBar-BarsRequired);
+					endBar = CurrentBar - LowBar(1, 1, CurrentBar-BarsRequired);
+				}
+				if(barZZMode[0] == -1) {
+					startBar = CurrentBar - LowBar(1, 1, CurrentBar-BarsRequired);
+					endBar = CurrentBar - HighBar(1, 1, CurrentBar-BarsRequired);
+				}			
+				
+				double zzSize = GetZZSwingSize(startBar, endBar);
+				Print("startBar,endBar, zzSize=[" + startBar + "," + endBar + "]," + zzSize);
+				
+				if(zzSize != 0) {
+					SetZZSwing(zzSwings, endBar, startBar, endBar, zzSize);
+					if(Historical) {
+						double y_base = zzSize > 0? Low[CurrentBar-endBar] : High[CurrentBar-endBar];
+						DrawGapText(zzSize, tagCurGapText, CurrentBar-endBar, y_base, 0.5);
+					}
+				}
+			}
+			
+			Print("IsLastBarOnChart()=" + IsLastBarOnChart());
+			if(IsLastBarOnChart() > 0) {
+				double curGap = GetCurZZGap();
+				
+				int startBarsAgo = curGap > 0? LowBar(1, 1, CurrentBar-BarsRequired) : HighBar(1, 1, CurrentBar-BarsRequired);
+				if(zigZagLine != null && !Historical) RemoveDrawObject(zigZagLine);		
+				zigZagLine = DrawZigZagLine(startBarsAgo, 0, curGap, tagZZLine, Color.Blue);
+				
+				double yBase = curGap > 0? Low[0] : High[0];				
+				if(curGapText != null && !Historical) RemoveDrawObject(curGapText);
+				curGapText = DrawGapText(curGap, tagCurGapText, 0, yBase, 0.5);
+				Print("curGapText=" + curGapText.Y + "," + curGapText.Time + "," + curGapText.Tag + "," + curGapText.BarsAgo + "," + curGapText.Text);
+
+				PrintZZSwings(zzSwings, log_file, printOut, backTest, 530, 1130);
+			}
         }
 
 		#region Properties
