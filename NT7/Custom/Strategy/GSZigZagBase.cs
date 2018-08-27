@@ -482,7 +482,7 @@ namespace NinjaTrader.Strategy
 					break;
 			}
 				
-			if(backTest && printOut > 1 && IsLastBarOnChart() > 0) {
+			if(backTest && printOut > 1 && giZigZag.IsLastBarOnChart() > 0) {
 				//bool GIZZ = GIZigZag(DeviationType.Points, retracePnts, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
 				bool GIZZ = giZigZag.GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
 				PrintZZSize();

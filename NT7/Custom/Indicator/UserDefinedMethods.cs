@@ -18,6 +18,10 @@ namespace NinjaTrader.Indicator
     /// </summary>
     partial class Indicator
     {
+		private bool drawTxt = false; // User defined variables (add any user defined variables below)
+		private IText it_gap = null; //the Text draw for gap on current bar
+		protected string log_file = ""; //
+		
 		#region ZZ Vars
 		/// <summary>
 		/// Two Bar ZZ Swing ratio = curSize/prevSize

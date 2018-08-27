@@ -1,0 +1,137 @@
+[Goal]
+1) Develop a system to verify patterns in different markets, 
+different time frames, 
+different data (tick data and time-based data), 
+on different platforms;
+2) Focus on Morning Breakout pattern (Session Open Breakout, or true breakout); 
+   On daily chart, the market should be in a high volatility trend that easily leads to measured moves in morning breakout;
+3) Enable live trading with the pattern that has been verified/back-tested (supervised auto-trading);
+
+
+[Development Cycle]
+1) Ideas from experience/eyeballs (5%-10%)
+	a) first 30 min big bar range breakout: retest of 50% retracement, combined with EMA before and after the big bar to identify true/false breakout;
+2) Prototype (20%-30%)
+3) Verification/back-testing/optimization and simulated trading (>50%)
+4) Bug fixing and improvement (10%-20%)
+5) Live trading (%5-10%)
+
+
+[Environment]
+1) NinjaTrader, Tradestation, MotiveWave; (Evaluate each platform for analysis, back-testing, simulation, live and cost)
+2) Cloud shared machine (AWS EC2 instance);
+3) Historic data loading and management;
+
+
+[Markets]
+ES, NQ (ES preferred)
+CL, NG (CL preferred)
+C, S, SM, W (S, C preferred)
+LC, LH
+GC, SI, HG
+
+Seasonal complementary, less overlap, liquidity, historical data available, TsT allowed;
+
+[Patterns]
+Start with Morning breakout (Session open breakout or true breakout), then channel/ladders(false breakout);
+
+Pre-defined context/supervised pattern recognition: 
+  a)find strong trending on daily chart; supervised intra-day trading; 
+  b)prediction of a new trend on daily chart;
+  
+Seasonal cycle for different markets (1st/3rd quarter: index; spring-summer: CL; summer: grains; winter:??);
+
+Volatility measurement:
+  (ES: seasonal volatility; daily volatility: 5-11 AM, ZZ>10, count, sum, one-way maximum, up sum, down sum, up/down ratio);
+
+Indicators/Price Actions for entry/exit;
+
+
+[Definition]
+Trend, Breakout, Range, Channel, Support/Resistance, 
+Pullback, Top, Bottom, Swing, Consolidation, Wedge(Triangle, Rectangle), Test, etc.
+Context: Direction, Volatility, S/R, Price Action
+
+Need to convert them to programmable concepts;
+
+
+[Responsibility]
+Anne-Marie:
+Overview the progress and quality, avoid over-engineering/over-optimization;
+simplify the process(help to figure out priority, what is important/unimportant);
+testing/verification; 
+commentary/challenge;
+discussion, different/new ideas;
+
+Gerry: 
+Design(convert the trading ideas to program model);
+development;
+back-testing/bug fixing/optimization;
+technical support/trouble shooting;
+documentation;
+
+
+[Time-line]
+Where are we now: 
+a) ES 11 points morning breakout pattern works on live in high volatility market,
+(use 12 ticks range bar chart, 24 ticks ZigZag indicator);
+b) Customized ZigZag indicator based on ParabolicSAR, volatility measurement based on this indicator;
+c) Live trading based on parabolicSAR at tradestation (just added cmd file this week);
+d) Supervised back-testing in NinjaTrader;
+
+TODO list:
+a) Apply the supervised back-testing in different markets(ES, CL, C, S), 
+different time frame/tick range,
+for multiple years historical data;
+b) Focus on ES first, morning breakout pattern;
+c) Optimization and discovering reliable patterns;
+
+
+Weekly/biweekly meeting;
+6-month plan:
+a) ES: morning breakout (7-11:30 AM CT); 
+b) discover 2-3 patterns;
+c) apply context to supervise the pattern matching;
+(supervised auto-trading instead of mechanical auto-trading, 
+the decision is made by the supervisor, the auto-trading program is focusing on execution and order/money management);
+d) back-testing on multiple years data, include minutes, tick data(range bar chart, volume bar chart);
+e) setup a simulation trading environment for SIM trading (to share on AWS cloud, or even with back-testing);
+f) go live trading if the back-testing and SIM trading results are consistent;
+
+12-month plan:
+AI,deep learning;
+
+[Progress]
+08/05-08/11,2018:
+a) Planning;
+b) Fixed the log and supervised file access issue to enable optimization in NinjaTrader;
+
+08/12-08/18, 2018
+a) Rewrote ZigZag indicator, printout current ZigZag gap, volatility measurement; more simplified, flexible coding structure;
+b) Refactoring indicator class, added shared methods and classes: ZigZagSwing;
+c) Figured out ingredients of the system we're developing on: 
+Money management, 
+Order/Trade management(Command for trading), 
+Context supervision (price action, decide trade style: trend following/counter trend, entry at breakout/pullback), 
+Triggers (customized indicators, indicators combination=directional+S/R, pattern recognition), 
+
+08/19-08/25,2018:
+a) Computer hardware upgraded;
+b) Rewrote  GSpbSARBase strategy: 
+the first goal is to have it running back-testing and optimization, without Logging to file, TradeCommand, MarketConext involved, 
+the performance of optimization is the consideration for the refactoring;
+c) Added definition of Modules/Classes: Trigger, TradeManagement, MarketContext, SpvDailyPattern, TradeCommand, PriceAction, Logger, 
+
+[End]
+
+August 07, 2018
+
+
+
+
+
+
+
+
+
+

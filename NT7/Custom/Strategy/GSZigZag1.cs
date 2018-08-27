@@ -296,10 +296,10 @@ namespace NinjaTrader.Strategy
 				}
 			}
 
-			if(IsLastBarOnChart() > 0) {
-				bool GIZZ = GIZigZag(DeviationType.Points, 4, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
-				PrintZZSize();
-			}
+//			if(IsLastBarOnChart() > 0) {
+//				bool GIZZ = GIZigZag(DeviationType.Points, 4, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
+//				PrintZZSize();
+//			}
         }
 
 		protected bool NewOrderAllowed()

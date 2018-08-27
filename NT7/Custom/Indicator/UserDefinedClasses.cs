@@ -21,26 +21,6 @@ namespace NinjaTrader.Indicator
 	
 	//public enum PriceActionType {UpTight, UpWide, DnTight, DnWide, RngTight, RngWide, UnKnown};
 	
-	/// <summary>
-	/// PriceAction include PriceAtionType and the volatility measurement
-	/// min and max ticks of up/down expected
-	/// shrinking, expanding, or paralleling motion;
-	/// </summary>
-//	public class PriceAction {
-//		public PriceActionType paType;
-//		public int minUpTicks;
-//		public int maxUpTicks;
-//		public int minDownTicks;
-//		public int maxDownTicks;
-//		public PriceAction(PriceActionType pat, int min_UpTicks, int max_UpTicks, int min_DnTicks, int max_DnTicks) {
-//			this.paType = pat;
-//			this.minUpTicks = min_UpTicks;
-//			this.maxUpTicks = max_UpTicks;
-//			this.minDownTicks = min_DnTicks;
-//			this.maxDownTicks = max_DnTicks;
-//		}
-//	}
-	
 	public class ZigZagSwing {
 		public int Bar_Start;
 		public int Bar_End;
@@ -55,33 +35,7 @@ namespace NinjaTrader.Indicator
 	}
 	
     partial class Indicator
-    {
-		/*
-		#region SpvPR Vars
-		/// <summary>
-		/// Loaded from supervised file;
-		/// Key1=Date; Key2=Time;
-		/// </summary>		
-		protected Dictionary<string,Dictionary<int,PriceAction>> Dict_SpvPR1 = null;
-		
-		protected int SpvPRBits1 = 0;
-		
-		#endregion
-		
-		protected double Day_Count1 = 0;
-		protected double Week_Count1 = 0;
-		
-		public void DayWeekMonthCount1() {
-			if(CurrentBar < BarsRequired) return;
-			if(Time[0].Day != Time[1].Day) {
-				Day_Count1 ++;
-			}
-			if(Time[0].DayOfWeek == DayOfWeek.Sunday &&  Time[1].DayOfWeek != DayOfWeek.Sunday) {
-				Week_Count1 ++;
-			}
-			
-		} */
-	
+    {	
 		#region Supervised pattern recognition
 		
 		public FileInfo[] GetSpvFile(string srcDir, string symbol) {
@@ -207,7 +161,7 @@ namespace NinjaTrader.Indicator
 		public ZigZagSwing GetZZSwing(List<ZigZagSwing> zzSwings, int barNo)
 		{
 			return zzSwings[barNo];			
-		}		
+		}
 		
 		/// <summary>
 		/// Set the zigzag swing obj fo the barNo.

@@ -266,10 +266,10 @@ namespace NinjaTrader.Strategy
 					//EnterShortLimit(DefaultQuantity, High[0]+EnOffsetPnts, "EnST1");
 				}
 			}
-			if(IsLastBarOnChart() > 0) {
-				bool GIZZ = GIZigZag(DeviationType.Points, 4, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
-				PrintZZSize();
-			}
+//			if(IsLastBarOnChart() > 0) {
+//				bool GIZZ = GIZigZag(DeviationType.Points, 4, false, false, false, true).GetZigZag(out zigZagSizeSeries, out zigZagSizeZigZag);
+//				PrintZZSize();
+//			}
         }
 		
 protected override void OnExecution(IExecution execution)

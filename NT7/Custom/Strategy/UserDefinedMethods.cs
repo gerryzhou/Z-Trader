@@ -24,22 +24,37 @@ namespace NinjaTrader.Strategy
 	
 	partial class Strategy
     {
+		protected IndicatorProxy indicatorProxy = null;
+		/*
 		protected string AccName = "";
 		protected int printOut = 1; // Default setting for PrintOut
+		private int algo_mode = 1;
 		
-		public int IsLastBarOnChart() {
-			try{
-				if(Input.Count - CurrentBar <= 2) {
-					return Input.Count;
-				} else {
-					return -1;
-				}
-			}
-			catch(Exception ex){
-				Print("IsLastBarOnChart:" + ex.Message);
-				return -1;
-			}
-		}
+		private int tradeDirection = 0; // -1=short; 0-both; 1=long;
+		private int tradeStyle = 0; // -1=counter trend; 1=trend following;
+		private bool backTest = true; //if it runs for backtesting;
+		
+		//time=H*10000+M*100+S, S is skipped here;
+        private int timeStartH = 1; //10100 Default setting for timeStart hour
+		private int timeStartM = 1; //10100 Default setting for timeStart minute
+		private int timeStart = -1; //10100 Default setting for timeStart
+        private int timeEndH = 14; // Default setting for timeEnd hour
+		private int timeEndM = 59; // Default setting for timeEnd minute
+		private int timeEnd = -1; // Default setting for timeEnd
+		*/
+//		public int IsLastBarOnChart() {
+//			try{
+//				if(Input.Count - CurrentBar <= 2) {
+//					return Input.Count;
+//				} else {
+//					return -1;
+//				}
+//			}
+//			catch(Exception ex){
+//				Print("IsLastBarOnChart:" + ex.Message);
+//				return -1;
+//			}
+//		}
 		
 		public string GetTimeDate(String str_timedate, int time_date) {
 			char[] delimiterChars = { ' '};
@@ -177,26 +192,7 @@ namespace NinjaTrader.Strategy
 		public string Get24HDateTime(DateTime dt) {
 			return dt.ToString("MM/dd/yyyy HH:mm:ss");
 		}
-		
-		/// <summary>
-		/// Check if now is the time allowed to put trade
-		/// </summary>
-		/// <param name="time_start">start time</param>
-		/// <param name="time_end">end time</param>
-		/// <param name="session_start">the overnight session start time: 170000 for ES</param>
-		/// <returns></returns>
-		public bool IsTradingTime(int time_start, int time_end, int session_start) {
-			int time_now = ToTime(Time[0]);
-			bool isTime= false;
-			if(time_start >= session_start) {
-				if(time_now >= time_start || time_now <= time_end)
-					isTime = true;
-			}
-			else if (time_now >= time_start && time_now <= time_end) {
-				isTime = true;
-			}
-			return isTime;
-		}
+
 
 		/// <summary>
 		/// Check the first reversal bar for the pullback under current ZigZag gap
