@@ -25,95 +25,45 @@ namespace NinjaTrader.Strategy
     partial class Strategy {
 	
 		#region Money Mgmt variables
-		private double profitTargetAmt = 350; //36 Default(450-650 USD) setting for profitTargetAmt
-		private double profitTgtIncTic = 6; //8 Default tick Amt for ProfitTarget increase Amt
-		private double profitLockMinTic = 16; //24 Default ticks Amt for Min Profit locking
-		private double profitLockMaxTic = 30; //80 Default ticks Amt for Max Profit locking
-        private double stopLossAmt = 200; //16 Default setting for stopLossAmt
-		private double stopLossIncTic = 4; //4 Default tick Amt for StopLoss increase Amt
-		private double breakEvenAmt = 150; //150 the profits amount to trigger setting breakeven order
-		private double trailingSLAmt = 100; //300 Default setting for trailing Stop Loss Amt
-		private double dailyLossLmt = -200; //-300 the daily loss limit amount
+		protected double profitTargetAmt = 350; //36 Default(450-650 USD) setting for profitTargetAmt
+		protected double profitTgtIncTic = 6; //8 Default tick Amt for ProfitTarget increase Amt
+		protected double profitLockMinTic = 16; //24 Default ticks Amt for Min Profit locking
+		protected double profitLockMaxTic = 30; //80 Default ticks Amt for Max Profit locking
+        protected double stopLossAmt = 200; //16 Default setting for stopLossAmt
+		protected double stopLossIncTic = 4; //4 Default tick Amt for StopLoss increase Amt
+		protected double breakEvenAmt = 150; //150 the profits amount to trigger setting breakeven order
+		protected double trailingSLAmt = 100; //300 Default setting for trailing Stop Loss Amt
+		protected double dailyLossLmt = -200; //-300 the daily loss limit amount
 
-		private bool enTrailing = true; //use trailing entry: counter pullback bars or simple enOffsetPnts
-		private bool ptTrailing = true; //use trailing profit target every bar
-		private bool slTrailing = true; //use trailing stop loss every bar		
+		protected bool enTrailing = true; //use trailing entry: counter pullback bars or simple enOffsetPnts
+		protected bool ptTrailing = true; //use trailing profit target every bar
+		protected bool slTrailing = true; //use trailing stop loss every bar		
 		#endregion
 		
 		#region Trade Mgmt variables
-		private double enOffsetPnts = 1.25;//Price offset for entry
-		private int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
+		protected double enOffsetPnts = 1.25;//Price offset for entry
+		protected int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
 		
-		private int minutesChkEnOrder = 20; //how long before checking an entry order filled or not
-		private int minutesChkPnL = 30; //how long before checking P&L
+		protected int minutesChkEnOrder = 20; //how long before checking an entry order filled or not
+		protected int minutesChkPnL = 30; //how long before checking P&L
 		
-		private int barsHoldEnOrd = 10; // Bars count since en order was issued
-        private int barsSincePtSl = 1; // Bar count since last P&L was filled
-		private int barsToCheckPL = 2; // Bar count to check P&L since the entry		
+		protected int barsHoldEnOrd = 10; // Bars count since en order was issued
+        protected int barsSincePtSl = 1; // Bar count since last P&L was filled
+		protected int barsToCheckPL = 2; // Bar count to check P&L since the entry		
 		#endregion
 		
 		#region Order Objects
 		protected IOrder entryOrder = null;
 		protected IOrder profitTargetOrder = null;
 		protected IOrder stopLossOrder = null;
-		private double trailingPTTic = 36; //400, tick amount of trailing target
-		private double trailingSLTic = 16; // 200, tick amount of trailing stop loss
-		private int barsSinceEnOrd = 0; // bar count since the en order issued		
+		protected double trailingPTTic = 36; //400, tick amount of trailing target
+		protected double trailingSLTic = 16; // 200, tick amount of trailing stop loss
+		protected int barsSinceEnOrd = 0; // bar count since the en order issued		
 		#endregion
 		
 		#region Trigger Functions
 		
-		/// <summary>
-		/// Check if now is the time allowed to put trade
-		/// </summary>
-		/// <param name="time_start">start time</param>
-		/// <param name="time_end">end time</param>
-		/// <param name="session_start">the overnight session start time: 170000 for ES</param>
-		/// <returns></returns>
-		public bool IsTradingTime(int time_start, int time_end, int session_start) {
-			int time_now = ToTime(Time[0]);
-			bool isTime= false;
-			if(time_start >= session_start) {
-				if(time_now >= time_start || time_now <= time_end)
-					isTime = true;
-			}
-			else if (time_now >= time_start && time_now <= time_end) {
-				isTime = true;
-			}
-			return isTime;
-		}		
-		
-		protected void SetTradeContext(PriceAction pa) {
-			switch(pa.paType) {
-				case PriceActionType.UpTight: //
-					tradeStyle = 1;
-					tradeDirection = 1;
-					break;
-				case PriceActionType.UpWide: //wide up channel
-					tradeStyle = 2;
-					tradeDirection = 1;
-					break;
-				case PriceActionType.DnTight: //
-					tradeStyle = 1;
-					tradeDirection = -1;
-					break;
-				case PriceActionType.DnWide: //wide dn channel
-					tradeStyle = 2;
-					tradeDirection = -1;
-					break;
-				case PriceActionType.RngTight: //
-					tradeStyle = -1;
-					tradeDirection = 0;
-					break;
-				case PriceActionType.RngWide: //
-					tradeStyle = 2;
-					tradeDirection = 1;
-					break;
-				default:
-					tradeStyle = 1;
-					tradeDirection = 0;
-					break;
-			}
+		protected virtual void PutTrade(double curGap, bool isRevBar) {
 		}
 		
 		protected bool NewOrderAllowed()
@@ -178,7 +128,7 @@ namespace NinjaTrader.Strategy
 			int bse = BarsSinceEntry();
 			double timeSinceEn = -1;
 			if(bse > 0) {
-				timeSinceEn = GetMinutesDiff(Time[0], Time[bse]);
+				timeSinceEn = indicatorProxy.GetMinutesDiff(Time[0], Time[bse]);
 			}
 			
 			double pl = Position.GetProfitLoss(Close[0], PerformanceUnit.Currency);
@@ -336,7 +286,7 @@ namespace NinjaTrader.Strategy
 
             if (entryOrder != null && entryOrder.OrderState == OrderState.Working)
             {
-                min_en = GetMinutesDiff(entryOrder.Time, Time[0]);// DateTime.Now);
+                min_en = indicatorProxy.GetMinutesDiff(entryOrder.Time, Time[0]);// DateTime.Now);
                 //if ( IsTwoBarReversal(cur_gap, TickSize, enCounterPBBars) || (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))
 				if ( (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))	
                 {

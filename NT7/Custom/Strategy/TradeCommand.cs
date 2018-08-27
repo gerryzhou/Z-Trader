@@ -22,15 +22,78 @@ namespace NinjaTrader.Strategy
  
 	//public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 
-    public class TradeCommand {
-		private int algo_mode = 1;
-		private string AccName = null;
+    partial class Strategy {
+		//private int algo_mode = 1;
+		//private string AccName = null;
 		
-		private int tradeDirection = 0; // -1=short; 0-both; 1=long;
-		private int tradeStyle = 0; // -1=counter trend; 1=trend following;
-		private bool backTest = true; //if it runs for backtesting;
+		//private int tradeDirection = 0; // -1=short; 0-both; 1=long;
+		//private int tradeStyle = 0; // -1=counter trend; 1=trend following;
+		//private bool backTest = true; //if it runs for backtesting;
 		
-		public TradeCommand () {
+		public FileInfo[] GetCmdFile(string srcDir) {
+			Print("GetCmdFile src: " + srcDir);
+		    DirectoryInfo DirInfo = new DirectoryInfo(srcDir);
+
+//            var filesInOrder = from f in DirInfo.EnumerateFiles()
+//                               orderbydescending f.CreationTime
+//                               select f;
+			
+//			var filesInOrder = DirInfo.GetFiles("*.*",SearchOption.AllDirectories).OrderBy(f => f.LastWriteTime)
+//								.ToList();
+			//DirectoryInfo dir = new DirectoryInfo (folderpath);
+
+			FileInfo[] filesInOrder = DirInfo.GetFiles().OrderByDescending(p => p.LastWriteTime).ToArray();
+			
+            foreach (FileInfo item in filesInOrder)
+            {
+                Print("cmdFile=" + item.FullName);
+            }
+			
+			return filesInOrder;
+		}
+		
+		public void MoveCmdFiles(FileInfo[] src, string dest) {
+			Print("MoveCmdFile src,dest: " + src.Length + "," + dest);
+			foreach (FileInfo item in src)
+            {
+				string destFile = dest+item.Name;
+				if (File.Exists(destFile))
+				{
+					File.Delete(destFile);
+				}
+				item.MoveTo(destFile);
+				//File.Move(src, dest);
+			}
+		}
+		
+		public Dictionary<string,string> ReadParaFile(FileInfo src) {
+			Dictionary<string,string> paraMap = new Dictionary<string,string>();
+			
+			Print("ReadParaFile src: " + src);
+			if (!src.Exists)
+			{
+				return paraMap;
+			}
+	
+			int counter = 0;  
+			string line;
+
+			// Read the file and display it line by line.  
+			System.IO.StreamReader file =   
+				new System.IO.StreamReader(src.FullName);//@"c:\test.txt");
+			while((line = file.ReadLine()) != null)  
+			{
+				string[] pa = line.Split(':');
+				paraMap.Add(pa[0], pa[1]);
+				Print(line);  
+				counter++;
+			}
+
+			file.Close();
+			Print("There were {0} lines." + counter);
+			// Suspend the screen.
+			//System.Console.ReadLine();
+			return paraMap;
 		}
 		
         #region Properties

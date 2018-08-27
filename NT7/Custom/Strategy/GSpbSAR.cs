@@ -123,7 +123,7 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void OnBarUpdate()
         {
-			Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, backTest, Color.Orange)[0] + "-------------");
+			Print("-------------" + CurrentBar + "-" + indicatorProxy.Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, backTest, Color.Orange)[0] + "-------------");
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetAf=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetAf());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetAfIncreased=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetAfIncreased());
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetLongPosition=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetLongPosition());
@@ -135,7 +135,7 @@ namespace NinjaTrader.Strategy
 //			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetXp=" + GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetXp());
 			double gap = GIParabolicSAR(0.002, 0.2, 0.002, AccName, backTest, Color.Orange).GetCurZZGap();
 			bool isReversalBar = GIParabolicSAR(0.002, 0.2, 0.002, AccName, backTest, Color.Orange).IsReversalBar();
-			Print(CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
+			Print(CurrentBar + "-" + indicatorProxy.Get24HDateTime(Time[0]) + "-GetCurZZGap,isReversalBar=" + gap + "," + isReversalBar);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
 			
 			if (GIParabolicSAR(0.002, 0.2, 0.002, AccName, backTest, Color.Orange)[0] > 0)
             {
@@ -163,7 +163,7 @@ namespace NinjaTrader.Strategy
 					CancelAllOrders();
 					break;
 				case -1: //stop trading
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "- Stop trading cmd:" + Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "- Stop trading cmd:" + indicatorProxy.Get24HDateTime(Time[0]));
 					break;
 			}			
         }
@@ -247,11 +247,11 @@ namespace NinjaTrader.Strategy
 			//enCounterPBBars
 			if(entryOrder == null) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + Get24HDateTime(Time[0]));			
+					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + indicatorProxy.Get24HDateTime(Time[0]));			
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));		
+					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + indicatorProxy.Get24HDateTime(Time[0]));		
 				CancelOrder(entryOrder);
 				//entryOrder = EnterShortLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
@@ -266,11 +266,11 @@ namespace NinjaTrader.Strategy
 			if(entryOrder == null) {
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + indicatorProxy.Get24HDateTime(Time[0]));
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + indicatorProxy.Get24HDateTime(Time[0]));
 				CancelOrder(entryOrder);
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
@@ -284,10 +284,10 @@ namespace NinjaTrader.Strategy
 			double pnl = CheckAccPnL();//GetAccountValue(AccountItem.RealizedProfitLoss);
 			double plrt = CheckAccCumProfit();
 			if(printOut > -1)				
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + Get24HDateTime(Time[0]));	
+				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + indicatorProxy.Get24HDateTime(Time[0]));	
 
 			if((backTest && !Historical) || (!backTest && Historical)) {
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + Get24HDateTime(Time[0]));
+				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + indicatorProxy.Get24HDateTime(Time[0]));
 				return false;
 			}
 			if(!backTest && (plrt <= dailyLossLmt || pnl <= dailyLossLmt))
@@ -304,14 +304,14 @@ namespace NinjaTrader.Strategy
 				{
 					if(bsx == -1 || bsx > barsSincePtSl)
 					{
-						indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + Get24HDateTime(Time[0]));
+						indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + indicatorProxy.Get24HDateTime(Time[0]));
 						return true;
 					} else 
-						indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + Get24HDateTime(Time[0]));
+						indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + indicatorProxy.Get24HDateTime(Time[0]));
 				} else
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + indicatorProxy.Get24HDateTime(Time[0]));
 			} else 
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[timeStart,timeEnd,Position.Quantity]" + timeStart + "," + timeEnd + "," + Position.Quantity + " - " + Get24HDateTime(Time[0]));
+				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[timeStart,timeEnd,Position.Quantity]" + timeStart + "," + timeEnd + "," + Position.Quantity + " - " + indicatorProxy.Get24HDateTime(Time[0]));
 				
 			return false;
 		}
@@ -321,7 +321,7 @@ namespace NinjaTrader.Strategy
 			int bse = BarsSinceEntry();
 			double timeSinceEn = -1;
 			if(bse > 0) {
-				timeSinceEn = GetMinutesDiff(Time[0], Time[bse]);
+				timeSinceEn = indicatorProxy.GetMinutesDiff(Time[0], Time[bse]);
 			}
 			
 			double pl = Position.GetProfitLoss(Close[0], PerformanceUnit.Currency);
@@ -427,7 +427,7 @@ namespace NinjaTrader.Strategy
 
             if (entryOrder != null && entryOrder.OrderState == OrderState.Working)
             {
-                min_en = GetMinutesDiff(entryOrder.Time, Time[0]);// DateTime.Now);
+                min_en = indicatorProxy.GetMinutesDiff(entryOrder.Time, Time[0]);// DateTime.Now);
                 //if ( IsTwoBarReversal(cur_gap, TickSize, enCounterPBBars) || (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))
 				if ( (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))	
                 {

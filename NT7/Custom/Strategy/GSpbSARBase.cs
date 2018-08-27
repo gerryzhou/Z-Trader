@@ -29,14 +29,14 @@ namespace NinjaTrader.Strategy
     public class GSpbSARBase : Strategy
     {		
         #region Variables
-		private TradeCommand tradeCommand = null;
+		
 		private MarketContext mktContext = null;
 		private GIParabolicSAR giParabSAR = null;//new GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan);
 		//private Logger logger = null;
 		
 		private double afAcc = 0.002; // Default setting for AfAcc
         private double afLmt = 0.2; // Default setting for AfLmt
-
+/*
 		private int algo_mode = 1;
 		
 		private double profitTargetAmt = 350; //36 Default(450-650 USD) setting for profitTargetAmt
@@ -92,16 +92,16 @@ namespace NinjaTrader.Strategy
 		private bool drawTxt = false; // User defined variables (add any user defined variables below)
 		private IText it_gap = null; //the Text draw for gap on current bar
 		//private string log_file = ""; //
-		
+		*/		
 		private int barsSinceLastCross = -1;
 		private PriceAction curBarPriceAction = new PriceAction(PriceActionType.UnKnown, -1,-1,-1,-1);//PriceAtionType of current bar
 		
 		private int spvPRBits = 42;//39,63
-		
+
 		/// <summary>
 		/// Order handling
 		/// </summary>
-		
+		/*
 		private IOrder entryOrder = null;
 		private IOrder profitTargetOrder = null;
 		private IOrder stopLossOrder = null;
@@ -110,7 +110,7 @@ namespace NinjaTrader.Strategy
 		private int barsSinceEnOrd = 0; // bar count since the en order issued
 		
 		private string AccName = null;
-
+*/
 		#endregion
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void Initialize()
         {
-			AccName = GetTsTAccName(Account.Name);
-			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, AccName, backTest, Color.Cyan);
+			accName = GetTsTAccName(Account.Name);
+			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, accName, backTest, Color.Cyan);
 			Add(giParabSAR);
 			giParabSAR.setSpvPRBits(spvPRBits);
 			timeStart = giParabSAR.GetTimeByHM(timeStartH, timeStartM);
@@ -143,7 +143,7 @@ namespace NinjaTrader.Strategy
 			ExitOnCloseSeconds = 30;
 			
 			if(!backTest)
-				indicatorProxy = new IndicatorProxy(AccName, Instrument.FullName);
+				indicatorProxy = new IndicatorProxy(accName, Instrument.FullName);
         }
 
         protected override void OnBarUpdate()
@@ -163,7 +163,7 @@ namespace NinjaTrader.Strategy
 				SetTradeContext(curBarPriceAction);
 				//Print("-------------" + CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GIParabolicSAR=" + GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan)[0] + "-------------");
 				if(printOut > 3)
-					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + Get24HDateTime(Time[0]) + "-GetCurZZGap,GetCurGap,isReversalBar=" + zz_gap + "," + cur_gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + indicatorProxy.Get24HDateTime(Time[0]) + "-GetCurZZGap,GetCurGap,isReversalBar=" + zz_gap + "," + cur_gap + "," + isReversalBar + ", getCurPriceActType=" + curBarPriceAction.ToString() + ", barsSinceLastCross=" + barsSinceLastCross);//GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Orange).GetCurZZGap());
 			}
 			
 			if (giParabSAR[0] > 0) //GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Orange)[0] > 0)
@@ -175,7 +175,7 @@ namespace NinjaTrader.Strategy
 			CheckPerformance();
 			//double gap = GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Cyan).GetCurZZGap();
 			//bool isReversalBar = true;//CurrentBar>BarsRequired?false:GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Cyan).IsReversalBar();
-			switch(algo_mode) {
+			switch(algoMode) {
 				case 0: //liquidate
 					CloseAllPositions();
 					break;
@@ -210,7 +210,7 @@ namespace NinjaTrader.Strategy
 			//double reverseValue = giParabSAR.GetReverseValue();
 		
 			if(printOut > 1) {
-				string logText = CurrentBar + "-" + AccName
+				string logText = CurrentBar + "-" + accName
 				//":PutOrder-(curGap,todaySAR,prevSAR,zzGap,reverseBar,last_reverseBar,reverseValue)= " 
 				//+ curGap + "," + todaySAR + "," + prevSAR + "," + zzGap + "," + reverseBar + "," + last_reverseBar + "," + reverseValue ;
 				+ ":PutOrder-(curGap,zzGap,last_reverseBar)= " 

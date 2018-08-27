@@ -34,8 +34,8 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void Initialize()
         {
-			AccName = GetTsTAccName(Account.Name);
-			giZigZag = GIZigZagBase(AccName, true, NinjaTrader.Data.DeviationType.Points, 3, true);
+			accName = GetTsTAccName(Account.Name);
+			giZigZag = GIZigZagBase(accName, true, NinjaTrader.Data.DeviationType.Points, 3, true);
             Add(giZigZag);
             SetProfitTarget(300);
             SetStopLoss(175, false);
