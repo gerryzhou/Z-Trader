@@ -21,13 +21,19 @@ namespace NinjaTrader.Strategy
     /// </summary>
  
 	//public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
+	public class Trigger {
+		private Strategy instStrategy = null;
+		public Trigger(Strategy inst_strategy) {
+			this.instStrategy = inst_strategy;
+		}
+	}
 	
 	partial class Strategy
     {
 		protected string accName = "";
-		protected int printOut = 1; // Default setting for PrintOut
 		protected int algoMode = 1;
 		protected bool backTest = true; //if it runs for backtesting;
+		protected int printOut = 1; // Default setting for PrintOut
 		
 		protected int tradeDirection = 0; // -1=short; 0-both; 1=long;
 		protected int tradeStyle = 0; // -1=counter trend; 1=trend following;
@@ -98,8 +104,6 @@ namespace NinjaTrader.Strategy
 			}
 		}
 		
-
-		
 		protected virtual bool PatternMatched()
 		{
 			//Print("CurrentBar, barsMaxLastCross, barsAgoMaxPbSAREn,=" + CurrentBar + "," + barsAgoMaxPbSAREn + "," + barsSinceLastCross);
@@ -169,10 +173,119 @@ namespace NinjaTrader.Strategy
 			return tbr_count;
 		}
 		
-        #region Properties
+        #region TG Properties
+		[Description("Account Name")]
+        [GridCategory("Parameters")]
+        public string TG_AccName
+        {
+            get { return accName; }
+            set { accName = value; }
+        }
+		
+		[Description("Algo mode")]
+        [GridCategory("Parameters")]
+        public int TG_AlgoMode
+        {
+            get { return algoMode; }
+            set { algoMode = value; }
+        }
+		
+		[Description("If it runs for backtesting")]
+        [GridCategory("Parameters")]
+        public bool TG_BackTest
+        {
+            get { return backTest; }
+            set { backTest = value; }
+        }
+		
+		[Description("Print out level: large # print out more")]
+        [GridCategory("Parameters")]
+        public int TG_PrintOut
+        {
+            get { return printOut; }
+            set { printOut = Math.Max(-1, value); }
+        }
+		
+        [Description("Short, Long or both direction for entry")]
+        [GridCategory("Parameters")]
+        public int TG_TradeDirection
+        {
+            get { return tradeDirection; }
+            set { tradeDirection = value; }
+        }		
 
-        #endregion		
-	
+        [Description("Trade style: trend following, counter trend, scalp")]
+        [GridCategory("Parameters")]
+        public int TG_TradeStyle
+        {
+            get { return tradeStyle; }
+            set { tradeStyle = value; }
+        }
+		
+        [Description("Min swing size for entry")]
+        [GridCategory("Parameters")]
+        public double TG_EnSwingMinPnts
+        {
+            get { return enSwingMinPnts; }
+            set { enSwingMinPnts = Math.Max(1, value); }
+        }
 
+        [Description("Max swing size for entry")]
+        [GridCategory("Parameters")]
+        public double TG_EnSwingMaxPnts
+        {
+            get { return enSwingMaxPnts; }
+            set { enSwingMaxPnts = Math.Max(4, value); }
+        }
+
+		[Description("Min pullback size for entry")]
+        [GridCategory("Parameters")]
+        public double TG_EnPullbackMinPnts
+        {
+            get { return enPullbackMinPnts; }
+            set { enPullbackMinPnts = Math.Max(1, value); }
+        }
+
+        [Description("Max pullback size for entry")]
+        [GridCategory("Parameters")]
+        public double TG_EnPullbackMaxPnts
+        {
+            get { return enPullbackMaxPnts; }
+            set { enPullbackMaxPnts = Math.Max(2, value); }
+        }
+
+        [Description("Time start hour")]
+        [GridCategory("Parameters")]
+        public int TG_TimeStartH
+        {
+            get { return timeStartH; }
+            set { timeStartH = Math.Max(0, value); }
+        }
+		
+        [Description("Time start minute")]
+        [GridCategory("Parameters")]
+        public int TG_TimeStartM
+        {
+            get { return timeStartM; }
+            set { timeStartM = Math.Max(0, value); }
+        }
+		
+        [Description("Time end hour")]
+        [GridCategory("Parameters")]
+        public int TG_TimeEndH
+        {
+            get { return timeEndH; }
+            set { timeEndH = Math.Max(0, value); }
+        }
+
+        [Description("Time end minute")]
+        [GridCategory("Parameters")]
+        public int TG_TimeEndM
+        {
+            get { return timeEndM; }
+            set { timeEndM = Math.Max(0, value); }
+        }
+		
+        #endregion
     }
 }

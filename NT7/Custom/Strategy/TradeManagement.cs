@@ -21,45 +21,54 @@ namespace NinjaTrader.Strategy
     /// </summary>
  
 	//public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
-
-    partial class Strategy {
-	
+	public class TradeObj {
+		public int tradeDirection;
+		public int tradeStyle;
+		
 		#region Money Mgmt variables
-		protected double profitTargetAmt = 350; //36 Default(450-650 USD) setting for profitTargetAmt
-		protected double profitTgtIncTic = 6; //8 Default tick Amt for ProfitTarget increase Amt
-		protected double profitLockMinTic = 16; //24 Default ticks Amt for Min Profit locking
-		protected double profitLockMaxTic = 30; //80 Default ticks Amt for Max Profit locking
-        protected double stopLossAmt = 200; //16 Default setting for stopLossAmt
-		protected double stopLossIncTic = 4; //4 Default tick Amt for StopLoss increase Amt
-		protected double breakEvenAmt = 150; //150 the profits amount to trigger setting breakeven order
-		protected double trailingSLAmt = 100; //300 Default setting for trailing Stop Loss Amt
-		protected double dailyLossLmt = -200; //-300 the daily loss limit amount
+		public double profitTargetAmt = 350; //36 Default(450-650 USD) setting for MM_ProfitTargetAmt
+		public double profitTgtIncTic = 6; //8 Default tick Amt for ProfitTarget increase Amt
+		public double profitLockMinTic = 16; //24 Default ticks Amt for Min Profit locking
+		public double profitLockMaxTic = 30; //80 Default ticks Amt for Max Profit locking
+        public double stopLossAmt = 200; //16 Default setting for stopLossAmt
+		public double stopLossIncTic = 4; //4 Default tick Amt for StopLoss increase Amt
+		public double breakEvenAmt = 150; //150 the profits amount to trigger setting breakeven order
+		public double trailingSLAmt = 100; //300 Default setting for trailing Stop Loss Amt
+		public double dailyLossLmt = -200; //-300 the daily loss limit amount
 
-		protected bool enTrailing = true; //use trailing entry: counter pullback bars or simple enOffsetPnts
-		protected bool ptTrailing = true; //use trailing profit target every bar
-		protected bool slTrailing = true; //use trailing stop loss every bar		
+		public bool enTrailing = true; //use trailing entry: counter pullback bars or simple enOffsetPnts
+		public bool ptTrailing = true; //use trailing profit target every bar
+		public bool slTrailing = true; //use trailing stop loss every bar		
 		#endregion
 		
 		#region Trade Mgmt variables
-		protected double enOffsetPnts = 1.25;//Price offset for entry
-		protected int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
+		public double enOffsetPnts = 1.25;//Price offset for entry
+		public int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
 		
-		protected int minutesChkEnOrder = 20; //how long before checking an entry order filled or not
-		protected int minutesChkPnL = 30; //how long before checking P&L
+		public int minutesChkEnOrder = 20; //how long before checking an entry order filled or not
+		public int minutesChkPnL = 30; //how long before checking P&L
 		
-		protected int barsHoldEnOrd = 10; // Bars count since en order was issued
-        protected int barsSincePtSl = 1; // Bar count since last P&L was filled
-		protected int barsToCheckPL = 2; // Bar count to check P&L since the entry		
+		public int barsHoldEnOrd = 10; // Bars count since en order was issued
+        public int barsSincePtSl = 1; // Bar count since last P&L was filled
+		public int barsToCheckPL = 2; // Bar count to check P&L since the entry		
 		#endregion
 		
 		#region Order Objects
-		protected IOrder entryOrder = null;
-		protected IOrder profitTargetOrder = null;
-		protected IOrder stopLossOrder = null;
-		protected double trailingPTTic = 36; //400, tick amount of trailing target
-		protected double trailingSLTic = 16; // 200, tick amount of trailing stop loss
-		protected int barsSinceEnOrd = 0; // bar count since the en order issued		
+		public IOrder entryOrder = null;
+		public IOrder profitTargetOrder = null;
+		public IOrder stopLossOrder = null;
+		public double trailingPTTic = 36; //400, tick amount of trailing target
+		public double trailingSLTic = 16; // 200, tick amount of trailing stop loss
+		public int barsSinceEnOrd = 0; // bar count since the en order issued		
 		#endregion
+		
+		public TradeObj(){
+		}
+		
+	}
+
+    partial class Strategy {
+		protected TradeObj tradeObj = null;
 		
 		#region Trigger Functions
 		
@@ -89,14 +98,14 @@ namespace NinjaTrader.Strategy
 				//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + Get24HDateTime(Time[0]));
 				return false;
 			}
-			if(!backTest && (plrt <= dailyLossLmt || pnl <= dailyLossLmt))
+			if(!backTest && (plrt <= MM_DailyLossLmt || pnl <= MM_DailyLossLmt))
 			{
 				if(printOut > -1) {
 					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
 				}
 				return false;
 			}
-			if (backTest && pnl <= dailyLossLmt) {
+			if (backTest && pnl <= MM_DailyLossLmt) {
 				if(printOut > 3) {
 					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": backTest dailyLossLmt reached = " + pnl);
 				}
@@ -105,9 +114,9 @@ namespace NinjaTrader.Strategy
 		
 			if (IsTradingTime(timeStart, timeEnd, 170000) && Position.Quantity == 0)
 			{
-				if (entryOrder == null || entryOrder.OrderState != OrderState.Working || enTrailing)
+				if (tradeObj.entryOrder == null || tradeObj.entryOrder.OrderState != OrderState.Working || MM_EnTrailing)
 				{
-					if(bsx == -1 || bsx > barsSincePtSl)
+					if(bsx == -1 || bsx > tradeObj.barsSincePtSl)
 					{
 						//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + Get24HDateTime(Time[0]));
 						return true;
@@ -138,26 +147,26 @@ namespace NinjaTrader.Strategy
          		//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- Open PnL: " + pl);
 				//int nChkPnL = (int)(timeSinceEn/minutesChkPnL);
 				double curPTTics = -1;
-				double slPrc = stopLossOrder == null ? Position.AvgPrice : stopLossOrder.StopPrice;
+				double slPrc = tradeObj.stopLossOrder == null ? Position.AvgPrice : tradeObj.stopLossOrder.StopPrice;
 				
-				if(ptTrailing && pl >= 12.5*(trailingPTTic - 2*profitTgtIncTic))
+				if(MM_PTTrailing && pl >= 12.5*(tradeObj.trailingPTTic - 2*MM_ProfitTgtIncTic))
 				{
-					trailingPTTic = trailingPTTic + profitTgtIncTic;
-					if(profitTargetOrder != null) {
-						curPTTics = Math.Abs(profitTargetOrder.LimitPrice - Position.AvgPrice)/TickSize;
+					tradeObj.trailingPTTic = tradeObj.trailingPTTic + MM_ProfitTgtIncTic;
+					if(tradeObj.profitTargetOrder != null) {
+						curPTTics = Math.Abs(tradeObj.profitTargetOrder.LimitPrice - Position.AvgPrice)/TickSize;
 					}
 					//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- update PT: PnL=" + pl + ",(trailingPTTic, curPTTics, $Amt, $Amt_cur)=(" + trailingPTTic + "," + curPTTics + "," + 12.5*trailingPTTic + "," + 12.5*curPTTics + ")");
-					if(profitTargetOrder == null || trailingPTTic > curPTTics)
-						SetProfitTarget(CalculationMode.Ticks, trailingPTTic);
+					if(tradeObj.profitTargetOrder == null || tradeObj.trailingPTTic > curPTTics)
+						SetProfitTarget(CalculationMode.Ticks, tradeObj.trailingPTTic);
 				}
 				
-				if(pl >= breakEvenAmt) { //setup breakeven order
+				if(pl >= MM_BreakEvenAmt) { //setup breakeven order
 					//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- setup SL Breakeven: (PnL, posAvgPrc)=(" + pl + "," + Position.AvgPrice + ")");
 					slPrc = Position.AvgPrice;
 					//SetStopLoss(0);
 				}
 				
-				if(slTrailing) { // trailing max and min profits then converted to trailing stop after over the max
+				if(MM_SLTrailing) { // trailing max and min profits then converted to trailing stop after over the max
 //					if(trailingSLTic > profitLockMaxTic && pl >= 12.5*(trailingSLTic + 2*profitTgtIncTic)) {
 //						trailingSLTic = trailingSLTic + profitTgtIncTic;
 //						if(Position.MarketPosition == MarketPosition.Long)
@@ -166,43 +175,43 @@ namespace NinjaTrader.Strategy
 //							slPrc = Position.AvgPrice-TickSize*trailingSLTic;
 //						Print(AccName + "- update SL over Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
 //					}
-					if(trailingSLTic > profitLockMaxTic && pl >= 12.5*(trailingSLTic + 2*profitTgtIncTic)) {
-						trailingSLTic = trailingSLTic + profitTgtIncTic;
-						if(stopLossOrder != null)
-							CancelOrder(stopLossOrder);
-						if(profitTargetOrder != null)
-							CancelOrder(profitTargetOrder);
-						SetTrailStop(trailingSLAmt);
+					if(tradeObj.trailingSLTic > MM_ProfitLockMaxTic && pl >= 12.5*(tradeObj.trailingSLTic + 2*MM_ProfitTgtIncTic)) {
+						tradeObj.trailingSLTic = tradeObj.trailingSLTic + MM_ProfitTgtIncTic;
+						if(tradeObj.stopLossOrder != null)
+							CancelOrder(tradeObj.stopLossOrder);
+						if(tradeObj.profitTargetOrder != null)
+							CancelOrder(tradeObj.profitTargetOrder);
+						SetTrailStop(MM_TrailingStopLossAmt);
 						//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- SetTrailStop over SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
 					}
-					else if(pl >= 12.5*(profitLockMaxTic + 2*profitTgtIncTic)) { // lock max profits
-						trailingSLTic = trailingSLTic + profitTgtIncTic;
+					else if(pl >= 12.5*(MM_ProfitLockMaxTic + 2*MM_ProfitTgtIncTic)) { // lock max profits
+						tradeObj.trailingSLTic = tradeObj.trailingSLTic + MM_ProfitTgtIncTic;
 						if(Position.MarketPosition == MarketPosition.Long)
-							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice+TickSize*trailingSLTic : Position.AvgPrice+TickSize*profitLockMaxTic;
+							slPrc = tradeObj.trailingSLTic > MM_ProfitLockMaxTic ? Position.AvgPrice+TickSize*tradeObj.trailingSLTic : Position.AvgPrice+TickSize*MM_ProfitLockMaxTic;
 						if(Position.MarketPosition == MarketPosition.Short)
-							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice-TickSize*trailingSLTic :  Position.AvgPrice-TickSize*profitLockMaxTic;
+							slPrc = tradeObj.trailingSLTic > MM_ProfitLockMaxTic ? Position.AvgPrice-TickSize*tradeObj.trailingSLTic :  Position.AvgPrice-TickSize*MM_ProfitLockMaxTic;
 						//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- update SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
-					else if(pl >= 12.5*(profitLockMinTic + 2*profitTgtIncTic)) { //lock min profits
-						trailingSLTic = trailingSLTic + profitTgtIncTic;
+					else if(pl >= 12.5*(MM_ProfitLockMinTic + 2*MM_ProfitTgtIncTic)) { //lock min profits
+						tradeObj.trailingSLTic = tradeObj.trailingSLTic + MM_ProfitTgtIncTic;
 						if(Position.MarketPosition == MarketPosition.Long)
-							slPrc = Position.AvgPrice+TickSize*profitLockMinTic;
+							slPrc = Position.AvgPrice+TickSize*MM_ProfitLockMinTic;
 						if(Position.MarketPosition == MarketPosition.Short)
-							slPrc = Position.AvgPrice-TickSize*profitLockMinTic;
+							slPrc = Position.AvgPrice-TickSize*MM_ProfitLockMinTic;
 						//giParabSAR.PrintLog(true, !backTest, log_file, AccName + "- update SL Min: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
 				}
-				if(stopLossOrder == null || 
-					(Position.MarketPosition == MarketPosition.Long && slPrc > stopLossOrder.StopPrice) ||
-					(Position.MarketPosition == MarketPosition.Short && slPrc < stopLossOrder.StopPrice)) 
+				if(tradeObj.stopLossOrder == null || 
+					(Position.MarketPosition == MarketPosition.Long && slPrc > tradeObj.stopLossOrder.StopPrice) ||
+					(Position.MarketPosition == MarketPosition.Short && slPrc < tradeObj.stopLossOrder.StopPrice)) 
 				{
 					SetStopLoss(CalculationMode.Price, slPrc);
 				}
 			} else {
-				SetStopLoss(stopLossAmt);
-				SetProfitTarget(profitTargetAmt);
+				SetStopLoss(MM_StopLossAmt);
+				SetProfitTarget(MM_ProfitTargetAmt);
 			}
 
 			return false;
@@ -232,7 +241,7 @@ namespace NinjaTrader.Strategy
 		#region Trade Mgmt Functions
 		protected void NewShortLimitOrder(string msg, double zzGap, double curGap)
 		{
-			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]+enOffsetPnts : High[0]+enOffsetPnts;
+			double prc = (MM_EnTrailing && TM_EnCounterPBBars>0) ? Close[0]+TM_EnOffsetPnts : High[0]+TM_EnOffsetPnts;
 			
 //			double curGap = giParabSAR.GetCurGap();
 //			double todaySAR = giParabSAR.GetTodaySAR();		
@@ -248,55 +257,55 @@ namespace NinjaTrader.Strategy
 //				giParabSAR.PrintLog(true, !backTest, log_file, logText);
 //			}
 			//enCounterPBBars
-			if(entryOrder == null) {
+			if(tradeObj.entryOrder == null) {
 //				if(printOut > -1)
 					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + Get24HDateTime(Time[0]));			
 			}
-			else if (entryOrder.OrderState == OrderState.Working) {
+			else if (tradeObj.entryOrder.OrderState == OrderState.Working) {
 //				if(printOut > -1)
 					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));		
-				CancelOrder(entryOrder);
+				CancelOrder(tradeObj.entryOrder);
 				//entryOrder = EnterShortLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
-			entryOrder = EnterShortLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
-			barsSinceEnOrd = 0;
+			tradeObj.entryOrder = EnterShortLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
+			tradeObj.barsSinceEnOrd = 0;
 		}
 		
 		protected void NewLongLimitOrder(string msg, double zzGap, double curGap)
 		{
-			double prc = (enTrailing && enCounterPBBars>0) ? Close[0]-enOffsetPnts :  Low[0]-enOffsetPnts;
+			double prc = (MM_EnTrailing && TM_EnCounterPBBars>0) ? Close[0]-TM_EnOffsetPnts :  Low[0]-TM_EnOffsetPnts;
 			
-			if(entryOrder == null) {
-				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
+			if(tradeObj.entryOrder == null) {
+				tradeObj.entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 //				if(printOut > -1)
 					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + Get24HDateTime(Time[0]));
 			}
-			else if (entryOrder.OrderState == OrderState.Working) {
+			else if (tradeObj.entryOrder.OrderState == OrderState.Working) {
 //				if(printOut > -1)
 					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + Get24HDateTime(Time[0]));
-				CancelOrder(entryOrder);
-				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
+				CancelOrder(tradeObj.entryOrder);
+				tradeObj.entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
-			barsSinceEnOrd = 0;
+			tradeObj.barsSinceEnOrd = 0;
 		}
 		
 		public bool CheckEnOrder(double cur_gap)
         {
             double min_en = -1;
 
-            if (entryOrder != null && entryOrder.OrderState == OrderState.Working)
+            if (tradeObj.entryOrder != null && tradeObj.entryOrder.OrderState == OrderState.Working)
             {
-                min_en = indicatorProxy.GetMinutesDiff(entryOrder.Time, Time[0]);// DateTime.Now);
+                min_en = indicatorProxy.GetMinutesDiff(tradeObj.entryOrder.Time, Time[0]);// DateTime.Now);
                 //if ( IsTwoBarReversal(cur_gap, TickSize, enCounterPBBars) || (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))
-				if ( (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))	
+				if ( (TM_BarsHoldEnOrd > 0 && tradeObj.barsSinceEnOrd >= TM_BarsHoldEnOrd) || ( TM_MinutesChkEnOrder > 0 &&  min_en >= TM_MinutesChkEnOrder))	
                 {
-                    CancelOrder(entryOrder);
+                    CancelOrder(tradeObj.entryOrder);
                     //giParabSAR.PrintLog(true, !backTest, log_file, "Order cancelled for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
 					return true;
                 }
 				else {
 					//giParabSAR.PrintLog(true, !backTest, log_file, "Order working for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
-					barsSinceEnOrd++;
+					tradeObj.barsSinceEnOrd++;
 				}
             }
             return false;
@@ -315,10 +324,10 @@ namespace NinjaTrader.Strategy
 		public bool CancelAllOrders() 
 		{
 			//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "- CancelAllOrders called");
-			if(stopLossOrder != null)
-				CancelOrder(stopLossOrder);
-			if(profitTargetOrder != null)
-				CancelOrder(profitTargetOrder);
+			if(tradeObj.stopLossOrder != null)
+				CancelOrder(tradeObj.stopLossOrder);
+			if(tradeObj.profitTargetOrder != null)
+				CancelOrder(tradeObj.profitTargetOrder);
 			return true;
 		}
 		
@@ -341,7 +350,7 @@ namespace NinjaTrader.Strategy
 
 		protected override void OnOrderUpdate(IOrder order)
 		{
-		    if (entryOrder != null && entryOrder == order)
+		    if (tradeObj.entryOrder != null && tradeObj.entryOrder == order)
 		    {
 				//giParabSAR.PrintLog(true, !backTest, log_file, order.ToString() + "--" + order.OrderState);
 		        if (order.OrderState == OrderState.Cancelled || 
@@ -349,8 +358,8 @@ namespace NinjaTrader.Strategy
 					order.OrderState == OrderState.Rejected || 
 					order.OrderState == OrderState.Unknown)
 				{
-					barsSinceEnOrd = 0;
-					entryOrder = null;
+					tradeObj.barsSinceEnOrd = 0;
+					tradeObj.entryOrder = null;
 				}
 		    }
 			
@@ -359,18 +368,18 @@ namespace NinjaTrader.Strategy
 					//giParabSAR.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + order.ToString());
 			}
 			
-			if(profitTargetOrder == null && order.Name == "Profit target" && order.OrderState == OrderState.Working) {
-				profitTargetOrder = order;
+			if(tradeObj.profitTargetOrder == null && order.Name == "Profit target" && order.OrderState == OrderState.Working) {
+				tradeObj.profitTargetOrder = order;
 			}
-			if(stopLossOrder == null && order.Name == "Stop loss" && (order.OrderState == OrderState.Accepted || order.OrderState == OrderState.Working)) {
-				stopLossOrder = order;
+			if(tradeObj.stopLossOrder == null && order.Name == "Stop loss" && (order.OrderState == OrderState.Accepted || order.OrderState == OrderState.Working)) {
+				tradeObj.stopLossOrder = order;
 			}
 			
 			if( order.OrderState == OrderState.Filled || order.OrderState == OrderState.Cancelled) {
 				if(order.Name == "Stop loss")
-					stopLossOrder = null;
+					tradeObj.stopLossOrder = null;
 				if(order.Name == "Profit target")
-					profitTargetOrder = null;
+					tradeObj.profitTargetOrder = null;
 			}
 		}
 
@@ -379,84 +388,165 @@ namespace NinjaTrader.Strategy
 			//Print(position.ToString() + "--MarketPosition=" + position.MarketPosition);
 			if (position.MarketPosition == MarketPosition.Flat)
 			{
-				trailingPTTic = profitTargetAmt/12.5;
-				trailingSLTic = stopLossAmt/12.5;
+				tradeObj.trailingPTTic = MM_ProfitTargetAmt/12.5;
+				tradeObj.trailingSLTic = MM_StopLossAmt/12.5;
 			}
 		}
 		
 		#endregion
 		
-		#region Properties
+		#region TM Properties
+        [Description("Offeset points for limit price entry")]
+        [GridCategory("Parameters")]
+        public double TM_EnOffsetPnts
+        {
+            get { return tradeObj.enOffsetPnts; }
+            set { tradeObj.enOffsetPnts = Math.Max(0, value); }
+        }
+        [Description("How long to check entry order filled or not")]
+        [GridCategory("Parameters")]
+        public int TM_MinutesChkEnOrder
+        {
+            get { return tradeObj.minutesChkEnOrder; }
+            set { tradeObj.minutesChkEnOrder = Math.Max(0, value); }
+        }
+		
+        [Description("How long to check P&L")]
+        [GridCategory("Parameters")]
+        public int TM_MinutesChkPnL
+        {
+            get { return tradeObj.minutesChkPnL; }
+            set { tradeObj.minutesChkPnL = Math.Max(-1, value); }
+        }		
+
+        [Description("Bar count since en order issued")]
+        [GridCategory("Parameters")]
+        public int TM_BarsHoldEnOrd
+        {
+            get { return tradeObj.barsHoldEnOrd; }
+            set { tradeObj.barsHoldEnOrd = Math.Max(1, value); }
+        }
+		
+        [Description("Bar count for en order counter pullback")]
+        [GridCategory("Parameters")]
+        public int TM_EnCounterPBBars
+        {
+            get { return tradeObj.enCounterPBBars; }
+            set { tradeObj.enCounterPBBars = Math.Max(-1, value); }
+        }		
+				
+		[Description("Bar count since last filled PT or SL")]
+        [GridCategory("Parameters")]
+        public int TM_BarsSincePtSl
+        {
+            get { return tradeObj.barsSincePtSl; }
+            set { tradeObj.barsSincePtSl = Math.Max(1, value); }
+        }
+		
+		[Description("Bar count before checking P&L")]
+        [GridCategory("Parameters")]
+        public int TM_BarsToCheckPL
+        {
+            get { return tradeObj.barsToCheckPL; }
+            set { tradeObj.barsToCheckPL = Math.Max(1, value); }
+        }
+		
+		#endregion
+		
+		#region MM Properties
         [Description("Money amount of profit target")]
         [GridCategory("Parameters")]
-        public double ProfitTargetAmt
+        public double MM_ProfitTargetAmt
         {
-            get { return profitTargetAmt; }
-            set { profitTargetAmt = Math.Max(0, value); }
+            get { return tradeObj.profitTargetAmt; }
+            set { tradeObj.profitTargetAmt = Math.Max(0, value); }
         }
 
         [Description("Money amount for profit target increasement")]
         [GridCategory("Parameters")]
-        public double ProfitTgtIncTic
+        public double MM_ProfitTgtIncTic
         {
-            get { return profitTgtIncTic; }
-            set { profitTgtIncTic = Math.Max(0, value); }
+            get { return tradeObj.profitTgtIncTic; }
+            set { tradeObj.profitTgtIncTic = Math.Max(0, value); }
         }
 		
         [Description("Tick amount for min profit locking")]
         [GridCategory("Parameters")]
-        public double ProfitLockMinTic
+        public double MM_ProfitLockMinTic
         {
-            get { return profitLockMinTic; }
-            set { profitLockMinTic = Math.Max(0, value); }
+            get { return tradeObj.profitLockMinTic; }
+            set { tradeObj.profitLockMinTic = Math.Max(0, value); }
         }
 
 		[Description("Tick amount for max profit locking")]
         [GridCategory("Parameters")]
-        public double ProfitLockMaxTic
+        public double MM_ProfitLockMaxTic
         {
-            get { return profitLockMaxTic; }
-            set { profitLockMaxTic = Math.Max(0, value); }
+            get { return tradeObj.profitLockMaxTic; }
+            set { tradeObj.profitLockMaxTic = Math.Max(0, value); }
         }
 		
         [Description("Money amount of stop loss")]
         [GridCategory("Parameters")]
-        public double StopLossAmt
+        public double MM_StopLossAmt
         {
-            get { return stopLossAmt; }
-            set { stopLossAmt = Math.Max(0, value); }
+            get { return tradeObj.stopLossAmt; }
+            set { tradeObj.stopLossAmt = Math.Max(0, value); }
         }
 		
         [Description("Money amount of trailing stop loss")]
         [GridCategory("Parameters")]
-        public double TrailingStopLossAmt
+        public double MM_TrailingStopLossAmt
         {
-            get { return trailingSLAmt; }
-            set { trailingSLAmt = Math.Max(0, value); }
+            get { return tradeObj.trailingSLAmt; }
+            set { tradeObj.trailingSLAmt = Math.Max(0, value); }
         }
 		
 		[Description("Money amount for stop loss increasement")]
         [GridCategory("Parameters")]
-        public double StopLossIncTic
+        public double MM_StopLossIncTic
         {
-            get { return stopLossIncTic; }
-            set { stopLossIncTic = Math.Max(0, value); }
+            get { return tradeObj.stopLossIncTic; }
+            set { tradeObj.stopLossIncTic = Math.Max(0, value); }
         }
 		
         [Description("Break Even amount")]
         [GridCategory("Parameters")]
-        public double BreakEvenAmt
+        public double MM_BreakEvenAmt
         {
-            get { return breakEvenAmt; }
-            set { breakEvenAmt = Math.Max(0, value); }
+            get { return tradeObj.breakEvenAmt; }
+            set { tradeObj.breakEvenAmt = Math.Max(0, value); }
         }
 
 		[Description("Daily Loss Limit amount")]
         [GridCategory("Parameters")]
-        public double DailyLossLmt
+        public double MM_DailyLossLmt
         {
-            get { return dailyLossLmt; }
-            set { dailyLossLmt = Math.Min(-100, value); }
+            get { return tradeObj.dailyLossLmt; }
+            set { tradeObj.dailyLossLmt = Math.Min(-100, value); }
+        }
+		[Description("Use trailing entry every bar")]
+        [GridCategory("Parameters")]
+        public bool MM_EnTrailing
+        {
+            get { return tradeObj.enTrailing; }
+            set { tradeObj.enTrailing = value; }
+        }
+		
+		[Description("Use trailing profit target every bar")]
+        [GridCategory("Parameters")]
+        public bool MM_PTTrailing
+        {
+            get { return tradeObj.ptTrailing; }
+            set { tradeObj.ptTrailing = value; }
+        }
+		
+		[Description("Use trailing stop loss every bar")]
+        [GridCategory("Parameters")]
+        public bool MM_SLTrailing
+        {
+            get { return tradeObj.slTrailing; }
+            set { tradeObj.slTrailing = value; }
         }		
 		#endregion
 	}

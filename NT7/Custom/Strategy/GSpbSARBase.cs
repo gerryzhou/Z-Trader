@@ -30,6 +30,7 @@ namespace NinjaTrader.Strategy
     {		
         #region Variables
 		
+		private Trigger trigger = null;
 		private MarketContext mktContext = null;
 		private GIParabolicSAR giParabSAR = null;//new GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan);
 		//private Logger logger = null;
@@ -118,7 +119,9 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void Initialize()
         {
-			accName = GetTsTAccName(Account.Name);
+			trigger = new Trigger(this);
+			
+			TG_AccName = GetTsTAccName(Account.Name);
 			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, accName, backTest, Color.Cyan);
 			Add(giParabSAR);
 			giParabSAR.setSpvPRBits(spvPRBits);
@@ -142,8 +145,10 @@ namespace NinjaTrader.Strategy
 			ExitOnClose = true;
 			ExitOnCloseSeconds = 30;
 			
-			if(!backTest)
-				indicatorProxy = new IndicatorProxy(accName, Instrument.FullName);
+			//if(!backTest)
+			tradeObj = new TradeObj();
+			
+			indicatorProxy = new IndicatorProxy(accName, Instrument.FullName);
         }
 
         protected override void OnBarUpdate()
