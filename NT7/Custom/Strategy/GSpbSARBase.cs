@@ -120,8 +120,10 @@ namespace NinjaTrader.Strategy
         protected override void Initialize()
         {
 			trigger = new Trigger(this);
-			
+			tradeObj = new TradeObj(this);
 			TG_AccName = GetTsTAccName(Account.Name);
+			indicatorProxy = new IndicatorProxy(accName, Instrument.FullName);			
+			
 			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, accName, backTest, Color.Cyan);
 			Add(giParabSAR);
 			giParabSAR.setSpvPRBits(spvPRBits);
@@ -146,9 +148,6 @@ namespace NinjaTrader.Strategy
 			ExitOnCloseSeconds = 30;
 			
 			//if(!backTest)
-			tradeObj = new TradeObj();
-			
-			indicatorProxy = new IndicatorProxy(accName, Instrument.FullName);
         }
 
         protected override void OnBarUpdate()

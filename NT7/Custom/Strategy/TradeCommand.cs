@@ -97,16 +97,7 @@ namespace NinjaTrader.Strategy
 		}
 		
         #region Properties
-		
 
-		
-//        [Description("ZigZag retrace points")]
-//        [GridCategory("Parameters")]
-//        public double RetracePnts
-//        {
-//            get { return retracePnts; }
-//            set { retracePnts = Math.Max(4, value); }
-//        }
 /*
 		
 		[Description("Supervised PR Bits")]
@@ -116,17 +107,6 @@ namespace NinjaTrader.Strategy
             get { return spvPRBits; }
             set { spvPRBits = Math.Max(0, value); }
         }		
-		*/
-//		[Description("ZigZag retrace points")]
-//        [GridCategory("Parameters")]
-//        public double RetracePnts
-//        {
-//            get { return retracePnts; }
-//            set { retracePnts = Math.Max(1, value); }
-//        }
-
-
-/*		
 
 		
 
@@ -144,18 +124,8 @@ namespace NinjaTrader.Strategy
         {
             get { return barsMaxLastCross; }
             set { barsMaxLastCross = Math.Max(1, value); }
-        }		
+        }		*/
 
-
-
-*/		
-//        [Description("Offeset points for limit price entry, pullback entry")]
-//        [GridCategory("Parameters")]
-//        public double EnOffset2Pnts
-//        {
-//            get { return enOffset2Pnts; }
-//            set { enOffset2Pnts = Math.Max(0, value); }
-//        }
 	
         #endregion		
 	}

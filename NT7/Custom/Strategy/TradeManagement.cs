@@ -22,6 +22,7 @@ namespace NinjaTrader.Strategy
  
 	//public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
 	public class TradeObj {
+		private Strategy instStrategy = null;
 		public int tradeDirection;
 		public int tradeStyle;
 		
@@ -62,7 +63,8 @@ namespace NinjaTrader.Strategy
 		public int barsSinceEnOrd = 0; // bar count since the en order issued		
 		#endregion
 		
-		public TradeObj(){
+		public TradeObj(Strategy inst_strategy){
+			this.instStrategy = inst_strategy;
 		}
 		
 	}
@@ -400,55 +402,55 @@ namespace NinjaTrader.Strategy
         [GridCategory("Parameters")]
         public double TM_EnOffsetPnts
         {
-            get { return tradeObj.enOffsetPnts; }
-            set { tradeObj.enOffsetPnts = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.enOffsetPnts; }
+            set { if(tradeObj!=null) tradeObj.enOffsetPnts = Math.Max(0, value); }
         }
         [Description("How long to check entry order filled or not")]
         [GridCategory("Parameters")]
         public int TM_MinutesChkEnOrder
         {
-            get { return tradeObj.minutesChkEnOrder; }
-            set { tradeObj.minutesChkEnOrder = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.minutesChkEnOrder; }
+            set { if(tradeObj!=null) tradeObj.minutesChkEnOrder = Math.Max(0, value); }
         }
 		
         [Description("How long to check P&L")]
         [GridCategory("Parameters")]
         public int TM_MinutesChkPnL
         {
-            get { return tradeObj.minutesChkPnL; }
-            set { tradeObj.minutesChkPnL = Math.Max(-1, value); }
+            get { return tradeObj==null? 0 : tradeObj.minutesChkPnL; }
+            set { if(tradeObj!=null) tradeObj.minutesChkPnL = Math.Max(-1, value); }
         }		
 
         [Description("Bar count since en order issued")]
         [GridCategory("Parameters")]
         public int TM_BarsHoldEnOrd
         {
-            get { return tradeObj.barsHoldEnOrd; }
-            set { tradeObj.barsHoldEnOrd = Math.Max(1, value); }
+            get { return tradeObj==null? 0 : tradeObj.barsHoldEnOrd; }
+            set { if(tradeObj!=null) tradeObj.barsHoldEnOrd = Math.Max(1, value); }
         }
 		
         [Description("Bar count for en order counter pullback")]
         [GridCategory("Parameters")]
         public int TM_EnCounterPBBars
         {
-            get { return tradeObj.enCounterPBBars; }
-            set { tradeObj.enCounterPBBars = Math.Max(-1, value); }
+            get { return tradeObj==null? 0 : tradeObj.enCounterPBBars; }
+            set { if(tradeObj!=null) tradeObj.enCounterPBBars = Math.Max(-1, value); }
         }		
 				
 		[Description("Bar count since last filled PT or SL")]
         [GridCategory("Parameters")]
         public int TM_BarsSincePtSl
         {
-            get { return tradeObj.barsSincePtSl; }
-            set { tradeObj.barsSincePtSl = Math.Max(1, value); }
+            get { return tradeObj==null? 0 : tradeObj.barsSincePtSl; }
+            set { if(tradeObj!=null) tradeObj.barsSincePtSl = Math.Max(1, value); }
         }
 		
 		[Description("Bar count before checking P&L")]
         [GridCategory("Parameters")]
         public int TM_BarsToCheckPL
         {
-            get { return tradeObj.barsToCheckPL; }
-            set { tradeObj.barsToCheckPL = Math.Max(1, value); }
+            get { return tradeObj==null? 0 : tradeObj.barsToCheckPL; }
+            set { if(tradeObj!=null) tradeObj.barsToCheckPL = Math.Max(1, value); }
         }
 		
 		#endregion
@@ -458,95 +460,95 @@ namespace NinjaTrader.Strategy
         [GridCategory("Parameters")]
         public double MM_ProfitTargetAmt
         {
-            get { return tradeObj.profitTargetAmt; }
-            set { tradeObj.profitTargetAmt = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.profitTargetAmt; }
+            set { if(tradeObj!=null) tradeObj.profitTargetAmt = Math.Max(0, value); }
         }
 
         [Description("Money amount for profit target increasement")]
         [GridCategory("Parameters")]
         public double MM_ProfitTgtIncTic
         {
-            get { return tradeObj.profitTgtIncTic; }
-            set { tradeObj.profitTgtIncTic = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.profitTgtIncTic; }
+            set { if(tradeObj!=null) tradeObj.profitTgtIncTic = Math.Max(0, value); }
         }
 		
         [Description("Tick amount for min profit locking")]
         [GridCategory("Parameters")]
         public double MM_ProfitLockMinTic
         {
-            get { return tradeObj.profitLockMinTic; }
-            set { tradeObj.profitLockMinTic = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.profitLockMinTic; }
+            set { if(tradeObj!=null) tradeObj.profitLockMinTic = Math.Max(0, value); }
         }
 
 		[Description("Tick amount for max profit locking")]
         [GridCategory("Parameters")]
         public double MM_ProfitLockMaxTic
         {
-            get { return tradeObj.profitLockMaxTic; }
-            set { tradeObj.profitLockMaxTic = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.profitLockMaxTic; }
+            set { if(tradeObj!=null) tradeObj.profitLockMaxTic = Math.Max(0, value); }
         }
 		
         [Description("Money amount of stop loss")]
         [GridCategory("Parameters")]
         public double MM_StopLossAmt
         {
-            get { return tradeObj.stopLossAmt; }
-            set { tradeObj.stopLossAmt = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.stopLossAmt; }
+            set { if(tradeObj!=null) tradeObj.stopLossAmt = Math.Max(0, value); }
         }
 		
         [Description("Money amount of trailing stop loss")]
         [GridCategory("Parameters")]
         public double MM_TrailingStopLossAmt
         {
-            get { return tradeObj.trailingSLAmt; }
-            set { tradeObj.trailingSLAmt = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.trailingSLAmt; }
+            set { if(tradeObj!=null) tradeObj.trailingSLAmt = Math.Max(0, value); }
         }
 		
 		[Description("Money amount for stop loss increasement")]
         [GridCategory("Parameters")]
         public double MM_StopLossIncTic
         {
-            get { return tradeObj.stopLossIncTic; }
-            set { tradeObj.stopLossIncTic = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.stopLossIncTic; }
+            set { if(tradeObj!=null) tradeObj.stopLossIncTic = Math.Max(0, value); }
         }
 		
         [Description("Break Even amount")]
         [GridCategory("Parameters")]
         public double MM_BreakEvenAmt
         {
-            get { return tradeObj.breakEvenAmt; }
-            set { tradeObj.breakEvenAmt = Math.Max(0, value); }
+            get { return tradeObj==null? 0 : tradeObj.breakEvenAmt; }
+            set { if(tradeObj!=null) tradeObj.breakEvenAmt = Math.Max(0, value); }
         }
 
 		[Description("Daily Loss Limit amount")]
         [GridCategory("Parameters")]
         public double MM_DailyLossLmt
         {
-            get { return tradeObj.dailyLossLmt; }
-            set { tradeObj.dailyLossLmt = Math.Min(-100, value); }
+            get { return tradeObj==null? 0 : tradeObj.dailyLossLmt; }
+            set { if(tradeObj!=null) tradeObj.dailyLossLmt = Math.Min(-100, value); }
         }
 		[Description("Use trailing entry every bar")]
         [GridCategory("Parameters")]
         public bool MM_EnTrailing
         {
-            get { return tradeObj.enTrailing; }
-            set { tradeObj.enTrailing = value; }
+            get { return tradeObj==null? false : tradeObj.enTrailing; }
+            set { if(tradeObj!=null) tradeObj.enTrailing = value; }
         }
 		
 		[Description("Use trailing profit target every bar")]
         [GridCategory("Parameters")]
         public bool MM_PTTrailing
         {
-            get { return tradeObj.ptTrailing; }
-            set { tradeObj.ptTrailing = value; }
+            get { return tradeObj==null? false : tradeObj.ptTrailing; }
+            set { if(tradeObj!=null) tradeObj.ptTrailing = value; }
         }
 		
 		[Description("Use trailing stop loss every bar")]
         [GridCategory("Parameters")]
         public bool MM_SLTrailing
         {
-            get { return tradeObj.slTrailing; }
-            set { tradeObj.slTrailing = value; }
+            get { return tradeObj==null? false : tradeObj.slTrailing; }
+            set { if(tradeObj!=null) tradeObj.slTrailing = value; }
         }		
 		#endregion
 	}
