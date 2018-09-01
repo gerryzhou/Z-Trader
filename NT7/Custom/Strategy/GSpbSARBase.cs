@@ -122,13 +122,15 @@ namespace NinjaTrader.Strategy
 			trigger = new Trigger(this);
 			tradeObj = new TradeObj(this);
 			TG_AccName = GetTsTAccName(Account.Name);
-			indicatorProxy = new IndicatorProxy(accName, Instrument.FullName);			
+			indicatorProxy = IndicatorProxy(timeEndH,timeEndM,timeStartH,timeStartM);//accName, Instrument.FullName);
+			Add(indicatorProxy);
 			
 			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, accName, backTest, Color.Cyan);
 			Add(giParabSAR);
 			giParabSAR.setSpvPRBits(spvPRBits);
-			timeStart = giParabSAR.GetTimeByHM(timeStartH, timeStartM);
-			timeEnd = giParabSAR.GetTimeByHM(timeEndH, timeEndM);
+			
+			timeStart = indicatorProxy.GetTimeByHM(timeStartH, timeStartM);
+			timeEnd = indicatorProxy.GetTimeByHM(timeEndH, timeEndM);
 			//Add(GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan));
 			//Add(GIParabolicSAR(0.001, 0.2, 0.001, Color.Orange));
 			EMA(High, 50).Plots[0].Pen.Color = Color.Orange;
@@ -175,7 +177,7 @@ namespace NinjaTrader.Strategy
                 DrawLine("My line" + CurrentBar, 0, 0, 0, 0, Color.Blue);
                 //EnterLongLimit(DefaultQuantity, 0, "enLn");
             }			
-			
+			//Print("indicatorProxy.Strategy.Account=" + indicatorProxy.Strategy.Account);
 			CheckPerformance();
 			//double gap = GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Cyan).GetCurZZGap();
 			//bool isReversalBar = true;//CurrentBar>BarsRequired?false:GIParabolicSAR(0.002, 0.2, 0.002, AccName, Color.Cyan).IsReversalBar();
@@ -305,13 +307,7 @@ namespace NinjaTrader.Strategy
 		
 		#region Order and P&L Functions
 		
-
-
-
-
-
-
-		
+	
 		#endregion	
 		        
 		[Description("AfAcc")]

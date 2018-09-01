@@ -402,10 +402,10 @@ namespace NinjaTrader.Indicator
 		public PriceAction getCurPriceAction() {
 			return curPriceAction;
 		}
-		
-		public void setSpvPRBits(int spvPRBits) {
-			SpvPRBits = spvPRBits;
-		}		
+//		
+//		public void setSpvPRBits(int spvPRBits) {
+//			SpvPRBits = spvPRBits;
+//		}		
 		
 		#endregion	
 		

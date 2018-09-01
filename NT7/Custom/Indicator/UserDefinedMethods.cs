@@ -8,6 +8,7 @@ using System.Linq;
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
 using NinjaTrader.Gui.Chart;
+using NinjaTrader.Strategy;
 #endregion
 
 // This namespace holds all indicators and is required. Do not change it.
@@ -17,7 +18,7 @@ namespace NinjaTrader.Indicator
     /// This file holds all user defined indicator methods.
     /// </summary>
     partial class Indicator
-    {
+    {		
 		private bool drawTxt = false; // User defined variables (add any user defined variables below)
 		private IText it_gap = null; //the Text draw for gap on current bar
 		protected string log_file = ""; //
@@ -60,26 +61,6 @@ namespace NinjaTrader.Indicator
 //		protected double ZZ_Avg_Daily_Sum;
 //		protected double ZZ_Avg_Weekly_Count;
 //		protected double ZZ_Avg_Weekly_Sum;
-		#endregion
-		
-		#region SpvPR Vars
-		/// <summary>
-		/// Loaded from supervised file;
-		/// Key1=Date; Key2=Time;
-		/// </summary>		
-		protected Dictionary<string,Dictionary<int,PriceAction>> Dict_SpvPR = null;
-		
-		/// <summary>
-		/// Bitwise op to tell which Price Action allowed to be the supervised entry approach
-		/// 0111 1111: [0 UnKnown RngWide RngTight DnWide DnTight UpWide UpTight]
-		/// UnKnown:spvPRBits&0100 000(64)
-		/// RngWide:spvPRBits&0010 0000(32), RngTight:spvPRBits&0001 0000(16)
-		/// DnWide:spvPRBits&0000 1000(8), DnTight:spvPRBits&0000 0100(4)
-		/// UpWide:spvPRBits&0000 0010(2), UpTight:spvPRBits&0000 0001(1)
-		/// </summary>
-
-		protected int SpvPRBits = 0;
-		
 		#endregion
 		
 		protected double Day_Count = 0;
@@ -263,6 +244,21 @@ namespace NinjaTrader.Indicator
 			if(start <= t && t <= end) return true;
 			else return false;
 		}
+
+		public int GetTimeDiffByHM(int hour, int min, DateTime dt) {
+			int t = GetTimeByHM(hour, min);
+			int t0 = GetTimeByHM(dt.Hour, dt.Minute);
+			Print("[hour,min]=[" + hour + "," + min + "], [dt.Hour,dt.Minute]=[" + dt.Hour + "," + dt.Minute + "]," + dt.TimeOfDay);
+			return t-t0;
+		}
+		
+		public int GetTimeDiffByHM(int start_hour, int start_min, int end_hour, int end_min) {
+			int t = GetTimeByHM(end_hour, end_min);
+			int t0 = GetTimeByHM(start_hour, start_min);
+			Print("[start_hour,start_min]=[" + start_hour + "," + start_min + "], [end_hour,end_min]=[" + end_hour + "," + end_min + "]");
+			return t-t0;
+		}
+		
 		/// <summary>
 		/// Check if now is the time allowed to put trade
 		/// </summary>

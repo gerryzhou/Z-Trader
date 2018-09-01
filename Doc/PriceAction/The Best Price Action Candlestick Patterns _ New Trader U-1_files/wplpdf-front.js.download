@@ -1,0 +1,9 @@
+jQuery( document ).ready(function(  ) {
+	jQuery(document).on('click', '#do_display_inline', function(e) {
+		e.preventDefault();
+		// $this = jQuery(this);
+		jQuery('#examplePopup1').toggle();
+	});
+
+
+});
