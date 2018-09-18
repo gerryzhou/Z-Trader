@@ -41,15 +41,46 @@ namespace NinjaTrader.Strategy
 		//time=H*10000+M*100+S, S is skipped here;
         protected int timeStartH = 1; //10100 Default setting for timeStart hour
 		protected int timeStartM = 1; //10100 Default setting for timeStart minute
-		protected int timeStart = -1; //10100 Default setting for timeStart
+		//protected int timeStart = -1; //10100 Default setting for timeStart
         protected int timeEndH = 14; // Default setting for timeEnd hour
 		protected int timeEndM = 59; // Default setting for timeEnd minute
-		protected int timeEnd = -1; // Default setting for timeEnd
+		//protected int timeEnd = -1; // Default setting for timeEnd
+		protected int timeLiqH = 15; //Time H to liquidate
+		protected int timeLiqM = 8; //Time M to liquidate
 		
         protected double enSwingMinPnts = 10; //10 Default setting for EnSwingMinPnts
         protected double enSwingMaxPnts = 35; //16 Default setting for EnSwingMaxPnts
 		protected double enPullbackMinPnts = 1; //6 Default setting for EnPullbackMinPnts
         protected double enPullbackMaxPnts = 8; //10 Default setting for EnPullbackMaxPnts
+		
+		public virtual void InitTrigger() {
+			
+		}
+		
+		/// <summary>
+		/// Check: 1) if it's time to liquidate
+		/// 2) if it's time to put entry order
+		/// 3) if there is signal fired for exit
+		/// 4) if there is signal fired for entry
+		/// </summary>
+		public virtual void CheckTrigger() {
+			if(IsLiquidateTime(timeLiqH, timeLiqM)) {
+				CloseAllPositions();
+			}
+			else {
+				IndicatorSignal indSignal = indicatorProxy.CheckIndicatorSignal();
+				if (Position.MarketPosition != MarketPosition.Flat) { //There are positions
+					CheckExitTrade(indSignal);
+				}
+				else { // no positions
+					CheckEntryTrade(indSignal);
+				}
+			}
+		}		
+		
+		public virtual IndicatorSignal GetSignal() {
+			return null;
+		}
 		
 		/// <summary>
 		/// Check if now is the time allowed to put trade
@@ -58,7 +89,10 @@ namespace NinjaTrader.Strategy
 		/// <param name="time_end">end time</param>
 		/// <param name="session_start">the overnight session start time: 170000 for ES</param>
 		/// <returns></returns>
-		public bool IsTradingTime(int time_start, int time_end, int session_start) {
+		public bool IsTradingTime(int session_start) {
+			//Bars.Session.GetNextBeginEnd(DateTime time, out DateTime sessionBegin, out DateTime sessionEnd)
+			int time_start = indicatorProxy.GetTimeByHM(TG_TimeStartH, TG_TimeStartM);
+			int time_end = indicatorProxy.GetTimeByHM(TG_TimeEndH, TG_TimeEndM);
 			int time_now = ToTime(Time[0]);
 			bool isTime= false;
 			if(time_start >= session_start) {
@@ -69,7 +103,25 @@ namespace NinjaTrader.Strategy
 				isTime = true;
 			}
 			return isTime;
-		}		
+		}
+		
+		/// <summary>
+		/// Check if now is the time to liquidate
+		/// </summary>
+		/// <param name="timeH">time hour</param>
+		/// <param name="timeM">time min</param>
+		/// <returns></returns>
+		public bool IsLiquidateTime(int timeH, int timeM) {
+			int time_now = indicatorProxy.GetTimeByHM(Time[0].Hour, Time[0].Minute);
+			int time_lastBar = indicatorProxy.GetTimeByHM(Time[1].Hour, Time[1].Minute);
+			int time_liq = indicatorProxy.GetTimeByHM(timeH, timeM);
+			bool isTime= false;
+			
+			if(time_now == time_liq || (time_liq > time_lastBar && time_liq <= time_now)) {
+				isTime = true;
+			}
+			return isTime;
+		}
 		
 		protected virtual void SetTradeContext(PriceAction pa) {
 			switch(pa.paType) {
@@ -102,6 +154,15 @@ namespace NinjaTrader.Strategy
 					tradeDirection = 0;
 					break;
 			}
+		}
+
+		protected double GetTimeSinceEntry() {
+			int bse = BarsSinceEntry();
+			double timeSinceEn = -1;
+			if(bse > 0) {
+				timeSinceEn = indicatorProxy.GetMinutesDiff(Time[0], Time[bse]);
+			}
+			return timeSinceEn;
 		}
 		
 		protected virtual bool PatternMatched()
@@ -182,6 +243,14 @@ namespace NinjaTrader.Strategy
             set { accName = value; }
         }
 		
+		/// <summary>
+		/// AlgoMode: 0=liquidate; 
+		/// 1=trading; 
+		/// 2=semi-algo(manual entry, algo exit);
+		/// -1=stop trading(no entry/exit, cancel entry orders and keep the exit order as it is if there has position);
+		/// -2=stop trading(no entry/exit, liquidate positions and cancel all entry/exit orders);
+		/// </summary>
+		/// <returns></returns>
 		[Description("Algo mode")]
         [GridCategory("Parameters")]
         public int TG_AlgoMode

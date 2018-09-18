@@ -37,81 +37,11 @@ namespace NinjaTrader.Strategy
 		
 		private double afAcc = 0.002; // Default setting for AfAcc
         private double afLmt = 0.2; // Default setting for AfLmt
-/*
-		private int algo_mode = 1;
 		
-		private double profitTargetAmt = 350; //36 Default(450-650 USD) setting for profitTargetAmt
-		private double profitTgtIncTic = 6; //8 Default tick Amt for ProfitTarget increase Amt
-		private double profitLockMinTic = 16; //24 Default ticks Amt for Min Profit locking
-		private double profitLockMaxTic = 30; //80 Default ticks Amt for Max Profit locking
-        private double stopLossAmt = 200; //16 Default setting for stopLossAmt
-		private double stopLossIncTic = 4; //4 Default tick Amt for StopLoss increase Amt
-		private double breakEvenAmt = 150; //150 the profits amount to trigger setting breakeven order
-		private double trailingSLAmt = 100; //300 Default setting for trailing Stop Loss Amt
-		private double dailyLossLmt = -200; //-300 the daily loss limit amount
-		
-		//time=H*10000+M*100+S, S is skipped here;
-        private int timeStartH = 1; //10100 Default setting for timeStart hour
-		private int timeStartM = 1; //10100 Default setting for timeStart minute
-		private int timeStart = -1; //10100 Default setting for timeStart
-        private int timeEndH = 14; // Default setting for timeEnd hour
-		private int timeEndM = 59; // Default setting for timeEnd minute
-		private int timeEnd = -1; // Default setting for timeEnd
-
-		private int minutesChkEnOrder = 20; //how long before checking an entry order filled or not
-		private int minutesChkPnL = 30; //how long before checking P&L
-		
-		private int barsHoldEnOrd = 10; // Bars count since en order was issued
-        private int barsSincePtSl = 1; // Bar count since last P&L was filled
-		private int barsToCheckPL = 2; // Bar count to check P&L since the entry
-		
-		private int barsAgoMaxPbSAREn = 6; //Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed
-		private int barsMaxLastCross = 24; //Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry
-		//private int barsPullback = 1; // Bars count for pullback
-        private double enSwingMinPnts = 10; //10 Default setting for EnSwingMinPnts
-        private double enSwingMaxPnts = 35; //16 Default setting for EnSwingMaxPnts
-		private double enPullbackMinPnts = 1; //6 Default setting for EnPullbackMinPnts
-        private double enPullbackMaxPnts = 8; //10 Default setting for EnPullbackMaxPnts
-		private double enOffsetPnts = 1.25;//Price offset for entry
-		//private double enOffset2Pnts = 0.5;//Price offset for entry
-		private int enCounterPBBars = 1;//Bar count of pullback for breakout entry setup
-		private double enResistPrc = 2700; // Resistance price for entry order
-		private double enSupportPrc = 2600; // Support price for entry order
-		
-		private bool enTrailing = true; //use trailing entry: counter pullback bars or simple enOffsetPnts
-		private bool ptTrailing = true; //use trailing profit target every bar
-		private bool slTrailing = true; //use trailing stop loss every bar
-		private bool resistTrailing = false; //track resistance price for entry order
-		private bool supportTrailing = false; //track resistance price for entry order
-		
-		private int tradeDirection = 0; // -1=short; 0-both; 1=long;
-		private int tradeStyle = 0; // -1=counter trend; 1=trend following;
-		private bool backTest = true; //if it runs for backtesting;
-		
-		private int printOut = 2; //0,1,2,3 more print
-
-		private bool drawTxt = false; // User defined variables (add any user defined variables below)
-		private IText it_gap = null; //the Text draw for gap on current bar
-		//private string log_file = ""; //
-		*/		
 		private int barsSinceLastCross = -1;
 		private PriceAction curBarPriceAction = new PriceAction(PriceActionType.UnKnown, -1,-1,-1,-1);//PriceAtionType of current bar
 		
 		private int spvPRBits = 42;//39,63
-
-		/// <summary>
-		/// Order handling
-		/// </summary>
-		/*
-		private IOrder entryOrder = null;
-		private IOrder profitTargetOrder = null;
-		private IOrder stopLossOrder = null;
-		private double trailingPTTic = 36; //400, tick amount of trailing target
-		private double trailingSLTic = 16; // 200, tick amount of trailing stop loss
-		private int barsSinceEnOrd = 0; // bar count since the en order issued
-		
-		private string AccName = null;
-*/
 		#endregion
 
         /// <summary>
@@ -121,34 +51,31 @@ namespace NinjaTrader.Strategy
         {
 			trigger = new Trigger(this);
 			tradeObj = new TradeObj(this);
-			TG_AccName = GetTsTAccName(Account.Name);
+			indicatorProxy = IndicatorProxy(11,5,9,5);
+			Add(indicatorProxy);
+			
+			TG_AccName = indicatorProxy.GetAccName();//.GetTsTAccName(Account.Name);
 			indicatorProxy = IndicatorProxy(timeEndH,timeEndM,timeStartH,timeStartM);//accName, Instrument.FullName);
 			Add(indicatorProxy);
 			
-			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, accName, backTest, Color.Cyan);
+			giParabSAR = GIParabolicSAR(afAcc, afLmt, afAcc, TG_AccName, backTest, Color.Cyan);
 			Add(giParabSAR);
-			giParabSAR.setSpvPRBits(spvPRBits);
+			giParabSAR.SpvPRBits = spvPRBits;
 			
-			timeStart = indicatorProxy.GetTimeByHM(timeStartH, timeStartM);
-			timeEnd = indicatorProxy.GetTimeByHM(timeEndH, timeEndM);
+			//timeStart = indicatorProxy.GetTimeByHM(timeStartH, timeStartM);
+			//timeEnd = indicatorProxy.GetTimeByHM(timeEndH, timeEndM);
 			//Add(GIParabolicSAR(afAcc, afLmt, afAcc, AccName, Color.Cyan));
 			//Add(GIParabolicSAR(0.001, 0.2, 0.001, Color.Orange));
-			EMA(High, 50).Plots[0].Pen.Color = Color.Orange;
-			EMA(Low, 50).Plots[0].Pen.Color = Color.Green;
-
-            Add(EMA(High, 50));
-            Add(EMA(Low, 50));
+//			EMA(High, 50).Plots[0].Pen.Color = Color.Orange;
+//			EMA(Low, 50).Plots[0].Pen.Color = Color.Green;
+//
+//            Add(EMA(High, 50));
+//            Add(EMA(Low, 50));
 			
             SetProfitTarget(300);
             SetStopLoss(150, false);
-
-            CalculateOnBarClose = true;
-			DefaultQuantity = 1;
-
-			// Triggers the exit on close function 30 seconds prior to session end
-			ExitOnClose = true;
-			ExitOnCloseSeconds = 30;
 			
+			SetInitParams();
 			//if(!backTest)
         }
 
@@ -216,7 +143,7 @@ namespace NinjaTrader.Strategy
 			//double reverseValue = giParabSAR.GetReverseValue();
 		
 			if(printOut > 1) {
-				string logText = CurrentBar + "-" + accName
+				string logText = CurrentBar + "-" + TG_AccName
 				//":PutOrder-(curGap,todaySAR,prevSAR,zzGap,reverseBar,last_reverseBar,reverseValue)= " 
 				//+ curGap + "," + todaySAR + "," + prevSAR + "," + zzGap + "," + reverseBar + "," + last_reverseBar + "," + reverseValue ;
 				+ ":PutOrder-(curGap,zzGap,last_reverseBar)= " 

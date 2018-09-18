@@ -25,7 +25,7 @@ namespace NinjaTrader.Strategy
         // Wizard generated variables
         
         // User defined variables (add any user defined variables below)
-		private GIZigZagBase giZigZag = null;		
+		private GIZigZagBase giZigZag = null;
 		
         #endregion
 
@@ -34,13 +34,20 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void Initialize()
         {
-			accName = GetTsTAccName(Account.Name);
-			giZigZag = GIZigZagBase(accName, true, NinjaTrader.Data.DeviationType.Points, 3, true);
+			indicatorProxy = IndicatorProxy(11,5,9,5);
+			Add(indicatorProxy);
+			TG_AccName = indicatorProxy.GetAccName();//.GetTsTAccName(Account.Name);
+			
+			giZigZag = GIZigZagBase(NinjaTrader.Data.DeviationType.Points, 3, true);
             Add(giZigZag);
+			
             SetProfitTarget(300);
             SetStopLoss(175, false);
 
-            CalculateOnBarClose = true;
+			SetInitParams();
+			InitTradeCmd();
+			InitTrigger();
+			InitTradeMgmt();
         }
 
         /// <summary>
@@ -48,6 +55,10 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void OnBarUpdate()
         {
+			CheckCmd();
+			
+			ExecuteCommand();
+			
 			double curGap = giZigZag.GetCurZZGap();
             // Condition set 1
 			Print(CurrentBar + ":" + Time[0] +  ":ZZHi,ZZLo,HiBar,LoBar,trDir,CurZZGap,zzMode=[" + giZigZag.ZigZagHigh[0] + "," + giZigZag.ZigZagLow[0] + "],[" + giZigZag.HighBar(1, 1, CurrentBar-BarsRequired) + "," + giZigZag.LowBar(1, 1, CurrentBar-BarsRequired)+"] " + giZigZag.GetTrendDir() + "," + curGap + "<" + giZigZag.GetBarZZMode(0) + ">");
@@ -55,7 +66,7 @@ namespace NinjaTrader.Strategy
 //            {
 //                EnterShortLimit(DefaultQuantity, 0, "shortLmt");
 //            }
-			giZigZag.PrintLog(true, false, "", CurrentBar + "::" + Time[0] +  ":ZZHi,ZZLo,HiBar,LoBar,trDir,CurZZGap,zzMode=[" + giZigZag.ZigZagHigh[0] + "," + giZigZag.ZigZagLow[0] + "],[" + giZigZag.HighBar(1, 1, CurrentBar-BarsRequired) + "," + giZigZag.LowBar(1, 1, CurrentBar-BarsRequired)+"] " + giZigZag.GetTrendDir() + "," + curGap + "<" + giZigZag.GetBarZZMode(0) + ">");
+			giZigZag.PrintLog(true, false, CurrentBar + "::" + Time[0] +  ":ZZHi,ZZLo,HiBar,LoBar,trDir,CurZZGap,zzMode=[" + giZigZag.ZigZagHigh[0] + "," + giZigZag.ZigZagLow[0] + "],[" + giZigZag.HighBar(1, 1, CurrentBar-BarsRequired) + "," + giZigZag.LowBar(1, 1, CurrentBar-BarsRequired)+"] " + giZigZag.GetTrendDir() + "," + curGap + "<" + giZigZag.GetBarZZMode(0) + ">");
         }
     }
 }

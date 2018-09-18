@@ -93,7 +93,10 @@ namespace NinjaTrader.Strategy
         /// </summary>
         protected override void Initialize()
         {
-			AccName = GetTsTAccName(Account.Name);
+			indicatorProxy = IndicatorProxy(11,5,9,5);
+			Add(indicatorProxy);
+			
+			AccName = indicatorProxy.GetTsTAccName(Account.Name);
 			giParabSAR = GIParabolicSAR(0.002, 0.2, 0.002, AccName, backTest, Color.Cyan);
 			Add(giParabSAR);
 			//Add(GIParabolicSAR(0.001, 0.2, 0.001, Color.Orange));
@@ -163,7 +166,7 @@ namespace NinjaTrader.Strategy
 					CancelAllOrders();
 					break;
 				case -1: //stop trading
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "- Stop trading cmd:" + indicatorProxy.Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "- Stop trading cmd:" + indicatorProxy.Get24HDateTime(Time[0]));
 					break;
 			}			
         }
@@ -173,9 +176,9 @@ namespace NinjaTrader.Strategy
 			double lastZZ = GetLastZZ();
 			double lastZZAbs = Math.Abs(lastZZ);
 			if(entryOrder == null)
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--null");
+				indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--null");
 			else
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--" + entryOrder.ToString());
+				indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":PutOrder-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts, entryOrder)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts + "--" + entryOrder.ToString());
 			if(isRevBar && tradeStyle == 0) // scalping, counter trade the pullbackMinPnts
 			{
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
@@ -223,7 +226,7 @@ namespace NinjaTrader.Strategy
 			}
 			else if(tradeStyle == 2) //entry at pullback
 			{
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder(tradeStyle,tradeDirection,gap,lastZZs[0],lastZZAbs,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + lastZZ + "," + lastZZAbs + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
+				indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":PutOrder(tradeStyle,tradeDirection,gap,lastZZs[0],lastZZAbs,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + lastZZ + "," + lastZZAbs + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
 				if(tradeDirection >= 0) //1=long only, 0 is for both;
 				{
 					if(gap < 0 && gapAbs >= enPullbackMinPnts && gapAbs < enPullbackMaxPnts && lastZZ > 0 && lastZZAbs >= enSwingMinPnts && lastZZAbs <= enSwingMaxPnts)
@@ -237,7 +240,7 @@ namespace NinjaTrader.Strategy
 				}
 			}
 			else {
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":PutOrder no-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
+				indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":PutOrder no-(tradeStyle,tradeDirection,gap,enSwingMinPnts,enSwingMaxPnts,enPullbackMinPnts,enPullbackMaxPnts)= " + tradeStyle + "," + tradeDirection + "," + gap + "," + enSwingMinPnts + "," + enSwingMaxPnts + "," + enPullbackMinPnts + "," + enPullbackMaxPnts);
 			}
 		}
 
@@ -247,11 +250,11 @@ namespace NinjaTrader.Strategy
 			//enCounterPBBars
 			if(entryOrder == null) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + indicatorProxy.Get24HDateTime(Time[0]));			
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":" + msg + ", EnterShortLimit called short price=" + prc + "--" + indicatorProxy.Get24HDateTime(Time[0]));			
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + indicatorProxy.Get24HDateTime(Time[0]));		
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":" + msg +  ", EnterShortLimit updated short price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + indicatorProxy.Get24HDateTime(Time[0]));		
 				CancelOrder(entryOrder);
 				//entryOrder = EnterShortLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
@@ -266,11 +269,11 @@ namespace NinjaTrader.Strategy
 			if(entryOrder == null) {
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + indicatorProxy.Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit called buy price= " + prc + " -- " + indicatorProxy.Get24HDateTime(Time[0]));
 			}
 			else if (entryOrder.OrderState == OrderState.Working) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + indicatorProxy.Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":" + msg +  ", EnterLongLimit updated buy price (old, new)=(" + entryOrder.LimitPrice + "," + prc + ") -- " + indicatorProxy.Get24HDateTime(Time[0]));
 				CancelOrder(entryOrder);
 				entryOrder = EnterLongLimit(0, true, DefaultQuantity, prc, "pbSAREntrySignal");
 			}
@@ -284,34 +287,34 @@ namespace NinjaTrader.Strategy
 			double pnl = CheckAccPnL();//GetAccountValue(AccountItem.RealizedProfitLoss);
 			double plrt = CheckAccCumProfit();
 			if(printOut > -1)				
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + indicatorProxy.Get24HDateTime(Time[0]));	
+				indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":(RealizedProfitLoss,RealtimeTrades.CumProfit)=(" + pnl + "," + plrt + ")--" + indicatorProxy.Get24HDateTime(Time[0]));	
 
 			if((backTest && !Historical) || (!backTest && Historical)) {
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + indicatorProxy.Get24HDateTime(Time[0]));
+				indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + "[backTest,Historical]=" + backTest + "," + Historical + "- NewOrderAllowed=false - " + indicatorProxy.Get24HDateTime(Time[0]));
 				return false;
 			}
 			if(!backTest && (plrt <= dailyLossLmt || pnl <= dailyLossLmt))
 			{
 				if(printOut > -1) {
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ": dailyLossLmt reached = " + pnl + "," + plrt);
 				}
 				return false;
 			}
 		
-			if (IsTradingTime(timeStart, timeEnd, 170000) && Position.Quantity == 0)
+			if (IsTradingTime(170000) && Position.Quantity == 0)
 			{
 				if (entryOrder == null || entryOrder.OrderState != OrderState.Working || enTrailing)
 				{
 					if(bsx == -1 || bsx > barsSincePtSl)
 					{
-						indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + indicatorProxy.Get24HDateTime(Time[0]));
+						indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + "- NewOrderAllowed=true - " + indicatorProxy.Get24HDateTime(Time[0]));
 						return true;
 					} else 
-						indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + indicatorProxy.Get24HDateTime(Time[0]));
+						indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[bsx,barsSincePtSl]" + bsx + "," + barsSincePtSl + " - " + indicatorProxy.Get24HDateTime(Time[0]));
 				} else
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + indicatorProxy.Get24HDateTime(Time[0]));
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[entryOrder.OrderState,entryOrder.OrderType]" + entryOrder.OrderState + "," + entryOrder.OrderType + " - " + indicatorProxy.Get24HDateTime(Time[0]));
 			} else 
-				indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[timeStart,timeEnd,Position.Quantity]" + timeStart + "," + timeEnd + "," + Position.Quantity + " - " + indicatorProxy.Get24HDateTime(Time[0]));
+				indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + "-NewOrderAllowed=false-[timeStart,timeEnd,Position.Quantity]" + timeStart + "," + timeEnd + "," + Position.Quantity + " - " + indicatorProxy.Get24HDateTime(Time[0]));
 				
 			return false;
 		}
@@ -328,7 +331,7 @@ namespace NinjaTrader.Strategy
 			 // If not flat print out unrealized PnL
     		if (Position.MarketPosition != MarketPosition.Flat) 
 			{
-         		indicatorProxy.PrintLog(true, !backTest, log_file, AccName + "- Open PnL: " + pl);
+         		indicatorProxy.PrintLog(true, !backTest, AccName + "- Open PnL: " + pl);
 				//int nChkPnL = (int)(timeSinceEn/minutesChkPnL);
 				double curPTTics = -1;
 				double slPrc = stopLossOrder == null ? Position.AvgPrice : stopLossOrder.StopPrice;
@@ -339,13 +342,13 @@ namespace NinjaTrader.Strategy
 					if(profitTargetOrder != null) {
 						curPTTics = Math.Abs(profitTargetOrder.LimitPrice - Position.AvgPrice)/TickSize;
 					}
-					indicatorProxy.PrintLog(true, !backTest, log_file, AccName + "- update PT: PnL=" + pl + ",(trailingPTTic, curPTTics, $Amt, $Amt_cur)=(" + trailingPTTic + "," + curPTTics + "," + 12.5*trailingPTTic + "," + 12.5*curPTTics + ")");
+					indicatorProxy.PrintLog(true, !backTest, AccName + "- update PT: PnL=" + pl + ",(trailingPTTic, curPTTics, $Amt, $Amt_cur)=(" + trailingPTTic + "," + curPTTics + "," + 12.5*trailingPTTic + "," + 12.5*curPTTics + ")");
 					if(profitTargetOrder == null || trailingPTTic > curPTTics)
 						SetProfitTarget(CalculationMode.Ticks, trailingPTTic);
 				}
 				
 				if(pl >= breakEvenAmt) { //setup breakeven order
-					indicatorProxy.PrintLog(true, !backTest, log_file, AccName + "- setup SL Breakeven: (PnL, posAvgPrc)=(" + pl + "," + Position.AvgPrice + ")");
+					indicatorProxy.PrintLog(true, !backTest, AccName + "- setup SL Breakeven: (PnL, posAvgPrc)=(" + pl + "," + Position.AvgPrice + ")");
 					slPrc = Position.AvgPrice;
 					//SetStopLoss(0);
 				}
@@ -366,7 +369,7 @@ namespace NinjaTrader.Strategy
 						if(profitTargetOrder != null)
 							CancelOrder(profitTargetOrder);
 						SetTrailStop(trailingSLAmt);
-						indicatorProxy.PrintLog(true, !backTest, log_file, AccName + "- SetTrailStop over SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
+						indicatorProxy.PrintLog(true, !backTest, AccName + "- SetTrailStop over SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");						
 					}
 					else if(pl >= 12.5*(profitLockMaxTic + 2*profitTgtIncTic)) { // lock max profits
 						trailingSLTic = trailingSLTic + profitTgtIncTic;
@@ -374,7 +377,7 @@ namespace NinjaTrader.Strategy
 							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice+TickSize*trailingSLTic : Position.AvgPrice+TickSize*profitLockMaxTic;
 						if(Position.MarketPosition == MarketPosition.Short)
 							slPrc = trailingSLTic > profitLockMaxTic ? Position.AvgPrice-TickSize*trailingSLTic :  Position.AvgPrice-TickSize*profitLockMaxTic;
-						indicatorProxy.PrintLog(true, !backTest, log_file, AccName + "- update SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
+						indicatorProxy.PrintLog(true, !backTest, AccName + "- update SL Max: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
 					else if(pl >= 12.5*(profitLockMinTic + 2*profitTgtIncTic)) { //lock min profits
@@ -383,7 +386,7 @@ namespace NinjaTrader.Strategy
 							slPrc = Position.AvgPrice+TickSize*profitLockMinTic;
 						if(Position.MarketPosition == MarketPosition.Short)
 							slPrc = Position.AvgPrice-TickSize*profitLockMinTic;
-						indicatorProxy.PrintLog(true, !backTest, log_file, AccName + "- update SL Min: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
+						indicatorProxy.PrintLog(true, !backTest, AccName + "- update SL Min: PnL=" + pl + "(slTrailing, trailingSLTic, slPrc)= (" + slTrailing + "," + trailingSLTic + "," + slPrc + ")");
 						//SetStopLoss(CalculationMode.Price, slPrc);
 					}
 				}
@@ -417,7 +420,7 @@ namespace NinjaTrader.Strategy
 		{
 			double pl = Performance.AllTrades.TradesPerformance.Currency.CumProfit;
 			double plrt = Performance.RealtimeTrades.TradesPerformance.Currency.CumProfit;
-			indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ": Cum all PnL= " + pl + ", Cum runtime PnL= " + plrt);
+			indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ": Cum all PnL= " + pl + ", Cum runtime PnL= " + plrt);
 			return plrt;
 		}
 		
@@ -432,11 +435,11 @@ namespace NinjaTrader.Strategy
 				if ( (barsHoldEnOrd > 0 && barsSinceEnOrd >= barsHoldEnOrd) || ( minutesChkEnOrder > 0 &&  min_en >= minutesChkEnOrder))	
                 {
                     CancelOrder(entryOrder);
-                    indicatorProxy.PrintLog(true, !backTest, log_file, "Order cancelled for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
+                    indicatorProxy.PrintLog(true, !backTest, "Order cancelled for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
 					return true;
                 }
 				else {
-					indicatorProxy.PrintLog(true, !backTest, log_file, "Order working for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
+					indicatorProxy.PrintLog(true, !backTest, "Order working for " + AccName + ":" + barsSinceEnOrd + "/" + min_en + " bars/mins elapsed--" + entryOrder.ToString());
 					barsSinceEnOrd++;
 				}
             }
@@ -445,7 +448,7 @@ namespace NinjaTrader.Strategy
 		
 		public bool CloseAllPositions() 
 		{
-			indicatorProxy.PrintLog(true, !backTest, log_file, "CloseAllPosition called");
+			indicatorProxy.PrintLog(true, !backTest, "CloseAllPosition called");
 			if(Position.MarketPosition == MarketPosition.Long)
 				ExitLong();
 			if(Position.MarketPosition == MarketPosition.Short)
@@ -455,7 +458,7 @@ namespace NinjaTrader.Strategy
 		
 		public bool CancelAllOrders() 
 		{
-			indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "- CancelAllOrders called");
+			indicatorProxy.PrintLog(true, !backTest, CurrentBar + "- CancelAllOrders called");
 			if(stopLossOrder != null)
 				CancelOrder(stopLossOrder);
 			if(profitTargetOrder != null)
@@ -468,7 +471,7 @@ namespace NinjaTrader.Strategy
 			// Remember to check the underlying IOrder object for null before trying to access its properties
 			if (execution.Order != null && execution.Order.OrderState == OrderState.Filled) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + " Exe=" + execution.Name + ",Price=" + execution.Price + "," + execution.Time.ToShortTimeString());
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + " Exe=" + execution.Name + ",Price=" + execution.Price + "," + execution.Time.ToShortTimeString());
 				if(drawTxt) {
 					IText it = DrawText(CurrentBar.ToString()+Time[0].ToShortTimeString(), Time[0].ToString().Substring(10)+"\r\n"+execution.Name+":"+execution.Price, 0, execution.Price, Color.Red);
 					it.Locked = false;
@@ -480,7 +483,7 @@ namespace NinjaTrader.Strategy
 		{
 		    if (entryOrder != null && entryOrder == order)
 		    {
-				indicatorProxy.PrintLog(true, !backTest, log_file, order.ToString() + "--" + order.OrderState);
+				indicatorProxy.PrintLog(true, !backTest, order.ToString() + "--" + order.OrderState);
 		        if (order.OrderState == OrderState.Cancelled || 
 					order.OrderState == OrderState.Filled || 
 					order.OrderState == OrderState.Rejected || 
@@ -493,7 +496,7 @@ namespace NinjaTrader.Strategy
 			
 			if (order.OrderState == OrderState.Working || order.OrderType == OrderType.Stop) {
 				if(printOut > -1)
-					indicatorProxy.PrintLog(true, !backTest, log_file, CurrentBar + "-" + AccName + ":" + order.ToString());
+					indicatorProxy.PrintLog(true, !backTest, CurrentBar + "-" + AccName + ":" + order.ToString());
 			}
 			
 			if(profitTargetOrder == null && order.Name == "Profit target" && order.OrderState == OrderState.Working) {

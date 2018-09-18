@@ -51,16 +51,16 @@ namespace NinjaTrader.Indicator
         protected override void Initialize()
         {
 			Pen pen_spt_ld = new Pen(Color.FromKnownColor(KnownColor.DarkGreen), 1.5f);
-			pen_spt_ld.DashStyle = DashStyle.Dot;
+			pen_spt_ld.DashStyle = DashStyle.Dash;
 			Pen pen_rst_ld = new Pen(Color.FromKnownColor(KnownColor.DarkViolet), 1.5f);
-			pen_rst_ld.DashStyle = DashStyle.Dot;
-			Pen pen_spt_on = new Pen(Color.FromKnownColor(KnownColor.DarkGreen), 3f);
+			pen_rst_ld.DashStyle = DashStyle.Dash;
+			Pen pen_spt_on = new Pen(Color.FromKnownColor(KnownColor.DarkGreen), 2f);
 			pen_spt_on.DashStyle = DashStyle.Dot;
-			Pen pen_rst_on = new Pen(Color.FromKnownColor(KnownColor.DarkViolet), 3f);
+			Pen pen_rst_on = new Pen(Color.FromKnownColor(KnownColor.DarkViolet), 2f);
 			pen_rst_on.DashStyle = DashStyle.Dot;
-			Pen pen_spt_td = new Pen(Color.FromKnownColor(KnownColor.DarkGreen), 4.5f);
+			Pen pen_spt_td = new Pen(Color.FromKnownColor(KnownColor.DarkGreen), 3.5f);
 			pen_spt_td.DashStyle = DashStyle.Dot;
-			Pen pen_rst_td = new Pen(Color.FromKnownColor(KnownColor.DarkViolet), 4.5f);
+			Pen pen_rst_td = new Pen(Color.FromKnownColor(KnownColor.DarkViolet), 3.5f);
 			pen_rst_td.DashStyle = DashStyle.Dot;
 			
 			plot_Spt_LD = new Plot(pen_spt_ld, PlotStyle.HLine, "SptLD");
@@ -104,9 +104,9 @@ namespace NinjaTrader.Indicator
 				}
 				
 				if(Time[1].Hour < sessionBegin.Hour && Time[0].Hour >= sessionBegin.Hour) {
-					Price_Spt_LD = Bars.GetDayBar(1).Low;
-					Price_Rst_LD = Bars.GetDayBar(1).High;
-				} 
+					Price_Spt_LD = PriorDayOHLC().PriorLow[0]; //Bars.GetDayBar(1).Low;
+					Price_Rst_LD = PriorDayOHLC().PriorHigh[0]; //Bars.GetDayBar(1).High;
+				}
 //				else {
 //					Price_Spt_LD = CurrentDayOHL().CurrentLow[0];
 //					Price_Rst_LD = CurrentDayOHL().CurrentHigh[0];
@@ -128,7 +128,7 @@ namespace NinjaTrader.Indicator
 				Rst_TD.Set(Price_Rst_TD);
 				
 				string text = CurrentBar + "-[" + Time[0] +  "]-[BarsSinceSession,SessionBegin.Hour,sessionEnd.Hour] [Price_Spt,Price_Rst]=[" + Bars.BarsSinceSession + "," + sessionBegin.Hour + "," + sessionEnd.Hour + "], [" + Price_Spt_ON + "," + Price_Rst_ON + "] " ;
-				PrintLog(true, false, "", text);
+				PrintLog(true, false, text);
 			}
         }
 

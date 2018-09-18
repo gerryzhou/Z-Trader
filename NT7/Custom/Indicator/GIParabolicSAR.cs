@@ -207,7 +207,7 @@ namespace NinjaTrader.Indicator
 				if(curGapText != null && !Historical) RemoveDrawObject(curGapText);
 				curGapText = DrawGapText(curZZGap, tagCurGapText, 0, Close[0], 0.5);
 				Print("curGapText=" + curGapText.Y + "," + curGapText.Time + "," + curGapText.Tag + "," + curGapText.BarsAgo + "," + curGapText.Text);
-				PrintZZSwings(zzSwings, log_file, printOut, backTest, 530, 1130);
+				PrintZZSwings(zzSwings, printOut, backTest, 530, 1130);
 				//PrintTwoBarRatio();
 			}
 		}

@@ -40,21 +40,12 @@ namespace NinjaTrader.Indicator
 		private IntSeries		barZZMode; //0=noChange, -1=Bear Reversal, 1=Bull Reversal, -2=UpdateLow, 2=UpdateHigh, -3=isOverLowDeviation, 3=isOverHighDeviation;
 
 		protected List<ZigZagSwing>		zzSwings;
-		
-		protected string accName = "";
-		protected string symbol = "";
-		private bool backTest = true; //if it runs for backtesting;private bool backTest = true; //if it runs for backtesting;
 
 		private ILine zigZagLine			= null; // The current ZigZag ended by the last bar of the chart;
 		private const string tagZZLine	= "tagZZLine-" ;// the tag of the line object for the current ZZ line;
 
 		private IText curGapText			= null; // The text for the ZZ ended by last bar of the chart; 
 		private const string tagCurGapText	= "tagCurGapText-"; // the tag of the line object for curGapText;
-		
-		protected int printOut = 3; //0,1,2,3 more print
-		protected bool drawTxt = false; //draw the zz text or not
-
-		protected string log_file = ""; //		
 		
         #endregion
 
@@ -323,7 +314,7 @@ namespace NinjaTrader.Indicator
 				curGapText = DrawGapText(curGap, tagCurGapText, 0, yBase, 0.5);
 				Print("curGapText=" + curGapText.Y + "," + curGapText.Time + "," + curGapText.Tag + "," + curGapText.BarsAgo + "," + curGapText.Text);
 
-				PrintZZSwings(zzSwings, log_file, printOut, backTest, 530, 1130);
+				PrintZZSwings(zzSwings, GetPrintOut(), IsBackTest(), 530, 1130);
 			}
         }
 
@@ -388,23 +379,15 @@ namespace NinjaTrader.Indicator
 		/// <summary>
 		/// The account name
 		/// </summary>
-		[Description("The account name")]
-		[GridCategory("Parameters")]
-		[Gui.Design.DisplayNameAttribute("Account name")]
-		public string AccName
-		{
-			get { return accName; }
-			set { accName = value; }
-		}
-		
-		[Description("If it runs for backtesting")]
-        [GridCategory("Parameters")]
-		[Gui.Design.DisplayNameAttribute("Back Testing")]
-        public bool BackTest
-        {
-            get { return backTest; }
-            set { backTest = value; }
-        }
+//		[Description("The account name")]
+//		[GridCategory("Parameters")]
+//		[Gui.Design.DisplayNameAttribute("Account name")]
+//		public string AccName
+//		{
+//			get { return accName; }
+//			set { accName = value; }
+//		}
+
 		
         #endregion
 		
@@ -577,28 +560,24 @@ namespace NinjaTrader.Indicator
         /// Enter the description of your new custom indicator here
         /// </summary>
         /// <returns></returns>
-        public GIZigZagBase GIZigZagBase(string accName, bool backTest, DeviationType deviationType, double deviationValue, bool useHighLow)
+        public GIZigZagBase GIZigZagBase(DeviationType deviationType, double deviationValue, bool useHighLow)
         {
-            return GIZigZagBase(Input, accName, backTest, deviationType, deviationValue, useHighLow);
+            return GIZigZagBase(Input, deviationType, deviationValue, useHighLow);
         }
 
         /// <summary>
         /// Enter the description of your new custom indicator here
         /// </summary>
         /// <returns></returns>
-        public GIZigZagBase GIZigZagBase(Data.IDataSeries input, string accName, bool backTest, DeviationType deviationType, double deviationValue, bool useHighLow)
+        public GIZigZagBase GIZigZagBase(Data.IDataSeries input, DeviationType deviationType, double deviationValue, bool useHighLow)
         {
             if (cacheGIZigZagBase != null)
                 for (int idx = 0; idx < cacheGIZigZagBase.Length; idx++)
-                    if (cacheGIZigZagBase[idx].AccName == accName && cacheGIZigZagBase[idx].BackTest == backTest && cacheGIZigZagBase[idx].DeviationType == deviationType && Math.Abs(cacheGIZigZagBase[idx].DeviationValue - deviationValue) <= double.Epsilon && cacheGIZigZagBase[idx].UseHighLow == useHighLow && cacheGIZigZagBase[idx].EqualsInput(input))
+                    if (cacheGIZigZagBase[idx].DeviationType == deviationType && Math.Abs(cacheGIZigZagBase[idx].DeviationValue - deviationValue) <= double.Epsilon && cacheGIZigZagBase[idx].UseHighLow == useHighLow && cacheGIZigZagBase[idx].EqualsInput(input))
                         return cacheGIZigZagBase[idx];
 
             lock (checkGIZigZagBase)
             {
-                checkGIZigZagBase.AccName = accName;
-                accName = checkGIZigZagBase.AccName;
-                checkGIZigZagBase.BackTest = backTest;
-                backTest = checkGIZigZagBase.BackTest;
                 checkGIZigZagBase.DeviationType = deviationType;
                 deviationType = checkGIZigZagBase.DeviationType;
                 checkGIZigZagBase.DeviationValue = deviationValue;
@@ -608,7 +587,7 @@ namespace NinjaTrader.Indicator
 
                 if (cacheGIZigZagBase != null)
                     for (int idx = 0; idx < cacheGIZigZagBase.Length; idx++)
-                        if (cacheGIZigZagBase[idx].AccName == accName && cacheGIZigZagBase[idx].BackTest == backTest && cacheGIZigZagBase[idx].DeviationType == deviationType && Math.Abs(cacheGIZigZagBase[idx].DeviationValue - deviationValue) <= double.Epsilon && cacheGIZigZagBase[idx].UseHighLow == useHighLow && cacheGIZigZagBase[idx].EqualsInput(input))
+                        if (cacheGIZigZagBase[idx].DeviationType == deviationType && Math.Abs(cacheGIZigZagBase[idx].DeviationValue - deviationValue) <= double.Epsilon && cacheGIZigZagBase[idx].UseHighLow == useHighLow && cacheGIZigZagBase[idx].EqualsInput(input))
                             return cacheGIZigZagBase[idx];
 
                 GIZigZagBase indicator = new GIZigZagBase();
@@ -619,8 +598,6 @@ namespace NinjaTrader.Indicator
                 indicator.MaximumBarsLookBack = MaximumBarsLookBack;
 #endif
                 indicator.Input = input;
-                indicator.AccName = accName;
-                indicator.BackTest = backTest;
                 indicator.DeviationType = deviationType;
                 indicator.DeviationValue = deviationValue;
                 indicator.UseHighLow = useHighLow;
@@ -648,18 +625,18 @@ namespace NinjaTrader.MarketAnalyzer
         /// </summary>
         /// <returns></returns>
         [Gui.Design.WizardCondition("Indicator")]
-        public Indicator.GIZigZagBase GIZigZagBase(string accName, bool backTest, DeviationType deviationType, double deviationValue, bool useHighLow)
+        public Indicator.GIZigZagBase GIZigZagBase(DeviationType deviationType, double deviationValue, bool useHighLow)
         {
-            return _indicator.GIZigZagBase(Input, accName, backTest, deviationType, deviationValue, useHighLow);
+            return _indicator.GIZigZagBase(Input, deviationType, deviationValue, useHighLow);
         }
 
         /// <summary>
         /// Enter the description of your new custom indicator here
         /// </summary>
         /// <returns></returns>
-        public Indicator.GIZigZagBase GIZigZagBase(Data.IDataSeries input, string accName, bool backTest, DeviationType deviationType, double deviationValue, bool useHighLow)
+        public Indicator.GIZigZagBase GIZigZagBase(Data.IDataSeries input, DeviationType deviationType, double deviationValue, bool useHighLow)
         {
-            return _indicator.GIZigZagBase(input, accName, backTest, deviationType, deviationValue, useHighLow);
+            return _indicator.GIZigZagBase(input, deviationType, deviationValue, useHighLow);
         }
     }
 }
@@ -674,21 +651,21 @@ namespace NinjaTrader.Strategy
         /// </summary>
         /// <returns></returns>
         [Gui.Design.WizardCondition("Indicator")]
-        public Indicator.GIZigZagBase GIZigZagBase(string accName, bool backTest, DeviationType deviationType, double deviationValue, bool useHighLow)
+        public Indicator.GIZigZagBase GIZigZagBase(DeviationType deviationType, double deviationValue, bool useHighLow)
         {
-            return _indicator.GIZigZagBase(Input, accName, backTest, deviationType, deviationValue, useHighLow);
+            return _indicator.GIZigZagBase(Input, deviationType, deviationValue, useHighLow);
         }
 
         /// <summary>
         /// Enter the description of your new custom indicator here
         /// </summary>
         /// <returns></returns>
-        public Indicator.GIZigZagBase GIZigZagBase(Data.IDataSeries input, string accName, bool backTest, DeviationType deviationType, double deviationValue, bool useHighLow)
+        public Indicator.GIZigZagBase GIZigZagBase(Data.IDataSeries input, DeviationType deviationType, double deviationValue, bool useHighLow)
         {
             if (InInitialize && input == null)
                 throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
-            return _indicator.GIZigZagBase(input, accName, backTest, deviationType, deviationValue, useHighLow);
+            return _indicator.GIZigZagBase(input, deviationType, deviationValue, useHighLow);
         }
     }
 }

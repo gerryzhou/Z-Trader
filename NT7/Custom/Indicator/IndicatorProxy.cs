@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 using NinjaTrader.Cbi;
 using NinjaTrader.Data;
 using NinjaTrader.Gui.Chart;
@@ -13,6 +14,12 @@ using NinjaTrader.Gui.Chart;
 // This namespace holds all indicators and is required. Do not change it.
 namespace NinjaTrader.Indicator
 {
+	public class IndicatorSignal {
+		public TrendDirection TrendDir = TrendDirection.UnKnown; //1=up, -1=down, 0=flat/unknown
+		public Breakout BreakoutDir = Breakout.UnKnown; //1=bk up, -1=bk down, 0=no bk/unknown
+		public Reversal ReversalDir = Reversal.UnKnown; //1=rev up, -1=rev down, 0=no rev/unknown		
+	}
+	
     /// <summary>
     /// Enter the description of your new custom indicator here
     /// </summary>
@@ -20,13 +27,16 @@ namespace NinjaTrader.Indicator
     public class IndicatorProxy : Indicator
     {
         #region Variables
-        // Wizard generated variables
+        // User defined variables (add any user defined variables below)
             private int startH = 9; // Default setting for StartH
             private int startM = 5; // Default setting for StartM
             private int endH = 11; // Default setting for EndH
             private int endM = 5; // Default setting for EndM
-        // User defined variables (add any user defined variables below)
-        #endregion
+			private string accName = ""; //account name from strategy, extracting simply string for print/log;
+			
+		#endregion
+		
+		private List<Indicator> listIndicator = new List<Indicator>();
 
         /// <summary>
         /// This method is used to configure the indicator and is called once before any bar data is loaded.
@@ -36,6 +46,8 @@ namespace NinjaTrader.Indicator
             Add(new Plot(Color.FromKnownColor(KnownColor.Black), PlotStyle.Block, "StartHM"));
             Add(new Plot(Color.FromKnownColor(KnownColor.DarkBlue), PlotStyle.Block, "EndHM"));
             Overlay				= true;
+			accName = GetTsTAccName(Strategy.Account.Name);
+			indicatorSignal = new IndicatorSignal();
         }
 
         /// <summary>
@@ -52,11 +64,6 @@ namespace NinjaTrader.Indicator
             		EndHM.Set(Low[0]-0.25);
 			}
         }
-
-				
-		public void PrintLog(bool prt_con, bool prt_file, string text) {
-			PrintLog(prt_con, prt_file, log_file, text);
-		}
 		
         #region Properties
         [Browsable(false)]	// this line prevents the data series from being displayed in the indicator properties dialog, do not remove
@@ -105,6 +112,17 @@ namespace NinjaTrader.Indicator
             set { endM = Math.Max(0, value); }
         }
         #endregion
+		
+		#region Methods
+		public string GetAccName() {
+			return accName;
+		}
+		
+		public void AddIndicator(Indicator i) {
+			this.listIndicator.Add(i);
+		}
+
+		#endregion
     }
 }
 

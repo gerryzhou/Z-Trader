@@ -21,14 +21,58 @@ namespace NinjaTrader.Strategy
     /// </summary>
  
 	//public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
+	
+	public class CmdObject {
+		private Strategy instStrategy = null;
+		
+        #region Properties
+		public Strategy GetStrategy() {
+			return this.instStrategy;
+		}
+        #endregion
+	}
 
     partial class Strategy {
-		//private int algo_mode = 1;
-		//private string AccName = null;
+		protected CmdObject cmdObj = null;
+
+		public virtual void InitTradeCmd() {
+			new CmdObject();
+		}
 		
-		//private int tradeDirection = 0; // -1=short; 0-both; 1=long;
-		//private int tradeStyle = 0; // -1=counter trend; 1=trend following;
-		//private bool backTest = true; //if it runs for backtesting;
+		public virtual CmdObject CheckCmd() {
+			return cmdObj;
+		}
+		
+		public virtual void ExecuteCommand() {
+			switch(TG_AlgoMode) {
+				case 0: // 0=liquidate; 
+					CloseAllPositions();
+					break;
+				case 1:	// 1=trading; 
+					//CheckPositions();
+					CheckTrigger();
+					ChangeSLPT();
+					CheckEnOrder(-1);
+					
+					if(NewOrderAllowed() && PatternMatched())
+					{
+						//indicatorProxy.PrintLog(true, !backTest, "----------------PutTrade, isReversalBar=" + isReversalBar + ",giParabSAR.IsSpvAllowed4PAT(curBarPat)=" + giParabSAR.IsSpvAllowed4PAT(curBarPriceAction.paType));
+						//PutTrade(zz_gap, cur_gap, isReversalBar);
+					}
+					break;
+				case 2:	// 2=semi-algo(manual entry, algo exit);
+					ChangeSLPT();
+					break;
+				case -1: // -1=stop trading(no entry/exit, cancel entry orders and keep the exit order as it is if there has position);
+					CancelEntryOrders();
+					break;
+				case -2: // -2=stop trading(no entry/exit, liquidate positions and cancel all entry/exit orders);
+					CancelAllOrders();
+					break;
+				default:
+					break;
+			}
+		}
 		
 		public FileInfo[] GetCmdFile(string srcDir) {
 			Print("GetCmdFile src: " + srcDir);
@@ -97,35 +141,6 @@ namespace NinjaTrader.Strategy
 		}
 		
         #region Properties
-
-/*
-		
-		[Description("Supervised PR Bits")]
-        [GridCategory("Parameters")]
-        public int SpvPRBits
-        {
-            get { return spvPRBits; }
-            set { spvPRBits = Math.Max(0, value); }
-        }		
-
-		
-
-		[Description("Bars Since PbSAR reversal. Enter the amount of the bars ago maximum for PbSAR entry allowed")]
-        [GridCategory("Parameters")]
-        public int BarsAgoMaxPbSAREn
-        {
-            get { return barsAgoMaxPbSAREn; }
-            set { barsAgoMaxPbSAREn = Math.Max(1, value); }
-        }
-
-		[Description("Bars count for last PbSAR swing. Enter the maximum bars count of last PbSAR allowed for entry")]
-        [GridCategory("Parameters")]
-        public int BarsMaxLastCross
-        {
-            get { return barsMaxLastCross; }
-            set { barsMaxLastCross = Math.Max(1, value); }
-        }		*/
-
 	
         #endregion		
 	}

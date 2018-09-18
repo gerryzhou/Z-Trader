@@ -17,6 +17,13 @@ namespace NinjaTrader.Indicator
     /// <summary>
     /// This file holds all price action classes.
     /// </summary>
+	//Enum conversion:
+	//Enum e = Question.Role;
+	//int i = Convert.ToInt32(e);
+	//YourEnum foo = (YourEnum)yourInt;
+	public enum TrendDirection {Up=1, Down=-1, Flat=0, UnKnown=9};
+	public enum Breakout {Up=1, Down=-1, UnKnown=9};
+	public enum Reversal {Up=1, Down=-1, UnKnown=9};
 	
 	public enum PriceActionType {UpTight, UpWide, DnTight, DnWide, RngTight, RngWide, UnKnown};
 	

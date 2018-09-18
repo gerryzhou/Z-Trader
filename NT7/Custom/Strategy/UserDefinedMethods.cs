@@ -194,30 +194,17 @@ namespace NinjaTrader.Strategy
 		}
 
 */
-
-				
-		public String GetTsTAccName(String tst_acc) {
-			char[] delimiterChars = {'!'};
-			string[] words = tst_acc.Split(delimiterChars);
-			return words[0];
+		public void SetInitParams() {
+			CalculateOnBarClose = true;
+			// Triggers the exit on close function 30 seconds prior to session end
+			ExitOnClose = true;
+			ExitOnCloseSeconds = 30;
+			
+			SyncAccountPosition = true;
+			QuantityType = QuantityType.DefaultQuantity;
+			DefaultQuantity = 1;
+			TimeInForce = Cbi.TimeInForce.Day;
 		}
-		
-//		public void FileTest(long barNo) {
-//			Print("FileTest: barNo=" + barNo);
-//		 //if(barNo > 0) return;
-//			FileStream F = new FileStream("C:\\inetpub\\wwwroot\\nt_files\\log\\" + barNo.ToString() + ".dat", FileMode.OpenOrCreate, 
-//            	FileAccess.ReadWrite);
-//			
-//			for (int i = 1; i <= 20; i++) {
-//				F.WriteByte((byte)i);
-//			}
-//			F.Position = 0;
-//			for (int i = 0; i <= 20; i++) {
-//				Print(F.ReadByte() + " ");
-//			}
-//			F.Close();
-//         //Console.ReadKey();
-//		}
 		
 		public string GetFileNameByDateTime(DateTime dt, string path, string accName, string ext) {
 			Print("GetFileNameByDateTime: " + dt.ToString());

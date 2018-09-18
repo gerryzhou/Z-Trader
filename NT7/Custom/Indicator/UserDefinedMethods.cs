@@ -19,9 +19,13 @@ namespace NinjaTrader.Indicator
     /// </summary>
     partial class Indicator
     {		
-		private bool drawTxt = false; // User defined variables (add any user defined variables below)
-		private IText it_gap = null; //the Text draw for gap on current bar
-		protected string log_file = ""; //
+		protected string symbol = "";
+		protected int printOut = 1;		
+		protected string logFile = ""; //Log file full path		
+		private bool drawTxt = false; // Draw the text on chart
+		protected IText it_gap = null; // The Text object drawn for bar
+		
+		protected bool backTest = true; //if it runs for backtesting;private bool backTest = true; //if it runs for backtesting;
 		
 		#region ZZ Vars
 		/// <summary>
@@ -480,6 +484,11 @@ namespace NinjaTrader.Indicator
 		
 		#endregion
 
+		public String GetTsTAccName(String tst_acc) {
+			char[] delimiterChars = {'!'};
+			string[] words = tst_acc.Split(delimiterChars);
+			return words[0];
+		}
 		
 		public PriceAction GetPriceAction(DateTime dt) {
 			
@@ -582,7 +591,8 @@ namespace NinjaTrader.Indicator
 			return gapText; 
 		}
 		
-		public void PrintLog(bool prt_con, bool prt_file, string fpath, string text) {
+		public void PrintLog(bool prt_con, bool prt_file, string text) {
+			string fpath = GetLogFile();
 			//Print("PrintLog: " + fpath);
 			if(prt_con) Print(text); // return;
 			if(prt_file) {
@@ -592,6 +602,82 @@ namespace NinjaTrader.Indicator
 					file.WriteLine(text);
 				}
 			}
-		}		
+		}
+		
+		#region Properties
+		
+		[Description("If it runs for backtesting")]
+        [GridCategory("Parameters")]
+		[Gui.Design.DisplayNameAttribute("Back Testing")]
+        public bool BackTest
+        {
+            get { return backTest; }
+            set { backTest = value; }
+        }
+		
+		#endregion
+		
+		#region Other Properties
+		/// <summary>
+		/// The symbol of the instument
+		/// </summary>
+		/// <returns></returns>
+        public string GetSymbol()
+        {
+            return Instrument.FullName;
+        }
+		
+		/// <summary>
+		/// If it runs for backtesting
+		/// </summary>
+		/// <returns></returns>
+        public bool IsBackTest()
+        {
+            return backTest;
+        }
+		public void SetBackTest(bool back_test)
+        {
+           backTest = back_test;
+        }
+		
+		/// <summary>
+		/// The log file name/path
+		/// </summary>
+		/// <returns></returns>
+        public string GetLogFile()
+        {
+            return logFile;
+        }
+		public void SetLogFile(string log_file)
+        {
+           logFile = log_file;
+        }
+		
+		/// <summary>
+		/// The print out level
+		/// </summary>
+		/// <returns></returns>
+        public int GetPrintOut()
+        {
+            return printOut;
+        }
+		public void SetPrintOut(int print_out)
+        {
+           printOut = print_out;
+        }
+		
+		/// <summary>
+		/// If it draws text on the chart
+		/// </summary>
+		/// <returns></returns>
+        public bool IsDrawTxt()
+        {
+            return drawTxt;
+        }
+		public void SetDrawTxt(bool draw_txt)
+        {
+           drawTxt = draw_txt;
+        }
+		#endregion		
     }
 }

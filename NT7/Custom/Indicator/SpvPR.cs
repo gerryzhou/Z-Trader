@@ -52,7 +52,7 @@ namespace NinjaTrader.Indicator
 		/// UpWide:spvPRBits&0000 0010(2), UpTight:spvPRBits&0000 0001(1)
 		/// </summary>
 
-		protected int SpvPRBits = 0;
+		private int spvPRBits = 0;
 		
 		#endregion
 		
@@ -168,13 +168,17 @@ namespace NinjaTrader.Indicator
 			Print("ReadSpvPRList:" + counter);
 			return Dict_SpvPR;
 		}
-		
-		
-		public void setSpvPRBits(int spvPRBits) {
-			SpvPRBits = spvPRBits;
-		}
-		
+
 		#endregion
 		
+		#region Properties
+		[Description("Supervised PR Bits")]
+        [GridCategory("Parameters")]
+        public int SpvPRBits
+        {
+            get { return spvPRBits; }
+            set { spvPRBits = Math.Max(0, value); }
+        }
+		#endregion
     }
 }

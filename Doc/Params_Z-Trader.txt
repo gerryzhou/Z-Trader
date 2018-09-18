@@ -1,0 +1,10 @@
+	Parameter definitions:
+		/// <summary>
+		/// AlgoMode: 0=liquidate; 
+		/// 1=trading; 
+		/// 2=semi-algo(manual entry, algo exit);
+		/// -1=stop trading(no entry/exit, cancel entry orders and keep the exit order as it is if there has position);
+		/// -2=stop trading(no entry/exit, liquidate positions and cancel all entry/exit orders);
+		/// </summary>
+		
+		

@@ -18,9 +18,7 @@ namespace NinjaTrader.Indicator
     /// This file holds all user defined indicator classes.
     /// </summary>
 	public enum SessionBreak {AfternoonClose, EveningOpen, MorningOpen, NextDay};
-	
-	public enum TrendDirection {Up, Down, Flat, UnKnown};
-	
+		
 	//public enum PriceActionType {UpTight, UpWide, DnTight, DnWide, RngTight, RngWide, UnKnown};
 	
 	public class ZigZagSwing {
@@ -37,12 +35,25 @@ namespace NinjaTrader.Indicator
 	}
 	
 	public class IndicatorParams {
-		public TrendDirection trendDir = TrendDirection.UnKnown;
+		//public TrendDirection trendDir = TrendDirection.UnKnown;
 		
 	}
 	
     partial class Indicator
     {		
+		protected IndicatorSignal indicatorSignal = null;
+	
+		#region Signal Functions
+		public virtual IndicatorSignal CheckIndicatorSignal() {
+			return null;
+		}
+		
+		public IndicatorSignal GetIndicatorSignal() {
+			return indicatorSignal;
+		}
+		
+		#endregion
+				
 		#region ZigZagSwing Functions
 		/// <summary>
 		/// Get the zigzag swing obj fo the barNo.
@@ -131,7 +142,7 @@ namespace NinjaTrader.Indicator
 		/// <summary>
 		/// Print zig zag swing.
 		/// </summary>
-		public void PrintZZSwings(List<ZigZagSwing> zzSwings, string log_file, int printOut, bool back_test, int timeStartHM, int timeEndHM)
+		public void PrintZZSwings(List<ZigZagSwing> zzSwings, int printOut, bool back_test, int timeStartHM, int timeEndHM)
 		{ 
 			if( ZZ_Count_0_6 == null) 
 				ZZ_Count_0_6 = new Dictionary<string,double>();
@@ -182,7 +193,7 @@ namespace NinjaTrader.Indicator
 				if(zzSize>0) str_suffix = str_Plus;
 				else if(zzSize<0) str_suffix = str_Minus;
 				if(zzSize != 0)				
-					PrintLog(printOut>3, !back_test, log_file, CurrentBar + " PrintZZSize called from GS:" + zzSize + "," + barStart + "," + barEnd);
+					PrintLog(GetPrintOut()>3, !back_test, CurrentBar + " PrintZZSize called from GS:" + zzSize + "," + barStart + "," + barEnd);
 				DateTime dt_start = (zzSize==0||barStart<0||barEnd<0) ? Time[0] : Time[CurrentBar-barStart];
 				DateTime dt_end = (zzSize==0||barStart<0||barEnd<0) ? Time[0] : Time[CurrentBar-barEnd];
 				
@@ -206,34 +217,34 @@ namespace NinjaTrader.Indicator
 					AddDictVal(ZZ_Count_10_16,key,1);
 					AddDictVal(ZZ_Sum_10_16,key,zzSizeAbs);
 					if(printOut > 1)
-						PrintLog(true, !back_test, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+						PrintLog(true, !back_test, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=10" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 16 && zzSizeAbs <22){
 					key = GetDictKeyByDateTime(dt_end, "zz16-22", "");
 					AddDictVal(ZZ_Count_16_22,key,1);
 					AddDictVal(ZZ_Sum_16_22,key,zzSizeAbs);
 					if(printOut > 1)
-						PrintLog(true, !back_test, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+						PrintLog(true, !back_test, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=16" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 22 && zzSizeAbs <30){
 					key = GetDictKeyByDateTime(dt_end, "zz22-30", "");
 					AddDictVal(ZZ_Count_22_30,key,1);
 					AddDictVal(ZZ_Sum_22_30,key,zzSizeAbs);
 					if(printOut > 1)
-						PrintLog(true, !back_test, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+						PrintLog(true, !back_test, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=22" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				else if(zzSizeAbs >= 30){
 					key = GetDictKeyByDateTime(dt_end, "zz30-", "");
 					AddDictVal(ZZ_Count_30_,key,1);
 					AddDictVal(ZZ_Sum_30_,key,zzSizeAbs);
 					if(printOut > 1)
-						PrintLog(true, !back_test, log_file, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=30" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
+						PrintLog(true, !back_test, idx.ToString() + "-ZZ= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "] >=30" + str_suffix + GetTimeDiff(Time[CurrentBar-barStart], Time[CurrentBar-barEnd]) + str_Minutes + ",r=" + zzSwings[barEnd].TwoBar_Ratio);
 				}
 				if(zzSize != 0) {
 					//DrawZZSizeText(idx, "txt-");
 					if(zzSizeAbs < 10)
 						if(printOut > 2)
-							PrintLog(true, !back_test, log_file, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "]" );
+							PrintLog(true, !back_test, idx.ToString() + "-zzS= " + zzSize + " [" + Time[CurrentBar-barStart].ToString() + "-" + Time[CurrentBar-barEnd].ToString() + "]" );
 					//lastZZIdx = idx;
 					key = GetDictKeyByDateTime(dt_end, "zzCount", "");
 					AddDictVal(ZZ_Count,key,1);
@@ -261,7 +272,7 @@ namespace NinjaTrader.Indicator
 			double zzSum_30_ = SumDictVal(ZZ_Sum_30_);
 			
 			if(printOut > 2) {
-				PrintLog(true, !back_test, log_file, CurrentBar + "-" + Instrument.FullName 
+				PrintLog(true, !back_test, CurrentBar + "-" + Instrument.FullName 
 					+ "\r\n ZZ_Count_Avg \t ZZ_Count \t ZZ_Count_Days \t"
 					+ "\r\n" + String.Format("{0:0.##}", ZZ_Count_Avg) 
 					+ "\t" + ZZ_Count_Total 
@@ -274,7 +285,7 @@ namespace NinjaTrader.Indicator
 					+ "\r\n ZZ_Count_22_30 \t" + zzCount_22_30 + "\t" + String.Format("{0:0.#}", 100*zzCount_22_30/ZZ_Count_Total) + "%"
 					+ "\r\n ZZ_Count_30_ \t" + zzCount_30_ + "\t" + String.Format("{0:0.#}", 100*zzCount_30_/ZZ_Count_Total) + "%");
 				
-				PrintLog(true, !back_test, log_file, CurrentBar + "-" + Instrument.FullName 
+				PrintLog(true, !back_test, CurrentBar + "-" + Instrument.FullName 
 					+ "\r\n ZZ_Sum_Avg \t ZZ_Sum \t ZZ_Sum_Days \t"
 					+ "\r\n" + String.Format("{0:0.##}", ZZ_Sum_Avg) 
 					+ "\t " + ZZ_Sum_Total 
