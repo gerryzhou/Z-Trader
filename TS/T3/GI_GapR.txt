@@ -11,7 +11,8 @@ using elsystem.drawing;
   "Oscillator" (leaving the quotes) with a name you choose.  The specified name will 
   appear in the chart analysis data window. }
 Inputs: InputGapPercent (15),
-GapDaysBack(1); //Today is 0, yesteday is 1;
+GapDaysBack(1),
+DisplayTxt(false); //Today is 0, yesteday is 1;
 
 variables: GapBarNumber(1),
  double GapPercent(0),
@@ -38,10 +39,14 @@ If (Currentbar > GapDaysBack +1) Then begin
 			end;
 		Plot1( GapPercent, !("GapP") ) ;
 		
-		TxtGapR = TextLabel.Create(BNPoint.Create(CurrentBar-GapDaysBack, GapLabelPos), Numtostr(GapPercent, 2)+"%");
-		if(TxtGapR <> NULL) then
-			DrawingObjects.Add(TxtGapR);
+		if(DisplayTxt = true) Then begin
+			TxtGapR = TextLabel.Create(BNPoint.Create(CurrentBar-GapDaysBack, GapLabelPos), Numtostr(GapPercent, 2)+"%");
+			if(TxtGapR <> NULL) then
+				DrawingObjects.Add(TxtGapR);
+		end;
 		//GapPercent = 0;
+		
+		Print("Currentbar=", Currentbar, ", GapR=", GapPercent);
 	end
 	Else
 		NoPlot(1);
