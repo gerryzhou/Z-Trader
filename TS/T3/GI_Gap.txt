@@ -1,0 +1,36 @@
+
+//TriggerCharts – Gap Scanner (To Be used with Tradestation Scanner)
+
+// Load Additional Bars = 100
+using elsystem;
+using elsystem.drawingobjects;
+using elsystem.drawing;
+
+Inputs: InputGapPercent (15),
+GapDaysBack(1); //Today is 0, yesteday is 1;
+
+variables: GapBarNumber(1),
+ GapPercent(0),
+ GapFromPrice(0),
+ GapUp (False),
+ GapDown(False),
+ GapDownPrice(0),
+ GapUpPrice(0),
+ TextLabel TxtGapR(NULL);
+ 
+
+GapPercent = 0;//GF_GapPercent(GapDaysBack);
+
+If LastBarOnChart Then begin
+	GapPercent = GF_GapPercent(GapDaysBack);
+	if(GapPercent >= InputGapPercent) Then begin
+		if(Open[GapDaysBack] > Close[GapDaysBack+1]) Then
+			GapUp = true
+		Else if(Open[GapDaysBack] < Close[GapDaysBack+1]) Then
+			GapDown = true;
+			
+		TxtGapR = TextLabel.Create(BNPoint.Create(CurrentBar-GapDaysBack, Low), Numtostr(GapPercent, 2)+"%");	
+		DrawingObjects.Add(TxtGapR);
+	end;
+	alert;
+end;

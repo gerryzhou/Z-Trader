@@ -1,0 +1,167 @@
+using elsystem;
+using elsystem.drawingobjects;
+using elsystem.drawing;
+
+inputs:
+	double LineValue( Close ) [
+		DisplayName = "LineValue", 
+		ToolTip = "Enter an EasyLanguage expression.  Enter the value at which to plot the horizontal line."],
+	
+	int LineColor( Yellow ) [
+		DisplayName = "LineColor", 
+		ToolTip = "Enter the color to use for the horizontal line."],
+	int LineColorHi( Red ) [
+		DisplayName = "LineColorHi", 
+		ToolTip = "Enter the color to use for the horizontal line."],
+	int LineColorLo( Green ) [
+		DisplayName = "LineColorLo", 
+		ToolTip = "Enter the color to use for the horizontal line."],				
+	
+	string LineStyle( "dotted" ) [ //"solid"
+		DisplayName = "LineStyle", 
+		ToolTip = "Enter the style to use for the horizontal line.  Example:  'dashed'"],
+	
+	int LineWeight( 0 ) [
+		DisplayName = "LineWeight", 
+		ToolTip = "Enter a number from 0 to 6."],
+	
+	double PercentTransparency( 50 ) [
+		DisplayName = "PercentTransparency", 
+		ToolTip = "Enter a number from 0 to 100.  0 is fully opaque.  100 is fully transparent."],
+		
+	int LineLabelLeftOrRightJustified( 0 ) [
+		DisplayName = "LineLabelLeftOrRightJustified", 
+		ToolTip = "Enter 0 to show the label on the left side of the horizontal line.  Enter 1 to show the label on the right side of the horizontal line."],	
+	
+	int HideOrShowLineLabel( 1 ) [
+		DisplayName = "HideOrShowLineLabel", 
+		ToolTip = "Enter 1 to show the label on the horizontal line.  Enter 0 to not show the label."],	
+	
+	double TextFontSize( 9 ) [
+		DisplayName = "TextFontSize", 
+		ToolTip = "Set to the point size of the desired font. Example: Set to 10 for a 10 point font."];
+	 
+variables:
+	HorizontalLine HorizLine( NULL ),
+	HorizontalLine HorizLineHi( NULL ),
+	HorizontalLine HorizLineLo( NULL ),
+	TextLabel TxtGapR(NULL),
+	double GapR(0);
+		
+method HorizontalLine CreateHorizontalLine(int LnColor)
+variables:  HorizontalLine HL;
+begin
+	HL = new HorizontalLine();
+	HL.Color = GetColorFromIntAndTransparency( LnColor, PercentTransparency );
+	HL.Style = GetHLStyleType( LineStyle );
+	HL.Weight = LineWeight;
+			
+	{ lock the horizontal line to prevent inadvertent dragging by the mouse }
+	HL.Lock = true;
+	
+	if TextFontSize > 0 then
+		HL.Label.Font = Font.Create( HL.Label.Font.Name, TextFontSize );
+
+	
+	HL.RightJustify = LineLabelLeftOrRightJustified = 1;
+	HL.ShowLabels = HideOrShowLineLabel = 1;
+	HL.ShowInPlotSubgraph = false;
+
+	{
+	To have a drawing object persist (i.e., stay on the chart once drawn), the 
+	drawing object either 1) must be configured to persist by setting the Persist
+	property to true, or 2) the drawing object must be drawn on a bar closing tick;
+	in this indicator, the Horizontal line is configured to persist by setting
+	the "Persist" property to true.  This is important since the horizontal line is
+	only created once (i.e., this method is only called once).
+	}
+	HL.Persist = true;
+	{  
+	this is how the horizontal line is "shown" - the horizontal line is added to the  
+	DrawingObjects collection; if you want to remove the horizontal line, you can  
+	use the	Delete method of the DrawingObjects class; note that the DrawingObjects
+	collection is NULL in RadarScreen - even though this study is only enabled for
+	Charting, this check was included as a coding example to reinforce the checking
+	before adding the drawing object to the DrawingObjects collection
+	} 
+	if DrawingObjects <> NULL then
+	begin
+		DrawingObjects.Add( HL );
+	end;	
+	return HL;
+end;
+
+method Color GetColorFromIntAndTransparency( int pColor, double pPctTransp )
+variables:  int AlphaValue, double TransPct, Color tempColor;
+begin
+	{ the percent transparency is only allowed to be between 0 and 100 }
+	if pPctTransp > 100 then
+		TransPct = 100
+	else if pPctTransp < 0 then
+		TransPct = 0
+	else
+		TransPct = pPctTransp;
+	
+	{
+	the following code is needed to convert percentage transparency to
+	a number between 0 and 255; where 255 is fully opaque and 0 is fully 
+	transparent
+	}
+	AlphaValue = Round( 0.01 * ( 100 - TransPct ) * 255, 0 ) 
+	 astype int;
+	
+	tempColor = Color.FromARGB( AlphaValue, GetRValue( pColor ), 
+	 GetGValue( pColor ), GetBValue( pColor ) );
+
+	return tempColor;
+end;
+
+method StyleType GetHLStyleType( string HorizontalLineStyle )
+variables: StyleType HLStyleType;
+begin
+	switch ( LowerStr( HorizontalLineStyle ) )
+	begin
+		case "dashed":
+			HLStyleType = StyleType.dashed;
+		case "dashed2":
+			HLStyleType = StyleType.dashed2;
+		case "dashed3":
+			HLStyleType = StyleType.dashed3;
+		case "dotted":
+			HLStyleType = StyleType.dotted;
+		default:
+			HLStyleType = StyleType.solid;	
+	end;
+	
+	return HLStyleType;
+end;
+
+method void MoveHorizLine( HorizontalLine HorizLineToMove, double HorizLinePrice )
+begin
+	HorizLineToMove.Price = HorizLinePrice;
+end;
+		
+once
+begin
+	HorizLineHi = CreateHorizontalLine(LineColorHi);
+	HorizLineLo = CreateHorizontalLine(LineColorLo);
+	HorizLine = CreateHorizontalLine(LineColor);
+end;
+
+if ( BarType < 2 or BarType = 14 ) { ie, if tick, second or minute bars } and 
+ Date <> Date[1] and Currentbar > 1 then 
+	begin
+	//PlotPaintBar( High, Low, Open, Close, !( "FirstBar-D" ) ) ;
+	MoveHorizLine( HorizLineHi, H );
+	MoveHorizLine( HorizLineLo, L );
+	MoveHorizLine( HorizLine, MedianPrice );
+	//MoveHorizLine( HorizLine, LineValue );
+	
+	GapR = 100*(Open - Close[1])/Close[1];
+	Print("CurrentBar=" , Currentbar, ",Open=", Open, ",Close[1]=", Close[1], ",GapR=", GapR);
+	
+	TxtGapR = TextLabel.Create(BNPoint.Create(CurrentBar, Low), Numtostr(GapR, 2)+"%");
+
+	DrawingObjects.Add(TxtGapR); 
+	Alert ;
+	end ;
