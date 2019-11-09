@@ -1,0 +1,37 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}. There is no need to erase these instructions  
+  when using EasyLanguage in order for it to function properly, because this text will 
+  be ignored. }
+
+{ OverBought and OverSold below are INPUTS, or holding places for the values you want 
+  to pass into the indicator.  The default values entered below, 80 & 20, can be 
+  replaced with different values at the time the indicator is applied to a chart, which 
+  is the main advantage of using inputs instead of variables.  The horizontal 
+  overbought and oversold lines will be drawn at these values.  }
+
+inputs: OverBought( 80 ), OverSold( 20 ) ;
+
+{ STEP 1: Replace <FORMULA> with the oscillator formula you wish to plot.  Note that 
+  Value1 is a numeric variable, a temporary holding place for the result of your 
+  numeric formula.  To assign a non-generic name to your plot, you may replace 
+  "Oscillator" (leaving the quotes) with a name you choose.  The specified name will 
+  appear in the chart analysis data window. }
+
+Value1 = <FORMULA> ;
+Plot1( Value1, "Oscillator" ) ;
+
+{ Leave the next 2 plot statements as is; these draw the horizontal overbought and 
+  oversold lines.  }
+
+Plot2( OverBought, "OverBought" ) ;
+Plot3( OverSold, "OverSold" ) ;
+
+{ OPTIONAL STEPS: To specify alert criteria that will sound an audible alert when 
+  triggered, replace FALSE with your criteria.  To specify a brief alert description 
+  that will be included in the alert notification pop-up window, insert your 
+  description between the quotes ( "" ).  Note that Condition1 is a logical variable, a 
+  temporary holding place for the true-false result of the criteria. }
+
+Condition1 = FALSE ;
+if Condition1 then
+	Alert( "" ) ;

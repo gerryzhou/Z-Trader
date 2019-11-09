@@ -1,0 +1,19 @@
+<TSXML>
+	<Template ID="{66CE5743-C8E8-4380-B702-4CC828B9FCFD}" Market="USStockOptions" Name="Exit - Stop Lmt Only" Description="Exit - Stop Lmt Only" Type="OSO" Version="3">
+		<Property Name="Action">Exit</Property>
+		<Collection Name="Group 1" Type="">
+			<Order Name="Stop Limit">
+				<Field Name="Type" Usage="Exact" Operation="=" Location="Value">Stop Limit</Field>
+				<Field Name="Action" Usage="Inverse" Operation="=" Location="Key"/>
+				<Field Name="Quantity" Usage="Percentage" Operation="=" Location="Key">100</Field>
+				<Field Name="Price" Usage="Explicit">
+					<Field Name="Stop" Usage="Offset" Operation="~" Location="Key">50</Field>
+					<Field Name="Limit" Usage="Offset" Operation="~" Location="Price.Stop" MinValue="0">2</Field>
+				</Field>
+				<Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+				<Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+				<Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"/>
+			</Order>
+		</Collection>
+	</Template>
+</TSXML>

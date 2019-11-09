@@ -1,0 +1,54 @@
+<TSXML>
+   <Template ID="{6BA55A7D-EFBE-46e3-BAA4-003542C91A6F}" Market="USFutures" Name="Exit - Brk - 2L/2SL" Description="Exit - Bracket - 2 Limit &amp; 2 Stop Limit Levels" Type="OCO" Version="2">
+      <Property Name="Action">Exit</Property>
+      <Property Name="BRQ">1</Property>
+      <Property Name="BRQT">Limit</Property>
+      <Property Name="BQPR">100</Property>
+      <Collection Name="Group 1" Type="Bracket">
+         <Order Name="Limit (T1)">
+            <Field Name="Type" Usage="Exact" Operation="=" Location="Value">Limit</Field>
+            <Field Name="Action" Usage="Inverse" Operation="=" Location="Position"/>
+            <Field Name="Quantity" Usage="Percentage" Operation="=" Location="Position">50</Field>
+            <Field Name="Price" Usage="Offset" Operation="~" Location="Last">10</Field>
+            <Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+            <Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+            <Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"/>
+         </Order>
+         <Order Name="Stop Limit (S1)">
+            <Field Name="Type" Usage="Exact" Operation="=" Location="Value">Stop Limit</Field>
+            <Field Name="Action" Usage="Inverse" Operation="=" Location="Position"/>
+            <Field Name="Quantity" Usage="Percentage" Operation="=" Location="Position">50</Field>
+            <Field Name="Price" Usage="Explicit">
+               <Field Name="Stop" Usage="Offset" Operation="~" Location="Last">20</Field>
+               <Field Name="Limit" Usage="Offset" Operation="~" Location="Price.Stop" MinValue="0">2</Field>
+            </Field>
+            <Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+            <Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+            <Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"/>
+         </Order>
+      </Collection>
+      <Collection Name="Group 2" Type="Bracket">
+         <Order Name="Limit (T2)">
+            <Field Name="Type" Usage="Exact" Operation="=" Location="Value">Limit</Field>
+            <Field Name="Action" Usage="Inverse" Operation="=" Location="Position"/>
+            <Field Name="Quantity" Usage="Percentage" Operation="=" Location="Position">50</Field>
+            <Field Name="Price" Usage="Offset" Operation="~" Location="Last">20</Field>
+            <Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+            <Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+            <Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"/>
+         </Order>
+         <Order Name="Stop Limit (S2)">
+            <Field Name="Type" Usage="Exact" Operation="=" Location="Value">Stop Limit</Field>
+            <Field Name="Action" Usage="Inverse" Operation="=" Location="Position"/>
+            <Field Name="Quantity" Usage="Percentage" Operation="=" Location="Position">50</Field>
+            <Field Name="Price" Usage="Explicit">
+               <Field Name="Stop" Usage="Offset" Operation="~" Location="Last">10</Field>
+               <Field Name="Limit" Usage="Offset" Operation="~" Location="Price.Stop" MinValue="0">2</Field>
+            </Field>
+            <Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+            <Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+            <Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"/>
+         </Order>
+      </Collection>
+   </Template>
+</TSXML>

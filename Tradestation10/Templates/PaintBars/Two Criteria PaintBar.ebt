@@ -1,0 +1,37 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}. There is no need to erase these instructions  
+  when using EasyLanguage in order for it to function properly, because this text will 
+  be ignored. }
+
+{ STEP 1: Replace <CRITERIA1> and <CRITERIA2> with the logical criteria that will 
+  trigger the placement of Cyan and Red paintbars on the chart, respectively.  Note 
+  that Condition1 and Condition2 are logical variables, temporary holding places for 
+  the true-false results of your criteria. }
+
+Condition1 = <CRITERIA1> ;
+Condition2 = <CRITERIA2> ;
+
+{ OPTIONAL STEP: Replace HIGH and LOW with your own formulas for the high and low 
+  prices of the PaintBar.  Note that Value1 and Value2 are numeric variables, temporary 
+  holding places for the results of the numeric formulas. }
+
+Value1 = HIGH ;
+Value2 = LOW ;
+
+{ OPTIONAL STEPS: You can replace "Plot" with a plot name of your choice; you must 
+  leave the quotes and use the same name in both places.  The specified name will 
+  appear in the chart analysis data window.  You can also replace "Criteria 1 alert" 
+  and "Criteria 2 alert" (leave the quotes) with alert descriptions of your choice.  
+  The specified alert descriptions will be included in the alert notification pop-up 
+  window. }
+
+if Condition1 then
+	begin
+	PlotPaintBar( Value1, Value2, "Plot", Cyan ) ;
+	Alert( "Criteria 1 alert" ) ;
+	end
+else if Condition2 then
+	begin
+	PlotPaintBar( Value1, Value2, "Plot", Red ) ;
+	Alert( "Criteria 2 alert" )  ;
+	end ;

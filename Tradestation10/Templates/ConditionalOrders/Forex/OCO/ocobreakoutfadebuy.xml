@@ -1,0 +1,25 @@
+<TSXML>
+   <Template ID="{A986091C-8AFC-4fe9-9BD4-674194285B6A}" Market="USForex" Name="Entry - B/F Buy" Description="Entry - OCO Breakout/Fade Buy (Buy Limit/Buy Stop)" Type="OCO" Version="1">
+      <Property Name="Action">Entry</Property>
+      <Collection Name="Group 1" Type="OCA">
+         <Order Name="Limit">
+            <Field Name="Type" Usage="Exact" Operation="=" Location="Value">Limit</Field>
+            <Field Name="Action" Usage="Exact" Operation="=" Location="Value">Buy To Open</Field>
+            <Field Name="Quantity" Usage="Percentage" Operation="=" Location="Key">100</Field>
+            <Field Name="Price" Usage="Offset" Operation="-" Location="Last">100</Field>
+            <Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+            <Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+            <Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"/>
+         </Order>
+         <Order Name="Stop Market">
+            <Field Name="Type" Usage="Exact" Operation="=" Location="Value">Stop Market</Field>
+            <Field Name="Action" Usage="Exact" Operation="=" Location="Value">Buy To Open</Field>
+            <Field Name="Quantity" Usage="Percentage" Operation="=" Location="Key">100</Field>
+            <Field Name="Price" Usage="Offset" Operation="+" Location="Last">100</Field>
+            <Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+            <Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+            <Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"/>
+         </Order>
+      </Collection>
+   </Template>
+</TSXML>

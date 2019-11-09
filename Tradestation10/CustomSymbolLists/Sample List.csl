@@ -1,0 +1,19 @@
+; Custom symbol lists may be created manually by following a strict format.
+; The file must be pure text format. Only one symbol may be listed per line.
+; The exchange may be optionally listed following the symbol separated by a
+; comma. All text following a ';' will be ignored.
+;
+
+"AMGN","NASDQ"
+"AAPL","NASDAQ"
+"CSCO","NASDAQ"
+"CVX","NYSE"
+"DOW","NYSE"
+"EBAY","NASDQ"
+"FB","NASDAQ"
+"GE","NYSE"
+"SBUX","NASDQ"
+"TWTR","NYSE"
+"WMT","NYSE"
+
+

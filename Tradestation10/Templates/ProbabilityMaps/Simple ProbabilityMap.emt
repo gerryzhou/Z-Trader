@@ -1,0 +1,70 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}.  There is no need to erase these 
+  instructions when using EasyLanguage in order for it to function properly, because 
+  this text will be ignored. }
+
+{ PriceRows and BarColumns below are INPUTS, or holding places for the values you want 
+  to pass into the indicator.  The default values entered below, 75 & 75, can be 
+  replaced with different values at the time the indicator is applied to a chart, which 
+  is the main advantage of using inputs instead of variables.  These values specify the 
+  size of the ProbabilityMap grid or "drawing area". }
+
+inputs: 
+	PriceRows( 75 ),
+	BarColumns( 75 ) ;
+
+{ The VARIABLES statement "declares" and "initializes" the variables - temporary 
+  holding places for data - that will be used later in the program.  BT is initialized
+  to the BarType index for the chart, and is then used as is in the program.  All the 
+  other variables are initialized to arbitrary zero values because they will be 
+  replaced with appropriate values in the program. }
+
+variables: 
+	BT( BarType ), 
+	HalfRangePct( 0 ),
+	MapTop( 0 ), 
+	MapBottom( 0 ), 
+	RowHeight( 0 ), 
+	BarCount( 0 ), 
+	PriceLevel( 0 ), 
+	Probability( 0 ) ;
+
+{ STEP 1 OF 2: Replace FORMULA1 with your formula for the percent of the Close that 
+  should be used to limit the upper and lower range of the ProbabilityMap grid.  The 
+  overall range of the grid, together with the PriceRows input, is then used to 
+  determine the grid's row height.  After the grid parameter values have been 
+  calculated, the PM_Set statements are used to actually set the parameters.  Note that 
+  the first statement below restricts the application of this study to daily, weekly 
+  and montly bar charts only.  }
+
+if BT = 2 or BT = 3 or BT = 4 then
+	begin
+	HalfRangePct = <FORMULA1> ;
+	MapTop = C * ( 1 + HalfRangePct ) ;
+	MapBottom = C * ( 1 - HalfRangePct ) ;
+	RowHeight = ( MapTop - MapBottom ) / PriceRows ;
+	PM_SetHigh( MapTop ) ;
+	PM_SetLow( MapBottom ) ;
+	PM_SetRowHeight( RowHeight ) ;
+	PM_SetNumColumns( BarColumns ) ;
+
+{ STEP 2 OF 2: Replace FORMULA2 with your formula for the probability value that should  
+  be displayed (as a color) at any given cell of the ProbabilityMap grid.  The formula 
+  should generate an appropriate probability value - between 0 and 100 - for each cell, 
+  i.e., for each pair of PriceLevel and BarColumn values.  The double loop structure 
+  below steps through each cell, calculates the corresponding probability value, and 
+  "sets" it for the cell via the PM_SetCellValue statement. }
+
+	BarCount = 1 ;
+	while BarCount <= BarColumns 
+		begin
+		PriceLevel = MapBottom ;		
+		while PriceLevel < MapTop 
+			begin		
+			Probability = <FORMULA2> ;
+			PM_SetCellValue( BarCount, PriceLevel, Probability ) ;
+			PriceLevel = PriceLevel + RowHeight ;
+			end ;
+		BarCount = BarCount + 1 ;
+		end ;		
+	end ;

@@ -1,0 +1,46 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}.  There is no need to erase these 
+  instructions when using EasyLanguage in order for it to function properly, because 
+  this text will be ignored. }
+
+{ This template includes some specialized functions.  Functions perform a specific 
+  task, are written in EasyLanguage, and can be "called" from other analysis 
+  techniques, signals/strategies, or functions.  }
+
+{ Leave the following as is.  The AB_NextColor and AB_NextLabel function calls return a 
+  new color and label to use for the cells corresponding to each new bar of the hidden 
+  activity data stream.  CellGroupColor, CellGroupLabel and	MinuteInterval are 
+  variables, temporary holding places for data, which are "declared" and "initialized" 
+  via the VARIABLES statement.  CellGroupColor (a numeric variable) and CellGroupLabel 
+  (a string variable) are initialized to arbitrary values in the declaration because 
+  these will be replaced by the returns of the color and label functions.  
+  MinuteInterval is initialized to the bar interval of the hidden activity data stream, 
+  and this value is then used as is in the color and label function calls. }
+
+variables: 
+	CellGroupColor( 0 ), 
+	CellGroupLabel( "" ), 
+	MinuteInterval( BarInterval of ActivityData ) ;
+
+CellGroupColor = AB_NextColor( MinuteInterval ) of ActivityData ;
+CellGroupLabel = AB_NextLabel( MinuteInterval ) of ActivityData ;
+
+{ The AB_SetRowHeight statement establishes the common height of the rows of cells that 
+  will be added to the current bar of the chart.  The height can be set to a constant 
+  value such as 1/8, or, as in this case, the AB_RowHeightCalc function can be used to 
+  calculate the "ideal" row height to use for each new bar. }
+
+AB_SetRowHeight( AB_RowHeightCalc( 10, 3 ) ) ;
+
+{ STEP 1 OF 1: Replace <CRITERIA> with your triggering criteria such as Close of 
+  ActivityData > Open of ActivityData.  If the criteria is met, the AB_AddCellRange 
+  function will add a range of cells corresponding to the current bar of the hidden 
+  activity data stream.  These cells will be added to the right of the ActivityBar.  
+  For the basic ActivityBar, in which each hidden bar is processed, replace <CRITERIA>  
+  with TRUE.  Note that Value1 is a pre-declared numeric variable that will receive the 
+  error code returned by the AB_AddCellRange function; the error code is not used. }
+
+Condition1 = <CRITERIA> ;
+if Condition1 then 
+	Value1 = AB_AddCellRange( High of ActivityData, Low of ActivityData, RightSide, 
+	 CellGroupLabel, CellGroupColor, 0 ) ;

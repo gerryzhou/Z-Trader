@@ -1,0 +1,5098 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 sp1 (http://www.altova.com) by Mike Burke (TradeStation) -->
+<dictionary>
+	<item name="#BEGINALERT">
+		<notes>A compiler directive including all instructions between #BeginAlert and #End.</notes>
+		<example>#BeginAlert</example>
+	</item>
+	<item name="#BEGINCMTRY">
+		<notes>A compiler directive including all instructions between #BeginCmtry and #End.</notes>
+		<example>#BeginCmtry</example>
+	</item>
+	<item name="#BEGINCMTRYORALERT">
+		<notes>Compiler directive including instructions between #BeginCmtryOrAlert and #End.</notes>
+		<example>#BeginCmtryOrAlert</example>
+	</item>
+	<item name="#END">
+		<notes>A compiler directive used to terminate an alert or commentary statement.</notes>
+		<example>#End</example>
+	</item>
+	<item name="#Events">
+		<notes>A compiler directive used to declare an event block.</notes>
+		<example>#Events</example>
+	</item>
+	<item name="#EVENTS">
+		<notes>A compiler directive used to declare an event block.</notes>
+		<example>#Events</example>
+	</item>
+	<item name="A">
+		<notes>Skip word.</notes>
+		<example>If a Close = 60 Then Buy</example>
+	</item>
+	<item name="AB_AddCell">
+		<notes>Adds a cell to an ActivityBar row</notes>
+		<example>AB_AddCell(C, RightSide, "A", Tool_Blue, C)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+		<parameter type="text">str_Char</parameter>
+		<parameter type="numeric">color</parameter>
+		<parameter type="numeric">value</parameter>
+	</item>
+	<item name="AB_GetCellChar">
+		<notes>Returns the character stored in a cell</notes>
+		<example>AB_GetCellChar(C, LeftSide, 0)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+		<parameter type="numeric">whichCell</parameter>
+	</item>
+	<item name="AB_GetCellColor">
+		<notes>Returns the color of the character stored in a cell</notes>
+		<example>AB_GetCellColor(C, RightSide, 1)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+		<parameter type="numeric">whichCell</parameter>
+	</item>
+	<item name="AB_GetCellDate">
+		<notes>Returns the corresponding date of a cell</notes>
+		<example>AB_GetCellDate(C, LeftSide, 1)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+		<parameter type="numeric">whichCell</parameter>
+	</item>
+	<item name="AB_GetCellTime">
+		<notes>Returns the corresponding time of a cell</notes>
+		<example>AB_GetCellTime(C, LeftSide, 2)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+		<parameter type="numeric">whichCell</parameter>
+	</item>
+	<item name="AB_GetCellValue">
+		<notes>Returns the extra-value stored in a cell</notes>
+		<example>AB_GetCellValue(C, RightSide, 2)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+		<parameter type="numeric">whichCell</parameter>
+	</item>
+	<item name="AB_GetNumCells">
+		<notes>Returns how many cells exist in a row-side</notes>
+		<example>AB_GetNumCells(C, RightSide)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+	</item>
+	<item name="AB_GetZoneHigh">
+		<notes>AB_GetZoneHigh</notes>
+		<example>AB_GetZoneHigh</example>
+		<parameter type="numeric">side</parameter>
+	</item>
+	<item name="AB_GetZoneLow">
+		<notes>AB_GetZoneLow</notes>
+		<example>AB_GetZoneLow</example>
+		<parameter type="numeric">side</parameter>
+	</item>
+	<item name="AB_High">
+		<notes>AB_High</notes>
+		<example>AB_High</example>
+	</item>
+	<item name="AB_Low">
+		<notes>AB_Low</notes>
+		<example>AB_Low</example>
+	</item>
+	<item name="AB_RemoveCell">
+		<notes>Removes a cell from an ActivityBar row</notes>
+		<example>AB_RemoveCell(C, 1, LeftSide)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">offset</parameter>
+		<parameter type="numeric">side</parameter>
+	</item>
+	<item name="AB_RowHeight">
+		<notes>AB_RowHeight</notes>
+		<example>AB_RowHeight</example>
+	</item>
+	<item name="AB_SetActiveCell">
+		<notes>Sets a cell-row as the active cell</notes>
+		<example>AB_SetActiveCell(C, LeftSide)</example>
+		<parameter type="numeric">Price</parameter>
+		<parameter type="numeric">side</parameter>
+	</item>
+	<item name="AB_SetRowHeight">
+		<notes>AB_SetRowHeight will change the current ActivityBar's row-increment value</notes>
+		<example>AB_SetRowHeight(.01) will change the ActivityBar's row spacing to .01</example>
+		<parameter type="numeric">rowHeight</parameter>
+	</item>
+	<item name="AB_SetZone">
+		<notes>Set a zone range-box for an ActivityBar side</notes>
+		<example>AB_SetZone(C+MinMove*2, C-MinMove*2, RightSide)</example>
+		<parameter type="numeric">PriceHigh</parameter>
+		<parameter type="numeric">PriceLow</parameter>
+		<parameter type="numeric">side</parameter>
+	</item>
+	<item name="Abort">
+		<notes>Turn the status of the Analysis technque to Off</notes>
+		<example>Abort();</example>
+	</item>
+	<item name="ABOVE">
+		<notes>Detects when a value crosses over, or becomes greater than another value.</notes>
+		<example>If Close Crosses Above 50 Then Sell;</example>
+	</item>
+	<item name="Above">
+		<notes>Detects when a value crosses over, or becomes greater than another value.</notes>
+		<example>If Close Crosses Above 50 Then Sell;</example>
+	</item>
+	<item name="AbsValue">
+		<notes>Absolute value of num</notes>
+		<example>AbsValue(-11) = 11, AbsValue(8) = 8</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="ActivityData">
+		<notes>References any bar data element (Open, upticks, etc.) of an ActivityBar.</notes>
+		<example>Value1 = Volume of ActivityData;</example>
+	</item>
+	<item name="ACTIVITYDATA">
+		<notes>References any bar data element (Open, upticks, etc.) of an ActivityBar.</notes>
+		<example>Value1 = Volume of ActivityData;</example>
+	</item>
+	<item name="AddToMovieChain">
+		<notes>Appends movie file mFile to end of movie chain mChain</notes>
+		<example>AddToMovieChain(mRef9,"c:\bull.avi") adds file c:\bull.avi to chain mRef9</example>
+		<parameter type="numeric">Chain_ID</parameter>
+		<parameter type="text">str_File</parameter>
+	</item>
+	<item name="Ago">
+		<notes>References a specified number of bars back already analyzed by EasyLanguage.</notes>
+		<example>Value1 = Close of 5 Bars Ago;</example>
+	</item>
+	<item name="AGO">
+		<notes>References a specified number of bars back already analyzed by EasyLanguage.</notes>
+		<example>Value1 = Close of 5 Bars Ago;</example>
+	</item>
+	<item name="aiAppId">
+		<notes>GetAppInfo parameter: Returns a value unique to the specific Application window.</notes>
+		<example>value1=GetAppInfo( aiAppId );</example>
+	</item>
+	<item name="aiApplicationType">
+		<notes>GetAppInfo parameter: Returns a value to identify the Application tool.</notes>
+		<example>if GetAppInfo( aiApplicationType ) = cChart then...;</example>
+	</item>
+	<item name="aiBarSpacing">
+		<notes>GetAppInfo parameter: Returns the bar spacing value of a chart.</notes>
+		<example>value1= GetAppInfo( aiBarSpacing );</example>
+	</item>
+	<item name="aiHighestDispValue">
+		<notes>GetAppInfo parameter: Returns the highest displayed value in a chart.</notes>
+		<example>value1=GetAppInfo( aiHighestDispValue );</example>
+	</item>
+	<item name="aiIntrabarOrder">
+		<notes>GetAppInfo parameter: Returns 1 if intra-bar orders are generated.</notes>
+		<example>value1=GetAppInfo( aiIntrabarOrder );</example>
+	</item>
+	<item name="aiLeftDispDateTime">
+		<notes>GetAppInfo parameter: Returns the leftmost displayed bar's DateTime in a chart.</notes>
+		<example>value1=GetAppInfo( aiLeftDispDateTime );</example>
+	</item>
+	<item name="aiLowestDispValue">
+		<notes>GetAppInfo parameter: Returns the lowest displayed value in a chart.</notes>
+		<example>value1=GetAppInfo( aiLeftDispDateTime );</example>
+	</item>
+	<item name="aiMacroConf">
+		<notes>GetAppInfo parameter: Returns 1 if Macro confirmation is on, 0, if off</notes>
+		<example>value1=GetAppInfo( aiMacroConf );</example>
+	</item>
+	<item name="aiMacroEnabled">
+		<notes>GetAppInfo parameter: Returns 1 if Macros are enabled in the UI, 0 if not</notes>
+		<example>value1=GetAppInfo( aiMacroEnabled );</example>
+	</item>
+	<item name="aiOptimizing">
+		<notes>GetAppInfo parameter: Returns 1 for a chart that is performing optimizations.</notes>
+		<example>value1=GetAppInfo( aiOptimizing );</example>
+	</item>
+	<item name="aiOptionStationPane">
+		<notes>GetAppInfo parameter: Returns the current OptionStatation pane.</notes>
+		<example>value1=GetAppInfo(aiOptionStationPane);</example>
+	</item>
+	<item name="aiPercentChange">
+		<notes>GetAppInfo parameter: Returns 1 for a chart in percent change mode.</notes>
+		<example>value1=GetAppInfo( aiPercentChange );</example>
+	</item>
+	<item name="aiPLofAcctCurrency">
+		<notes>GetAppInfo parameter: Returns 1 if the currency setting is Account and 0 if the </notes>
+		<example>value1=GetAppInfo( aiPLofAcctCurrency );</example>
+	</item>
+	<item name="aiRealTimeCalc">
+		<notes>GetAppInfo parameter: Returns 1 if calculation are causes for a real-time event.</notes>
+		<example>value1=GetAppInfo( aiRealTimeCalc );</example>
+	</item>
+	<item name="aiRightDispDateTime">
+		<notes>GetAppInfo parameter: Returns the rightmost displayed bar's DateTime in a chart.</notes>
+		<example>value1=GetAppInfo( aiRightDispDateTime );</example>
+	</item>
+	<item name="aiRow">
+		<notes>GetAppInfo parameter. Returns the current row in RadarScreen.</notes>
+		<example>value1=GetAppInfo( aiRow );</example>
+	</item>
+	<item name="aiSpaceToRight">
+		<notes>GetAppInfo parameter: Returns the right-bar spacing when called in charting.</notes>
+		<example>value1=GetAppInfo( aiSpaceToRight );</example>
+	</item>
+	<item name="aiStrategyAuto">
+		<notes>GetAppInfo parameter: Returns information about strategy automation.</notes>
+		<example>value1=GetAppInfo( aiStrategyAuto );</example>
+	</item>
+	<item name="aiStrategyAutoConf">
+		<notes>GetAppInfo parameter: Returns 1 if order confirmation is used.</notes>
+		<example>value1=GetAppInfo( aiStrategyAutoConf );</example>
+	</item>
+	<item name="ALERT">
+		<notes>Triggers an alert for an indicator, ShowMe, ShowMe, PaintBar, or ActivityBar.</notes>
+		<example>If Close &gt; Highest(High,10) Then Alert("NewHigh");</example>
+	</item>
+	<item name="ALERTENABLED">
+		<notes>True/false expression returning true if the Enable Alert check box is selected.</notes>
+		<example>If AlertEnabled and Close&gt;Close[1] Then Alert("UpClose");</example>
+	</item>
+	<item name="ALL">
+		<notes>Specifies all shares/contracts are to be sold/covered when exiting a position.</notes>
+		<example>ExitLong All Shares Next Bar at Market;</example>
+	</item>
+	<item name="AN">
+		<notes>Skip word.</notes>
+		<example>If an Open &lt; 30 Then Sell</example>
+	</item>
+	<item name="AND">
+		<notes>Links 2 true/false expressions together. True if both expressions are true.</notes>
+		<example>If Close &gt; High[1] AND Volume &gt; Volume[1] Then Buy;</example>
+	</item>
+	<item name="Arctangent">
+		<notes>Arctangent value of num, in degrees</notes>
+		<example>Arctangent(112.500) = 89.490700</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="ARRAY">
+		<notes>Used to declare an array.</notes>
+		<example>Array: MyArray[9](0);</example>
+	</item>
+	<item name="Array_Compare">
+		<notes>This function compares a range of elements between the MySrcArray and MyDestArra</notes>
+		<example> bresult = Array_Compare(MySrcArray, 1, MyDestArray, 1, 10);</example>
+		<parameter type="numeric">SrcArrayName</parameter>
+		<parameter type="numeric">SrcElement</parameter>
+		<parameter type="numeric">DestArrayName</parameter>
+		<parameter type="numeric">DestElement</parameter>
+		<parameter type="numeric">NumElements</parameter>
+	</item>
+	<item name="Array_Copy">
+		<notes>This function copies n elements from the MySrcArray to MyDestArray</notes>
+		<example> result = Array_Copy( MySrcArray, 1, MyDestArray, 5, 10 );</example>
+		<parameter type="numeric">SrcArrayName</parameter>
+		<parameter type="numeric">SrcElement</parameter>
+		<parameter type="numeric">DestArrayName</parameter>
+		<parameter type="numeric">DestElement</parameter>
+		<parameter type="numeric">NumElements</parameter>
+	</item>
+	<item name="Array_GetMaxIndex">
+		<notes>This function returns the index of the last element of the dynamic array.</notes>
+		<example> MaxIndex = Array_GetMaxIndex(MyArray);</example>
+		<parameter type="numeric">ArrayName</parameter>
+	</item>
+	<item name="Array_GetType">
+		<notes>This function identifies the data type of the elements in the array</notes>
+		<example> DataType = Array_GetType(MyArray);</example>
+		<parameter type="numeric">ArrayName</parameter>
+	</item>
+	<item name="Array_SetMaxIndex">
+		<notes>This function resizes a dynamic array.</notes>
+		<example>bResult = Array_SetMaxIndex(MyArray, 10);</example>
+		<parameter type="numeric">ArrayName</parameter>
+		<parameter type="numeric">MaxIndex</parameter>
+	</item>
+	<item name="Array_Sort">
+		<notes>This function sorts the values in the dynamic array identified by MyArray</notes>
+		<example> result = Array_Sort(MyArray, 1, 20, true);</example>
+		<parameter type="numeric">ArrayName</parameter>
+		<parameter type="numeric">BegElementNum</parameter>
+		<parameter type="numeric">EndElementNum</parameter>
+		<parameter type="true / false">tfSortOrder</parameter>
+	</item>
+	<item name="Array_Sum">
+		<notes>This function sums the values in the dynamic array identified by MyArray</notes>
+		<example> Sum = Array_Sum(MyArray, 1, 10);</example>
+		<parameter type="numeric">ArrayName</parameter>
+		<parameter type="numeric">BegElementNum</parameter>
+		<parameter type="numeric">EndElementNum</parameter>
+	</item>
+	<item name="ARRAYS">
+		<notes>Used to declare an array.</notes>
+		<example>Arrays: MyArray[9](0);</example>
+	</item>
+	<item name="ARRAYSIZE">
+		<notes>Reserved for use with ELKIT32.DLL.</notes>
+		<example>ArraySize</example>
+	</item>
+	<item name="ARRAYSTARTADDR">
+		<notes>Reserved for use with ELKIT32.DLL.</notes>
+		<example>ArrayStartAddr</example>
+	</item>
+	<item name="asActive">
+		<notes>Used to determine if Active is the account Status(numeric value = 1) for the Get</notes>
+		<example>if GetAccountStatus("12345") = asActive then Alert("Active");</example>
+	</item>
+	<item name="asClosed">
+		<notes>Used to determine if Closed is the account Status(numeric value = 4) for the Get</notes>
+		<example>if GetAccountStatus("12345") = asClosed then Alert("Closed");</example>
+	</item>
+	<item name="asClosingOnly">
+		<notes>Used to determine if ClosingOnly is the account Status(numeric value = 5) for th</notes>
+		<example>if GetAccountStatus("12345") = asClosingOnly then Alert("ClosingOnly");</example>
+	</item>
+	<item name="asFedMarginCall">
+		<notes>Used to determine if FedMarginCall is the account Status(numeric value = 7) for </notes>
+		<example>if GetAccountStatus("12345") = asFedMarginCall then Alert("FedMarginCall");</example>
+	</item>
+	<item name="asInactive">
+		<notes>Used to determine if Inactive is the account Status(numeric value = 2) for the G</notes>
+		<example>if GetAccountStatus("12345") = asInactive then Alert("Inactive");</example>
+	</item>
+	<item name="asInvalid">
+		<notes>Used to determine if Invalid is the account Status(numeric value = 0) for the Ge</notes>
+		<example>if GetAccountStatus("12345") = asInvalid then Alert("Invalid");</example>
+	</item>
+	<item name="ASK">
+		<notes>Refers to the ask value of an option or leg calculated by a Bid/Ask Model.</notes>
+		<example>If Ask - Bid &gt; .125 Then Alert;</example>
+	</item>
+	<item name="AskDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="AskDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="AskDateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="AskExch">
+		<notes/>
+		<example/>
+	</item>
+	<item name="AskSize">
+		<notes/>
+		<example/>
+	</item>
+	<item name="AskTime">
+		<notes/>
+		<example/>
+	</item>
+	<item name="AskTimeEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="asLiquidatingOnly">
+		<notes>Used to determine if LiquidatingOnly is the account Status(numeric value = 6) fo</notes>
+		<example>if GetAccountStatus("12345") = asLiquidatingOnly then Alert("LiquidatingOnly");</example>
+	</item>
+	<item name="asRestricted">
+		<notes>Used to determine if Restricted is the account Status(numeric value = 3) for the</notes>
+		<example>if GetAccountStatus("12345") = asRestricted then Alert("Restricted");</example>
+	</item>
+	<item name="ASSET">
+		<notes>Refers to an option's underlying asset.</notes>
+		<example>Value1 = Volume of Asset;</example>
+	</item>
+	<item name="ASSETTYPE">
+		<notes>Evaluates a position leg to determine if it is an asset.</notes>
+		<example>If LegType of Leg(1) = AssetType Then {ACTION}</example>
+	</item>
+	<item name="ASSETVOLATILITY">
+		<notes>The volatility of the underlying asset.</notes>
+		<example>AssetVolatility</example>
+	</item>
+	<item name="AT">
+		<notes>Skip word.</notes>
+		<example>Buy 200 Shares at Market</example>
+	</item>
+	<item name="AT$">
+		<notes>Anchors exit prices to the bar where the entry order was placed.</notes>
+		<example>ExitLong from Entry("OverSold") Next Bar at$ Low Stop;</example>
+	</item>
+	<item name="atCash">
+		<notes>Used to determine if Cash is the account type(numeric value = 1) for the GetAcco</notes>
+		<example>if GetAccountType("12345") = atCash then Alert("Cash");</example>
+	</item>
+	<item name="ATCOMMENTARYBAR">
+		<notes>True/false expression returning true when Expert Commentary is applied to a bar</notes>
+		<example>If AtCommentaryBar Then Commentary(string1);</example>
+	</item>
+	<item name="atDVP">
+		<notes>Used to determine if DVP is the account type(numeric value = 4) for the GetAccou</notes>
+		<example>if GetAccountType("12345") = atDVP then Alert("DVP");</example>
+	</item>
+	<item name="atFutures">
+		<notes>Used to determine if Futures is the account type(numeric value = 5) for the GetA</notes>
+		<example>if GetAccountType("12345") = atFutures then Alert("Futures");</example>
+	</item>
+	<item name="atInvalid">
+		<notes>Used to determine if Invalid is the account type(numeric value = 0) for the GetA</notes>
+		<example>if GetAccountType("12345") = atInvalid then Alert("Invalid");</example>
+	</item>
+	<item name="atMargin">
+		<notes>Used to determine if Margin is the account type(numeric value = 2) for the GetAc</notes>
+		<example>if GetAccountType("12345") = atMargin then Alert("Margin");</example>
+	</item>
+	<item name="atShort">
+		<notes>Used to determine if Short is the account type(numeric value = 3) for the GetAcc</notes>
+		<example>if GetAccountType("12345") = atShort then Alert("Short");</example>
+	</item>
+	<item name="AUTOSESSION">
+		<notes>Used with session information to refer to auto-detect sessions.</notes>
+		<example>AutoSession</example>
+	</item>
+	<item name="AvgBarsEvenTrade">
+		<notes>Average number of bars in closed-out even trades</notes>
+		<example>value1 = AvgBarsEvenTrade;</example>
+	</item>
+	<item name="AvgBarsLosTrade">
+		<notes>Average number of bars in closed-out losing trades</notes>
+		<example>Total Bars Losing Trades/Total Losing Trades = 34/3 = 11</example>
+	</item>
+	<item name="AvgBarsWinTrade">
+		<notes>Average number of bars in closed-out winning trades</notes>
+		<example>Total Bars Winning Trades/Total Winning Trades = 56/4 = 14</example>
+	</item>
+	<item name="AvgEntryPrice">
+		<notes>Average price of all currently open entries</notes>
+		<example>Open entries at 231.45 and 657.32, AvgEntryPrice = $444.39</example>
+	</item>
+	<item name="AvgList">
+		<notes>Average of nums in list</notes>
+		<example>AvgList(4.23,6.86,5.04) = 5.376670</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num...</parameter>
+	</item>
+	<item name="Bar">
+		<notes>References a specific bar.</notes>
+		<example>Value1=High of 1 bar ago; Buy Next Bar at value1 or Higher;</example>
+	</item>
+	<item name="BAR">
+		<notes>References a specific bar.</notes>
+		<example>Value1=High of 1 bar ago; Buy Next Bar at value1 or Higher;</example>
+	</item>
+	<item name="BarInterval">
+		<notes>Bar interval of datastream currently being analyzed</notes>
+		<example>BarInterval = 5 for 5 min SP 500 chart</example>
+	</item>
+	<item name="Bars">
+		<notes>References a specific bar.</notes>
+		<example>Value1=High of 10 bars ago;</example>
+	</item>
+	<item name="BARS">
+		<notes>References a specific bar.</notes>
+		<example>Value1=High of 10 bars ago;</example>
+	</item>
+	<item name="BarsSinceEntry">
+		<notes>Bars since initial entry of position, num position(s) ago</notes>
+		<example>If long since 3 bars ago then BarsSinceEntry = 3</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="BarsSinceExit">
+		<notes>Bars since position closed-out, num position(s) ago</notes>
+		<example>Last exit occured 3 bars ago, BarsSinceExit(1) = 3</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="BarStatus">
+		<notes>Returns 0 for the first tick, 1 for a normal-tick, and 2 for bar-close</notes>
+		<example>BarStatus(1) returns the status information for Data1.</example>
+		<parameter type="numeric">dataNum</parameter>
+	</item>
+	<item name="BarType">
+		<notes>0 for tick, 1 for intra-day, 2 for dly, 3 for wkly, 4 for mnthly, 5 for P&amp;&amp;F</notes>
+		<example>For a daily chart, BarType = 2</example>
+	</item>
+	<item name="Based">
+		<notes>Skip word.</notes>
+		<example>based</example>
+	</item>
+	<item name="BASED">
+		<notes>Skip word.</notes>
+		<example>based</example>
+	</item>
+	<item name="BEGIN">
+		<notes>Used to begin a block statement (e.g., If-Then-Else, For loops, While loops).</notes>
+		<example>If Condition1 Then Begin</example>
+	</item>
+	<item name="Begin">
+		<notes>Used to begin a block statement (e.g., If-Then-Else, For loops, While loops).</notes>
+		<example>If Condition1 Then Begin</example>
+	</item>
+	<item name="BELOW">
+		<notes>Detects when a value crosses below, or becomes less than another value.</notes>
+		<example>If Close Crosses Below 50 Then Buy;</example>
+	</item>
+	<item name="BID">
+		<notes>Returns to the bid value of an option or leg calculated by a Bid/Ask Model.</notes>
+		<example>If Ask - Bid &gt; .125 Then Alert;</example>
+	</item>
+	<item name="BidDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="BidDateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="BidDirectionNNM">
+		<notes/>
+		<example/>
+	</item>
+	<item name="BidExch">
+		<notes/>
+		<example/>
+	</item>
+	<item name="BidSize">
+		<notes/>
+		<example/>
+	</item>
+	<item name="BidTime">
+		<notes/>
+		<example/>
+	</item>
+	<item name="BidTimeEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="BigPointValue">
+		<notes>Dollar amount of 1 full point move</notes>
+		<example>BigPointValue = $500 for SP 500</example>
+	</item>
+	<item name="BLACK">
+		<notes>Specifies color Black (numeric value = 1) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Black)</example>
+	</item>
+	<item name="BlockNumber">
+		<notes>Unique Security Block number</notes>
+		<example>BlockNumber for block #125 = 125</example>
+	</item>
+	<item name="BLUE">
+		<notes>Specifies color Blue (numeric value = 2) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Blue)</example>
+	</item>
+	<item name="Book_Val_Per_Share">
+		<notes>Number common shares / number outstanding shares</notes>
+		<example>Function value taken from Fundamental report</example>
+	</item>
+	<item name="BOOL">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="BoxSize">
+		<notes>Box size of Point &amp;&amp; Figure chart</notes>
+		<example>BoxSize of 1 x 3 Point &amp;&amp; Figure chart = 1</example>
+	</item>
+	<item name="BREAK">
+		<notes>The break statement terminates the execution of the nearest enclosing loop or c</notes>
+		<example>
+break;</example>
+	</item>
+	<item name="BreakEvenStopFloor">
+		<notes>Break-even stop floor amount</notes>
+		<example>BreakEvenStopFloor = $1800 if set to 1800 in Stops tab</example>
+	</item>
+	<item name="BreakPoint">
+		<notes>Sets a BreakPoint</notes>
+		<example>BreakPoint("BreakPoint name");</example>
+		<parameter type="text">strBreakPoint</parameter>
+	</item>
+	<item name="BUY">
+		<notes>Initiates a long position. Covers any short positions &amp; reverses your position.</notes>
+		<example>Buy("Support") 5 contracts next bar at Low Limit;</example>
+	</item>
+	<item name="BUYTOCOVER">
+		<notes>Used in trading Strategy to partially or completely cover short positions.</notes>
+		<example>Buy to Cover ("Profit") 10 contracts next bar at MidPrice stop;</example>
+	</item>
+	<item name="BY">
+		<notes>Skip word.</notes>
+		<example>by</example>
+	</item>
+	<item name="BYTE">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="C">
+		<notes>Returns the closing price of the bar referenced. (Abbreviation for Close)</notes>
+		<example>If C &gt; Highest(H,10)[1] Then Alert;</example>
+	</item>
+	<item name="CALL">
+		<notes>Used to determine if an option or leg analyzed is a call.</notes>
+		<example>If Legtype of Leg(1) = Call Then {ACTION}</example>
+	</item>
+	<item name="CALLCOUNT">
+		<notes>The number of calls in the option chain.</notes>
+		<example>CallCount</example>
+	</item>
+	<item name="CALLITMCOUNT">
+		<notes>Reserved for future use.</notes>
+		<example>CallITMCount</example>
+	</item>
+	<item name="CallOpenint">
+		<notes/>
+		<example/>
+	</item>
+	<item name="CALLOTMCOUNT">
+		<notes>Reserved for future use.</notes>
+		<example>CallOTMCount</example>
+	</item>
+	<item name="CALLSERIESCOUNT">
+		<notes>The number of call series available in the option chain.</notes>
+		<example>CallSeriesCount</example>
+	</item>
+	<item name="CALLSTRIKECOUNT">
+		<notes>The number of strike prices available for calls in the option chain.</notes>
+		<example>CallStrikeCount</example>
+	</item>
+	<item name="CallVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="Cancel">
+		<notes>Used in conjunction with Alert to cancel a previously enabled alert.</notes>
+		<example>If Close &lt; Low[1] Then Cancel Alert;</example>
+	</item>
+	<item name="CANCEL">
+		<notes>Used in conjunction with Alert to cancel a previously enabled alert.</notes>
+		<example>If Close &lt; Low[1] Then Cancel Alert;</example>
+	</item>
+	<item name="CASE">
+		<notes>If a matching expression is found, control is not impeded by subsequent case or</notes>
+		<example>
+case (numeric expression) : 
+	{statement}</example>
+	</item>
+	<item name="Category">
+		<notes>Category of symbol: 0=Unspecified, 1=Stock, 2=Future, 3=Stock Option, etc..</notes>
+		<example>Category = 3 for MSQ option of MSFT</example>
+	</item>
+	<item name="Ceiling">
+		<notes>Lowest integer greater than num</notes>
+		<example>Ceiling(7.4) = 8, Ceiling(-5.4) = -5</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="CHAR">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="CHECKALERT">
+		<notes>Returns true for the last bar when Enable Alert check box is selected.</notes>
+		<example>If CheckAlert and Close Crosses Over Open Then Alert;</example>
+	</item>
+	<item name="CHECKCOMMENTARY">
+		<notes>True/False expression returning true when Expert Commentary is applied to a bar</notes>
+		<example>If CheckCommentary Then Commentary(string1);</example>
+	</item>
+	<item name="CLEARDEBUG">
+		<notes>Clears the contents of the Output Debug window.</notes>
+		<example>ClearDebug;</example>
+	</item>
+	<item name="ClearDebug">
+		<notes>Clears the contents of the Output Debug window.</notes>
+		<example>ClearDebug;</example>
+	</item>
+	<item name="CLEARPRINTLOG">
+		<notes>Clears the contents of the Output Print Log window.</notes>
+		<example>ClearPrintLog;</example>
+	</item>
+	<item name="CLOSE">
+		<notes>Returns the closing price of the bar referenced.</notes>
+		<example>If Close &gt; Close[1] Then Value1 = Close;</example>
+	</item>
+	<item name="COARSE">
+		<notes>Specifies a coarse automatic optimization value for function inputs.</notes>
+		<example>Coarse</example>
+	</item>
+	<item name="COMMENTARY">
+		<notes>Sends EasyLanguage expression(s) to the Expert Commentary window.</notes>
+		<example>Commentary("Close of This Bar: ",Close);</example>
+	</item>
+	<item name="COMMENTARYCL">
+		<notes>Sends EasyLanguage expression(s) to Expert Commentary with a carriage return.</notes>
+		<example>Commentary("Close of This Bar: ",Close);</example>
+	</item>
+	<item name="CommentaryCL">
+		<notes>Sends EasyLanguage expression(s) to Expert Commentary with a carriage return.</notes>
+		<example>Commentary("Close of This Bar: ",Close);</example>
+	</item>
+	<item name="COMMENTARYENABLED">
+		<notes>True/false expression returning true when the Expert Commentary window is open.</notes>
+		<example>If CommentaryEnabled Then Commentary(string);</example>
+	</item>
+	<item name="Commission">
+		<notes>Commission per stock/transaction</notes>
+		<example>Commission = $50 if set to 50 in Costs tab</example>
+	</item>
+	<item name="CommodityNumber">
+		<notes>Unique number representing particular symbol (optional)</notes>
+		<example>Omega products use CommodityNumber = 149 for SP 500</example>
+	</item>
+	<item name="ComputerDateTime">
+		<notes>Return the system DateTime</notes>
+		<example>dDateTime = ComputerDateTime();</example>
+	</item>
+	<item name="CONST">
+		<notes>Declares custom words to behave as constants throughout your analysis technique</notes>
+		<example>Const: int Counter(0);</example>
+	</item>
+	<item name="CONSTS">
+		<notes>Declares custom words to behave as constants throughout your analysis technique</notes>
+		<example>Consts: int Counter(0), float Switch(23.45);</example>
+	</item>
+	<item name="CONTINUE">
+		<notes>The continue statement forces transfer of control to the controlling expression</notes>
+		<example>
+continue;</example>
+	</item>
+	<item name="CONTRACT">
+		<notes>Specifies the number of contracts for a particular order.</notes>
+		<example>Buy 1 Contract Next Bar at Open;</example>
+	</item>
+	<item name="CONTRACTMONTH">
+		<notes>Refers to the delivery/expiration month of any option or position leg.</notes>
+		<example>If Month(date) = Contractmonth Then {ACTION}</example>
+	</item>
+	<item name="ContractProfit">
+		<notes>ContractProfit notes</notes>
+		<example>ContractProfit example</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="CONTRACTS">
+		<notes>Specifies the number of contracts for a particular order.</notes>
+		<example>Buy 10 Contracts Next Bar at Open;</example>
+	</item>
+	<item name="Contracts">
+		<notes>Specifies the number of contracts for a particular order.</notes>
+		<example>Buy 10 Contracts Next Bar at Open;</example>
+	</item>
+	<item name="ContractSize">
+		<notes/>
+		<example/>
+	</item>
+	<item name="CONTRACTYEAR">
+		<notes>Refers to the delivery/expiration year of any option or position leg.</notes>
+		<example>If Year(date) = ContractYear Then {ACTION}</example>
+	</item>
+	<item name="Cosine">
+		<notes>Cosine value of num, in degrees</notes>
+		<example>Cosine(111.750) = -.370548</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="COST">
+		<notes>Returns the value of the cost of establishing a leg or position.</notes>
+		<example>Cost</example>
+	</item>
+	<item name="Cotangent">
+		<notes>Cotangent value of num, in degrees</notes>
+		<example>Cotangent(115.000) = -.466295</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="CREATELEG">
+		<notes>Sets a position's size &amp; type when the conditions for creating a leg are true.</notes>
+		<example>CreateLeg(5, Call);</example>
+	</item>
+	<item name="CROSS">
+		<notes>Used to detect when values have crossed over/under another value.</notes>
+		<example>Condition1 = Close Cross Under 50;</example>
+	</item>
+	<item name="CROSSES">
+		<notes>Used to detect when values have crossed over/under another value.</notes>
+		<example>If Close Crosses Under 50 Then Buy;</example>
+	</item>
+	<item name="CURRENT">
+		<notes>Reserved for future use.</notes>
+		<example>Current</example>
+	</item>
+	<item name="Current_Ratio">
+		<notes>Current assets / current liabilities</notes>
+		<example>Function value taken from Fundamental report</example>
+	</item>
+	<item name="CurrentBar">
+		<notes>Bar number of current bar</notes>
+		<example>CurrentBar is 40 on the 40th bar</example>
+	</item>
+	<item name="CurrentContracts">
+		<notes>Number of contracts currently open</notes>
+		<example>3 contracts currently open, CurrentContracts = 3</example>
+	</item>
+	<item name="CurrentDate">
+		<notes>Computer or datafeed current calendar date</notes>
+		<example>CurrentDate = 960408 on Apr. 8, 1996</example>
+	</item>
+	<item name="CurrentEntries">
+		<notes>Number of entries currently open</notes>
+		<example>2 entries currently open, CurrentEntries = 2</example>
+	</item>
+	<item name="CurrentOpenInt">
+		<notes/>
+		<example/>
+	</item>
+	<item name="CurrentShares">
+		<notes>Number of shares currently open</notes>
+		<example>3 shares currently open, CurrentShares = 3</example>
+	</item>
+	<item name="CurrentTime">
+		<notes>Computer or datafeed current time, in 24 hr format</notes>
+		<example>CurrentTime = 1545 at 3:45 pm</example>
+	</item>
+	<item name="CustomerID">
+		<notes>Unique customer ID number</notes>
+		<example>CustomerID for customer #2134234 = 2134234</example>
+	</item>
+	<item name="CYAN">
+		<notes>Specifies color Cyan (numeric value = 3) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Cyan)</example>
+	</item>
+	<item name="D">
+		<notes>Returns the closing date of the bar referenced. (Abbreviation for Date)</notes>
+		<example>If D&lt;&gt;D[1] Then Alert;</example>
+	</item>
+	<item name="DailyClose">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyHigh">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyLimit">
+		<notes>Number of stocks/contracts allowed traded in 1 day</notes>
+		<example>DailyLimit is 1500 for Pork Bellies</example>
+	</item>
+	<item name="DailyLow">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyOpen">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyTrades">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyTradesDn">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyTradesUC">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyTradesUp">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyVolumeDn">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyVolumeUC">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DailyVolumeUp">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DARKBLUE">
+		<notes>Specifies color Dark Blue (numeric value = 9) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", DarkBlue)</example>
+	</item>
+	<item name="DARKBROWN">
+		<notes>Specifies color Dark Brown (numeric value = 14) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", DarkBrown)</example>
+	</item>
+	<item name="DARKCYAN">
+		<notes>Specifies color Dark Cyan (numeric value =10) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", DarkCyan)</example>
+	</item>
+	<item name="DARKGRAY">
+		<notes>Specifies color Dark Gray (numeric value = 15) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", DarkGray)</example>
+	</item>
+	<item name="DARKGREEN">
+		<notes>Specifies color Dark Green (numeric value = 11) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Darkgreen)</example>
+	</item>
+	<item name="DARKMAGENTA">
+		<notes>Specifies color Dark Magenta (numeric value = 12) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", DarkMagenta)</example>
+	</item>
+	<item name="DARKRED">
+		<notes>Specifies color Dark Red (numeric value = 13) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", DarkRed)</example>
+	</item>
+	<item name="DATA">
+		<notes>Used to reference information from a specified data stream.</notes>
+		<example>value1 = Close of Data(1);</example>
+	</item>
+	<item name="DataCompression">
+		<notes>0 for tick, 1 for intra-day, 2 for dly, 3 for wkly, 4 for mnthly, 5 for P&amp;&amp;F</notes>
+		<example>Daily chart data compression = 2</example>
+	</item>
+	<item name="DataInUnion">
+		<notes>Reserved for future use</notes>
+		<example>DataInUnion</example>
+	</item>
+	<item name="DATE">
+		<notes>Returns the closing date of the bar referenced.</notes>
+		<example>If Date=ELDate(12,01,1999) Then value1 = High;</example>
+	</item>
+	<item name="DateTimeToString">
+		<notes>Converts numeric DateTime value to a string DateTime</notes>
+		<example>strDateTime = DateTimeToString(1440.500);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="DateToJulian">
+		<notes>Converts calendar date cDate to Julian date</notes>
+		<example>DateToJulian(960408) = 35163</example>
+		<parameter type="numeric">cDate</parameter>
+	</item>
+	<item name="DateToString">
+		<notes>Converts numeric DateTime value to a string Date</notes>
+		<example>strDate = DateToString(1440.500);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="DAY">
+		<notes>References a specific bar occurring N days ago.</notes>
+		<example>Value1 = Close of 1 Day Ago;</example>
+	</item>
+	<item name="DayFromDateTime">
+		<notes>Returns day portion of DateTime</notes>
+		<example>iDay = DayFromDateTime(1440.211863426);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="DayOfMonth">
+		<notes>Day's date on date cDate</notes>
+		<example>DayOfMonth(960408) = 8</example>
+		<parameter type="numeric">cDate</parameter>
+	</item>
+	<item name="DayOfWeek">
+		<notes>Day of week (0 for Sun., 1 for Mon., ..., 6 for Sat.) on date cDate</notes>
+		<example>DayOfWeek(960410) = 3 (a Wednesday)</example>
+		<parameter type="numeric">cDate</parameter>
+	</item>
+	<item name="DayOfWeekFromDateTime">
+		<notes>Returns day of week from DateTime</notes>
+		<example>iDayOfWeek = DayOfWeekFromDateTime(1440.211863426);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="DAYS">
+		<notes>References a specific bar occurring N days ago.</notes>
+		<example>Value1 = Close of 12 Days Ago;</example>
+	</item>
+	<item name="DEFAULT">
+		<notes>Used in plot statements to set one of its styles to its default value.</notes>
+		<example>Plot1(value1,"Plot1",default,default,5);</example>
+	</item>
+	<item name="DefineCustfield">
+		<notes>Reserved for future use.</notes>
+		<example>DefineCustField</example>
+	</item>
+	<item name="DEFINECUSTFIELD">
+		<notes>Reserved for future use.</notes>
+		<example>DefineCustField</example>
+	</item>
+	<item name="DEFINEDLLFUNC">
+		<notes>Reserved for use with ELKIT32.DLL to declare a DLL.</notes>
+		<example>DefineDLLFunc:</example>
+	</item>
+	<item name="DeliveryMonth">
+		<notes>Delivery month of futures contract</notes>
+		<example>DeliveryMonth = 12 for SP6Z and SA1296</example>
+	</item>
+	<item name="DeliveryYear">
+		<notes>Delivery year of futures contract</notes>
+		<example>DeliveryYear = 97 for SP7U and BP0997</example>
+	</item>
+	<item name="DELTA">
+		<notes>Returns the Delta value of an option, leg, or position.</notes>
+		<example>Value1 = Delta of Option;</example>
+	</item>
+	<item name="Description">
+		<notes/>
+		<example/>
+	</item>
+	<item name="DOES">
+		<notes>Skip word.</notes>
+		<example>If Plot1 does Cross Over Plot2 Then Alert</example>
+	</item>
+	<item name="DOUBLE">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="DoubleQuote">
+		<notes>Double quote-character useful for commentary/file output strings</notes>
+		<example>Will embed a double-quote (") character in a string</example>
+	</item>
+	<item name="DOWNTICKS">
+		<notes>Reserved for backward compatibility. Replaced with DnVolume.</notes>
+		<example>If DownTicks &gt; UpTicks Then {ACTION}</example>
+	</item>
+	<item name="DOWNTO">
+		<notes>Instructs a loop's counter to decrement and exit the loop at a specified value.</notes>
+		<example>For value1 = 10 DownTo 1 Begin</example>
+	</item>
+	<item name="DWORD">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="EasyLanguageRtlOnDestroy">
+		<notes>EasyLanguageRtlOnDestroy functions</notes>
+		<example>EasyLanguageRtlOnDestroy(o);</example>
+		<parameter type="numeric">o</parameter>
+	</item>
+	<item name="EasyLanguageVersion">
+		<notes>Number representing EasyLanguage implementation version</notes>
+		<example>6.1 for Omega Tradestation 5</example>
+	</item>
+	<item name="EL_DateStr">
+		<notes>EL_DateStr returns a string composed of the month,day,year passed</notes>
+		<example>EL_DateStr(11,10,2004) returns "20041011" which means Oct. 11, 2004.</example>
+	</item>
+	<item name="ELDateToDateTime">
+		<notes>Converts ELDate to a numeric DateTime</notes>
+		<example>dDateTime = ELDateToDateTime(1030430);</example>
+		<parameter type="numeric">iELDate</parameter>
+	</item>
+	<item name="ELSE">
+		<notes>Included in If-Then statements to execute an alternate set of statements.</notes>
+		<example>If Condition1 and Condition2 Then Condition3 = True else Condition3 = False;</example>
+	</item>
+	<item name="ELTimeToDateTime">
+		<notes>Converts ELTime to a numeric DateTime</notes>
+		<example>dDateTime = ELTimeToDateTime(1030430);</example>
+		<parameter type="numeric">iELTime</parameter>
+	</item>
+	<item name="EncodeDate">
+		<notes>Encodes the Date</notes>
+		<example>dEncodedDate = EncodeDate(01,01,03);</example>
+		<parameter type="numeric">iYear</parameter>
+		<parameter type="numeric">iMonth</parameter>
+		<parameter type="numeric">iDay</parameter>
+	</item>
+	<item name="EncodeTime">
+		<notes>Encodes the time</notes>
+		<example>dEncodedTime = EncodeTime(01,00,00,000);</example>
+		<parameter type="numeric">iHour</parameter>
+		<parameter type="numeric">iMinutes</parameter>
+		<parameter type="numeric">iSeconds</parameter>
+		<parameter type="numeric">iMilliseconds</parameter>
+	</item>
+	<item name="END">
+		<notes>Completes a block of instructions that follow a Begin statement.</notes>
+		<example>If Close &gt; Close[1] Then Begin Condition1 = True; Condition2 = False; End;</example>
+	</item>
+	<item name="ENTRY">
+		<notes>Ties an exit to an entry order in an exit order.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="Entry">
+		<notes>Ties an exit to an entry order in an exit order.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="EntryDate">
+		<notes>Date of entry, num position(s) ago</notes>
+		<example>Entry on Nov 4, 1992, EntryDate(0) = 921104</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="EntryPrice">
+		<notes>Price of entry, num position(s) ago</notes>
+		<example>If entry at 634.55 then EntryPrice = $634.55</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="EntryTime">
+		<notes>Time of entry of position, num position(s) ago</notes>
+		<example>Entry made at 1:00 pm, EntryTime = 1300</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="ExchListed">
+		<notes/>
+		<example/>
+	</item>
+	<item name="ExecOffset">
+		<notes>Local function execution bar-offset amount</notes>
+		<example>ExecOffset = 10 if simple function is called with ten bar offset</example>
+	</item>
+	<item name="ExecuteScript">
+		<notes>Execute a script</notes>
+		<example>ExecuteScript("abc","MyFunc");</example>
+		<parameter type="text">strFile</parameter>
+		<parameter type="text">strFunction</parameter>
+	</item>
+	<item name="ExitDate">
+		<notes>Date when position closed-out, num position(s) ago</notes>
+		<example>ExitDate = date when all entries closed</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="ExitPrice">
+		<notes>Exit price of closed-out entry, num position(s) ago</notes>
+		<example>If last trade exited at 455.75 then ExitPrice(1) = $455.75</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="ExitTime">
+		<notes>Time when last entry closed-out, num position(s) ago</notes>
+		<example>ExitTime = 1425 for exit made at 2:25 pm</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="ExpDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="ExpDateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="EXPIRATIONDATE">
+		<notes>Returns the expiration/delivery date of an option, future, or position leg.</notes>
+		<example>If Month(date) = ExpirationDate Then Alert</example>
+	</item>
+	<item name="EXPIRATIONSTYLE">
+		<notes>Numeric value specifying an option's expiration rule (0=American, 1=European).</notes>
+		<example>If ExpirationStyle of Option = Then {ACTION}</example>
+	</item>
+	<item name="ExpStyle">
+		<notes/>
+		<example/>
+	</item>
+	<item name="ExpValue">
+		<notes>Exponential value of num</notes>
+		<example>ExpValue(2.4) = 11.023200</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="EXTERNAL">
+		<notes>Defines a DLL entry point to be called from EasyLanguage.</notes>
+		<example>External "C:\MINE.DLL", void, "MYFUNC", float;</example>
+	</item>
+	<item name="External">
+		<notes>Defines a DLL entry point to be called from EasyLanguage.</notes>
+		<example>External "C:\MINE.DLL", void, "MYFUNC", float;</example>
+	</item>
+	<item name="FALSE">
+		<notes>Assigns a false value to a variable. Checks the status of an expression.</notes>
+		<example>Condition1 = False;</example>
+	</item>
+	<item name="fdrDataUnavailable">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrDataUnavailable then...</example>
+	</item>
+	<item name="fdrFutureReference">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrFutureReference then...</example>
+	</item>
+	<item name="fdrInvalidField">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrInvalidField then...</example>
+	</item>
+	<item name="fdrNoMeaningfulValue">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrNoMeaningfulValue then...</example>
+	</item>
+	<item name="fdrNoSnapshotHistory">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrNoSnapshotHistory then...</example>
+	</item>
+	<item name="fdrOk">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrOk then...</example>
+	</item>
+	<item name="fdrTypeMismatch">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrTypeMismatch then...</example>
+	</item>
+	<item name="fdrValueNotAvailable">
+		<notes>Returned by function GetLastFundDataError </notes>
+		<example>if GetLastFundDataError() = fdrValueNotAvailable then...</example>
+	</item>
+	<item name="FILE">
+		<notes>Sends information to a specified file from a print statement.</notes>
+		<example>Print(File("test.txt"),date,time,close);</example>
+	</item>
+	<item name="FileAppend">
+		<notes>Appends text string str_Text to file str_Filename</notes>
+		<example>FileAppend("c:\sym.txt","Orders:") sends text "Orders:" to file c:\sym.txt</example>
+		<parameter type="text">str_Filename</parameter>
+		<parameter type="text">str_Text</parameter>
+	</item>
+	<item name="FileDelete">
+		<notes>Deletes file str_Filename</notes>
+		<example>FileDelete("c:\syms.txt") will delete the file c:\syms.txt</example>
+		<parameter type="text">str_Filename</parameter>
+	</item>
+	<item name="FINE">
+		<notes>Specifies fine automatic optimization value for function inputs.</notes>
+		<example>Fine</example>
+	</item>
+	<item name="FIRSTNOTICEDATE">
+		<notes>Returns the first notice date of a futures contract.</notes>
+		<example>If Date=FirstNoticeDate Then Alert;</example>
+	</item>
+	<item name="FirstNoticeDate">
+		<notes>Returns the first notice date of a futures contract.</notes>
+		<example>If Date=FirstNoticeDate Then Alert;</example>
+	</item>
+	<item name="FirstNoticeDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="FirstNoticeDateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="FIRSTOPTION">
+		<notes>Returns True for the first option initiating a core event.</notes>
+		<example>FirstOption</example>
+	</item>
+	<item name="FLOAT">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="Floor">
+		<notes>Highest integer less than num</notes>
+		<example>Floor(10.8) = 10, Floor(-11.1) = -12</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="FND">
+		<notes/>
+		<example/>
+	</item>
+	<item name="FNDEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="FOR">
+		<notes>Defines a group of instructions executed a predefined number of times.</notes>
+		<example>For value1=1 to 10 Begin</example>
+	</item>
+	<item name="FormatDate">
+		<notes>Format the date</notes>
+		<example>strFormatDate = FormatDate( "ddd MMM dd yy", ElDateToDateTime( Date ) );</example>
+		<parameter type="text">strFormat</parameter>
+		<parameter type="numeric">Date</parameter>
+	</item>
+	<item name="FormatTime">
+		<notes>Format the time</notes>
+		<example>strFormatTime = FormatTime( "hh:mm:ss tt", ElTimeToDateTime( Time ) );</example>
+		<parameter type="text">strFormat</parameter>
+		<parameter type="numeric">Time</parameter>
+	</item>
+	<item name="fpcExactAccuracy">
+		<notes>Sepcifies the tolerance level (numeric value = 5) for the function SetFPCompareA</notes>
+		<example>SetFPCompareAccuracy(fpcExactAccuracy);</example>
+	</item>
+	<item name="fpcHighAccuracy">
+		<notes>Sepcifies the tolerance level (numeric value = 3) for the function SetFPCompareA</notes>
+		<example>SetFPCompareAccuracy(fpcHighAccuracy);</example>
+	</item>
+	<item name="fpcLowAccuracy">
+		<notes>Sepcifies the tolerance level (numeric value = 1) for the function SetFPCompareA</notes>
+		<example>SetFPCompareAccuracy(fpcLowAccuracy);</example>
+	</item>
+	<item name="fpcMedAccuracy">
+		<notes>Sepcifies the tolerance level (numeric value = 2) for the function SetFPCompareA</notes>
+		<example>SetFPCompareAccuracy(fpcMedAccuracy);</example>
+	</item>
+	<item name="fpcVeryHighAccuracy">
+		<notes>Sepcifies the tolerance level (numeric value = 4) for the function SetFPCompareA</notes>
+		<example>SetFPCompareAccuracy(fpcVeryHighAccuracy);</example>
+	</item>
+	<item name="fpcVeryLowAccuracy">
+		<notes>Sepcifies the tolerance level (numeric value = 0) for the function SetFPCompareA</notes>
+		<example>SetFPCompareAccuracy(fpcVeryLowAccuracy);</example>
+	</item>
+	<item name="FracPortion">
+		<notes>Fractional portion of num</notes>
+		<example>FracPortion(1.56) = .56</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="FRIDAY">
+		<notes>Specifies day of the week Thursday (numeric value = 5).</notes>
+		<example>Friday</example>
+	</item>
+	<item name="FROM">
+		<notes>Skip word.</notes>
+		<example>ExitLong from Entry ("Test") Next Bar at Market</example>
+	</item>
+	<item name="FUTURE">
+		<notes>References the current futures contract in a Position Analysis window.</notes>
+		<example>Value1 = Close of Future(1);</example>
+	</item>
+	<item name="FUTURETYPE">
+		<notes>Evaluates a position leg to determine if it is a future.</notes>
+		<example>If LegType of Leg(1) = FutureType Then  ACTION}</example>
+	</item>
+	<item name="GAMMA">
+		<notes>Returns the Gamma value of an option, leg, or position.</notes>
+		<example>Value1 = Gamma;</example>
+	</item>
+	<item name="GetAccount">
+		<notes>iAccountId</notes>
+		<example>Identifies the account associated with the AccounId.</example>
+	</item>
+	<item name="GetAccountId">
+		<notes>Gets the account that has been selected in the Format Strategy dialog.</notes>
+		<example>strAcctID = GetAccountID;</example>
+	</item>
+	<item name="GetAccountLotSize">
+		<notes>Return for a mini forex account 10,000 will be returned.  For a big forex accoun</notes>
+		<example> LotSize = GetAccountLotSize( strAccount );</example>
+		<parameter type="text">strAccount</parameter>
+	</item>
+	<item name="GetAccountStatus">
+		<notes>Retrieve the Account Status from the TradeManager's Balances tab for the given e</notes>
+		<example>iStatus = GetAccountStatus("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetAccountType">
+		<notes>Retrieve the Account Type from the TradeManager's Balances tab for the given equ</notes>
+		<example>iType = GetAccountType("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetAllOrNone">
+		<notes>The current state of the All or None advanced setting.</notes>
+		<example>tfAllOrNone = GetAllOrNone();</example>
+	</item>
+	<item name="GetAppInfo">
+		<notes>Return information about the running application</notes>
+		<example>if GetAppInfo( aiApplicationType ) = cChart then....;</example>
+		<parameter type="numeric">nInfoConstant</parameter>
+	</item>
+	<item name="GetBackGroundColor">
+		<notes>Current chart background color (see documentation for color values)</notes>
+		<example>GetBackGroundColor = 1 if chart background is black</example>
+	</item>
+	<item name="GetBackgroundColor">
+		<notes>Current chart background color (see documentation for color values)</notes>
+		<example>GetBackGroundColor = 1 if chart background is black</example>
+	</item>
+	<item name="GetBDAccountEquity">
+		<notes>Retrieve the Beginning Day Account Equity amount from the TradeManager's Balance</notes>
+		<example>dBDAccountEquity = GetBDAccountEquity("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetBDAccountNetWorth">
+		<notes>Retrieve the Beginning Day Account Net Worth amount from the TradeManager's Bala</notes>
+		<example>dBDNetWorth = GetBDAccountNetWorth("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetBDCashBalance">
+		<notes>Retrieve the Beginning Day Cash Balance amount from the TradeManager's Balances </notes>
+		<example>dBDCashBalance = GetBDCashBalance("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetBDDayTradingBuyingPower">
+		<notes>Retrieve the Beginning Day Overnight Buying Power amount from the TradeManager's</notes>
+		<example>dDBDayTradingBuyingPower = GetBDDayTradingBuyingPower("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetBDMarginRequirement">
+		<notes>Return the Beginning Day margin Requirement for the specified account</notes>
+		<example>dBDMarginRequirement = GetBDMarginRequirement("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetBDOvernightBuyingPower">
+		<notes>Retrieve the Beginning Day Overnight Buying Power amount from the TradeManager's</notes>
+		<example>dBDOverNightBuyingPower = GetBDOvernightBuyingPower("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetBDTradeEquity">
+		<notes>Retrieve the Beginning Day TradeEquity amount from the TradeManager's Balances t</notes>
+		<example>dBDTradeEquity = GetBDTradeEquity("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetBuyMinusSellPlus">
+		<notes>Identifies the current state of the "Buy on -/Sell on +" advanced setting.</notes>
+		<example>tfBuyMinusSellPlus = GetBuyMinusSellPlus();</example>
+	</item>
+	<item name="GetBValue">
+		<notes>Return the blue component of a RGB color.</notes>
+		<example> BluePortion = GetBValue( cyan );</example>
+		<parameter type="numeric">nRGB</parameter>
+	</item>
+	<item name="GetCDRomDrive">
+		<notes>Drive letter of first CD-ROM found</notes>
+		<example>GetCDRomDrive = "D" on most computers</example>
+	</item>
+	<item name="GetCountry">
+		<notes>Return the full localized name of the country/region.</notes>
+		<example>stCountry = GetCountry();</example>
+	</item>
+	<item name="GetCurrency">
+		<notes>Return the full english name of the currency.</notes>
+		<example>stCurrency = GetCurrency();</example>
+	</item>
+	<item name="GetDiscretion">
+		<notes>Identifies the current state of the "Discretionary" advanced setting.</notes>
+		<example>dDiscretionValue = GetDiscretion();</example>
+	</item>
+	<item name="GetExchangeName">
+		<notes>The name of the exchange which the chart's symbol is a member of</notes>
+		<example>GetExchangeName in a "MSFT" chart would return "NASDAQ"</example>
+	</item>
+	<item name="GetFundData">
+		<notes>Returns the numeric value of the specified fundamental field. </notes>
+		<example>dEPS = GetFundData( "EPS", 1 );</example>
+		<parameter type="numeric">sFieldName</parameter>
+		<parameter type="numeric">nDataPointsBack</parameter>
+	</item>
+	<item name="GetFundDataAsBoolean">
+		<notes>Returns the truefalse value of the specified fundamental field. </notes>
+		<example>bValue = GetFundDataAsBoolean( "FUNDFIELDNAME", 1 );</example>
+		<parameter type="numeric">sFieldName</parameter>
+		<parameter type="numeric">nDataPointsBack</parameter>
+	</item>
+	<item name="GetFundDataAsString">
+		<notes>Returns the string value of the specified fundamental field. </notes>
+		<example>sValue = GetFundDataAsString( "SECTORNAME", 1 );</example>
+		<parameter type="numeric">sFieldName</parameter>
+		<parameter type="numeric">nDataPointsBack</parameter>
+	</item>
+	<item name="GetFundPeriodEndDate">
+		<notes>Returns the Period End Date of the specified fundamental field. Returned in Juli</notes>
+		<example>dDate = GetFundPeriodEndDate( "FUNDFIELDNAME", 1 );</example>
+		<parameter type="numeric">sFieldName</parameter>
+		<parameter type="numeric">nDataPointsBack</parameter>
+	</item>
+	<item name="GetFundPostDate">
+		<notes>Returns the post date of the specified fundamental field. </notes>
+		<example>dEPSPostDate = GetFundPostDate( "EPS", 3 );</example>
+		<parameter type="numeric">sFieldName</parameter>
+		<parameter type="numeric">nDataPointsBack</parameter>
+	</item>
+	<item name="GetGValue">
+		<notes>Return the green component of a RGB color.</notes>
+		<example> GreenPortion = GetGValue( yellow );</example>
+		<parameter type="numeric">nRGB</parameter>
+	</item>
+	<item name="GetLastFundDataError">
+		<notes>Returns fdrOk, fdrInvalidField, fdrDataUnavailable, fdrTypeMismatch, fdrFutureRe</notes>
+		<example> if ( GetLastFundDataError() = fdrOK )....</example>
+	</item>
+	<item name="GetNonDisplay">
+		<notes>The current state of the Non-Display advanced setting.</notes>
+		<example>tfNonDisplay = GetNonDisplay();</example>
+	</item>
+	<item name="GetNow">
+		<notes>Identifies the current state of the "NOW (ECN's Only)" advanced setting.</notes>
+		<example>tfNow = GetNow();</example>
+	</item>
+	<item name="GetNumAccounts">
+		<notes>Get the number of available equity and futures accounts.</notes>
+		<example>iNumAccounts = GetNumAccounts();</example>
+	</item>
+	<item name="GetNumPositions">
+		<notes/>
+		<example>iNumPositions = GetNumPositions("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetOpenOrderInitialMargin">
+		<notes>:  Retrieve the Open Order Initial Margin amount from the TradeManager's Balance</notes>
+		<example>dOpenOrderInitialMargin = GetOpenOrderInitialMargin("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetPeg">
+		<notes>The current state of the Peg advanced setting.</notes>
+		<example>tfPeg = GetPeg();</example>
+	</item>
+	<item name="GETPLOTBGCOLOR">
+		<notes>Returns the background color of a cell for an analysis technique.</notes>
+		<example>GetPlotBGColor</example>
+	</item>
+	<item name="GETPLOTCOLOR">
+		<notes>Returns the numeric color value of a chart's plot line or grid's foreground.</notes>
+		<example>Value1 = GetPlotColor(1);</example>
+	</item>
+	<item name="GETPLOTWIDTH">
+		<notes>Returns the width value of a plot line in a chart.</notes>
+		<example>Value1 = GetPlotWidth(1);</example>
+	</item>
+	<item name="GetPlotWidth">
+		<notes>Returns the width value of a plot line in a chart.</notes>
+		<example>Value1 = GetPlotWidth(1);</example>
+	</item>
+	<item name="GetPositionAveragePrice">
+		<notes>:  Identifies the average price of the equity or futures position for the given </notes>
+		<example>iPrice = GetPositionAveragePrice("ABC","12345");</example>
+		<parameter type="text">strSymbol</parameter>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetPositionMarketValue">
+		<notes>Retrieves the future or equity position's Market Value for the given symbol in t</notes>
+		<example>dMarketValue = GetPositionMarketValue("ABC","12345");</example>
+		<parameter type="text">strSymbol</parameter>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetPositionOpenPL">
+		<notes>Retrieves the future or equity position's Open P/L for the given symbol in the g</notes>
+		<example>dOpenPL = GetPositionOpenPL("ABC","12345");</example>
+		<parameter type="text">strSymbol</parameter>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetPositionQuantity">
+		<notes>Identifies the net quantity and side of the equity or futures position for the g</notes>
+		<example>iQty = GetPositionQuantity("ABC","12345");</example>
+		<parameter type="text">strSymbol</parameter>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetPositionSymbol">
+		<notes>Identifies the symbol associated with the PositionNum.  This function can be use</notes>
+		<example>strPositionSymbol = GetPositionSymbol("12345",1);</example>
+		<parameter type="text">strAccountNumber</parameter>
+		<parameter type="numeric">iPositionId</parameter>
+	</item>
+	<item name="GetPositionTotalCost">
+		<notes>Retrieves the future or equity position's Total Cost for the given symbol in the</notes>
+		<example>dTotalCost = GetPositionTotalCose("ABC","12345");</example>
+		<parameter type="text">strSymbol</parameter>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRoute">
+		<notes>Identifies the currently selected route.</notes>
+		<example>iRoute = GetRoute();</example>
+	</item>
+	<item name="GetRouteCount">
+		<notes>Get the number of Routes</notes>
+		<example>iRouteCount = GetRouteCount();</example>
+	</item>
+	<item name="GetRouteName">
+		<notes>Identifies the name of the currently selected route</notes>
+		<example>strRoute = GetRouteName(rtIntelligent);</example>
+		<parameter type="numeric">nRoute</parameter>
+	</item>
+	<item name="GetRTAccountEquity">
+		<notes>Retrieve the Real-time Account Equity amount from the TradeManager's Balances ta</notes>
+		<example>dRTAccountEquity = GetRTAccountEquity("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTAccountNetWorth">
+		<notes>Retrieve the Real-time Account Net Worth amount from the TradeManager's Balances</notes>
+		<example>dRTAccountNetWorth = GetRTAccountNetWorth("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTCashBalance">
+		<notes>Retrieve the Real-time Cash Balance amount from the TradeManager's Balances tab </notes>
+		<example>dRTCashBalance = GetRTCashBalance("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTCostOfPositions">
+		<notes>Retrieve the Real-time Cost of Positions amount from the TradeManager's Balances</notes>
+		<example>dRTCostOfPositions = GetRTCostOfPositions("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTDaytradingBuyingPower">
+		<notes>Retrieve the Real-time Daytrading Buying Power amount from the TradeManager's Ba</notes>
+		<example>dRTDaytradingBuyingPower = GetRTDaytradingBuyingPower("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTInitialMargin">
+		<notes>Retrieve the Real-time Initial Margin amount from the TradeManager's Balances ta</notes>
+		<example>dRTInitialMargin = GetRTInitialMargin("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTMaintMargin">
+		<notes>Retrieve the Real-time Maintenance Margin amount from the TradeManager's Balance</notes>
+		<example>dRTMaintMargin = GetRTMaintMargin("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTMarginRequirement">
+		<notes>Return the Real Time margin Requirement for the specified account.</notes>
+		<example>dRTMarginRequirement = GetRTMarginRequirement("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTOvernightBuyingPower">
+		<notes>Retrieve the Real-time Overnight Buying Power amount from the TradeManager's Bal</notes>
+		<example>dRTOvernightBuyingPower = GetRTOvernightBuyingPower("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTPurchasingPower">
+		<notes>Retrieve the Real-time Purchasing Power amount from the TradeManager's Balances </notes>
+		<example>dRTPurchasingPower = GetRTPurchasingPower("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTRealizedPL">
+		<notes>Retrieve the Real-time Realized P/L amount from the TradeManager's Balances tab </notes>
+		<example>dRTRealizedPL = GetRTRealizedPL("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTTradeEquity">
+		<notes>Retrieve the Real-time Trade Equity amount from the TradeManager's Balances tab </notes>
+		<example>dRTTradeEquity = GetRTTradeEquity("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRTUnrealizedPL">
+		<notes>Retrieve the Real-time Unrealized P/L amount from the TradeManager's Balances ta</notes>
+		<example>dRTUnrealizedPL = GetRTUnrealizedPL("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetRValue">
+		<notes>Return the red component of a RGB color.</notes>
+		<example> RedPortion = GetRValue( margenta );</example>
+		<parameter type="numeric">nRGB</parameter>
+	</item>
+	<item name="GetScreenName">
+		<notes>Unique User Name</notes>
+		<example>GetScreenName for customer "Jane Doe" might be "DOEJ"</example>
+	</item>
+	<item name="GetShaveImprove">
+		<notes>Identifies the amount by which the strategy limit price will be adjusted.</notes>
+		<example>dShaveImprove = GetShaveImprove();</example>
+	</item>
+	<item name="GetShowOnly">
+		<notes>Identifies the current state of the Show Only advanced setting.</notes>
+		<example>iShowOnly = GetShowOnly();</example>
+	</item>
+	<item name="GetStrategyName">
+		<notes>The name of the trading strategy which is applied to the chart</notes>
+		<example>GetStrategyName in a chart with the MACD strategy applied returns "MACD"</example>
+	</item>
+	<item name="GetSubscriberOnly">
+		<notes>Identifies the current state of the Subscriber Only advanced setting.</notes>
+		<example>tfSubscriberOnly = GetSubscriberOnly();</example>
+	</item>
+	<item name="GetSymbolName">
+		<notes>Name of the symbol study currently analyzing</notes>
+		<example>GetSymbolName in a CATERPILLAR chart = "CAT"</example>
+	</item>
+	<item name="GetSystemName">
+		<notes>Reserved for backward compatibility. See GetStrategyName</notes>
+		<example>GetSystemName in a chart with the MACD strategy applied returns "MACD"</example>
+	</item>
+	<item name="GetTodaysRTTradeEquity">
+		<notes>Retrieve Today's Real-time Trade Equity amount from the TradeManager's Balances </notes>
+		<example>dTodaysRTTradeEquity = GetTodaysRTTradeEquity("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GetUnclearedDeposits">
+		<notes>Retrieve the Uncleared Deposits amount from the TradeManager's Balances tab for </notes>
+		<example>dDeposit = GetUnclearedDeposits("12345");</example>
+		<parameter type="text">strAccountNumber</parameter>
+	</item>
+	<item name="GradientColor">
+		<notes>Return the RGB color of a gradient</notes>
+		<example>value1 = GradientColor( RSIValue, 0, 100, white, blue );</example>
+		<parameter type="numeric">dValue</parameter>
+		<parameter type="numeric">dMin</parameter>
+		<parameter type="numeric">dMax</parameter>
+		<parameter type="numeric">nFromColor</parameter>
+		<parameter type="numeric">nToColor</parameter>
+	</item>
+	<item name="GREEN">
+		<notes>Specifies color Cyan (numeric value = 4) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Green)</example>
+	</item>
+	<item name="GrossLoss">
+		<notes>Cumulative dollar total of all closed-out losing trades</notes>
+		<example>Closed-out trades = -311.64 and -545.67, GrossLoss = -$857.31</example>
+	</item>
+	<item name="GrossProfit">
+		<notes>Cumulative dollar total of all closed-out winning trades</notes>
+		<example>Closed-out trades = 832.25 and 352.50, GrossProfit = $1184.75</example>
+	</item>
+	<item name="H">
+		<notes>Returns the highest price of the bar referenced. (Abbreviation for High)</notes>
+		<example>If H &gt; Highest(H,10)[1] Then Alert;</example>
+	</item>
+	<item name="HANDLE">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information."</example>
+	</item>
+	<item name="HIGH">
+		<notes>Returns the highest price of the bar referenced.</notes>
+		<example>Value1 = High - High[1];</example>
+	</item>
+	<item name="High52Wk">
+		<notes/>
+		<example/>
+	</item>
+	<item name="Higher">
+		<notes>Synonym for stop or limit orders depending on the context used within a Strateg</notes>
+		<example>Buy Next Bar at Close or Higher;</example>
+	</item>
+	<item name="HIGHER">
+		<notes>Synonym for stop or limit orders depending on the context used within a Strateg</notes>
+		<example>Buy Next Bar at Close or Higher;</example>
+	</item>
+	<item name="HistFundExists">
+		<notes>Informs if historical fundamental data available for symbol</notes>
+		<example>TRUE if historical fundamental data exists, FALSE otherwise</example>
+	</item>
+	<item name="HoursFromDateTime">
+		<notes>Returns the hours portion of DateTime</notes>
+		<example>iHours = HoursFromDateTime(1440.500);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="I">
+		<notes>Number of contracts outstanding at the close of a bar. (Abbr. for OpenInt)</notes>
+		<example>If I &gt; I[1] Then Alert;</example>
+	</item>
+	<item name="I_AvgEntryPrice">
+		<notes>Average of applied strategy's open entries</notes>
+		<example>Open entries at 647.90 and 646.20, I_AvgEntryPrice = $647.05</example>
+	</item>
+	<item name="I_ClosedEquity">
+		<notes>Applied strategy's total net profit</notes>
+		<example>Entries closed at 811.00 and 2136.00, I_ClosedEquity = $2947.00</example>
+	</item>
+	<item name="I_CurrentContracts">
+		<notes>Number of contracts applied strategy has currently bought/sold</notes>
+		<example>With two 1 contract open entries, I_CurrentContracts = 2</example>
+	</item>
+	<item name="I_CurrentShares">
+		<notes>Number of shares applied strategy has currently bought/sold</notes>
+		<example>With two 1-share open entries, I_CurrentShares = 2</example>
+	</item>
+	<item name="I_MarketPosition">
+		<notes>Applied strategy's current market position: 1 = long, -1 = short, 0 = flat</notes>
+		<example>Current position is long, I_MarketPosition = 1</example>
+	</item>
+	<item name="I_OpenEquity">
+		<notes>Applied strategy's total net profit + open position Profit/Loss</notes>
+		<example>Net profit = 7377.00 &amp;&amp; open position P/L = -500.00, I_OpenEquity = $6877.00</example>
+	</item>
+	<item name="IF">
+		<notes>Specifies a condition that must be met to execute a set of instructions.</notes>
+		<example>If Close &gt; Close[1] Then Buy at Open of Next bar;</example>
+	</item>
+	<item name="INCLUDESIGNAL">
+		<notes>Allows the inclusion of a Strategy within another Strategy.</notes>
+		<example>IncludeSignal:"Consecutive Closes",LECONSEC,SECONSEC;</example>
+	</item>
+	<item name="INCLUDESYSTEM">
+		<notes>Allows the inclusion of a Strategy within another Strategy.</notes>
+		<example>IncludeSignal:"Consecutive Closes",LECONSEC,SECONSEC;</example>
+	</item>
+	<item name="IncMonth">
+		<notes>Increment DateTime by a number of months</notes>
+		<example>dDateTime = IncMonths(1440.500,01);</example>
+		<parameter type="numeric">dDateTime</parameter>
+		<parameter type="numeric">iNumMonths</parameter>
+	</item>
+	<item name="InfiniteLoopDetect">
+		<notes>Enables or disables infinite loop detection: True = enabled, False = disabled </notes>
+		<example> [InfiniteLoopDetect = False]</example>
+	</item>
+	<item name="INITIALMARGIN">
+		<notes>The Intial Margin Requirement of an option position</notes>
+	</item>
+	<item name="INPUT">
+		<notes>Declares custom words to behave as constants throughout an analysis technique.</notes>
+		<example>Input: Length(10);</example>
+	</item>
+	<item name="INPUTS">
+		<notes>Declares custom words to behave as constants throughout an analysis technique.</notes>
+		<example>Inputs: Price(Close), Length(18);</example>
+	</item>
+	<item name="InsideAsk">
+		<notes/>
+		<example/>
+	</item>
+	<item name="InsideBid">
+		<notes/>
+		<example/>
+	</item>
+	<item name="InStr">
+		<notes>Location of string2 within string1</notes>
+		<example>InStr("MSFT","X") = 0, InStr("Open","p") = 2</example>
+		<parameter type="text">string1</parameter>
+		<parameter type="text">string2</parameter>
+	</item>
+	<item name="INT">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="IntPortion">
+		<notes>Integer portion of num</notes>
+		<example>IntPortion(1.56) = 1</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="IntrabarOrderGeneration">
+		<notes>Enables or disables IntrabarOrderGeneration: True = enabled, False = disabled </notes>
+		<example> [IntrabarOrderGeneration=True]</example>
+	</item>
+	<item name="IS">
+		<notes>Skip word.</notes>
+		<example>If Open is &lt; Close Then Sell</example>
+	</item>
+	<item name="is">
+		<notes>Skip word.</notes>
+		<example>If Open is &lt; Close Then Sell</example>
+	</item>
+	<item name="IsFundDataAvailable">
+		<notes>Returns true if the specified fundamental field value is available</notes>
+		<example> if IsFundDataAvailable("EPS", 3 )...</example>
+		<parameter type="numeric">sFieldName</parameter>
+		<parameter type="numeric">nDataPointsBack</parameter>
+	</item>
+	<item name="IsValidFundField">
+		<notes>Returns true if the specified fundamental field is valid.</notes>
+		<example>if IsValidFundField( "YIELD" )...</example>
+		<parameter type="numeric">sFieldName</parameter>
+	</item>
+	<item name="IVolatility">
+		<notes/>
+		<example/>
+	</item>
+	<item name="JulianToDate">
+		<notes>Converts Julian date jDate to calendar date</notes>
+		<example>JulianToDate(35163) = 960408</example>
+		<parameter type="numeric">jDate</parameter>
+	</item>
+	<item name="L">
+		<notes>Returns the lowest price of the bar referenced. (Abbreviation for Low)</notes>
+		<example>If L &lt; Lowest(L,10)[1] Then Alert;</example>
+	</item>
+	<item name="LargestLosTrade">
+		<notes>Dollar amount of largest closed-out losing trade</notes>
+		<example>Closed-out trades = -311.94, -456.78 and 214.56, LargestLosTrade = -$456.78</example>
+	</item>
+	<item name="LargestWinTrade">
+		<notes>Dollar amount of largest closed-out winning trade</notes>
+		<example>Closed-out trades = -214.50,521.10 and 425.36, LargestWinTrade = $521.10</example>
+	</item>
+	<item name="Last">
+		<notes/>
+		<example/>
+	</item>
+	<item name="LastCalcJDate">
+		<notes>Julian date of last completed bar</notes>
+		<example>LastCalcJDate = 35163 for bar completed April 8, 1996</example>
+	</item>
+	<item name="LastCalcMMTime">
+		<notes>Time of last completed bar, in minutes since midnight</notes>
+		<example>LastCalcMMTime = 820 for bar completed at 1:40 pm </example>
+	</item>
+	<item name="LASTTRADINGDATE">
+		<notes>Refers to the last day an option, future, position leg, or asset may be traded.</notes>
+		<example>If Date = LastTradingDate Then Alert;</example>
+	</item>
+	<item name="LastTradingDate">
+		<notes>Refers to the last day an option, future, position leg, or asset may be traded.</notes>
+		<example>If Date = LastTradingDate Then Alert;</example>
+	</item>
+	<item name="LEAPYear">
+		<notes/>
+		<example/>
+	</item>
+	<item name="LEFTSIDE">
+		<notes>Used with ActivityBars to refer to a cell or zone on the left side of a bar.</notes>
+		<example>AddCell(value1, LeftSide, "a", Tool_Red, 0); </example>
+	</item>
+	<item name="LeftSide">
+		<notes>Used with ActivityBars to refer to a cell or zone on the left side of a bar.</notes>
+		<example>AddCell(value1, LeftSide, "a", Tool_Red, 0); </example>
+	</item>
+	<item name="LeftStr">
+		<notes>Leftmost sSize portion of string</notes>
+		<example>LeftStr("Gross Loss",5) = the string "Gross"</example>
+		<parameter type="text">string</parameter>
+		<parameter type="numeric">sSize</parameter>
+	</item>
+	<item name="LEG">
+		<notes>References the position leg specified by (num).</notes>
+		<example>If Strike of Leg(1) &gt; Close of Asset Then {ACTION}</example>
+	</item>
+	<item name="LegacyColorToRGB">
+		<notes>Return the RGB from a legacy color value.</notes>
+		<example>value1 = LegacyColorToRGB( nMyOldColor );</example>
+		<parameter type="numeric">nLegacyColor</parameter>
+	</item>
+	<item name="LegacyColorValue">
+		<notes>Specifies color system to be used: True = 16 bit, False = RGB </notes>
+		<example> [LegacyColorValue=True]</example>
+	</item>
+	<item name="LEGTYPE">
+		<notes>Returns the type of position leg: asset, future, call, or put.</notes>
+		<example>If LegType of Leg(1) = Call Then {ACTION}</example>
+	</item>
+	<item name="LIGHTGRAY">
+		<notes>Specifies color Light Gray (numeric value = 16) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", LightGray)</example>
+	</item>
+	<item name="LightGray">
+		<notes>Specifies color Light Gray (numeric value = 16) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", LightGray)</example>
+	</item>
+	<item name="Limit">
+		<notes>A limit order meaning 'or higher' or 'or lower', depending on the context.</notes>
+		<example>Sell next bar at High Limit;</example>
+	</item>
+	<item name="LIMIT">
+		<notes>A limit order meaning 'or higher' or 'or lower', depending on the context.</notes>
+		<example>Sell next bar at High Limit;</example>
+	</item>
+	<item name="Log">
+		<notes>Natural logarithm of num</notes>
+		<example>Log(4) = 1.386290</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="LONG">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LOW">
+		<notes>Returns the lowest price of the bar referenced.</notes>
+		<example>Value1 = High - Low;</example>
+	</item>
+	<item name="Low">
+		<notes>Returns the lowest price of the bar referenced.</notes>
+		<example>Value1 = High - Low;</example>
+	</item>
+	<item name="Low52Wk">
+		<notes/>
+		<example/>
+	</item>
+	<item name="LOWER">
+		<notes>Synonym for stop or limit orders depending on the context used within a Strateg</notes>
+		<example>Buy Next Bar at Close or Lower;</example>
+	</item>
+	<item name="LowerStr">
+		<notes>Lowercase copy of string str1</notes>
+		<example>LowerStr("MSft") = "msft"</example>
+		<parameter type="text">str1</parameter>
+	</item>
+	<item name="LPBOOL">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPBYTE">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPDOUBLE">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPDWORD">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPFLOAT">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPINT">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPLONG">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPSTR">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LPWORD">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="LTD">
+		<notes/>
+		<example/>
+	</item>
+	<item name="LTDEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="MAGENTA">
+		<notes>Specifies color Magenta (numeric value = 5) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Magenta)</example>
+	</item>
+	<item name="MakeNewMovieRef">
+		<notes>Creates new movie reference number</notes>
+		<example>MakeNewMovieRef = 1 for first movie reference number</example>
+	</item>
+	<item name="Margin">
+		<notes>Margin per stock/contract/transaction</notes>
+		<example>Margin = $3000 if set to 3000 in Costs tab</example>
+	</item>
+	<item name="MARKET">
+		<notes>Order type referring to the opening price of the next bar.</notes>
+		<example>Sell Next Bar at Market;</example>
+	</item>
+	<item name="MarketPosition">
+		<notes>Market position (1 = long, -1 = short, 0 = flat) of num position(s) ago</notes>
+		<example>If short 3 contracts then MarketPosition = -1</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MaxBarsBack">
+		<notes>Max. number reference bars (buffer) needed before study can plot</notes>
+		<example>MaxBarsBack = 50 if set to 50 in Properties tab</example>
+	</item>
+	<item name="MaxBarsForward">
+		<notes>Number bars allocated (by charting) to the right of the chart</notes>
+		<example>MaxBarsBack = 10 if set to 10 in Charting's Properties tab</example>
+	</item>
+	<item name="MaxConsecLosers">
+		<notes>Longest chain of consecutive closed-out losing trades</notes>
+		<example>If there are 2 winning trades then 4 losing, MaxConsecLosers = 4</example>
+	</item>
+	<item name="MaxConsecWinners">
+		<notes>Longest chain of consecutive closed-out winning trades</notes>
+		<example>Five consecutive winning trades then 3 losing, MaxConsecWinners = 5</example>
+	</item>
+	<item name="MaxContractProfit">
+		<notes>MaxContractProfit notes</notes>
+		<example>MaxContractProfit example</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MaxContracts">
+		<notes>Max contracts held during num position(s) ago</notes>
+		<example>Last position had 4 contracts open, MaxContracts(1) = 4</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MaxContractsHeld">
+		<notes>Maximum number of contracts held at any one time</notes>
+		<example>Five open entries at one contract each, MaxContractsHeld = 5</example>
+	</item>
+	<item name="MaxEntries">
+		<notes>Max entries open during life of position, num position(s) ago</notes>
+		<example>Second most recent position had 3 open entries, MaxEntries(2) = 3</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MAXGAIN">
+		<notes>The Maximum Gain of the position.</notes>
+		<example>If MaxGain of Position &lt; HighVal Then {ACTION}</example>
+	</item>
+	<item name="MaxIDDrawDown">
+		<notes>True dollar amount needed to sustain largest equity dip</notes>
+		<example>Please see documentation</example>
+	</item>
+	<item name="MaxList">
+		<notes>Highest value num in list</notes>
+		<example>MaxList(4,9,6) = 9</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num...</parameter>
+	</item>
+	<item name="MaxList2">
+		<notes>Second highest value num in list</notes>
+		<example>MaxList2(4,9,6) = 6</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num...</parameter>
+	</item>
+	<item name="MAXLOSS">
+		<notes>The Maximum Loss of the position.</notes>
+		<example>If MaxLoss of Position &gt; LowVal Then {ACTION}</example>
+	</item>
+	<item name="MaxPositionLoss">
+		<notes>Dollar amount of largest loss during position, num position(s) ago</notes>
+		<example>Largest loss during position = -856.25, MaxPositionLoss = -$856.25</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MaxPositionProfit">
+		<notes>Dollar amount of largest gain during position, num position(s) ago</notes>
+		<example>Largest gain during position = 923.40, MaxPositionProfit = $923.40</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MaxShares">
+		<notes>Max shares held during num position(s) ago</notes>
+		<example>Last position had 4 shares open, MaxShares(1) = 4</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MaxSharesHeld">
+		<notes>Maximum number of shares held at any one time</notes>
+		<example>Five open entries at one share each, MaxSharesHeld = 5</example>
+	</item>
+	<item name="MEDIUM">
+		<notes>Specifies a medium automatic optimization value for function inputs.</notes>
+		<example>Medium</example>
+	</item>
+	<item name="MESSAGELOG">
+		<notes>Sends EasyLanguage expression(s) to the Message Log application, appending a ca</notes>
+		<example>MessageLog("Close of This Bar: ",Close);</example>
+	</item>
+	<item name="METHOD">
+		<notes>Define a function as a method.</notes>
+		<example>external method: ....</example>
+	</item>
+	<item name="MidStr">
+		<notes>Arbitrary slice of string str, starting at pos position for siz characters</notes>
+		<example>MidStr("A bearish market",3,7) = the string "bearish"</example>
+		<parameter type="text">string</parameter>
+		<parameter type="numeric">pos</parameter>
+		<parameter type="numeric">siz</parameter>
+	</item>
+	<item name="MillisecondsFromDateTime">
+		<notes>Returns milliseconds portion of DateTime</notes>
+		<example>iMillSecs = MillisecondsFromDateTime(1440.500);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="MinList">
+		<notes>Lowest value num in list</notes>
+		<example>MinList(4,9,6) = 4</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num...</parameter>
+	</item>
+	<item name="MinList2">
+		<notes>Second lowest value num in list</notes>
+		<example>MinList2(4,9,6) = 6</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="MinMove">
+		<notes>Minimum tick movement of stock/future symbol</notes>
+		<example>MinMove = 5 for SP 500</example>
+	</item>
+	<item name="MinutesFromDateTime">
+		<notes>Returns minutes portion of DateTime</notes>
+		<example>iMinutes = MinutesFromDateTime(1440.500);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="MIVONASK">
+		<notes>Market implied volatility of option/position leg based on ask of Bid/Ask Model.</notes>
+		<example>If MIVOnAsk &gt; 20 Then {ACTION}</example>
+	</item>
+	<item name="MIVONBID">
+		<notes>Market implied volatility of option/position leg based on bid of Bid/Ask model.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="MIVONCLOSE">
+		<notes>Market implied volatility of an option/position leg based on the closing price.</notes>
+		<example>If MIVOnClose &gt; 20 Then {ACTION}</example>
+	</item>
+	<item name="MIVONRAWASK">
+		<notes>Market implied volatility of an option/position leg based on datafeed's ask.</notes>
+		<example>If MIVOnRawAsk &gt; 20 Then {ACTION}</example>
+	</item>
+	<item name="MIVONRAWBID">
+		<notes>Market implied volatility of an option/position leg based on datafeed's bid.</notes>
+		<example>If MIVOnRawBid &gt; 20 Then {ACTION}</example>
+	</item>
+	<item name="MOC">
+		<notes>Reserved for future use</notes>
+		<example>no example available</example>
+	</item>
+	<item name="Mod">
+		<notes>Remainder of num/divisor</notes>
+		<example>Mod(11,4) = 3</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">divisor</parameter>
+	</item>
+	<item name="MODELPOSITION">
+		<notes>References a modeled position in a Search Strategy.</notes>
+		<example>ModelPosition</example>
+	</item>
+	<item name="MODELPRICE">
+		<notes>The underlying price currently used by the Pricing or Volatility Model.</notes>
+		<example>Value1 = ModelPrice of Option;</example>
+	</item>
+	<item name="MODELRATE">
+		<notes>The underlying rate currently used by the Pricing Model.</notes>
+		<example>Value1 = ModelRate of Option;</example>
+	</item>
+	<item name="MODELRATE2">
+		<notes>The second rate currently used by the Pricing Model.</notes>
+		<example>Value1 = ModelRate2 of Option;</example>
+	</item>
+	<item name="MODELVOLATILITY">
+		<notes>References the volatility calculated by the Volatility Model in OptionStation.</notes>
+		<example>Value1 = ModelVolatility;</example>
+	</item>
+	<item name="MONDAY">
+		<notes>Specifies day of the week Monday (numeric value = 1).</notes>
+		<example>Monday</example>
+	</item>
+	<item name="MoneyMgtStopAmt">
+		<notes>Money management stop dollar amount</notes>
+		<example>MoneyMgtStopAmt = $250 if set to 250 in Stops tab</example>
+	</item>
+	<item name="Month">
+		<notes>Month on date cDate, from 1 to 12</notes>
+		<example>Month(960408) = 4</example>
+		<parameter type="numeric">cDate</parameter>
+	</item>
+	<item name="MonthFromDateTime">
+		<notes>Returns month portion of DateTime</notes>
+		<example>iMonth = MonthFromDateTime(1440.211863426);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="MULTIPLE">
+		<notes>Reserved for use with ELKIT32.DLL.</notes>
+		<example>Multiple</example>
+	</item>
+	<item name="Neg">
+		<notes>Absolute negative of num</notes>
+		<example>Neg(10) = -10, Neg(-8) = -8</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="NetProfit">
+		<notes>Cumulative dollar total of all closed-out trades</notes>
+		<example>Gross profit - gross loss = 628.55 - 211.25 = $417.30</example>
+	</item>
+	<item name="NewLine">
+		<notes>Carriage return/linefeed useful for commentary/file output strings</notes>
+		<example>"Profit/" + NewLine + "Loss" writes "Loss" under "Profit/"</example>
+	</item>
+	<item name="NEXT">
+		<notes>Used with Bar to reference the next bar in a trading Strategy.</notes>
+		<example>ExitLong Next Bar at Market;</example>
+	</item>
+	<item name="NOPLOT">
+		<notes>Removes a plot from the current bar in a chart or cell in a grid.</notes>
+		<example>If Close &gt; Highest(C,1)[1] Then NoPlot(1);</example>
+	</item>
+	<item name="NOT">
+		<notes>Reserved for future use</notes>
+		<example>no example available</example>
+	</item>
+	<item name="NthMaxList">
+		<notes>Nth highest value num in list</notes>
+		<example>NthMaxList(2,8,10,1) = 8</example>
+		<parameter type="numeric">N</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num...</parameter>
+	</item>
+	<item name="NthMinList">
+		<notes>Nth lowest value num in list</notes>
+		<example>NthMinList(2,8,10,1) = 8</example>
+		<parameter type="numeric">N</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num...</parameter>
+	</item>
+	<item name="NUMERIC">
+		<notes>Defines an input as a numeric expression.</notes>
+		<example>Input: Price(numeric);</example>
+	</item>
+	<item name="NUMERICARRAY">
+		<notes>Defines an input as a numeric array.</notes>
+		<example>Input: Price(NumericArray);</example>
+	</item>
+	<item name="NumericArrayRef">
+		<notes>Defines an input as a numeric function-modifiable array.</notes>
+		<example>Input: Price(NumericArrayRef);</example>
+	</item>
+	<item name="NUMERICARRAYREF">
+		<notes>Defines an input as a numeric function-modifiable array.</notes>
+		<example>Input: Price(NumericArrayRef);</example>
+	</item>
+	<item name="NUMERICREF">
+		<notes>Allows the code to pass a Numeric variable so it can be modified by the functio</notes>
+		<example>NumericRef</example>
+	</item>
+	<item name="NUMERICSERIES">
+		<notes>Defines an input as a numeric series expression.</notes>
+		<example>Input: Price(NumericSeries);</example>
+	</item>
+	<item name="NUMERICSIMPLE">
+		<notes>Defines an input as a numeric simple expression.</notes>
+		<example>Input: Price(NumericSimple);</example>
+	</item>
+	<item name="NumEvenTrades">
+		<notes>Total count of closed-out even trades</notes>
+		<example>value1 = NumEvenTrades;</example>
+	</item>
+	<item name="NUMFUTURES">
+		<notes>Returns the total number of futures contracts associated with an asset.</notes>
+		<example>Value1 = NumFutures</example>
+	</item>
+	<item name="NUMLEGS">
+		<notes>The total number of position legs associated with any position.</notes>
+		<example>Value1 = NumLegs of Position;</example>
+	</item>
+	<item name="NumLosTrades">
+		<notes>Total count of closed-out losing trades</notes>
+		<example>Closed-out trades : -23.45, 34.67, -12.56, 56.98, 34.21, NumLosTrades = 2</example>
+	</item>
+	<item name="NUMOPTIONS">
+		<notes>Returns the total number of options associated with an asset.</notes>
+		<example>Value1 = NumOptions of Asset</example>
+	</item>
+	<item name="NumToStr">
+		<notes>Converts num to string with dec decimal places</notes>
+		<example>NumToStr(10.23,3) = the string "10.230"</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">dec</parameter>
+	</item>
+	<item name="NumWinTrades">
+		<notes>Total count of closed-out winning trades</notes>
+		<example>Closed-out trades : -23.45, 34.67, -12.56, 56.98, 34.21, NumWintrades = 3</example>
+	</item>
+	<item name="O">
+		<notes>Returns the opening price of the bar referenced. (Abbreviation for Open)</notes>
+		<example>If O &gt; High[1] Then Alert;</example>
+	</item>
+	<item name="OF">
+		<notes>Skip word.</notes>
+		<example>Value1 = Close of 1 Bar Ago;</example>
+	</item>
+	<item name="ON">
+		<notes>Skip word.</notes>
+		<example>Buy This Bar on Close;</example>
+	</item>
+	<item name="ONCE">
+		<notes>Executes one or more statements one time when the condition is met.</notes>
+		<example>
+Once {Condition} 
+	{statement}</example>
+	</item>
+	<item name="OPEN">
+		<notes>Returns the opening price of the bar referenced.</notes>
+		<example>Buy at Open next bar + Range or Higher;</example>
+	</item>
+	<item name="OPENINT">
+		<notes>Returns the number of contracts outstanding at the close of the bar referenced.</notes>
+		<example>If OpenInt&gt;OpenInt[1] Then Buy next bar at MidPrice or higher;</example>
+	</item>
+	<item name="OpenPositionProfit">
+		<notes>Profit/Loss of current open position</notes>
+		<example>Open position loss of -2035, OpenPositionProfit = -$2035</example>
+	</item>
+	<item name="OPTION">
+		<notes>References the current option contract in a Position Analysis window.</notes>
+		<example>Value1 = Close of Option(1);</example>
+	</item>
+	<item name="OPTIONTYPE">
+		<notes>Returns the type of option: Put or Call.</notes>
+		<example>If OptionType of Option = Call Then Plot1("Call")</example>
+	</item>
+	<item name="OR">
+		<notes>Links 2 true/false expressions together. True if either expression is true.</notes>
+		<example>If Volume&gt;Volume[1] OR OpenInt&gt;Openint[1] Then Plot1(High);</example>
+	</item>
+	<item name="OVER">
+		<notes>Detects when a value crosses above, or becomes greater than another value.</notes>
+		<example>If Close Crosses Over 50 Then Sell;</example>
+	</item>
+	<item name="Pager_DefaultName">
+		<notes>Default subscriber name</notes>
+		<example>Pager_DefaultName sends "Ben" if default subscriber = Ben</example>
+	</item>
+	<item name="Pager_Send">
+		<notes>Sends text message str_Msg to str_Name (if pager module enabled)</notes>
+		<example>Pager_Send("Fred K","Buy @ 254") sends "Buy @ 254" to Fred K</example>
+		<parameter type="text">str_Name</parameter>
+		<parameter type="text">str_Msg</parameter>
+	</item>
+	<item name="pegBest">
+		<notes>Specifies the state of the Peg Advanced order setting(numeric value = 1), used w</notes>
+		<example>SetPeg(pegBest);</example>
+	</item>
+	<item name="pegDisable">
+		<notes>Specifies the state of the Peg Advanced order setting(numeric value = 0), used w</notes>
+		<example>SetPeg(pegDisable);</example>
+	</item>
+	<item name="pegMid">
+		<notes>Specifies the state of the Peg Advanced order setting(numeric value = 2), used w</notes>
+		<example>SetPeg(pegMid);</example>
+	</item>
+	<item name="PERatio">
+		<notes/>
+		<example/>
+	</item>
+	<item name="PercentProfit">
+		<notes>Percentage of all closed-out winning trades</notes>
+		<example>Total trades : 8, total winning trades : 7, PercentProfit = 88%</example>
+	</item>
+	<item name="PLACE">
+		<notes>Skip word.</notes>
+		<example>If Close &gt; Open Then Place a Buy</example>
+	</item>
+	<item name="PlayMovieChain">
+		<notes>Queues then plays movies in movie chain mRef</notes>
+		<example>PlayMovieChain(mvRef8) queues and plays movie chain mvRef8</example>
+		<parameter type="numeric">mRef</parameter>
+	</item>
+	<item name="PlaySound">
+		<notes>Plays sound from file sFile</notes>
+		<example>PlaySound("c:\hiscore.wav") plays sound in c:\hiscore.wav file</example>
+		<parameter type="text">str_File</parameter>
+	</item>
+	<item name="PLOT">
+		<notes>References the value of a plot.</notes>
+		<example>value1=Plot("Plot1");</example>
+	</item>
+	<item name="PLOT1">
+		<notes>Plots a specified expression in a chart or grid.</notes>
+		<example>Plot1(value1);</example>
+	</item>
+	<item name="PLOT2">
+		<notes>Plots a specified expression in a chart or grid.</notes>
+		<example>Plot2(value1);</example>
+	</item>
+	<item name="PLOT3">
+		<notes>Plots a specified expression in a chart or grid.</notes>
+		<example>Plot3(value1);</example>
+	</item>
+	<item name="PLOT4">
+		<notes>Plots a specified expression in a chart or grid.</notes>
+		<example>Plot4(value1);</example>
+	</item>
+	<item name="PLOTPAINTBAR">
+		<notes>Plots a range of values inside the current bar in a chart.</notes>
+		<example>PlotPaintBar(value1,Value2);</example>
+	</item>
+	<item name="PLOTPB">
+		<notes>Plots a range of values inside the current bar in a chart.</notes>
+		<example>PlotPB(value1,Value2);</example>
+	</item>
+	<item name="PM_GetCellValue">
+		<notes>PM_GetCellValue</notes>
+		<example>PM_GetCellValue</example>
+		<parameter type="numeric">column</parameter>
+		<parameter type="numeric">price</parameter>
+	</item>
+	<item name="PM_GetNumColumns">
+		<notes>PM_GetNumColumns</notes>
+		<example>PM_GetNumColumns</example>
+	</item>
+	<item name="PM_GetRowHeight">
+		<notes>PM_GetRowHeight</notes>
+		<example>PM_GetRowHeight</example>
+	</item>
+	<item name="PM_High">
+		<notes>PM_High</notes>
+		<example>PM_High</example>
+	</item>
+	<item name="PM_Low">
+		<notes>PM_Low</notes>
+		<example>PM_Low</example>
+	</item>
+	<item name="PM_SetCellValue">
+		<notes>PM_SetCellValue</notes>
+		<example>PM_SetCellValue</example>
+		<parameter type="numeric">column</parameter>
+		<parameter type="numeric">price</parameter>
+		<parameter type="numeric">value</parameter>
+	</item>
+	<item name="PM_SetHigh">
+		<notes>PM_SetHigh</notes>
+		<example>PM_SetHigh</example>
+		<parameter type="numeric">price</parameter>
+	</item>
+	<item name="PM_SetLow">
+		<notes>PM_SetLow</notes>
+		<example>PM_SetLow</example>
+		<parameter type="numeric">price</parameter>
+	</item>
+	<item name="PM_SetNumColumns">
+		<notes>PM_SetNumColumns</notes>
+		<example>PM_SetNumColumns</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="PM_SetRowHeight">
+		<notes>PM_SetRowHeight</notes>
+		<example>PM_SetRowHeight</example>
+		<parameter type="numeric">increment</parameter>
+	</item>
+	<item name="POB">
+		<notes>A synonym for a limit order.</notes>
+		<example>ExitLong Next Bar at Low POB;</example>
+	</item>
+	<item name="POINT">
+		<notes>Returns the minimal interval value a symbol can move.</notes>
+		<example>Buy at Low- 1 Point Limit;</example>
+	</item>
+	<item name="POINTER">
+		<notes>Reserved for use with ELKIT32.DLL.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="POINTS">
+		<notes>Returns the minimal interval value a symbol can move.</notes>
+		<example>Sell at High- 5 points Limit;</example>
+	</item>
+	<item name="PointValue">
+		<notes>Dollar amount of 1 point move</notes>
+		<example>PointValue = $5 for SP 500</example>
+	</item>
+	<item name="Pos">
+		<notes>Absolute positive of num</notes>
+		<example>Pos(-5) = 5, Pos(3) = 3</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="POSITION">
+		<notes>References a position in a Position Search Strategy.</notes>
+		<example>Value1 = numLegs of Position(1);</example>
+	</item>
+	<item name="POSITIONID">
+		<notes>References the ID of the Position in a Search Strategy.</notes>
+		<example>PositionID</example>
+	</item>
+	<item name="PositionProfit">
+		<notes>Profit/Loss of position, num position(s) ago</notes>
+		<example>Current P/L = 4000, PositionProfit(0) = $4000</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="POSITIONSTATUS">
+		<notes>Defines the true/false expression that must be true to create a position.</notes>
+		<example>PositionStatus(strike of Leg(1)=Strike of Leg(2));</example>
+	</item>
+	<item name="Power">
+		<notes>Num raised to the pow power</notes>
+		<example>Power(2,3) = 8</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">pow</parameter>
+	</item>
+	<item name="PrevClose">
+		<notes/>
+		<example/>
+	</item>
+	<item name="PrevOpenInt">
+		<notes/>
+		<example/>
+	</item>
+	<item name="PrevVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="PriceScale">
+		<notes>Price scale of stock/future symbol (inverted for Easy Language)</notes>
+		<example>Pork Bellies price scale = 1/1000, PriceScale = 1000</example>
+	</item>
+	<item name="PRINT">
+		<notes>Sends output to the PowerEditor's Debug Window, a specified file, or a printer.</notes>
+		<example>Print(date, time, close);</example>
+	</item>
+	<item name="PRINTER">
+		<notes>Sends information to a printer from a print statement.</notes>
+		<example>print(Printer,date,time,close);</example>
+	</item>
+	<item name="Product">
+		<notes>Number representing Omega product currently being used</notes>
+		<example>0 for TradeStation, 1 for SuperCharts, ... (see documentation for other values)</example>
+	</item>
+	<item name="ProfitTargetStop">
+		<notes>Profit target stop amount</notes>
+		<example>ProfitTargetStop = $2500 if set to 2500 in Stops tab</example>
+	</item>
+	<item name="ptDate">
+		<notes>Specifies Date (numeric value = 25) as the plot type for function SetPlotType</notes>
+		<example>SetPlotType(ptDate);</example>
+	</item>
+	<item name="ptDateTime">
+		<notes>Specifies DateTime (numeric value = 27) as the plot type for function SetPlotTyp</notes>
+		<example>SetPlotType(ptDateTime);</example>
+	</item>
+	<item name="ptDouble">
+		<notes>Specifies Double (numeric value = 28) as the plot type for function SetPlotType</notes>
+		<example>SetPlotType(ptDouble);</example>
+	</item>
+	<item name="ptFloat">
+		<notes>Specifies Float (numeric value = 29) as the plot type for function SetPlotType</notes>
+		<example>SetPlotType(ptFloat);</example>
+	</item>
+	<item name="ptInvalid">
+		<notes>Specifies Invalid (numeric value = 3) as the plot type for function SetPlotType</notes>
+		<example>SetPlotType(ptInvalid);</example>
+	</item>
+	<item name="ptProbability">
+		<notes>Specifies ptProbability (numeric value = 4) as the plot type for function SetPlo</notes>
+		<example>SetPlotType(ptProbability);</example>
+	</item>
+	<item name="ptString">
+		<notes>Specifies String (numeric value = 2) as the plot type for function SetPlotType</notes>
+		<example>SetPlotType(ptString);</example>
+	</item>
+	<item name="ptTime">
+		<notes>Specifies Time (numeric value = 26) as the plot type for function SetPlotType</notes>
+		<example>SetPlotType(ptTime);</example>
+	</item>
+	<item name="ptTrueFalse">
+		<notes>Specifies TrueFalse (numeric value = 1) as the plot type for function SetPlotTyp</notes>
+		<example>SetPlotType(ptTrueFalse);</example>
+	</item>
+	<item name="PUT">
+		<notes>Used to determine if an option or leg analyzed is a put.</notes>
+		<example>If LegType of Leg(1) = Put Then {ACTION}</example>
+	</item>
+	<item name="PUTCOUNT">
+		<notes>the number of puts in the option chain.</notes>
+		<example>PutCount</example>
+	</item>
+	<item name="PUTITMCOUNT">
+		<notes>Reserved for future use.</notes>
+		<example>PutITMCount</example>
+	</item>
+	<item name="PutOpenint">
+		<notes/>
+		<example/>
+	</item>
+	<item name="PUTOTMCOUNT">
+		<notes>Reserved for future use.</notes>
+		<example>PutOTMCount</example>
+	</item>
+	<item name="PUTSERIESCOUNT">
+		<notes>The number of put series available in the option chain.</notes>
+		<example>PutSeriesCount</example>
+	</item>
+	<item name="PUTSTRIKECOUNT">
+		<notes>The number of strike prices available for puts in the option chain.</notes>
+		<example>PutStrikeCount</example>
+	</item>
+	<item name="PutVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Ask">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_AskExchange">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_AskSize">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Bid">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_BidExchange">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_BidSize">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_BigPointValue">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_CallOpenint">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_CallVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Category">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Close">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DailyLimit">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Date">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Date">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DateLastAsk">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DateLastAskEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DateLastBid">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DateLastBidEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DateLastTrade">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DateLastTradeEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_DownVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_ExchangeListed">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_ExpirationDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_ExpirationDateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_High">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_IVolatility">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Last">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_LastTradingDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_LastTradingDateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Low">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Margin">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_MinMove">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_NewsCount">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_NumOptions">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Offer">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Open">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Open">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_OpenInterest">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_OptionType">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_PreviousClose">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_PreviousOpenInterest">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_PreviousVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_PrevTotalVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_PutOpenint">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_PutVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_StrikePrice">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Ticks">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Time">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TimeEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TimeLastAsk">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TimeLastAskEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TimeLastBid">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TimeLastBidEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TimeLastTrade">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TimeLastTradeEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TotalVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_TradeVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_UnchangedVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_UpVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="q_Yield">
+		<notes/>
+		<example/>
+	</item>
+	<item name="RaiseRuntimeError">
+		<notes>Display a Run-time error</notes>
+		<example>RaiseRunTimeError("Error");</example>
+		<parameter type="text">strReason</parameter>
+	</item>
+	<item name="Random">
+		<notes>Returns a pseudo-random number</notes>
+		<example>Random(18) returns a random value between 0 and 18</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="RAWASK">
+		<notes>Returns the ask value of an option or position leg received by your datafeed.</notes>
+		<example>Plot1(RawAsk, "Ask");</example>
+	</item>
+	<item name="RAWBID">
+		<notes>Returns the bid value of an option or position leg received by your datafeed.</notes>
+		<example>Plot1(RawVid, "Bid");</example>
+	</item>
+	<item name="Reciprocal">
+		<notes>Reciprocal value of num</notes>
+		<example>Reciprocal(2) = 0.5, Reciprocal(4) = 0.25. Reciprocal(0) = div by zero.</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="RED">
+		<notes>Specifies color Red (numeric value = 6) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Red)</example>
+	</item>
+	<item name="REGULARSESSION">
+		<notes>Used with session information to refer to regular sessions.</notes>
+		<example>RegularSession</example>
+	</item>
+	<item name="REPEAT">
+		<notes>The REPEAT statement is similar to the while loop, however, with the repeat sta</notes>
+		<example> 
+repeat 
+	{statements} 
+until (boo</example>
+	</item>
+	<item name="Repeat">
+		<notes>The REPEAT statement is similar to the while loop, however, with the repeat sta</notes>
+		<example> 
+repeat 
+	{statements} 
+until (boo</example>
+	</item>
+	<item name="RevSize">
+		<notes>Reversal size of Point &amp;&amp; Figure chart</notes>
+		<example>RevSize of 1 x 3 Point &amp;&amp; Figure chart = 3</example>
+	</item>
+	<item name="RGB">
+		<notes>Return a RGB color. The red, green and blue components are valid only from 0 to </notes>
+		<example>value1 = RGB( 255, 0, 0 );</example>
+		<parameter type="numeric">nRed</parameter>
+		<parameter type="numeric">nGreen</parameter>
+		<parameter type="numeric">nBlue</parameter>
+	</item>
+	<item name="RGBToLegacyColor">
+		<notes>Return the nearest legacy color value from a RGB color.</notes>
+		<example> value1 = RGBToLegacyColor( nMyRGB );</example>
+		<parameter type="numeric">nRGB</parameter>
+	</item>
+	<item name="RHO">
+		<notes>Returns the Rho value of an option, leg, or position.</notes>
+		<example>Value1 = Rho of Option;</example>
+	</item>
+	<item name="RIGHTSIDE">
+		<notes>Used with ActivityBars to refer to a cell or zone on the right side of a bar.</notes>
+		<example>AddCell(value1, RightSide, "a", Tool_Blue, 0)</example>
+	</item>
+	<item name="RightSide">
+		<notes>Used with ActivityBars to refer to a cell or zone on the right side of a bar.</notes>
+		<example>AddCell(value1, RightSide, "a", Tool_Blue, 0)</example>
+	</item>
+	<item name="RightStr">
+		<notes>Rightmost sSize portion of string</notes>
+		<example>RightStr("Net Profit",6) = the string "Profit"</example>
+		<parameter type="text">string</parameter>
+		<parameter type="numeric">sSize</parameter>
+	</item>
+	<item name="Round">
+		<notes>Num rounded to nearest prec precision</notes>
+		<example>Round(1.5,0) = 2, Round(3.456,2) = 3.46</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">prec</parameter>
+	</item>
+	<item name="rtARCA">
+		<notes>Specifies ARCA(numeric value = 2) as the order route, used with functions SetRou</notes>
+		<example>SetRoute(rtARCA);</example>
+	</item>
+	<item name="rtBRUT">
+		<notes>Specifies BRUT(numeric value = 3) as the order route, used with functions SetRou</notes>
+		<example>SetRoute(rtBRUT);</example>
+	</item>
+	<item name="rtBTRD">
+		<notes>Specifies BTRD(numeric value = 4) as the order route, used with functions SetRou</notes>
+		<example>SetRoute(rtBTRD);</example>
+	</item>
+	<item name="rtDefault">
+		<notes>Specifies Default(numeric value = 0) as the order route, used with functions Set</notes>
+		<example>SetRoute(rtDefault);</example>
+	</item>
+	<item name="rtINCA">
+		<notes>Specifies INCA(numeric value = 5) as the order route, used with functions SetRou</notes>
+		<example>SetRoute(rtINCA);</example>
+	</item>
+	<item name="rtIntelligent">
+		<notes>Specifies Intelligent(numeric value = 1) as the order route, used with functions</notes>
+		<example>SetRoute(rtIntelligent);</example>
+	</item>
+	<item name="rtInvalid">
+		<notes>Specifies Invalid(numeric value = 9) as the order route, used with functions Set</notes>
+		<example>SetRoute(rtInvalid);</example>
+	</item>
+	<item name="rtISLD">
+		<notes>Specifies ISLD(numeric value = 6) as the order route, used with functions SetRou</notes>
+		<example>SetRoute(rtISLD);</example>
+	</item>
+	<item name="rtNone">
+		<notes>Specifies None(numeric value = 0) as the order route, used with functions SetRou</notes>
+		<example>SetRoute(rtNone);</example>
+	</item>
+	<item name="rtSuperDOT">
+		<notes>Specifies SuperDot(numeric value = 8) as the order route, used with functions Se</notes>
+		<example>SetRoute(rtSuperDOT);</example>
+	</item>
+	<item name="rtSuperMont">
+		<notes>Specifies SuperMont(numeric value = 7) as the order route, used with functions S</notes>
+		<example>SetRoute(rtSuperMont);</example>
+	</item>
+	<item name="RunCommand">
+		<notes>Run a command</notes>
+		<example>RunCommand(".ow");</example>
+		<parameter type="text">strCommand</parameter>
+	</item>
+	<item name="SATURDAY">
+		<notes>Specifies day of the week Thursday (numeric value = 6).</notes>
+		<example>Saturday</example>
+	</item>
+	<item name="SCREEN">
+		<notes>Reserved for future use.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="Screen">
+		<notes>Reserved for future use.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SecondsFromDateTime">
+		<notes>Returns seconds portion of DateTime</notes>
+		<example>iSeconds = SecondsFromDateTime(1440.500);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="SELF">
+		<notes>Used to send the execution context to an EXTERNAL DLL function.</notes>
+		<example>Value1 = ExternDllFunc(self)</example>
+	</item>
+	<item name="SELL">
+		<notes>Used in trading Strategy to partially or completely liquidate a long position.</notes>
+		<example>Sell ("Profit") 10 contracts next bar at MidPrice stop;</example>
+	</item>
+	<item name="SELLSHORT">
+		<notes>Initiates a short position, closes any open long positions &amp; reverses position.</notes>
+		<example>Sell Short("BreakOut") 500 Shares next bar MidPrice or Lower</example>
+	</item>
+	<item name="SERIESCOUNT">
+		<notes>The number of series available in the option chain.</notes>
+		<example>SeriesCount</example>
+	</item>
+	<item name="Sess1EndTime">
+		<notes>Ending time of first session</notes>
+		<example>Sess1EndTime = 1615 (eastern time) for SP 500</example>
+	</item>
+	<item name="Sess1FirstBarTime">
+		<notes>Time when first bar in morning session completed</notes>
+		<example>Sess1FirstBarTime = 935 (eastern time) for 5 min SP 500</example>
+	</item>
+	<item name="Sess1StartTime">
+		<notes>Starting time of first session</notes>
+		<example>Sess1StartTime = 930 (eastern time) for SP 500</example>
+	</item>
+	<item name="Sess2EndTime">
+		<notes>Ending time of second session</notes>
+		<example>Sess2EndTime = 900 (eastern time) for SP 500</example>
+	</item>
+	<item name="Sess2FirstBarTime">
+		<notes>Time when first bar in evening session completed</notes>
+		<example>Sess2FirstBarTime = 1650 (eastern time) for 5 min SP 500</example>
+	</item>
+	<item name="Sess2StartTime">
+		<notes>Starting time of second session</notes>
+		<example>Sess2StartTime = 1645 (eastern time) for SP 500</example>
+	</item>
+	<item name="SessionCount">
+		<notes>Returns the number of sessions for the week.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionCountMS">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionEndDay">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionEndDayMS">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionEndTime">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionEndTimeMS">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionStartDay">
+		<notes>Returns the day of the week that the specified session starts; a numerical valu</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionStartDayMS">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionStartTime">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SessionStartTimeMS">
+		<notes>no notes available</notes>
+		<example>no example available</example>
+	</item>
+	<item name="SetAllOrNone">
+		<notes>The current state of the All or None advanced setting.</notes>
+		<example>SetAllOrNone(TRUE);</example>
+		<parameter type="true / false">tfAllOrNone</parameter>
+	</item>
+	<item name="SETBREAKEVEN">
+		<notes>Sets up a break-even stop</notes>
+		<example>SetBreakEven(500);</example>
+	</item>
+	<item name="SetBuyMinusSellPlus">
+		<notes>Enables or disables the Buy on -/Sell on + advanced setting.</notes>
+		<example>SetBuyMinusSellPlus(TRUE);</example>
+		<parameter type="true / false">tfBuyMinusSellPlus</parameter>
+	</item>
+	<item name="SetDiscretion">
+		<notes>Enables or disables the Discretionary advanced setting.</notes>
+		<example>SetDiscretion(.05);</example>
+		<parameter type="numeric">dDiscretionValue</parameter>
+	</item>
+	<item name="SETDOLLARTRAILING">
+		<notes>Sets up a dollar-trailing stop</notes>
+		<example>SetDollarTrailing(25000);</example>
+	</item>
+	<item name="SETEXITONCLOSE">
+		<notes>Sets the Exit on Close stop to true.</notes>
+		<example>SetExitOnClose;</example>
+	</item>
+	<item name="SetFPCompareAccuracy">
+		<notes>Sets the tolerance value to be used when comparing two floating point values.</notes>
+		<example>SetFPCompareAccuracy(fpcMedAccuracy);</example>
+		<parameter type="numeric">iTolerance</parameter>
+	</item>
+	<item name="SetNonDisplay">
+		<notes>Enables or disables the Non-Display advanced setting.</notes>
+		<example>SetNonDisplay(TRUE);</example>
+		<parameter type="true / false">tfNonDisplay</parameter>
+	</item>
+	<item name="SetNOW">
+		<notes>Enables or disables the NOW (ECN's Only) advanced setting.</notes>
+		<example>SetNow(TRUE);</example>
+		<parameter type="true / false">tfNow</parameter>
+	</item>
+	<item name="SetPeg">
+		<notes>Enables or disables the Peg advanced setting.</notes>
+		<example>SetPeg(pegBest);</example>
+		<parameter type="numeric">iPegType</parameter>
+	</item>
+	<item name="SETPERCENTTRAILING">
+		<notes>Sets up a percent-trailing stop</notes>
+		<example>SetPercentTrailing(0, 15)</example>
+	</item>
+	<item name="SETPLOTBGCOLOR">
+		<notes>Assigns a specified background color to a grid containing an indicator.</notes>
+		<example>SetPlotBgColor(1,Tool_Red);</example>
+	</item>
+	<item name="SETPLOTCOLOR">
+		<notes>Assigns the color value (color) to the plot specified by (num).</notes>
+		<example>SetPlotColor(1, Tool_Blue);</example>
+	</item>
+	<item name="SetPlotType">
+		<notes>Sets the Plot Type</notes>
+		<example>SetPlotType(1,ptString);</example>
+		<parameter type="numeric">iPlotNumber</parameter>
+		<parameter type="numeric">iPlotType</parameter>
+	</item>
+	<item name="SETPLOTWIDTH">
+		<notes>Modifies the thickness of an indicator's plot line.</notes>
+		<example>SetPlotWidth(1, 3);</example>
+	</item>
+	<item name="SETPROFITTARGET">
+		<notes>Sets up a profit-target stop</notes>
+		<example>SetProfitTarget(10000);</example>
+	</item>
+	<item name="SetRoute">
+		<notes>Set the Route for an order</notes>
+		<example>SetRoute(rtIntelligent);</example>
+		<parameter type="numeric">iRoute</parameter>
+	</item>
+	<item name="SetRouteName">
+		<notes>Set the route for an order</notes>
+		<example>SetRouteName( "ARCA" );</example>
+		<parameter type="numeric">sRoute</parameter>
+	</item>
+	<item name="SetShaveImprove">
+		<notes>Adjusts the strategy calculated limit price by the ShaveImproveVal.</notes>
+		<example>SetShaveImprove(.05);</example>
+		<parameter type="numeric">dShaveImprove</parameter>
+	</item>
+	<item name="SetShowOnly">
+		<notes>Enables or disables the Show Only advanced setting.</notes>
+		<example>SetShowOnly(100);</example>
+		<parameter type="numeric">iQuantity</parameter>
+	</item>
+	<item name="SETSTOPCONTRACT">
+		<notes>Sets the builtin stops to execute on a contract basis.</notes>
+		<example>SetStopContract;</example>
+	</item>
+	<item name="SETSTOPLOSS">
+		<notes>Sets up a stop-loss stop</notes>
+		<example>SetStopLoss(5000);</example>
+	</item>
+	<item name="SETSTOPPOSITION">
+		<notes>Sets the builtin stops to execute on a position basis.</notes>
+		<example>SetStopPosition;</example>
+	</item>
+	<item name="SETSTOPSHARE">
+		<notes>Sets the builtin stops to execute on a share basis.</notes>
+		<example>SetStopShare;</example>
+	</item>
+	<item name="SetSubscriberOnly">
+		<notes>Enables or disables the Subscriber Only advanced setting.</notes>
+		<example>SetSubscriberOnly(TRUE);</example>
+		<parameter type="true / false">tfSubscriberOnly</parameter>
+	</item>
+	<item name="Settlement">
+		<notes/>
+		<example/>
+	</item>
+	<item name="SHARE">
+		<notes>Used to specify the number of shares for a particular order.</notes>
+		<example>Buy 1 Share Next Bar at Open;</example>
+	</item>
+	<item name="SHARES">
+		<notes>Used to specify the number of shares for a particular order.</notes>
+		<example>Buy 100 Shares Next Bar at Open;</example>
+	</item>
+	<item name="Shares">
+		<notes>Used to specify the number of shares for a particular order.</notes>
+		<example>Buy 100 Shares Next Bar at Open;</example>
+	</item>
+	<item name="SharesOut">
+		<notes/>
+		<example/>
+	</item>
+	<item name="SICCode">
+		<notes/>
+		<example/>
+	</item>
+	<item name="Sign">
+		<notes>1 for positive num, -1 for negative num and 0 for 0</notes>
+		<example>Sign(4) = 1, Sign(-3.23) = -1</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="Sine">
+		<notes>Sine value of num, in degrees</notes>
+		<example>Sine(115.125) = .905388</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="SKIP">
+		<notes>Reserved for future use.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="Slippage">
+		<notes>Slippage per stock/contract</notes>
+		<example>Slippage = $50 if set to 50 in Costs tab</example>
+	</item>
+	<item name="SnapFundExists">
+		<notes>Informs if snapshot fundamental data available for symbol</notes>
+		<example>TRUE if snapshot fundamental data exists, FALSE otherwise</example>
+	</item>
+	<item name="Spaces">
+		<notes>String of cnt empty spaces, used for padding output</notes>
+		<example>Spaces(5) = "    " or 5 empty spaces</example>
+		<parameter type="numeric">cnt</parameter>
+	</item>
+	<item name="Square">
+		<notes>Square of num</notes>
+		<example>Square(4.2) = 17.64</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="SquareRoot">
+		<notes>Square root of num</notes>
+		<example>SquareRoot(25) = 5</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="STARTDATE">
+		<notes>Reserved for future use.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="StartDate">
+		<notes>Reserved for future use.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="stAutoSession">
+		<notes>Specifies the Type of session (numeric value = 0)</notes>
+		<example>;</example>
+	</item>
+	<item name="STOP">
+		<notes>A stop order meaning 'or higher' or 'or lower', depending on the context.</notes>
+		<example>Buy next bar at High Stop;</example>
+	</item>
+	<item name="stRegularSession">
+		<notes>Specifies the Type of session (numeric value = 1)</notes>
+		<example>;</example>
+	</item>
+	<item name="STRIKE">
+		<notes>Returns the strike price of an option or position leg.</notes>
+		<example>If Close crosses over Strike of Option Then Alert;</example>
+	</item>
+	<item name="STRIKECOUNT">
+		<notes>The number of strikes available in the option chain.</notes>
+		<example>StrikeCount</example>
+	</item>
+	<item name="STRIKEITMCOUNT">
+		<notes>Reserved for future use.</notes>
+		<example>StrikeITMCount</example>
+	</item>
+	<item name="STRIKEOTMCOUNT">
+		<notes>Reserved for future use.</notes>
+		<example>StrikeOTMCount</example>
+	</item>
+	<item name="String">
+		<notes>Defines an input as a string expression.</notes>
+		<example>Input: Name(String);</example>
+	</item>
+	<item name="STRING">
+		<notes>Defines an input as a string expression.</notes>
+		<example>Input: Name(String);</example>
+	</item>
+	<item name="STRINGARRAY">
+		<notes>Defines an input as a string array.</notes>
+		<example>Input: Name[n](StringArray);</example>
+	</item>
+	<item name="STRINGARRAYREF">
+		<notes>Defines an input as a string function-modificable array.</notes>
+		<example>Input: Name[n](StringArrayRef);</example>
+	</item>
+	<item name="STRINGREF">
+		<notes>Allows the code to pass a Text-String variable so it can be modified by the fun</notes>
+		<example>StringRef</example>
+	</item>
+	<item name="StringRef">
+		<notes>Allows the code to pass a Text-String variable so it can be modified by the fun</notes>
+		<example>StringRef</example>
+	</item>
+	<item name="STRINGSERIES">
+		<notes>Defines a function's input as a string series expression.</notes>
+		<example>Input: Name(StringSeries);</example>
+	</item>
+	<item name="STRINGSIMPLE">
+		<notes>Defines a function's input as a string simple expression.</notes>
+		<example>Input: Name(StringSimple);</example>
+	</item>
+	<item name="StringToDate">
+		<notes>Convert a date from string to numeric value</notes>
+		<example>dDate = StringToDate("01/01/03");</example>
+		<parameter type="text">strDate</parameter>
+	</item>
+	<item name="StringToDateTime">
+		<notes>Convers a DateTime string to numeric value</notes>
+		<example>dDateTime = StringToDateTime("01/01/03 01:01:00");</example>
+		<parameter type="text">strDateTime</parameter>
+	</item>
+	<item name="StringToTime">
+		<notes>Converts a time value from string to numeric value</notes>
+		<example>dTime = StringToTime("01:01:15:");</example>
+		<parameter type="text">strTime</parameter>
+	</item>
+	<item name="StrLen">
+		<notes>Number of characters in string str</notes>
+		<example>StrLen("1357908642") = 10, StrLen("") = 0</example>
+		<parameter type="text">str</parameter>
+	</item>
+	<item name="StrToNum">
+		<notes>Numerical value of str, zero if str not numeric</notes>
+		<example>StrToNum("23.10") = 23.1, StrToNum("Francis") = 0</example>
+		<parameter type="text">str</parameter>
+	</item>
+	<item name="SumList">
+		<notes>Sum of all nums in list</notes>
+		<example>SumList(5,7,9) = 21</example>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num</parameter>
+		<parameter type="numeric">num...</parameter>
+	</item>
+	<item name="SUNDAY">
+		<notes>Specifies day of the week Sunday (numeric value = 0).</notes>
+		<example>Sunday</example>
+	</item>
+	<item name="SWITCH">
+		<notes>The switch statement allows selection among multiple sections of code, dependin</notes>
+		<example>
+switch (numeric expression) 
+begin 
+	case expression:statement;{break;}
+en</example>
+	</item>
+	<item name="Symbol">
+		<notes/>
+		<example/>
+	</item>
+	<item name="SymbolName">
+		<notes/>
+		<example/>
+	</item>
+	<item name="SymbolRoot">
+		<notes/>
+		<example/>
+	</item>
+	<item name="T">
+		<notes>Returns the closing time of the bar referenced. (Abbreviation for Time)</notes>
+		<example>If T &gt; 1200 Then Sell Next Bar at Lowest(l,10) or Lower;</example>
+	</item>
+	<item name="Tangent">
+		<notes>Tangent of num degrees</notes>
+		<example>Tangent(45) = 1</example>
+		<parameter type="numeric">num</parameter>
+	</item>
+	<item name="TEXT">
+		<notes>Reserved for backward compatibility with previous EasyLanguage versions.</notes>
+		<example>no example available</example>
+	</item>
+	<item name="Text_Delete">
+		<notes>Deletes text object TX_Ref</notes>
+		<example>Text_Delete(92) deletes text object #92 from the chart</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_GetActive">
+		<notes>Return the ID of the active/selected text object</notes>
+		<example>value1 = Text_GetActive;</example>
+	</item>
+	<item name="Text_GetColor">
+		<notes>Color of text object TX_Ref (see documentation for color values)</notes>
+		<example>Text_GetColor(92) = color of text object #92</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_GetDate">
+		<notes>Date axis value of text object TX_Ref</notes>
+		<example>Text_GetDate(56) = date of text object #56</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_GetFirst">
+		<notes>First created text object of type pref (see documentation for pref types)</notes>
+		<example>Text_GetFirst(1) = reference number of first type 1 text object</example>
+		<parameter type="numeric">pref</parameter>
+	</item>
+	<item name="Text_GetHStyle">
+		<notes>TX_Ref horizontal text placement style (see documentation for style values)</notes>
+		<example>Text_GetHStyle(51) = the horizontal style of text object #51</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_GetNext">
+		<notes>Text object created after TX_Ref (see documentation for pref types)</notes>
+		<example>Text_GetNext(18,2) = Text object type 2 reference after text object # 81</example>
+		<parameter type="numeric">TX_Ref</parameter>
+		<parameter type="numeric">pref</parameter>
+	</item>
+	<item name="Text_GetString">
+		<notes>Text stored in text object TX_Ref</notes>
+		<example>Text_GetString(43) = text stored in text object #43</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_GetTime">
+		<notes>Time axis value of text object TX_Ref</notes>
+		<example>Text_GetTime(18) = time axis value of text object #18</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_GetValue">
+		<notes>Price axis value of text object TX_Ref</notes>
+		<example>Text_GetValue(34) = price axis value of text object #34</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_GetVStyle">
+		<notes>TX_Ref vertical text placement style (see documentation for style values)</notes>
+		<example>Text_GetVStyle(18) = the vertical style of text object #18</example>
+		<parameter type="numeric">TX_Ref</parameter>
+	</item>
+	<item name="Text_New">
+		<notes>Draws text object str1 at value nPrice on cDate date at tTime time</notes>
+		<example>Text_New(cDt,tTm,23,"Up") draws "Up" at 23 on cDt at tTm</example>
+		<parameter type="numeric">cDate</parameter>
+		<parameter type="numeric">tTime</parameter>
+		<parameter type="numeric">nPrice</parameter>
+		<parameter type="text">str1</parameter>
+	</item>
+	<item name="Text_SetColor">
+		<notes>Changes the color of TX_Ref to clr (see documentation for color values)</notes>
+		<example>Text_SetColor(51,Tool_Red) changes color of text object #51 to red</example>
+		<parameter type="numeric">TX_Ref</parameter>
+		<parameter type="numeric">clr</parameter>
+	</item>
+	<item name="Text_SetLocation">
+		<notes>Moves text object TX_Ref to price nPrice on date cDate at time tTime</notes>
+		<example>Text_SetLocation(24,cDte,845,7) moves TX_Ref #24 to 7 on cDte at 8:45am</example>
+		<parameter type="numeric">TX_Ref</parameter>
+		<parameter type="numeric">cDate</parameter>
+		<parameter type="numeric">tTime</parameter>
+		<parameter type="numeric">nPrice</parameter>
+	</item>
+	<item name="Text_SetString">
+		<notes>Changes the text of text object TX_Ref to str1</notes>
+		<example>Text_SetString(43,"MovAvg") changes object #43's to "MovAvg"</example>
+		<parameter type="numeric">TX_Ref</parameter>
+		<parameter type="text">str1</parameter>
+	</item>
+	<item name="Text_SetStyle">
+		<notes>Sets horiz/vert position of TX_Ref (see documentation for horiz/vert values)</notes>
+		<example>Text_SetStyle(24,2,0) sets object 24 centered and below the price line</example>
+		<parameter type="numeric">TX_Ref</parameter>
+		<parameter type="numeric">horiz</parameter>
+		<parameter type="numeric">vert</parameter>
+	</item>
+	<item name="THAN">
+		<notes>Skip word.</notes>
+		<example>If High &gt; than the Highest(High,50) Then {ACTION}</example>
+	</item>
+	<item name="THE">
+		<notes>Skip word.</notes>
+		<example>Sell the Next Bar on the Close;</example>
+	</item>
+	<item name="THEN">
+		<notes>Specifies the action to be executed if an If-Then statement is true.</notes>
+		<example>If High&gt;=Highest(high,10) Then Value1 = High;</example>
+	</item>
+	<item name="THEORETICALGROSSIN">
+		<notes>Amount required/received to establish a position at its theoretical value.</notes>
+		<example>Value1 = TheoreticalGrossIn of Leg(1);</example>
+	</item>
+	<item name="THEORETICALGROSSOUT">
+		<notes>Amount required/received in order to close a position at its theoretical value.</notes>
+		<example>Value1 = TheoreticalGrossOut of Leg(1);</example>
+	</item>
+	<item name="THEORETICALVALUE">
+		<notes>Returns the modeled value of an option.</notes>
+		<example>If TheoreticalValue of Option(1) &lt; Close of Option(1) Then Alert; </example>
+	</item>
+	<item name="THETA">
+		<notes>Returns the Theta value of an option, leg, or position.</notes>
+		<example>value1 = Theta of Option;</example>
+	</item>
+	<item name="THIS">
+		<notes>Used with Bar to reference the current bar.</notes>
+		<example>ExitLong this bar on close;</example>
+	</item>
+	<item name="THURSDAY">
+		<notes>Specifies day of the week Thursday (numeric value = 4).</notes>
+		<example>Thursday</example>
+	</item>
+	<item name="TICKS">
+		<notes>Reserved for backward compatibility. Replaced with Volume.</notes>
+		<example>Value1=Ticks;</example>
+	</item>
+	<item name="TICKTYPE">
+		<notes>The kind of tick in an option core event: Asset, Option, Future, or Model.</notes>
+		<example>TickType</example>
+	</item>
+	<item name="TIME">
+		<notes>Closing time of the bar in charting or specified time interval in a grid.</notes>
+		<example>If Time&lt;1000 Then Buy at Highest(High,10) or Higher;</example>
+	</item>
+	<item name="TimeToString">
+		<notes>Converts numeric DateTime value to a string Time</notes>
+		<example>strTime = TimeToString(1440.500);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="TL_Delete">
+		<notes>Deletes trendline TL_Ref and recycles its reference</notes>
+		<example>TL_Delete(19) removes trendline #19 from the chart</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetActive">
+		<notes>Return the ID of the active/selected trend line</notes>
+		<example>value1 = TL_GetActive;</example>
+	</item>
+	<item name="TL_GetAlert">
+		<notes>TL_Ref's alert type value (see documentation for alert values)</notes>
+		<example>TL_GetAlert(34) = 1 if trendline #34's alert set to intra-bar</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetBeginDate">
+		<notes>Date of trendline TL_Ref's start point</notes>
+		<example>TL_GetBeginDate(7) = date of trendline #7's start point</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetBeginTime">
+		<notes>Bar time of trendline TL_Ref's start point</notes>
+		<example>TL_GetBeginTime(7) = bar time of trendline #7's start point</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetBeginVal">
+		<notes>Price axis value at trendline TL_Ref's start point </notes>
+		<example>TL_GetBeginVal(7) = price axis value at trendline #7's start point</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetColor">
+		<notes>Trendline TL_Ref's color value (see documentation for color values)</notes>
+		<example>TL_GetColor(7) = 5 (Tool_Magenta) if trendline #7 is magenta</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetEndDate">
+		<notes>Date of trendline TL_Ref's end point</notes>
+		<example>TL_GetEndDate(7) = date of trendline #7's end point</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetEndTime">
+		<notes>Bar time of trendline TL_Ref's end point </notes>
+		<example>TL_GetEndTime(7) = bar time of trendline #7's end point</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetEndVal">
+		<notes>Price value at trendline TL_Ref's end point </notes>
+		<example>TL_GetEndVal(7) = value of trendline #7's end point</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetExtLeft">
+		<notes>TRUE if trendline TL_Ref is extended left, FALSE otherwise</notes>
+		<example>TL_GetExtLeft(7) = TRUE if trendline #7 is extend left enabled</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetExtRight">
+		<notes>TRUE if trendline TL_Ref is extended right, FALSE otherwise</notes>
+		<example>TL_GetExtRight(84) = FALSE if trendline #84 is extend right disabled</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetFirst">
+		<notes>First created trendline of type pref (see documentation for pref types)</notes>
+		<example>TL_GetFirst(3) = reference of first type 3 trendline</example>
+		<parameter type="numeric">pref</parameter>
+	</item>
+	<item name="TL_GetNext">
+		<notes>Trendline created after TL_Ref (see documentation for pref types)</notes>
+		<example>TL_GetNext(81,1) = Type 1 trendline reference after trendline # 81</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">pref</parameter>
+	</item>
+	<item name="TL_GetSize">
+		<notes>Thickness of trendline TL_Ref (see documentation for size values)</notes>
+		<example>TL_GetSize(7) = 0 If trendline #7's size is thinnest</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetStyle">
+		<notes>Trendline TL_Ref's style value (see documentation for style values)</notes>
+		<example>TL_GetStyle(7) = 2 (Tool_Dashed) if trendline #7's style is dashed</example>
+		<parameter type="numeric">TL_Ref</parameter>
+	</item>
+	<item name="TL_GetValue">
+		<notes>Price value at date cDate and time tTime on trendline TL_Ref</notes>
+		<example>TL_GetValue(14,950123,1400) = price on TL #14 at 2:00 pm on 1/23/95</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">cDate</parameter>
+		<parameter type="numeric">tTime</parameter>
+	</item>
+	<item name="TL_New">
+		<notes>Creates a new trendline with listed s start and e end points</notes>
+		<example>TL_New(d1,t1,p1,d2,t2,p2) creates trendline from d1/t1/p1 to d2/t2/p2</example>
+		<parameter type="numeric">sDate</parameter>
+		<parameter type="numeric">sTime</parameter>
+		<parameter type="numeric">sVal</parameter>
+		<parameter type="numeric">eDate</parameter>
+		<parameter type="numeric">eTime</parameter>
+		<parameter type="numeric">eVal</parameter>
+	</item>
+	<item name="TL_SetAlert">
+		<notes>Sets trendline TL_ref's alert to alertVal (see documentation for alert values)</notes>
+		<example>TL_SetAlert(7,2) sets trendline #7's alert to trigger on the close of a bar</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">alertVal</parameter>
+	</item>
+	<item name="TL_SetBegin">
+		<notes>Sets the start point of trendline TL_Ref to sVal on sDate at sTime</notes>
+		<example>TL_SetBegin(8,sDt,sTm,C) sets TL #8 start point to close of sDate at sTime</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">sDate</parameter>
+		<parameter type="numeric">sTime</parameter>
+		<parameter type="numeric">sVal</parameter>
+	</item>
+	<item name="TL_SetColor">
+		<notes>Sets color of trendline TL_Ref to clr (see documentation for color values)</notes>
+		<example>TL_SetColor(53,Tool_Green) sets color of TL #53 to green</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">clr</parameter>
+	</item>
+	<item name="TL_SetEnd">
+		<notes>Sets the end point of trendline TL_Ref to eVal on eDate at eTime</notes>
+		<example>TL_SetEnd(4,eDate,1300,C) sets TL #4 end point to close of eDate at 1:00pm</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">eDate</parameter>
+		<parameter type="numeric">eTime</parameter>
+		<parameter type="numeric">eVal</parameter>
+	</item>
+	<item name="TL_SetExtLeft">
+		<notes>Sets indefinite leftward extention of trendline TL_Ref (tfExt = true/false)</notes>
+		<example>TL_SetExtLeft(5,FALSE) disables left extend of trendline #5</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="true / false">tfExt</parameter>
+	</item>
+	<item name="TL_SetExtRight">
+		<notes>Sets indefinite rightward extention of trendline TL_Ref (tfExt = true/false)</notes>
+		<example>TL_SetExtRight(3,TRUE) enables right extend of trendline #3</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="true / false">tfExt</parameter>
+	</item>
+	<item name="TL_SetSize">
+		<notes>Sets thickness/size of trendline TL_Ref (see documentation for size values)</notes>
+		<example>TL_SetSize(6,0) sets trendline #6 to the thinnest line width</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">size</parameter>
+	</item>
+	<item name="TL_SetStyle">
+		<notes>Sets trendline TL_Ref to style (see documentation for style values)</notes>
+		<example>TL_SetStyle(4,Tool_Dashed3) sets trendline #4's style to dashed-3</example>
+		<parameter type="numeric">TL_Ref</parameter>
+		<parameter type="numeric">style</parameter>
+	</item>
+	<item name="TO">
+		<notes>Instructs a For-Loop statement to increment its count by one each iteration.</notes>
+		<example>For value1=1 to 20 Begin</example>
+	</item>
+	<item name="TODAY">
+		<notes>References the most current bar, even when analyzing intraday bars.</notes>
+		<example>value1 = Close of Today;</example>
+	</item>
+	<item name="Tomorrow">
+		<notes>References the next bar, even when analyzing intraday bars.</notes>
+		<example>Buy at Open of Tomorrow + Range stop;</example>
+	</item>
+	<item name="TOMORROW">
+		<notes>References the next bar, even when analyzing intraday bars.</notes>
+		<example>Buy at Open of Tomorrow + Range stop;</example>
+	</item>
+	<item name="TOOL_BLACK">
+		<notes>References the color black.</notes>
+		<example>SetPlotColor(1,Tool_Black)</example>
+	</item>
+	<item name="TOOL_BLUE">
+		<notes>References the color blue.</notes>
+		<example>SetPlotColor(1,Tool_Blue)</example>
+	</item>
+	<item name="TOOL_CYAN">
+		<notes>References the color cyan.</notes>
+		<example>SetPlotColor(1,Tool_Cyan)</example>
+	</item>
+	<item name="TOOL_DARKBLUE">
+		<notes>References the color dark blue.</notes>
+		<example>SetPlotColor(1,Tool_DrakBlue)</example>
+	</item>
+	<item name="TOOL_DARKBROWN">
+		<notes>References the color dark brown.</notes>
+		<example>SetPlotColor(1,Tool_DarkBrown)</example>
+	</item>
+	<item name="TOOL_DARKCYAN">
+		<notes>References the color dark cyan.</notes>
+		<example>SetPlotColor(1,Tool_DarkCyan)</example>
+	</item>
+	<item name="TOOL_DARKGRAY">
+		<notes>References the color dark gray.</notes>
+		<example>SetPlotColor(1,Tool_DarkGray)</example>
+	</item>
+	<item name="TOOL_DARKGREEN">
+		<notes>References the color dark green.</notes>
+		<example>SetPlotColor(1,Tool_DarkGreen)</example>
+	</item>
+	<item name="TOOL_DARKMAGENTA">
+		<notes>References the color dark magenta.</notes>
+		<example>SetPlotColor(1,Tool_DarkMagenta)</example>
+	</item>
+	<item name="TOOL_DARKRED">
+		<notes>References the color dark red.</notes>
+		<example>SetPlotColor(1,Tool_DarkRed)</example>
+	</item>
+	<item name="TOOL_DARKYELLOW">
+		<notes>Specifies the Dark yellow(brown).</notes>
+		<example>SetPlotColor(1,Tool_DarkYellow)</example>
+	</item>
+	<item name="TOOL_DASHED">
+		<notes>Assigns a dashed line to a drawing object.</notes>
+		<example>TL_SetStyle(1, Tool_Dashed);</example>
+	</item>
+	<item name="TOOL_DASHED2">
+		<notes>Assigns a dashed2 line to a drawing object.</notes>
+		<example>TL_SetStyle(1, Tool_Dashed2);</example>
+	</item>
+	<item name="TOOL_DASHED3">
+		<notes>Assigns a dashed3 line to a drawing object.</notes>
+		<example>TL_SetStyle(1, Tool_Dashed3);</example>
+	</item>
+	<item name="Tool_Dotted">
+		<notes>Assigns a dotted line to a drawing object.</notes>
+		<example>TL_SetStyle(1, Tool_Dotted);</example>
+	</item>
+	<item name="TOOL_DOTTED">
+		<notes>Assigns a dotted line to a drawing object.</notes>
+		<example>TL_SetStyle(1, Tool_Dotted);</example>
+	</item>
+	<item name="TOOL_GREEN">
+		<notes>References the color green.</notes>
+		<example>SetPlotColor(1,Tool_Green)</example>
+	</item>
+	<item name="TOOL_LIGHTGRAY">
+		<notes>References the color light gray.</notes>
+		<example>SetPlotColor(1,Tool_LightGray)</example>
+	</item>
+	<item name="TOOL_MAGENTA">
+		<notes>References the color magenta.</notes>
+		<example>SetPlotColor(1,Tool_Magenta)</example>
+	</item>
+	<item name="TOOL_RED">
+		<notes>References the color red.</notes>
+		<example>SetPlotColor(1,Tool_Red)</example>
+	</item>
+	<item name="TOOL_SOLID">
+		<notes>Assigns a solid line to a drawing object. </notes>
+		<example>TL_SetStyle(1, Tool_Solid);</example>
+	</item>
+	<item name="TOOL_WHITE">
+		<notes>References the color white.</notes>
+		<example>SetPlotColor(1,Tool_White)</example>
+	</item>
+	<item name="TOOL_YELLOW">
+		<notes>References the color yellow.</notes>
+		<example>SetPlotColor(1,Tool_Yellow)</example>
+	</item>
+	<item name="TOTAL">
+		<notes>Number of shares/contracts to exit from a position created by pyramiding.</notes>
+		<example>Buy to Cover 3 Contracts Total Next Bar at Market;</example>
+	</item>
+	<item name="TotalBarsEvenTrades">
+		<notes>Total number of bars in closed-out even trades</notes>
+		<example>value1 = TotalBarsEvenTrades;</example>
+	</item>
+	<item name="TotalBarsLosTrades">
+		<notes>Total number of bars in closed-out losing trades</notes>
+		<example>Three losing trades, 10 bars each, TotalBarsLosTrades = 30</example>
+	</item>
+	<item name="TotalBarsWinTrades">
+		<notes>Total number of bars in closed-out winning trades</notes>
+		<example>Five winning trades, 7 bars each, TotalBarsWinTrades = 35</example>
+	</item>
+	<item name="TotalTrades">
+		<notes>Number of all closed-out trades in the life of a strategy</notes>
+		<example>Total losing trades = 4, total winning trades = 7, TotalTrades = 11</example>
+	</item>
+	<item name="TradeDate">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TradeDate_EX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TradeDateEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TradeDirectionSeries">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TradeExch">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TradeTime">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TradeTimeEX">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TradeVolume">
+		<notes/>
+		<example/>
+	</item>
+	<item name="TrailingStopAmt">
+		<notes>Risk trailing stop dollar amount</notes>
+		<example>TrailingStopAmt = $92 if set to 92 in Stops tab</example>
+	</item>
+	<item name="TrailingStopFloor">
+		<notes>Risk trailing stop floor amount</notes>
+		<example>TrailingStopFloor = $2300 if set to 2300 in Stops tab</example>
+	</item>
+	<item name="TrailingStopPct">
+		<notes>Risk trailing stop percent amount</notes>
+		<example>TrailingStopPct = 15% if set to 15 in Stops tab</example>
+	</item>
+	<item name="TRUE">
+		<notes>Assigns a true value to a variable. Checks the status of an expression.</notes>
+		<example>Condition1 = True;</example>
+	</item>
+	<item name="TRUEFALSE">
+		<notes>Defines an input as a true/false expression.</notes>
+		<example>Input: OverSold(TrueFalse);</example>
+	</item>
+	<item name="TRUEFALSEARRAY">
+		<notes>Defines an input as a true/false array.</notes>
+		<example>Input: OverSold(TrueFalseArray);</example>
+	</item>
+	<item name="TRUEFALSEARRAYREF">
+		<notes>Defines an input as a true/false function-modifiable array.</notes>
+		<example>Input: OverSold(TrueFalseArrayRef);</example>
+	</item>
+	<item name="TRUEFALSEREF">
+		<notes>Allows the code to pass a TrueFalse variable so it can be modified by the funct</notes>
+		<example>TrueFalseRef</example>
+	</item>
+	<item name="TRUEFALSESERIES">
+		<notes>Defines an input as a true/false series expression.</notes>
+		<example>Input: Price(TrueFalseSeries);</example>
+	</item>
+	<item name="TRUEFALSESIMPLE">
+		<notes>Defines an input as a true/false simple expression.</notes>
+		<example>Input: Price(TrueFalseSimple);</example>
+	</item>
+	<item name="TUESDAY">
+		<notes>Specifies day of the week Tuesday (numeric value = 2).</notes>
+		<example>Tuesday</example>
+	</item>
+	<item name="UNDER">
+		<notes>Detects when a value crosses under, or becomes less than another value.</notes>
+		<example>If Close Crosses Under 50 Then Buy;</example>
+	</item>
+	<item name="Underlying">
+		<notes/>
+		<example/>
+	</item>
+	<item name="UnionSess1EndTime">
+		<notes>Latest session 1 end time of all datas in a multi-data chart</notes>
+		<example>SP Data1, BP Data2 &amp;&amp; LC Data3, UnionSess1EndTime = 1615 (eastern time)</example>
+	</item>
+	<item name="UnionSess1FirstBar">
+		<notes>Earliest session 1 first bar time of all datas in a multi-data chart</notes>
+		<example>1st bar created by 5-min BP Data3, UnionSess1FirstBar = 825 (eastern time)</example>
+	</item>
+	<item name="UnionSess1StartTime">
+		<notes>Earliest session 1 start time of all datas in a multi-data chart</notes>
+		<example>SP Data1, BP Data2 &amp;&amp; LC Data3, UnionSess1StartTime = 820 (eastern time)</example>
+	</item>
+	<item name="UnionSess2EndTime">
+		<notes>Latest session 2 end time of all datas in a multi-data chart</notes>
+		<example>Last bar created by BP Data3, UnionSess2EndTime = 750 (eastern time)</example>
+	</item>
+	<item name="UnionSess2FirstBar">
+		<notes>Earliest session 2 first bar time of all datas in a multi-data chart</notes>
+		<example>1st bar created by 5-min BP Data3, UnionSess2FirstBar = 1535 (eastern time)</example>
+	</item>
+	<item name="UnionSess2StartTime">
+		<notes>Earliest session 2 start time of all datas in a multi-data chart</notes>
+		<example>1st bar created by BP Data3, UnionSess2StartTime = 1530 (eastern time)</example>
+	</item>
+	<item name="UNITS">
+		<notes>Number of assets, options, or futures comprising a specific position leg.</notes>
+		<example>value1=Units of Leg(1);</example>
+	</item>
+	<item name="UNSIGNED">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="UNTIL">
+		<notes>The REPEAT statement is similar to the while loop, however, with the repeat sta</notes>
+		<example> 
+repeat 
+	{statements} 
+until (bool</example>
+	</item>
+	<item name="UpperStr">
+		<notes>Uppercase copy of string str</notes>
+		<example>UpperStr("Aapl") = "AAPL"</example>
+		<parameter type="text">str</parameter>
+	</item>
+	<item name="UPTICKS">
+		<notes>Reserved for backward compatibility. Replaced with UpVolume.</notes>
+		<example>If UpTicks &gt; DownTicks Then {ACTION}</example>
+	</item>
+	<item name="V">
+		<notes>Number of shares/contracts traded for the bar referenced. (Abbr. for Volume)</notes>
+		<example>If V&gt;Average(V,20) Then Alert;</example>
+	</item>
+	<item name="VAR">
+		<notes>Declares custom words to behave as variables throughout your analysis technique</notes>
+		<example>Var: Counter(0);</example>
+	</item>
+	<item name="VARIABLE">
+		<notes>Declares custom words to behave as variables throughout your analysis technique</notes>
+		<example>Variable: Counter(0);</example>
+	</item>
+	<item name="VARIABLES">
+		<notes>Declares custom words to behave as variables throughout your analysis technique</notes>
+		<example>Vars: Counter(0), Switch(false)</example>
+	</item>
+	<item name="VARS">
+		<notes>Declares custom words to behave as variables throughout your analysis technique</notes>
+		<example>Vars: Counter(0), Switch(false)</example>
+	</item>
+	<item name="VARSIZE">
+		<notes>Reserved for use with ELKIT32.DLL.</notes>
+		<example>VarSize</example>
+	</item>
+	<item name="VARSTARTADDR">
+		<notes>Reserved for use with ELKIT32.DLL.</notes>
+		<example>VarStartAddr</example>
+	</item>
+	<item name="VEGA">
+		<notes>Returns the Vega value of an option, leg, or position.</notes>
+		<example>If Vega of Option &lt; .125 Then Alert;</example>
+	</item>
+	<item name="VOID">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="VOLUME">
+		<notes>Returns the number of shares or contracts traded for the bar referenced.</notes>
+		<example>If Volume &gt; 800000 Then Plot1(High);</example>
+	</item>
+	<item name="Volume">
+		<notes>Returns the number of shares or contracts traded for the bar referenced.</notes>
+		<example>If Volume &gt; 800000 Then Plot1(High);</example>
+	</item>
+	<item name="VSBCOMMENTARY">
+		<notes>Sends EasyLanguage expression(s) to the VSB Commentary window.</notes>
+		<example>VSBCommentary("Order type is: ",MarketPosition);</example>
+	</item>
+	<item name="VWAP">
+		<notes/>
+		<example/>
+	</item>
+	<item name="WAS">
+		<notes>Skip word.</notes>
+		<example>If the Low was &gt; than 60 Then Buy</example>
+	</item>
+	<item name="WEDNESDAY">
+		<notes>Specifies day of the week Wednesday (numeric value = 3).</notes>
+		<example>Wednesday</example>
+	</item>
+	<item name="WHILE">
+		<notes>Defines instructions executed until a true/false expression returns false.</notes>
+		<example>While Value1 &lt; 20 Begin Value1 = Value1+1; End;</example>
+	</item>
+	<item name="WHITE">
+		<notes>Specifies color White (numeric value = 8) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", White)</example>
+	</item>
+	<item name="WORD">
+		<notes>Reserved for use with custom DLLs designed for EasyLanguage.</notes>
+		<example>Refer to the Omega Research Developer’s Kit for more information.</example>
+	</item>
+	<item name="Year">
+		<notes>Year on date cDate, in short form (last 2 digits of year)</notes>
+		<example>Year(960408) = 96</example>
+		<parameter type="numeric">cDate</parameter>
+	</item>
+	<item name="YearFromDateTime">
+		<notes>Returns year portion of DateTime</notes>
+		<example>iYear = YearFromDateTime(1440.211863426);</example>
+		<parameter type="numeric">dDateTime</parameter>
+	</item>
+	<item name="YELLOW">
+		<notes>Specifies color Yellow (numeric value = 7) for plots and backgrounds.</notes>
+		<example>Plot1(Value1, "Test", Yellow)</example>
+	</item>
+	<item name="YESTERDAY">
+		<notes>References the previous bar, even when analyzing intraday bars.</notes>
+		<example>ExitLong Next Bar at High of Yesterday or Higher;</example>
+	</item>
+	<category name="ActivityBar">
+		<item name="AB_AddCell"/>
+		<item name="AB_GetCellChar"/>
+		<item name="AB_GetCellColor"/>
+		<item name="AB_GetCellDate"/>
+		<item name="AB_GetCellTime"/>
+		<item name="AB_GetCellValue"/>
+		<item name="AB_GetNumCells"/>
+		<item name="AB_GetZoneHigh"/>
+		<item name="AB_GetZoneLow"/>
+		<item name="AB_High"/>
+		<item name="AB_Low"/>
+		<item name="AB_RemoveCell"/>
+		<item name="AB_RowHeight"/>
+		<item name="AB_SetActiveCell"/>
+		<item name="AB_SetRowHeight"/>
+		<item name="AB_SetZone"/>
+		<item name="ActivityData"/>
+		<item name="BarStatus"/>
+		<item name="LeftSide"/>
+		<item name="RightSide"/>
+	</category>
+	<category name="Alerts &amp; Commentary">
+		<item name="Alert"/>
+		<item name="AlertEnabled"/>
+		<item name="ATCommentaryBar"/>
+		<item name="Cancel"/>
+		<item name="CheckAlert"/>
+		<item name="Commentary"/>
+		<item name="CommentaryCL"/>
+		<item name="CommentaryEnabled"/>
+		<item name="DoubleQuote"/>
+		<item name="VSB_Commentary"/>
+	</category>
+	<category name="Attributes">
+		<item name="BaseCurrency"/>
+		<item name="InfiniteLoopDetect"/>
+		<item name="IntrabarOrderGeneration"/>
+		<item name="LegacyColorValue"/>
+	</category>
+	<category name="Backward Compatibility">
+		<item name="Based"/>
+		<item name="BreakevenStopFloor"/>
+		<item name="CheckCommentary"/>
+		<item name="Default"/>
+		<item name="DefineCustfield"/>
+		<item name="GetSubscriberOnly"/>
+		<item name="GetSystemName"/>
+		<item name="IncludeSignal"/>
+		<item name="IncludeSystem"/>
+		<item name="Moc"/>
+		<item name="MoneyMgtStopAmt"/>
+		<item name="Not"/>
+		<item name="Place"/>
+		<item name="Pob"/>
+		<item name="ProfitTargetStop"/>
+		<item name="Repeat"/>
+		<item name="Screen"/>
+		<item name="SetSubscriberOnly"/>
+		<item name="Skip"/>
+		<item name="Text"/>
+		<item name="Today"/>
+		<item name="Tomorrow"/>
+		<item name="Tool_Black"/>
+		<item name="Tool_Blue"/>
+		<item name="Tool_Cyan"/>
+		<item name="Tool_DarkBlue"/>
+		<item name="Tool_DarkBrown"/>
+		<item name="Tool_DarkCyan"/>
+		<item name="Tool_DarkGray"/>
+		<item name="Tool_DarkGreen"/>
+		<item name="Tool_DarkMagenta"/>
+		<item name="Tool_DarkRed"/>
+		<item name="Tool_DarkYellow"/>
+		<item name="Tool_Dashed"/>
+		<item name="Tool_Dashed2"/>
+		<item name="Tool_Dashed3"/>
+		<item name="Tool_Dotted"/>
+		<item name="Tool_Green"/>
+		<item name="Tool_LightGray"/>
+		<item name="Tool_Magenta"/>
+		<item name="Tool_Red"/>
+		<item name="Tool_Solid"/>
+		<item name="Tool_White"/>
+		<item name="Tool_Yellow"/>
+		<item name="TrailingStopAmt"/>
+		<item name="TrailingStopFloor"/>
+		<item name="TrailingStopPct"/>
+		<item name="Units"/>
+		<item name="Until"/>
+		<item name="Yesterday"/>
+	</category>
+	<category name="Colors">
+		<item name="Black"/>
+		<item name="Blue"/>
+		<item name="Cyan"/>
+		<item name="DarkBlue"/>
+		<item name="DarkBrown"/>
+		<item name="DarkCyan"/>
+		<item name="DarkGray"/>
+		<item name="DarkGreen"/>
+		<item name="DarkMagenta"/>
+		<item name="DarkRed"/>
+		<item name="GetBValue"/>
+		<item name="GetGValue"/>
+		<item name="GetRValue"/>
+		<item name="GradientColor"/>
+		<item name="Green"/>
+		<item name="LegacyColorToRGB"/>
+		<item name="LightGray"/>
+		<item name="Magenta"/>
+		<item name="Red"/>
+		<item name="RGB"/>
+		<item name="RGBToLegacyColor"/>
+		<item name="White"/>
+		<item name="Yellow"/>
+	</category>
+	<category name="Comparison and Loops">
+		<item name="Above"/>
+		<item name="And"/>
+		<item name="Begin"/>
+		<item name="Below"/>
+		<item name="Cross"/>
+		<item name="Crosses"/>
+		<item name="Downto"/>
+		<item name="Else"/>
+		<item name="End"/>
+		<item name="False"/>
+		<item name="For"/>
+		<item name="If"/>
+		<item name="Or"/>
+		<item name="Over"/>
+		<item name="Then"/>
+		<item name="To"/>
+		<item name="True"/>
+		<item name="Under"/>
+		<item name="While"/>
+	</category>
+	<category name="Compiler Directives">
+		<item name="#BEGINALERT"/>
+		<item name="#BEGINCMTRY"/>
+		<item name="#BEGINCMTRYORALERT"/>
+		<item name="#END"/>
+		<item name="BreakPoint"/>
+		<item name="RunCommand"/>
+	</category>
+	<category name="Conditional">
+		<item name="begin"/>
+		<item name="Break"/>
+		<item name="case"/>
+		<item name="default"/>
+		<item name="else"/>
+		<item name="end"/>
+		<item name="if"/>
+		<item name="Once"/>
+		<item name="switch"/>
+		<item name="then"/>
+	</category>
+	<category name="Data Information/General">
+		<item name="Abort"/>
+		<item name="Ago"/>
+		<item name="aiAppId"/>
+		<item name="aiApplicationType"/>
+		<item name="aiBarSpacing"/>
+		<item name="aiHighestDispValue"/>
+		<item name="aiIntrabarOrder"/>
+		<item name="aiLeftDispDateTime"/>
+		<item name="aiLowestDispValue"/>
+		<item name="aiMacroConf"/>
+		<item name="aiMacroEnabled"/>
+		<item name="aiOptimizing"/>
+		<item name="aiOptionStationPane"/>
+		<item name="aiPercentChange"/>
+		<item name="aiPlotAcctCurrency"/>
+		<item name="aiRealTimeCalc"/>
+		<item name="aiRightDispDateTime"/>
+		<item name="aiRow"/>
+		<item name="aiSpaceToRight"/>
+		<item name="aiStrategyAuto"/>
+		<item name="aiStrategyAutoConf"/>
+		<item name="Bar"/>
+		<item name="BarInterval"/>
+		<item name="Bars"/>
+		<item name="BarType"/>
+		<item name="BigPointValue"/>
+		<item name="BoxSize"/>
+		<item name="C"/>
+		<item name="Category"/>
+		<item name="Close"/>
+		<item name="CommodityNumber"/>
+		<item name="Contract"/>
+		<item name="ContractMonth"/>
+		<item name="Contracts"/>
+		<item name="ContractYear"/>
+		<item name="Current"/>
+		<item name="CurrentBar"/>
+		<item name="D"/>
+		<item name="DailyLimit"/>
+		<item name="Data"/>
+		<item name="DataCompression"/>
+		<item name="DataInUnion"/>
+		<item name="Date"/>
+		<item name="Day"/>
+		<item name="Days"/>
+		<item name="DeliveryMonth"/>
+		<item name="DeliveryYear"/>
+		<item name="DownTicks"/>
+		<item name="ExpirationDate"/>
+		<item name="FirstNoticeDate"/>
+		<item name="GetAppInfo"/>
+		<item name="GetCountry"/>
+		<item name="GetCurrency"/>
+		<item name="GetRouteCount"/>
+		<item name="GetExchangeName"/>
+		<item name="GetSymbolName"/>
+		<item name="H"/>
+		<item name="High"/>
+		<item name="I"/>
+		<item name="L"/>
+		<item name="LastTradingDate"/>
+		<item name="Low"/>
+		<item name="Market"/>
+		<item name="MaxBarsBack"/>
+		<item name="MaxBarsForward"/>
+		<item name="MinMove"/>
+		<item name="Next"/>
+		<item name="O"/>
+		<item name="Open"/>
+		<item name="OpenInt"/>
+		<item name="Point"/>
+		<item name="Points"/>
+		<item name="PointValue"/>
+		<item name="PriceScale"/>
+		<item name="RevSize"/>
+		<item name="Sess1EndTime"/>
+		<item name="Sess1FirstBarTime"/>
+		<item name="Sess1StartTime"/>
+		<item name="Sess2EndTime"/>
+		<item name="Sess2FirstBarTime"/>
+		<item name="Sess2StartTime"/>
+		<item name="StartDate"/>
+		<item name="T"/>
+		<item name="This"/>
+		<item name="Ticks"/>
+		<item name="Time"/>
+		<item name="UnionSess1EndTime"/>
+		<item name="UnionSess1FirstBar"/>
+		<item name="UnionSess1StartTime"/>
+		<item name="UnionSess2EndTime"/>
+		<item name="UnionSess2FirstBar"/>
+		<item name="UnionSess2StartTime"/>
+		<item name="UpTicks"/>
+		<item name="V"/>
+		<item name="Volume"/>
+	</category>
+	<category name="Date and Time">
+		<item name="AutoSession"/>
+		<item name="ComputerDateTime"/>
+		<item name="CurrentDate"/>
+		<item name="CurrentTime"/>
+		<item name="Date"/>
+		<item name="DateTimeToString"/>
+		<item name="DateToJulian"/>
+		<item name="DateToString"/>
+		<item name="DayFromDateTime"/>
+		<item name="DayOfMonth"/>
+		<item name="DayOfWeek"/>
+		<item name="DayOfWeekFromDateTime"/>
+		<item name="EL_DateStr"/>
+		<item name="ELDateToDateTime"/>
+		<item name="ELTimeToDateTime"/>
+		<item name="EncodeDate"/>
+		<item name="EncodeTime"/>
+		<item name="FormatDate"/>
+		<item name="FormatTime"/>
+		<item name="Friday"/>
+		<item name="HoursFromDateTime"/>
+		<item name="IncMonth"/>
+		<item name="JulianToDate"/>
+		<item name="LastCalcJDate"/>
+		<item name="LastCalcMMTime"/>
+		<item name="MillisecondsFromDateTime"/>
+		<item name="MinutesFromDateTime"/>
+		<item name="Monday"/>
+		<item name="Month"/>
+		<item name="MonthFromDateTime"/>
+		<item name="RegularSession"/>
+		<item name="Saturday"/>
+		<item name="SecondsFromDateTime"/>
+		<item name="SessionCount"/>
+		<item name="SessionCountMS"/>
+		<item name="SessionEndDay"/>
+		<item name="SessionEndDayMS"/>
+		<item name="SessionEndTime"/>
+		<item name="SessionEndTimeMS"/>
+		<item name="SessionStartDay"/>
+		<item name="SessionStartDayMS"/>
+		<item name="SessionStartTime"/>
+		<item name="SessionStartTimeMS"/>
+		<item name="stAutoSession"/>
+		<item name="stRegularSession"/>
+		<item name="StringToDate"/>
+		<item name="StringToDateTime"/>
+		<item name="StringToTime"/>
+		<item name="Sunday"/>
+		<item name="T"/>
+		<item name="Thursday"/>
+		<item name="Time"/>
+		<item name="TimeToString"/>
+		<item name="Tuesday"/>
+		<item name="Wednesday"/>
+		<item name="Year"/>
+		<item name="YearFromDateTime"/>
+	</category>
+	<category name="Declaration">
+		<item name="Array"/>
+		<item name="Arrays"/>
+		<item name="Const"/>
+		<item name="Consts"/>
+		<item name="Input"/>
+		<item name="Inputs"/>
+		<item name="Method"/>
+		<item name="Numeric"/>
+		<item name="NumericArray"/>
+		<item name="NumericArrayRef"/>
+		<item name="NumericRef"/>
+		<item name="NumericSeries"/>
+		<item name="NumericSimple"/>
+		<item name="String"/>
+		<item name="StringArray"/>
+		<item name="StringArrayRef"/>
+		<item name="StringRef"/>
+		<item name="StringSeries"/>
+		<item name="StringSimple"/>
+		<item name="TrueFalse"/>
+		<item name="TrueFalseArray"/>
+		<item name="TrueFalseArrayRef"/>
+		<item name="TrueFalseRef"/>
+		<item name="TrueFalseSeries"/>
+		<item name="TrueFalseSimple"/>
+		<item name="Var"/>
+		<item name="Variable"/>
+		<item name="Variables"/>
+		<item name="Vars"/>
+	</category>
+	<category name="DLL Calling">
+		<item name="#Events"/>
+		<item name="ARRAYSIZE"/>
+		<item name="ARRAYSTARTADDR"/>
+		<item name="BOOL"/>
+		<item name="BYTE"/>
+		<item name="CHAR"/>
+		<item name="DEFINEDLLFUNC"/>
+		<item name="DOUBLE"/>
+		<item name="DWORD"/>
+		<item name="ExecuteScript"/>
+		<item name="External"/>
+		<item name="FLOAT"/>
+		<item name="handle"/>
+		<item name="INT"/>
+		<item name="LONG"/>
+		<item name="LPBOOL"/>
+		<item name="LPBYTE"/>
+		<item name="LPDOUBLE"/>
+		<item name="LPDWORD"/>
+		<item name="LPFLOAT"/>
+		<item name="LPINT"/>
+		<item name="LPLONG"/>
+		<item name="LPSTR"/>
+		<item name="LPWORD"/>
+		<item name="Method"/>
+		<item name="MULTIPLE"/>
+		<item name="POINTER"/>
+		<item name="RaiseRunTimeError"/>
+		<item name="Self"/>
+		<item name="String"/>
+		<item name="UNSIGNED"/>
+		<item name="VARSIZE"/>
+		<item name="VARSTARTADDR"/>
+		<item name="VOID"/>
+		<item name="WORD"/>
+	</category>
+	<category name="Dynamic Arrays">
+		<item name="Array_Compare"/>
+		<item name="Array_Copy"/>
+		<item name="Array_GetMaxIndex"/>
+		<item name="Array_GetType"/>
+		<item name="Array_SetMaxIndex"/>
+		<item name="Array_Sort"/>
+		<item name="Array_Sum"/>
+	</category>
+	<category name="Forex">
+		<item name="GetAccountLotSize"/>
+	</category>
+	<category name="Fundamental Data">
+		<item name="fdrDataUnavailable"/>
+		<item name="fdrFutureReference"/>
+		<item name="fdrInvalidField"/>
+		<item name="fdrNotMeaningfulValue"/>
+		<item name="fdrNotSnapShotHistory"/>
+		<item name="fdrOK"/>
+		<item name="fdrTypeMismatch"/>
+		<item name="fdrValueNotAvailable"/>
+		<item name="GetFundData"/>
+		<item name="GetFundDataAsBoolean"/>
+		<item name="GetFundDataAsString"/>
+		<item name="GetFundPeriodEndDate"/>
+		<item name="GetFundPostDate"/>
+		<item name="GetLastFundDataError"/>
+		<item name="HistFundExists"/>
+		<item name="IsFundDataAvailable"/>
+		<item name="IsValidFundField"/>
+		<item name="SnapFundExists"/>
+	</category>
+	<category name="Iteration">
+		<item name="begin"/>
+		<item name="Break"/>
+		<item name="Continue"/>
+		<item name="downto"/>
+		<item name="end"/>
+		<item name="For"/>
+		<item name="Repeat"/>
+		<item name="to"/>
+		<item name="Until"/>
+		<item name="While"/>
+	</category>
+	<category name="Math and Trig">
+		<item name="AbsValue"/>
+		<item name="Arctangent"/>
+		<item name="AvgList"/>
+		<item name="Ceiling"/>
+		<item name="Cosine"/>
+		<item name="Cotangent"/>
+		<item name="ExpValue"/>
+		<item name="Floor"/>
+		<item name="fpcExactAccuracy"/>
+		<item name="fpcHighAccuracy"/>
+		<item name="fpcLowAccuracy"/>
+		<item name="fpcMedAccuracy"/>
+		<item name="fpcVeryHighAccuracy"/>
+		<item name="fpcVeryLowAccuracy"/>
+		<item name="FracPortion"/>
+		<item name="IntPortion"/>
+		<item name="Log"/>
+		<item name="MaxList"/>
+		<item name="MaxList2"/>
+		<item name="MinList"/>
+		<item name="MinList2"/>
+		<item name="Mod"/>
+		<item name="Neg"/>
+		<item name="NthMaxList"/>
+		<item name="NthMinList"/>
+		<item name="Pos"/>
+		<item name="Power"/>
+		<item name="Random"/>
+		<item name="Reciprocal"/>
+		<item name="Round"/>
+		<item name="SetFPCompareAccuracy"/>
+		<item name="Sign"/>
+		<item name="Sine"/>
+		<item name="Square"/>
+		<item name="SquareRoot"/>
+		<item name="SumList"/>
+		<item name="Tangent"/>
+	</category>
+	<category name="Messaging">
+		<item name="Pager_DefaultName"/>
+		<item name="Pager_Send"/>
+	</category>
+	<category name="Multimedia">
+		<item name="AddToMovieChain"/>
+		<item name="GetCDRomDrive"/>
+		<item name="MakeNewMovieRef"/>
+		<item name="PlayMovieChain"/>
+		<item name="PlaySound"/>
+	</category>
+	<category name="OptionStation">
+		<item name="Ask"/>
+		<item name="Asset"/>
+		<item name="AssetType"/>
+		<item name="AssetVolatility"/>
+		<item name="Bid"/>
+		<item name="Call"/>
+		<item name="CallCount"/>
+		<item name="CallItmCount"/>
+		<item name="CallOTMCount"/>
+		<item name="CallSeriesCount"/>
+		<item name="CallStrikeCount"/>
+		<item name="Cost"/>
+		<item name="CreateLeg"/>
+		<item name="FirstOption"/>
+		<item name="Future"/>
+		<item name="FutureType"/>
+		<item name="Gamma"/>
+		<item name="InitialMargin"/>
+		<item name="Leg"/>
+		<item name="LegType"/>
+		<item name="MaxGain"/>
+		<item name="MaxLoss"/>
+		<item name="MIVOnAsk"/>
+		<item name="MIVOnBid"/>
+		<item name="MIVOnClose"/>
+		<item name="MIVOnRawAsk"/>
+		<item name="MIVOnRawBid"/>
+		<item name="ModelPosition"/>
+		<item name="ModelPrice"/>
+		<item name="ModelRate"/>
+		<item name="ModelRate2"/>
+		<item name="ModelVolatility"/>
+		<item name="num_Futures"/>
+		<item name="num_Legs"/>
+		<item name="num_Options"/>
+		<item name="of"/>
+		<item name="Option"/>
+		<item name="OptionType"/>
+		<item name="Position"/>
+		<item name="PositionID"/>
+		<item name="PositionStatus"/>
+		<item name="Put"/>
+		<item name="PutCount"/>
+		<item name="PutITMCount"/>
+		<item name="PutOTMCount"/>
+		<item name="PutSeriesCount"/>
+		<item name="PutStrikeCount"/>
+		<item name="RawAsk"/>
+		<item name="RawBid"/>
+		<item name="SeriesCount"/>
+		<item name="Strike"/>
+		<item name="StrikeCount"/>
+		<item name="StrikeITMCount"/>
+		<item name="StrikeOTMCount"/>
+		<item name="TheoreticalGrossIn"/>
+		<item name="TheoreticalGrossOut"/>
+		<item name="TheoreticalValue"/>
+		<item name="TickType"/>
+	</category>
+	<category name="Output">
+		<item name="ClearPrintLog"/>
+		<item name="ClearDebug"/>
+		<item name="File"/>
+		<item name="FileAppend"/>
+		<item name="FileDelete"/>
+		<item name="MessageLog"/>
+		<item name="Print"/>
+		<item name="Printer"/>
+	</category>
+	<category name="Plotting">
+		<item name="GetBackgroundColor"/>
+		<item name="GetPlotBGColor"/>
+		<item name="GetPlotColor"/>
+		<item name="GetPlotWidth"/>
+		<item name="NoPlot"/>
+		<item name="Plot"/>
+		<item name="Plot1"/>
+		<item name="Plot2"/>
+		<item name="Plot3"/>
+		<item name="Plot4"/>
+		<item name="PlotPaintBar"/>
+		<item name="PlotPB"/>
+		<item name="ptDate"/>
+		<item name="ptDateTime"/>
+		<item name="ptDouble"/>
+		<item name="ptFloat"/>
+		<item name="ptInvalid"/>
+		<item name="ptProbability"/>
+		<item name="ptString"/>
+		<item name="ptTime"/>
+		<item name="ptTrueFalse"/>
+		<item name="SetPlotBGColor"/>
+		<item name="SetPlotColor"/>
+		<item name="SetPlotType"/>
+		<item name="SetPlotWidth"/>
+	</category>
+	<category name="ProbabilityMaps">
+		<item name="PM_GetCellValue"/>
+		<item name="PM_GetNumColumns"/>
+		<item name="PM_GetRowHeight"/>
+		<item name="PM_High"/>
+		<item name="PM_Low"/>
+		<item name="PM_SetCellValue"/>
+		<item name="PM_SetHigh"/>
+		<item name="PM_SetLow"/>
+		<item name="PM_SetNumColumns"/>
+		<item name="PM_SetRowHeight"/>
+	</category>
+	<category name="Product Information">
+		<item name="BlockNumber"/>
+		<item name="CurrentDate"/>
+		<item name="CurrentTime"/>
+		<item name="CustomerID"/>
+		<item name="EasyLanguageVersion"/>
+		<item name="GetScreenName"/>
+		<item name="Product"/>
+	</category>
+	<category name="Quote Fields">
+		<item name="AskDate"/>
+		<item name="AskDateEX"/>
+		<item name="AskExch"/>
+		<item name="AskSize"/>
+		<item name="AskTime"/>
+		<item name="AskTimeEX"/>
+		<item name="BidDate"/>
+		<item name="BidDateEX"/>
+		<item name="BidDirectionNNM"/>
+		<item name="BidExch"/>
+		<item name="BidSize"/>
+		<item name="BidTime"/>
+		<item name="BidTimeEX"/>
+		<item name="CallOpenint"/>
+		<item name="CallVolume"/>
+		<item name="ContractSize"/>
+		<item name="CurrentOpenInt"/>
+		<item name="DailyClose"/>
+		<item name="DailyHigh"/>
+		<item name="DailyLow"/>
+		<item name="DailyOpen"/>
+		<item name="DailyTrades"/>
+		<item name="DailyTradesDn"/>
+		<item name="DailyTradesUC"/>
+		<item name="DailyTradesUp"/>
+		<item name="DailyVolume"/>
+		<item name="DailyVolumeDn"/>
+		<item name="DailyVolumeUC"/>
+		<item name="DailyVolumeUp"/>
+		<item name="Description"/>
+		<item name="ExchListed"/>
+		<item name="ExpDate"/>
+		<item name="ExpDateEX"/>
+		<item name="ExpirationStyle"/>
+		<item name="ExpStyle"/>
+		<item name="FirstNoticeDate"/>
+		<item name="FirstNoticeDateEX"/>
+		<item name="FND"/>
+		<item name="FNDEX"/>
+		<item name="High52Wk"/>
+		<item name="InsideAsk"/>
+		<item name="InsideBid"/>
+		<item name="IVolatility"/>
+		<item name="Last"/>
+		<item name="LEAPYear"/>
+		<item name="Low52Wk"/>
+		<item name="LTD"/>
+		<item name="LTDEX"/>
+		<item name="NewsCount"/>
+		<item name="PERatio"/>
+		<item name="PrevClose"/>
+		<item name="PrevOpenInt"/>
+		<item name="PrevVolume"/>
+		<item name="PutOpenint"/>
+		<item name="PutVolume"/>
+		<item name="q_Ask"/>
+		<item name="q_AskExchange"/>
+		<item name="q_AskSize"/>
+		<item name="q_Bid"/>
+		<item name="q_BidExchange"/>
+		<item name="q_BidSize"/>
+		<item name="q_BigPointValue"/>
+		<item name="q_CallOpenint"/>
+		<item name="q_CallVolume"/>
+		<item name="q_Category"/>
+		<item name="q_Close"/>
+		<item name="q_DailyLimit"/>
+		<item name="q_Date"/>
+		<item name="q_DateEX"/>
+		<item name="q_DateLastAsk"/>
+		<item name="q_DateLastAskEX"/>
+		<item name="q_DateLastBid"/>
+		<item name="q_DateLastBidEX"/>
+		<item name="q_DateLastTrade"/>
+		<item name="q_DateLastTradeEX"/>
+		<item name="q_DownVolume"/>
+		<item name="q_ExchangeListed"/>
+		<item name="q_ExpirationDate"/>
+		<item name="q_ExpirationDateEX"/>
+		<item name="q_High"/>
+		<item name="q_IVolatility"/>
+		<item name="q_Last"/>
+		<item name="q_LastTradingDate"/>
+		<item name="q_LastTradingDateEX"/>
+		<item name="q_Low"/>
+		<item name="q_Margin"/>
+		<item name="q_MinMove"/>
+		<item name="q_NewsCount"/>
+		<item name="q_NumOptions"/>
+		<item name="q_Offer"/>
+		<item name="q_Open"/>
+		<item name="q_OpenInterest"/>
+		<item name="q_OptionType"/>
+		<item name="q_PreviousClose"/>
+		<item name="q_PreviousOpenInterest"/>
+		<item name="q_PreviousVolume"/>
+		<item name="q_PrevTotalVolume"/>
+		<item name="q_PutOpenint"/>
+		<item name="q_PutVolume"/>
+		<item name="q_StrikePrice"/>
+		<item name="q_Ticks"/>
+		<item name="q_Time"/>
+		<item name="q_TimeEX"/>
+		<item name="q_TimeLastAsk"/>
+		<item name="q_TimeLastAskEX"/>
+		<item name="q_TimeLastBid"/>
+		<item name="q_TimeLastBidEX"/>
+		<item name="q_TimeLastTrade"/>
+		<item name="q_TimeLastTradeEX"/>
+		<item name="q_TotalVolume"/>
+		<item name="q_TradeVolume"/>
+		<item name="q_UnchangedVolume"/>
+		<item name="q_UpVolume"/>
+		<item name="q_Yield"/>
+		<item name="Settlement"/>
+		<item name="SICCode"/>
+		<item name="Symbol"/>
+		<item name="SymbolName"/>
+		<item name="SymbolRoot"/>
+		<item name="TradeDate"/>
+		<item name="TradeDate_EX"/>
+		<item name="TradeDateEX"/>
+		<item name="TradeDirectionSeries"/>
+		<item name="TradeExch"/>
+		<item name="TradeTime"/>
+		<item name="TradeTimeEX"/>
+		<item name="TradeVolume"/>
+		<item name="Underlying"/>
+		<item name="VWAP"/>
+	</category>
+	<category name="Reserved">
+		<item name="beta"/>
+		<item name="beta_down"/>
+		<item name="beta_up"/>
+		<item name="EasyLanguageRtlOnDestroy"/>
+		<item name="EPS"/>
+		<item name="EPSCount"/>
+		<item name="EPSDate"/>
+		<item name="EPSTIME"/>
+		<item name="ExecOffset"/>
+		<item name="FreeCshFlwPerShare"/>
+		<item name="G_Rate_EPS_NY"/>
+		<item name="G_Rate_Nt_In_NY"/>
+		<item name="G_Rate_P_EPS"/>
+		<item name="G_Rate_P_Net_Inc"/>
+		<item name="Inst_Percent_Held"/>
+		<item name="Last_Split_Date"/>
+		<item name="Last_Split_Fact"/>
+		<item name="LiveDate"/>
+		<item name="LiveTime"/>
+		<item name="Net_Profit_Margin"/>
+		<item name="Price_To_Book"/>
+		<item name="Profit"/>
+		<item name="Protective"/>
+		<item name="Quick_Ratio"/>
+		<item name="Ret_On_Avg_Equity"/>
+		<item name="SGA_Exp_By_NetSales"/>
+		<item name="StockSpiltTime"/>
+		<item name="StockSplit"/>
+		<item name="StockSplitCount"/>
+		<item name="StockSplitDate"/>
+		<item name="Target"/>
+		<item name="TargetType"/>
+		<item name="TtlDbt_By_NetAssts"/>
+	</category>
+	<category name="Skip Words">
+		<item name="a"/>
+		<item name="an"/>
+		<item name="at"/>
+		<item name="by"/>
+		<item name="does"/>
+		<item name="is"/>
+		<item name="of"/>
+		<item name="on"/>
+		<item name="than"/>
+		<item name="the"/>
+		<item name="was"/>
+	</category>
+	<category name="Strategies to include"/>
+	<category name="Strategy Automation">
+		<item name="GetAllOrNone"/>
+		<item name="GetBuyMinusSellPlus"/>
+		<item name="GetDiscretion"/>
+		<item name="GetNonDisplay"/>
+		<item name="GetNow"/>
+		<item name="GetPeg"/>
+		<item name="GetRoute"/>
+		<item name="GetRouteName"/>
+		<item name="GetShaveImprove"/>
+		<item name="GetShowOnly"/>
+		<item name="pegBest"/>
+		<item name="pegDisable"/>
+		<item name="pegMid"/>
+		<item name="rtARCA"/>
+		<item name="rtBRUT"/>
+		<item name="rtBTRD"/>
+		<item name="rtDefault"/>
+		<item name="rtINCA"/>
+		<item name="rtIntelligent"/>
+		<item name="rtInvalid"/>
+		<item name="rtISLD"/>
+		<item name="rtNone"/>
+		<item name="rtSuperDOT"/>
+		<item name="rtSuperMont"/>
+		<item name="SetAllOrNone"/>
+		<item name="SetBuyMinusSellPlus"/>
+		<item name="SetDiscretion"/>
+		<item name="SetNonDisplay"/>
+		<item name="SetNOW"/>
+		<item name="SetPeg"/>
+		<item name="SetRoute"/>
+		<item name="SetRouteName"/>
+		<item name="SetShaveImprove"/>
+		<item name="SetShowOnly"/>
+	</category>
+	<category name="Strategy Orders">
+		<item name="All"/>
+		<item name="AT$"/>
+		<item name="Bar"/>
+		<item name="Buy"/>
+		<item name="BuyToCover"/>
+		<item name="Entry"/>
+		<item name="From"/>
+		<item name="Higher"/>
+		<item name="Limit"/>
+		<item name="Lower"/>
+		<item name="Market"/>
+		<item name="Next"/>
+		<item name="Point"/>
+		<item name="Points"/>
+		<item name="Sell"/>
+		<item name="SellShort"/>
+		<item name="SetBreakeven"/>
+		<item name="SetDollarTrailing"/>
+		<item name="SetExitOnClose"/>
+		<item name="SetPercentTrailing"/>
+		<item name="SetProfitTarget"/>
+		<item name="SetStopContract"/>
+		<item name="SetStopLoss"/>
+		<item name="SetStopPosition"/>
+		<item name="SetStopShare"/>
+		<item name="Share"/>
+		<item name="Shares"/>
+		<item name="Stop"/>
+		<item name="This"/>
+		<item name="Total"/>
+	</category>
+	<category name="Strategy Performance">
+		<item name="AvgBarsEvenTrade"/>
+		<item name="AvgBarsLosTrade"/>
+		<item name="AvgBarsWinTrade"/>
+		<item name="AvgEntryPrice"/>
+		<item name="ContractProfit"/>
+		<item name="CurrentContracts"/>
+		<item name="CurrentEntries"/>
+		<item name="CurrentShares"/>
+		<item name="GrossLoss"/>
+		<item name="GrossProfit"/>
+		<item name="I_AvgEntryPrice"/>
+		<item name="I_ClosedEquity"/>
+		<item name="I_CurrentContracts"/>
+		<item name="I_CurrentShares"/>
+		<item name="I_MarketPosition"/>
+		<item name="I_OpenEquity"/>
+		<item name="LargestLosTrade"/>
+		<item name="LargestWinTrade"/>
+		<item name="MaxConsecLosers"/>
+		<item name="MaxConsecWinners"/>
+		<item name="MaxContractProfit"/>
+		<item name="MaxContracts"/>
+		<item name="MaxContractsHeld"/>
+		<item name="MaxIDDrawDown"/>
+		<item name="MaxSharesHeld"/>
+		<item name="NetProfit"/>
+		<item name="NumEvenTrades"/>
+		<item name="NumLosTrades"/>
+		<item name="NumWinTrades"/>
+		<item name="PercentProfit"/>
+		<item name="TotalBarsEvenTrades"/>
+		<item name="TotalBarsLosTrades"/>
+		<item name="TotalBarsWinTrades"/>
+		<item name="TotalTrades"/>
+	</category>
+	<category name="Strategy Position">
+		<item name="BarsSinceEntry"/>
+		<item name="BarsSinceExit"/>
+		<item name="ContractProfit"/>
+		<item name="CurrentContracts"/>
+		<item name="CurrentEntries"/>
+		<item name="CurrentShares"/>
+		<item name="EntryDate"/>
+		<item name="EntryPrice"/>
+		<item name="EntryTime"/>
+		<item name="ExitDate"/>
+		<item name="ExitPrice"/>
+		<item name="ExitTime"/>
+		<item name="MarketPosition"/>
+		<item name="MaxContractProfit"/>
+		<item name="MaxContracts"/>
+		<item name="MaxEntries"/>
+		<item name="MaxPositionLoss"/>
+		<item name="MaxPositionProfit"/>
+		<item name="MaxShares"/>
+		<item name="OpenPositionProfit"/>
+		<item name="PositionProfit"/>
+	</category>
+	<category name="Strategy Properties">
+		<item name="Coarse"/>
+		<item name="Commission"/>
+		<item name="Fine"/>
+		<item name="GetStrategyName"/>
+		<item name="Margin"/>
+		<item name="Medium"/>
+		<item name="Slippage"/>
+	</category>
+	<category name="Text Drawing">
+		<item name="GetBackGroundColor"/>
+		<item name="Text_Delete"/>
+		<item name="Text_GetActive"/>
+		<item name="Text_GetColor"/>
+		<item name="Text_GetDate"/>
+		<item name="Text_GetFirst"/>
+		<item name="Text_GetHStyle"/>
+		<item name="Text_GetNext"/>
+		<item name="Text_GetString"/>
+		<item name="Text_GetTime"/>
+		<item name="Text_GetValue"/>
+		<item name="Text_GetVStyle"/>
+		<item name="Text_New"/>
+		<item name="Text_SetColor"/>
+		<item name="Text_SetLocation"/>
+		<item name="Text_SetString"/>
+		<item name="Text_SetStyle"/>
+	</category>
+	<category name="Text Manipulation">
+		<item name="InStr"/>
+		<item name="LeftStr"/>
+		<item name="LowerStr"/>
+		<item name="MidStr"/>
+		<item name="NewLine"/>
+		<item name="NumToStr"/>
+		<item name="RightStr"/>
+		<item name="Spaces"/>
+		<item name="StrLen"/>
+		<item name="StrToNum"/>
+		<item name="UpperStr"/>
+	</category>
+	<category name="TradeManager">
+		<item name="asActive"/>
+		<item name="asClosed"/>
+		<item name="asClosingOnly"/>
+		<item name="asFedMarginCall"/>
+		<item name="asInactive"/>
+		<item name="asInvalid"/>
+		<item name="asLiquidatingOnly"/>
+		<item name="asRestricted"/>
+		<item name="atCash"/>
+		<item name="atDVP"/>
+		<item name="atFutures"/>
+		<item name="atInvalid"/>
+		<item name="atMargin"/>
+		<item name="atShort"/>
+		<item name="GetAccount"/>
+		<item name="GetAccountId"/>
+		<item name="GetAccountStatus"/>
+		<item name="GetAccountType"/>
+		<item name="GetBDAccountEquity"/>
+		<item name="GetBDAccountNetWorth"/>
+		<item name="GetBDCashBalance"/>
+		<item name="GetBDDayTradingBuyingPower"/>
+		<item name="GetBDMarginRequirement"/>
+		<item name="GetBDOvernightBuyingPower"/>
+		<item name="GetBDTradeEquity"/>
+		<item name="GetNumAccounts"/>
+		<item name="GetNumPositions"/>
+		<item name="GetOpenOrderInitialMargin"/>
+		<item name="GetPositionAveragePrice"/>
+		<item name="GetPositionMarketValue"/>
+		<item name="GetPositionOpenPL"/>
+		<item name="GetPositionQuantity"/>
+		<item name="GetPositionSymbol"/>
+		<item name="GetPositionTotalCost"/>
+		<item name="GetRTAccountEquity"/>
+		<item name="GetRTAccountNetWorth"/>
+		<item name="GetRTCashBalance"/>
+		<item name="GetRTCostOfPositions"/>
+		<item name="GetRTDaytradingBuyingPower"/>
+		<item name="GetRTInitialMargin"/>
+		<item name="GetRTMaintMargin"/>
+		<item name="GetRTMarginRequirement"/>
+		<item name="GetRTOvernightBuyingPower"/>
+		<item name="GetRTPurchasingPower"/>
+		<item name="GetRTRealizedPL"/>
+		<item name="GetRTTradeEquity"/>
+		<item name="GetRTUnrealizedPL"/>
+		<item name="GetTodaysRTTradeEquity"/>
+		<item name="GetUnclearedDeposits"/>
+	</category>
+	<category name="Trendline Drawing">
+		<item name="GetBackGroundColor"/>
+		<item name="TL_Delete"/>
+		<item name="TL_GetActive"/>
+		<item name="TL_GetAlert"/>
+		<item name="TL_GetBeginDate"/>
+		<item name="TL_GetBeginTime"/>
+		<item name="TL_GetBeginVal"/>
+		<item name="TL_GetColor"/>
+		<item name="TL_GetEndDate"/>
+		<item name="TL_GetEndTime"/>
+		<item name="TL_GetEndVal"/>
+		<item name="TL_GetExtLeft"/>
+		<item name="TL_GetExtRight"/>
+		<item name="TL_GetFirst"/>
+		<item name="TL_GetNext"/>
+		<item name="TL_GetSize"/>
+		<item name="TL_GetStyle"/>
+		<item name="TL_GetValue"/>
+		<item name="TL_New"/>
+		<item name="TL_SetAlert"/>
+		<item name="TL_SetBegin"/>
+		<item name="TL_SetColor"/>
+		<item name="TL_SetEnd"/>
+		<item name="TL_SetExtLeft"/>
+		<item name="TL_SetExtRight"/>
+		<item name="TL_SetSize"/>
+		<item name="TL_SetStyle"/>
+		<item name="Tool_Dashed"/>
+		<item name="Tool_Dashed2"/>
+		<item name="Tool_Dashed3"/>
+		<item name="Tool_Dotted"/>
+		<item name="Tool_Solid"/>
+	</category>
+	<category name="User Functions"/>
+</dictionary>

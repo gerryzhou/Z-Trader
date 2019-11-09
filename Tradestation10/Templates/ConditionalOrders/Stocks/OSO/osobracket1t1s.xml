@@ -1,0 +1,25 @@
+<TSXML>
+	<Template ID="{E23603F7-F530-48a2-85D9-6297C94EA688}" Market="USEquities" Name="Exit - Brk - 1L/1S" Description="Exit - Bracket - 1 Limit &amp; 1 Stop Level" Type="OSO" Version="1">
+		<Property Name="Action">Exit</Property>
+		<Collection Name="Group 1" Type="Bracket">
+			<Order Name="Limit">
+				<Field Name="Type" Usage="Exact" Operation="=" Location="Value">Limit</Field>
+				<Field Name="Action" Usage="Inverse" Operation="=" Location="Key"/>
+				<Field Name="Quantity" Usage="Percentage" Operation="=" Location="Key">100</Field>
+				<Field Name="Price" Usage="Offset" Operation="~" Location="Key">500</Field>
+				<Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+				<Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+				<Field Name="Advanced" Usage="Exact" Operation="=" Location="Value"></Field>
+			</Order>
+			<Order Name="Stop Market">
+				<Field Name="Type" Usage="Exact" Operation="=" Location="Value">Stop Market</Field>
+				<Field Name="Action" Usage="Inverse" Operation="=" Location="Key"/>
+				<Field Name="Quantity" Usage="Percentage" Operation="=" Location="Key">100</Field>
+				<Field Name="Price" Usage="Offset" Operation="~" Location="Key">300</Field>
+				<Field Name="Route" Usage="Exact" Operation="=" Location="Key">Intelligent</Field>
+				<Field Name="Duration" Usage="Exact" Operation="=" Location="Key">Day</Field>
+				<Field Name="Advanced" Usage="Exact" Operation="=" Location="Value">STPTRG=STT;</Field>
+			</Order>
+		</Collection>
+	</Template>
+</TSXML>

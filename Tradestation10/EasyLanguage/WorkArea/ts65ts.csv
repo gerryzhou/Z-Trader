@@ -1,0 +1,973 @@
+  Built-in function ,  AB_AddCellRange ,  02/17/2006 ,  13:59  
+  Built-in function ,  AB_AverageCells ,  02/17/2006 ,  14:08  
+  Built-in function ,  AB_AveragePrice ,  02/17/2006 ,  14:08  
+  Built-in function ,  AB_CellCount ,  02/17/2006 ,  14:08  
+  Built-in function ,  AB_Median ,  02/17/2006 ,  14:09  
+  Built-in function ,  AB_Mode ,  02/17/2006 ,  14:09  
+  Built-in function ,  AB_NextColor ,  07/27/2016 ,  09:12  
+  Built-in function ,  AB_RowHeightCalc ,  01/29/2016 ,  05:22  
+  Built-in function ,  AB_StdDev ,  02/17/2006 ,  15:32  
+  Built-in function ,  AbsoluteBreadth ,  02/22/2006 ,  11:34  
+  Built-in function ,  AccumDist ,  06/17/2009 ,  12:11  
+  Built-in function ,  AccumSwingIndex ,  02/22/2006 ,  11:36  
+  Built-in function ,  AdaptiveMovAvg ,  02/22/2006 ,  11:37  
+  Built-in function ,  AdvanceDeclineDiff ,  02/22/2006 ,  11:37  
+  Built-in function ,  AdvanceDeclineRatio ,  02/22/2006 ,  11:56  
+  Built-in function ,  ADX ,  02/22/2006 ,  11:57  
+  Built-in function ,  ADXCustom ,  02/22/2006 ,  11:58  
+  Built-in function ,  ADXR ,  02/22/2006 ,  11:58  
+  Built-in function ,  ADXRCustom ,  02/22/2006 ,  12:00  
+  Built-in function ,  ArmsIndex ,  02/22/2006 ,  12:01  
+  Built-in function ,  Aroon ,  10/17/2013 ,  12:55  
+  Built-in function ,  AroonDown ,  09/26/2012 ,  17:06  
+  Built-in function ,  AroonOsc ,  09/26/2012 ,  17:06  
+  Built-in function ,  AroonUp ,  09/26/2012 ,  17:06  
+  Built-in function ,  Average ,  07/25/2017 ,  16:03  
+  Built-in function ,  AverageArray ,  02/22/2006 ,  12:02  
+  Built-in function ,  AverageFC ,  07/25/2017 ,  16:03  
+  Built-in function ,  AvgDeviation ,  02/22/2006 ,  12:07  
+  Built-in function ,  AvgDeviationArray ,  02/22/2006 ,  12:07  
+  Built-in function ,  AvgPrice ,  02/22/2006 ,  12:08  
+  Built-in function ,  AvgTrueRange ,  02/22/2006 ,  12:08  
+  Built-in function ,  BarAnnualization ,  03/26/2010 ,  10:26  
+  Built-in function ,  BarNumber ,  02/22/2006 ,  12:09  
+  Built-in function ,  BearishDivergence ,  02/22/2006 ,  12:11  
+  Built-in function ,  BollingerBand ,  02/22/2006 ,  12:15  
+  Built-in function ,  BollingerBandwidth ,  08/31/2012 ,  10:29  
+  Built-in function ,  BullishDivergence ,  02/22/2006 ,  12:16  
+  Built-in function ,  C_3WhSolds_3BlkCrows ,  02/22/2006 ,  12:17  
+  Built-in function ,  C_AbandonedBaby ,  10/24/2012 ,  15:44  
+  Built-in function ,  C_AbandonedBabyBottom ,  10/24/2012 ,  15:44  
+  Built-in function ,  C_AbandonedBabyTop ,  10/24/2012 ,  15:44  
+  Built-in function ,  C_AdvanceBlock ,  03/21/2013 ,  11:56  
+  Built-in function ,  C_BullEng_BearEng ,  02/22/2006 ,  12:17  
+  Built-in function ,  C_BullHar_BearHar ,  02/22/2006 ,  12:18  
+  Built-in function ,  C_Doji ,  02/22/2006 ,  12:18  
+  Built-in function ,  C_Hammer_HangingMan ,  02/22/2006 ,  12:19  
+  Built-in function ,  C_HaramiCross ,  03/21/2013 ,  13:34  
+  Built-in function ,  C_InvertedHammer ,  03/21/2013 ,  13:16  
+  Built-in function ,  C_Kicking ,  11/12/2012 ,  15:53  
+  Built-in function ,  C_Marubozu ,  11/12/2012 ,  15:34  
+  Built-in function ,  C_MarubozuBlackOpening ,  03/21/2013 ,  12:10  
+  Built-in function ,  C_MarubozuWhiteOpening ,  03/21/2013 ,  12:51  
+  Built-in function ,  C_MeetingLines ,  03/21/2013 ,  12:16  
+  Built-in function ,  C_MornDoji_EveDoji ,  02/22/2006 ,  12:20  
+  Built-in function ,  C_MornStar_EveStar ,  02/22/2006 ,  12:21  
+  Built-in function ,  C_PierceLine_DkCloud ,  02/22/2006 ,  12:22  
+  Built-in function ,  C_ShootingStar ,  02/22/2006 ,  12:22  
+  Built-in function ,  C_TasukiGap ,  10/24/2012 ,  15:46  
+  Built-in function ,  C_TasukiGapDownside ,  10/24/2012 ,  15:46  
+  Built-in function ,  C_TasukiGapUpside ,  10/24/2012 ,  15:47  
+  Built-in function ,  C_ThreeMethods ,  10/24/2012 ,  15:48  
+  Built-in function ,  C_ThreeMethodsFalling ,  10/24/2012 ,  15:48  
+  Built-in function ,  C_ThreeMethodsRising ,  10/24/2012 ,  15:48  
+  Built-in function ,  C_ThreeStarsInTheSouth ,  03/21/2013 ,  13:28  
+  Built-in function ,  C_TriStar ,  06/14/2017 ,  15:13  
+  Built-in function ,  CalcDate ,  02/22/2006 ,  12:23  
+  Built-in function ,  CalcTime ,  10/18/2012 ,  13:54  
+  Built-in function ,  CCI ,  02/22/2006 ,  12:39  
+  Built-in function ,  CCICustom ,  09/03/2014 ,  14:28  
+  Built-in function ,  ChaikinMoneyFlow ,  11/12/2012 ,  15:37  
+  Built-in function ,  ChaikinOsc ,  06/17/2009 ,  12:13  
+  Built-in function ,  ChaikinVolatility ,  11/12/2012 ,  15:38  
+  Built-in function ,  CloseD ,  06/18/2009 ,  15:18  
+  Built-in function ,  CloseM ,  06/18/2009 ,  15:19  
+  Built-in function ,  CloseSession ,  06/14/2017 ,  15:14  
+  Built-in function ,  CloseW ,  06/18/2009 ,  15:19  
+  Built-in function ,  CloseY ,  06/18/2009 ,  15:20  
+  Built-in function ,  CMO ,  09/26/2012 ,  16:46  
+  Built-in function ,  CoefficientR ,  02/22/2006 ,  12:56  
+  Built-in function ,  CoefficientRArray ,  02/22/2006 ,  12:57  
+  Built-in function ,  CoefficientREasy ,  02/22/2006 ,  12:57  
+  Built-in function ,  Combination ,  02/22/2006 ,  12:58  
+  Built-in function ,  CopyArray ,  05/26/2011 ,  14:10  
+  Built-in function ,  CopyColumn ,  01/26/2007 ,  14:26  
+  Built-in function ,  Correlation ,  02/22/2006 ,  12:59  
+  Built-in function ,  CorrelationArray ,  02/22/2006 ,  13:00  
+  Built-in function ,  CountIf ,  02/22/2006 ,  13:00  
+  Built-in function ,  Covar ,  06/14/2017 ,  15:14  
+  Built-in function ,  CovarArray ,  06/14/2017 ,  15:15  
+  Built-in function ,  CovarEasy ,  06/14/2017 ,  15:15  
+  Built-in function ,  CSI ,  02/22/2006 ,  13:02  
+  Built-in function ,  Cum ,  02/22/2006 ,  13:02  
+  Built-in function ,  CurrentAsk ,  06/23/2015 ,  12:06  
+  Built-in function ,  CurrentBid ,  06/23/2015 ,  12:05  
+  Built-in function ,  CurrentSession ,  07/19/2012 ,  19:10  
+  Built-in function ,  CurrentSessionMS ,  07/19/2012 ,  19:12  
+  Built-in function ,  DailyLosers ,  02/22/2006 ,  13:46  
+  Built-in function ,  DailyWinners ,  02/22/2006 ,  13:47  
+  Built-in function ,  DaysToExpiration ,  02/22/2006 ,  13:54  
+  Built-in function ,  DEMA ,  12/04/2013 ,  11:37  
+  Built-in function ,  Detrend ,  02/22/2006 ,  13:55  
+  Built-in function ,  DevSqrd ,  02/22/2006 ,  13:56  
+  Built-in function ,  DevSqrdArray ,  02/22/2006 ,  13:58  
+  Built-in function ,  DirMovement ,  02/22/2006 ,  13:58  
+  Built-in function ,  Disparity ,  05/02/2014 ,  09:20  
+  Built-in function ,  Divergence ,  02/22/2006 ,  13:59  
+  Built-in function ,  DMI ,  02/22/2006 ,  13:59  
+  Built-in function ,  DMICustom ,  02/22/2006 ,  14:00  
+  Built-in function ,  DMIMinus ,  02/22/2006 ,  14:00  
+  Built-in function ,  DMIMinusCustom ,  02/22/2006 ,  14:01  
+  Built-in function ,  DMIPlus ,  02/22/2006 ,  14:01  
+  Built-in function ,  DMIPlusCustom ,  02/22/2006 ,  14:02  
+  Built-in function ,  DownColorDefault ,  02/26/2016 ,  09:10  
+  Built-in function ,  EaseOfMovement ,  06/18/2009 ,  14:52  
+  Built-in function ,  ELDate ,  02/08/2003 ,  13:37  
+  Built-in function ,  ELDate_Consol ,  02/05/2008 ,  17:09  
+  Built-in function ,  EntriesToday ,  02/08/2003 ,  20:22  
+  Built-in function ,  ExitsToday ,  02/08/2003 ,  20:22  
+  Built-in function ,  ExtremePriceRatio ,  02/22/2006 ,  14:04  
+  Built-in function ,  Extremes ,  02/22/2006 ,  14:05  
+  Built-in function ,  ExtremesArray ,  02/22/2006 ,  14:12  
+  Built-in function ,  ExtremesFC ,  02/22/2006 ,  14:13  
+  Built-in function ,  Factorial ,  02/22/2006 ,  14:13  
+  Built-in function ,  FAMA ,  03/21/2013 ,  13:29  
+  Built-in function ,  FastD ,  02/22/2006 ,  14:14  
+  Built-in function ,  FastDCustom ,  02/22/2006 ,  14:14  
+  Built-in function ,  FastDCustomOrig ,  02/22/2006 ,  14:15  
+  Built-in function ,  FastHighestBar ,  02/22/2006 ,  14:15  
+  Built-in function ,  FastK ,  02/22/2006 ,  14:15  
+  Built-in function ,  FastKCustom ,  02/22/2006 ,  14:16  
+  Built-in function ,  FastKCustomEasy ,  02/22/2006 ,  14:18  
+  Built-in function ,  FastKCustomOrig ,  02/22/2006 ,  14:18  
+  Built-in function ,  FastLowestBar ,  02/22/2006 ,  14:19  
+  Built-in function ,  FindBar ,  06/14/2017 ,  15:17  
+  Built-in function ,  FirstSession ,  02/22/2006 ,  14:20  
+  Built-in function ,  FirstSessionMS ,  02/22/2006 ,  14:22  
+  Built-in function ,  Fisher ,  02/22/2006 ,  14:23  
+  Built-in function ,  FisherInv ,  02/22/2006 ,  14:23  
+  Built-in function ,  FundBoolean ,  08/30/2012 ,  17:26  
+  Built-in function ,  FundDate ,  01/26/2007 ,  14:42  
+  Built-in function ,  FundPeriodEndDate ,  01/26/2007 ,  14:42  
+  Built-in function ,  FundSetup ,  06/14/2017 ,  15:17  
+  Built-in function ,  FundString ,  01/26/2007 ,  14:45  
+  Built-in function ,  FundValue ,  01/26/2007 ,  14:46  
+  Built-in function ,  FundValueTTM ,  03/27/2007 ,  17:14  
+  Built-in function ,  GetRGBValues ,  02/22/2006 ,  14:28  
+  Built-in function ,  HarmonicMean ,  02/22/2006 ,  14:28  
+  Built-in function ,  HarmonicMeanArray ,  02/22/2006 ,  14:29  
+  Built-in function ,  HeapPush ,  06/14/2017 ,  15:18  
+  Built-in function ,  HeapPush2D ,  06/14/2017 ,  15:18  
+  Built-in function ,  HeapSift ,  02/22/2006 ,  14:30  
+  Built-in function ,  HeapSift2D ,  02/22/2006 ,  14:31  
+  Built-in function ,  HighD ,  06/18/2009 ,  15:14  
+  Built-in function ,  Highest ,  02/22/2006 ,  14:32  
+  Built-in function ,  HighestArray ,  02/22/2006 ,  14:33  
+  Built-in function ,  HighestBar ,  02/22/2006 ,  14:34  
+  Built-in function ,  HighestFC ,  02/22/2006 ,  14:43  
+  Built-in function ,  HighM ,  06/18/2009 ,  15:14  
+  Built-in function ,  HighSession ,  06/14/2017 ,  15:19  
+  Built-in function ,  HighW ,  06/18/2009 ,  15:14  
+  Built-in function ,  HighY ,  06/18/2009 ,  15:15  
+  Built-in function ,  HMA ,  06/14/2017 ,  15:19  
+  Built-in function ,  HPI ,  06/17/2009 ,  11:11  
+  Built-in function ,  IFF ,  02/22/2006 ,  14:45  
+  Built-in function ,  InfoBox ,  01/19/2018 ,  11:01  
+  Built-in function ,  InsideBar ,  03/21/2013 ,  12:56  
+  Built-in function ,  KeltnerChannel ,  02/22/2006 ,  14:47  
+  Built-in function ,  Kurtosis ,  02/22/2006 ,  14:47  
+  Built-in function ,  KurtosisArray ,  02/22/2006 ,  15:03  
+  Built-in function ,  KurtosisOpt ,  02/22/2006 ,  15:04  
+  Built-in function ,  LastBarOnChartEx ,  10/18/2012 ,  13:52  
+  Built-in function ,  LastCalcDate ,  02/22/2006 ,  15:05  
+  Built-in function ,  LastCalcTime ,  02/22/2006 ,  15:05  
+  Built-in function ,  LastDayOfMonth ,  02/22/2006 ,  15:06  
+  Built-in function ,  LastSession ,  02/22/2006 ,  15:07  
+  Built-in function ,  LastSessionMS ,  02/22/2006 ,  15:07  
+  Built-in function ,  Leader ,  02/22/2006 ,  15:08  
+  Built-in function ,  LimitIfTouchedOrder ,  09/12/2006 ,  13:27  
+  Built-in function ,  LimitOrder ,  09/12/2006 ,  13:27  
+  Built-in function ,  LinearReg ,  06/23/2015 ,  12:04  
+  Built-in function ,  LinearRegAngle ,  02/22/2006 ,  15:09  
+  Built-in function ,  LinearRegAngleFC ,  02/22/2006 ,  15:16  
+  Built-in function ,  LinearRegFC ,  02/22/2006 ,  15:17  
+  Built-in function ,  LinearRegSlope ,  02/22/2006 ,  15:24  
+  Built-in function ,  LinearRegSlopeFC ,  02/22/2006 ,  15:24  
+  Built-in function ,  LinearRegValue ,  02/22/2006 ,  15:25  
+  Built-in function ,  LinearRegValueFC ,  02/22/2006 ,  15:25  
+  Built-in function ,  LinRegAngleArray ,  02/22/2006 ,  15:26  
+  Built-in function ,  LinRegAngleArray2 ,  03/05/2008 ,  10:25  
+  Built-in function ,  LinRegArray ,  02/22/2006 ,  15:26  
+  Built-in function ,  LinRegArray2 ,  03/05/2008 ,  10:24  
+  Built-in function ,  LinRegForecastArray ,  02/22/2006 ,  15:27  
+  Built-in function ,  LinRegForecastArray2 ,  03/05/2008 ,  10:23  
+  Built-in function ,  LinRegIntercepArray2 ,  03/05/2008 ,  10:22  
+  Built-in function ,  LinRegInterceptArray ,  02/22/2006 ,  15:29  
+  Built-in function ,  LinRegSlopeArray ,  02/22/2006 ,  15:29  
+  Built-in function ,  LinRegSlopeArray2 ,  03/05/2008 ,  10:22  
+  Built-in function ,  LogXY ,  07/25/2017 ,  16:03  
+  Built-in function ,  LowD ,  06/18/2009 ,  15:13  
+  Built-in function ,  Lowest ,  02/22/2006 ,  15:30  
+  Built-in function ,  LowestArray ,  02/22/2006 ,  15:30  
+  Built-in function ,  LowestBar ,  02/22/2006 ,  15:31  
+  Built-in function ,  LowestFC ,  02/22/2006 ,  15:31  
+  Built-in function ,  LowM ,  06/18/2009 ,  15:13  
+  Built-in function ,  LowSession ,  06/14/2017 ,  15:20  
+  Built-in function ,  LowW ,  06/18/2009 ,  15:13  
+  Built-in function ,  LowY ,  06/18/2009 ,  15:12  
+  Built-in function ,  LRO ,  02/22/2006 ,  15:33  
+  Built-in function ,  LWAccDis ,  02/22/2006 ,  15:33  
+  Built-in function ,  MACD ,  02/22/2006 ,  15:34  
+  Built-in function ,  MAMA ,  03/21/2013 ,  13:28  
+  Built-in function ,  MamaBase ,  03/21/2013 ,  13:00  
+  Built-in function ,  MarketIfTouchedOrder ,  09/12/2006 ,  13:27  
+  Built-in function ,  MarketOrder ,  09/12/2006 ,  13:27  
+  Built-in function ,  MassIndex ,  02/22/2006 ,  15:34  
+  Built-in function ,  McClellanOsc ,  02/22/2006 ,  15:34  
+  Built-in function ,  Median ,  02/22/2006 ,  15:35  
+  Built-in function ,  MedianArray ,  02/22/2006 ,  15:35  
+  Built-in function ,  MedianPrice ,  02/22/2006 ,  15:35  
+  Built-in function ,  MFI ,  02/22/2006 ,  15:35  
+  Built-in function ,  MidPoint ,  02/22/2006 ,  15:36  
+  Built-in function ,  MinutesIntoWeek ,  02/22/2006 ,  15:36  
+  Built-in function ,  MinutesToTime ,  03/25/2010 ,  19:23  
+  Built-in function ,  Mode ,  06/16/2011 ,  15:09  
+  Built-in function ,  ModeArray ,  02/22/2006 ,  15:37  
+  Built-in function ,  Momentum ,  02/22/2006 ,  15:38  
+  Built-in function ,  MoneyFlow ,  06/18/2009 ,  15:03  
+  Built-in function ,  MRO ,  02/22/2006 ,  15:39  
+  Built-in function ,  MyColors ,  06/14/2017 ,  15:56  
+  Built-in function ,  MyPrice ,  02/22/2006 ,  15:46  
+  Built-in function ,  Next3rdFriday ,  06/14/2017 ,  15:21  
+  Built-in function ,  NormCumDensity ,  02/22/2006 ,  15:47  
+  Built-in function ,  NormCumDensityArray ,  02/22/2006 ,  15:48  
+  Built-in function ,  NormDensity ,  02/22/2006 ,  15:48  
+  Built-in function ,  NormDensityArray ,  02/22/2006 ,  15:48  
+  Built-in function ,  NormGradientColor ,  02/22/2006 ,  15:49  
+  Built-in function ,  NormSCDensity ,  02/22/2006 ,  15:50  
+  Built-in function ,  NRBar ,  06/14/2017 ,  15:22  
+  Built-in function ,  NthExtremes ,  02/22/2006 ,  15:51  
+  Built-in function ,  NthExtremesArray ,  02/22/2006 ,  15:51  
+  Built-in function ,  NthHighest ,  02/22/2006 ,  15:51  
+  Built-in function ,  NthHighestArray ,  02/22/2006 ,  15:52  
+  Built-in function ,  NthHighestBar ,  02/22/2006 ,  15:52  
+  Built-in function ,  NthLowest ,  02/22/2006 ,  15:53  
+  Built-in function ,  NthLowestArray ,  02/22/2006 ,  15:53  
+  Built-in function ,  NthLowestBar ,  02/22/2006 ,  15:53  
+  Built-in function ,  NumDecimals ,  01/20/2015 ,  09:23  
+  Built-in function ,  NumericRank ,  02/22/2006 ,  15:54  
+  Built-in function ,  NumericRankArray ,  02/22/2006 ,  15:54  
+  Built-in function ,  NumUnits ,  02/22/2006 ,  15:55  
+  Built-in function ,  NVI ,  03/21/2013 ,  13:02  
+  Built-in function ,  OBV ,  06/18/2009 ,  15:05  
+  Built-in function ,  OBVCustom ,  09/03/2014 ,  14:27  
+  Built-in function ,  OHLCPeriodsAgo ,  07/25/2017 ,  16:16  
+  Built-in function ,  OHLCVCollection ,  07/19/2012 ,  19:18  
+  Built-in function ,  OneAlert ,  02/22/2006 ,  15:56  
+  Built-in function ,  OpenD ,  06/18/2009 ,  15:15  
+  Built-in function ,  OpenM ,  06/18/2009 ,  15:16  
+  Built-in function ,  OpenSession ,  06/14/2017 ,  15:22  
+  Built-in function ,  OpenW ,  06/18/2009 ,  15:16  
+  Built-in function ,  OpenY ,  06/18/2009 ,  15:16  
+  Built-in function ,  OutsideBar ,  03/20/2015 ,  09:29  
+  Built-in function ,  Parabolic ,  02/22/2006 ,  16:13  
+  Built-in function ,  ParabolicCustom ,  02/22/2006 ,  16:13  
+  Built-in function ,  ParabolicSAR ,  02/22/2006 ,  16:21  
+  Built-in function ,  PartSessionCountDay ,  02/22/2006 ,  16:21  
+  Built-in function ,  PercentChange ,  02/22/2006 ,  16:22  
+  Built-in function ,  Percentile ,  01/29/2008 ,  11:51  
+  Built-in function ,  PercentileArray ,  01/26/2007 ,  15:33  
+  Built-in function ,  PercentR ,  02/22/2006 ,  16:23  
+  Built-in function ,  PercentRank ,  02/22/2006 ,  16:23  
+  Built-in function ,  PercentRankArray ,  02/22/2006 ,  16:24  
+  Built-in function ,  Permutation ,  02/22/2006 ,  16:24  
+  Built-in function ,  PFE ,  03/21/2013 ,  13:08  
+  Built-in function ,  Pivot ,  02/22/2006 ,  16:24  
+  Built-in function ,  PivotHighVS ,  02/22/2006 ,  16:25  
+  Built-in function ,  PivotHighVSBar ,  02/22/2006 ,  16:25  
+  Built-in function ,  PivotLowVS ,  02/22/2006 ,  16:26  
+  Built-in function ,  PivotLowVSBar ,  02/22/2006 ,  16:26  
+  Built-in function ,  PlaceOrder ,  06/14/2017 ,  15:55  
+  Built-in function ,  PositionProfitCustom ,  10/09/2006 ,  16:00  
+  Built-in function ,  PPO ,  10/21/2016 ,  09:35  
+  Built-in function ,  PriceOscillator ,  02/22/2006 ,  16:27  
+  Built-in function ,  PriceVolTrend ,  06/18/2009 ,  15:22  
+  Built-in function ,  ProbAbove ,  02/22/2006 ,  16:27  
+  Built-in function ,  ProbBelow ,  02/22/2006 ,  16:30  
+  Built-in function ,  ProbBetween ,  02/22/2006 ,  16:30  
+  Built-in function ,  Psych ,  07/25/2017 ,  16:03  
+  Built-in function ,  PVI ,  03/21/2013 ,  13:09  
+  Built-in function ,  QEMA ,  12/30/2015 ,  13:44  
+  Built-in function ,  QQE ,  04/11/2017 ,  11:14  
+  Built-in function ,  Quartile ,  02/22/2006 ,  16:30  
+  Built-in function ,  QuartileArray ,  02/22/2006 ,  16:31  
+  Built-in function ,  QuoteFieldValue ,  06/16/2011 ,  15:26  
+  Built-in function ,  Range ,  02/22/2006 ,  16:31  
+  Built-in function ,  RangeLeader ,  02/22/2006 ,  16:31  
+  Built-in function ,  RateOfChange ,  02/22/2006 ,  16:32  
+  Built-in function ,  RCI ,  07/25/2017 ,  16:04  
+  Built-in function ,  RecentOcc ,  02/22/2006 ,  16:32  
+  Built-in function ,  Round2Fraction ,  08/19/2015 ,  15:35  
+  Built-in function ,  RSI ,  02/23/2006 ,  10:32  
+  Built-in function ,  RSIJP ,  07/25/2017 ,  16:04  
+  Built-in function ,  RSquare ,  02/23/2006 ,  10:32  
+  Built-in function ,  RSquareArray ,  02/23/2006 ,  10:32  
+  Built-in function ,  RunCommandOnLastBar ,  10/18/2012 ,  13:59  
+  Built-in function ,  SecondsIntoWeek ,  07/19/2012 ,  19:26  
+  Built-in function ,  SemiStandardDev ,  04/13/2018 ,  09:40  
+  Built-in function ,  SemiVariancePS ,  04/13/2018 ,  09:37  
+  Built-in function ,  SessionCountDay ,  02/23/2006 ,  10:33  
+  Built-in function ,  SessionFirstBarTime ,  06/14/2017 ,  15:25  
+  Built-in function ,  ShowLongStop ,  01/19/2018 ,  11:01  
+  Built-in function ,  ShowShortStop ,  01/19/2018 ,  11:01  
+  Built-in function ,  Skew ,  02/23/2006 ,  10:40  
+  Built-in function ,  SkewArray ,  02/23/2006 ,  10:41  
+  Built-in function ,  SkewOpt ,  02/23/2006 ,  10:50  
+  Built-in function ,  SlowD ,  02/23/2006 ,  10:50  
+  Built-in function ,  SlowDCustom ,  02/23/2006 ,  10:51  
+  Built-in function ,  SlowDCustomOrig ,  02/23/2006 ,  10:51  
+  Built-in function ,  SlowK ,  02/23/2006 ,  10:52  
+  Built-in function ,  SlowKCustom ,  02/23/2006 ,  10:52  
+  Built-in function ,  SlowKCustomOrig ,  02/23/2006 ,  10:52  
+  Built-in function ,  SmoothedAverage ,  02/23/2006 ,  10:52  
+  Built-in function ,  Sort2DArray ,  02/23/2006 ,  10:53  
+  Built-in function ,  SortArray ,  02/23/2006 ,  10:53  
+  Built-in function ,  SortHeap2DArray ,  02/23/2006 ,  10:53  
+  Built-in function ,  SortHeapArray ,  02/23/2006 ,  10:54  
+  Built-in function ,  StandardDev ,  02/23/2006 ,  10:54  
+  Built-in function ,  StandardDevAnnual ,  02/23/2006 ,  10:54  
+  Built-in function ,  StandardDevArray ,  02/23/2006 ,  10:55  
+  Built-in function ,  Standardize ,  02/23/2006 ,  10:55  
+  Built-in function ,  StandardizeArray ,  02/23/2006 ,  10:55  
+  Built-in function ,  StdDev ,  02/23/2006 ,  10:56  
+  Built-in function ,  StdDevS ,  02/23/2006 ,  10:56  
+  Built-in function ,  StdError ,  05/02/2014 ,  11:42  
+  Built-in function ,  StdErrorArray ,  02/23/2006 ,  10:57  
+  Built-in function ,  StdErrorArray2 ,  03/05/2008 ,  10:21  
+  Built-in function ,  Stochastic ,  02/23/2006 ,  10:57  
+  Built-in function ,  STOCHASTICEXP ,  02/23/2006 ,  10:57  
+  Built-in function ,  StopLimitOrder ,  09/12/2006 ,  13:26  
+  Built-in function ,  StopMarketOrder ,  09/12/2006 ,  13:26  
+  Built-in function ,  StrColortoNum ,  02/23/2006 ,  10:58  
+  Built-in function ,  Summation ,  02/05/2008 ,  17:09  
+  Built-in function ,  SummationArray ,  02/23/2006 ,  10:58  
+  Built-in function ,  SummationFC ,  01/29/2008 ,  11:58  
+  Built-in function ,  SummationIf ,  02/23/2006 ,  10:59  
+  Built-in function ,  SummationRecArray ,  02/23/2006 ,  11:05  
+  Built-in function ,  SummationSqrArray ,  02/23/2006 ,  11:04  
+  Built-in function ,  SwingHigh ,  02/23/2006 ,  11:05  
+  Built-in function ,  SwingHighBar ,  02/23/2006 ,  11:05  
+  Built-in function ,  SwingIndex ,  07/25/2017 ,  16:04  
+  Built-in function ,  SwingLow ,  02/23/2006 ,  11:06  
+  Built-in function ,  SwingLowBar ,  02/23/2006 ,  11:07  
+  Built-in function ,  TEMA ,  12/04/2013 ,  11:37  
+  Built-in function ,  Text_Float ,  06/14/2017 ,  15:26  
+  Built-in function ,  Text_FloatEx ,  06/14/2017 ,  15:27  
+  Built-in function ,  TimeSeriesForecast ,  02/23/2006 ,  11:09  
+  Built-in function ,  TimeToMinutes ,  02/23/2006 ,  11:10  
+  Built-in function ,  TLAngle ,  10/27/2006 ,  14:50  
+  Built-in function ,  TLAngleEasy ,  02/23/2006 ,  11:11  
+  Built-in function ,  TLSlope ,  06/16/2011 ,  15:05  
+  Built-in function ,  TLSlopeEasy ,  06/16/2011 ,  15:07  
+  Built-in function ,  TLValue ,  10/27/2006 ,  14:52  
+  Built-in function ,  TLValueEasy ,  02/23/2006 ,  11:12  
+  Built-in function ,  TrailingStopOrder ,  09/12/2006 ,  13:26  
+  Built-in function ,  TriAverage ,  02/23/2006 ,  11:13  
+  Built-in function ,  TriAverage_Gen ,  02/23/2006 ,  11:13  
+  Built-in function ,  TrimMean ,  02/23/2006 ,  11:14  
+  Built-in function ,  TrimMeanArray ,  02/23/2006 ,  11:14  
+  Built-in function ,  TRIX ,  02/23/2006 ,  11:14  
+  Built-in function ,  TrueHigh ,  02/23/2006 ,  11:15  
+  Built-in function ,  TrueLow ,  02/23/2006 ,  11:15  
+  Built-in function ,  TrueRange ,  02/23/2006 ,  11:15  
+  Built-in function ,  TrueRangeCustom ,  02/23/2006 ,  11:15  
+  Built-in function ,  TSI ,  03/07/2018 ,  07:57  
+  Built-in function ,  TypicalPrice ,  02/23/2006 ,  11:16  
+  Built-in function ,  UlcerIndex ,  02/23/2006 ,  11:16  
+  Built-in function ,  UltimateOscillator ,  02/23/2006 ,  11:16  
+  Built-in function ,  UpColorDefault ,  02/26/2016 ,  09:10  
+  Built-in function ,  VarianceArray ,  02/23/2006 ,  11:17  
+  Built-in function ,  VariancePS ,  02/23/2006 ,  11:17  
+  Built-in function ,  VHF ,  03/21/2013 ,  13:13  
+  Built-in function ,  Volatility ,  02/23/2006 ,  11:18  
+  Built-in function ,  VolatilityStdDev ,  02/06/2008 ,  17:13  
+  Built-in function ,  VolumeDay ,  08/30/2012 ,  17:46  
+  Built-in function ,  VolumeMonth ,  08/30/2012 ,  17:19  
+  Built-in function ,  VolumeOsc ,  06/18/2009 ,  15:28  
+  Built-in function ,  VolumeRatioJP ,  06/14/2017 ,  15:27  
+  Built-in function ,  VolumeROC ,  06/18/2009 ,  15:30  
+  Built-in function ,  VolumeSession ,  06/14/2017 ,  15:28  
+  Built-in function ,  VolumeWeek ,  08/30/2012 ,  16:57  
+  Built-in function ,  VolumeYear ,  08/30/2012 ,  17:15  
+  Built-in function ,  WAverage ,  02/23/2006 ,  11:20  
+  Built-in function ,  WeightedClose ,  02/23/2006 ,  11:20  
+  Built-in function ,  XAverage ,  06/14/2017 ,  15:16  
+  Built-in function ,  XAverageOrig ,  02/23/2006 ,  11:21  
+  Built-in function ,  ZProb ,  02/23/2006 ,  11:21  
+  Function ,  AB_NextLabel ,  07/27/2016 ,  09:12  
+  Function ,  BjerkStensCall ,  10/07/2010 ,  11:45  
+  Function ,  BjerkStensPhi ,  02/22/2006 ,  12:13  
+  Function ,  BlackModel ,  02/22/2006 ,  12:13  
+  Function ,  BlackScholes ,  02/22/2006 ,  12:14  
+  Function ,  Delta ,  02/22/2006 ,  13:55  
+  Function ,  ELDateToString ,  02/22/2006 ,  14:03  
+  Function ,  Gamma ,  02/22/2006 ,  14:24  
+  Function ,  GCD ,  12/16/2014 ,  14:28  
+  Function ,  GenerateStrike ,  12/16/2014 ,  14:28  
+  Function ,  IFFLogic ,  02/22/2006 ,  14:46  
+  Function ,  IffString ,  12/16/2014 ,  14:27  
+  Function ,  ImpliedVolatility ,  02/22/2006 ,  14:46  
+  Function ,  ImpliedVolatilityEx ,  06/20/2018 ,  08:03  
+  Function ,  Intrinsic ,  12/16/2014 ,  14:27  
+  Function ,  LastBarOnChart ,  02/22/2006 ,  15:04  
+  Function ,  LastHour ,  02/22/2006 ,  15:06  
+  Function ,  OptionPrice ,  02/22/2006 ,  16:07  
+  Function ,  OptionsComplex ,  02/22/2006 ,  16:07  
+  Function ,  OS_AnnualDividend ,  12/16/2014 ,  14:29  
+  Function ,  OS_Binomial ,  12/16/2014 ,  14:30  
+  Function ,  OS_CheckProx ,  12/16/2014 ,  14:30  
+  Function ,  OS_DaysToExp ,  12/16/2014 ,  14:31  
+  Function ,  OS_DaysToFarExp ,  12/16/2014 ,  14:31  
+  Function ,  OS_DaysToNearExp ,  12/16/2014 ,  14:31  
+  Function ,  OS_DivsBetweenDates ,  12/16/2014 ,  14:32  
+  Function ,  OS_FindCall ,  12/16/2014 ,  14:33  
+  Function ,  OS_FindPut ,  12/16/2014 ,  14:34  
+  Function ,  OS_FindSeries ,  12/16/2014 ,  14:34  
+  Function ,  OS_FracDaysToExp ,  12/16/2014 ,  14:35  
+  Function ,  OS_GrossIn ,  12/16/2014 ,  14:35  
+  Function ,  OS_GrossOut ,  12/16/2014 ,  14:36  
+  Function ,  OS_Intrinsic ,  12/16/2014 ,  14:36  
+  Function ,  OS_MaxNumStrikes ,  12/16/2014 ,  14:37  
+  Function ,  Pennant ,  06/16/2011 ,  14:41  
+  Function ,  PivotReversalGen ,  05/23/2017 ,  08:24  
+  Function ,  Rho ,  02/22/2006 ,  16:33  
+  Function ,  RS_Average ,  09/27/2006 ,  16:42  
+  Function ,  RS_BarsPerDay ,  05/23/2017 ,  08:24  
+  Function ,  RS_DailyDataArray ,  05/23/2017 ,  08:24  
+  Function ,  RS_Extremes ,  02/23/2006 ,  10:30  
+  Function ,  RS_PriceExtension ,  02/23/2006 ,  10:31  
+  Function ,  RS_ReversalPatterns ,  02/23/2006 ,  10:31  
+  Function ,  RS_TrueExtremes ,  02/23/2006 ,  10:31  
+  Function ,  Text_Exist ,  02/23/2006 ,  11:08  
+  Function ,  Theta ,  02/23/2006 ,  11:08  
+  Function ,  TL_Exist ,  02/23/2006 ,  11:10  
+  Function ,  Vega ,  02/23/2006 ,  11:17  
+  Strategy ,  _Historical Entry ,  02/19/2015 ,  16:07  
+  Strategy ,  _Percent Exit Pair ,  02/26/2016 ,  07:52  
+  Strategy ,  _Single 1dir Rnge En ,  05/23/2017 ,  08:24  
+  Strategy ,  _Single 2dir Rnge En ,  05/23/2017 ,  08:24  
+  Strategy ,  _Single At-Mrkt En ,  05/23/2017 ,  08:24  
+  Strategy ,  _Single StpOrLim En ,  05/23/2017 ,  08:24  
+  Strategy ,  _Stops & Targets ,  04/25/2016 ,  10:50  
+  Strategy ,  _StpOrLim Exit ,  02/26/2016 ,  07:59  
+  Strategy ,  ATR Trailing LX ,  02/26/2016 ,  07:59  
+  Strategy ,  ATR Trailing SX ,  02/26/2016 ,  08:00  
+  Strategy ,  ATR Trgt & Trail LX ,  02/26/2016 ,  08:01  
+  Strategy ,  ATR Trgt & Trail SX ,  02/26/2016 ,  08:02  
+  Strategy ,  Bollinger Bands LE ,  02/26/2016 ,  08:04  
+  Strategy ,  Bollinger Bands SE ,  02/26/2016 ,  08:05  
+  Strategy ,  Breakeven Stop ,  07/31/2014 ,  11:32  
+  Strategy ,  Breakeven Stop LX ,  02/26/2016 ,  08:06  
+  Strategy ,  Breakeven Stop SX ,  02/26/2016 ,  08:07  
+  Strategy ,  Channel Trailing LX ,  02/26/2016 ,  08:07  
+  Strategy ,  Channel Trailing SX ,  02/26/2016 ,  08:08  
+  Strategy ,  Close at End of Day ,  03/20/2015 ,  09:14  
+  Strategy ,  Consecutive Downs SE ,  02/26/2016 ,  08:09  
+  Strategy ,  Consecutive Ups LE ,  02/26/2016 ,  08:09  
+  Strategy ,  Custom Strategy LE ,  02/26/2016 ,  08:09  
+  Strategy ,  Custom Strategy LX ,  02/26/2016 ,  08:09  
+  Strategy ,  Custom Strategy SE ,  02/26/2016 ,  08:11  
+  Strategy ,  Custom Strategy SX ,  02/26/2016 ,  08:11  
+  Strategy ,  Dollar Trailing ,  02/26/2016 ,  08:11  
+  Strategy ,  Dollar Trailing LX ,  02/26/2016 ,  08:13  
+  Strategy ,  Dollar Trailing SX ,  02/26/2016 ,  08:13  
+  Strategy ,  EntryBar $ Stop LX ,  04/25/2016 ,  10:50  
+  Strategy ,  EntryBar $ Stop SX ,  04/25/2016 ,  10:50  
+  Strategy ,  EntryBar ATR Stop LX ,  02/26/2016 ,  08:16  
+  Strategy ,  EntryBar ATR Stop SX ,  02/26/2016 ,  08:16  
+  Strategy ,  EntryBar Pnt Stop LX ,  02/26/2016 ,  08:16  
+  Strategy ,  EntryBar Pnt Stop SX ,  02/26/2016 ,  08:16  
+  Strategy ,  Fundamntl & Chan LE ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & Chan LX ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & MACD LE ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & MACD LX ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & RSI LE ,  07/31/2014 ,  13:28  
+  Strategy ,  Fundamntl & RSI LX ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & Stoch LE ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & Stoch LX ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & Volty LE ,  07/31/2014 ,  11:34  
+  Strategy ,  Fundamntl & Volty LX ,  07/31/2014 ,  11:34  
+  Strategy ,  Gap Down SE ,  02/26/2016 ,  08:18  
+  Strategy ,  Gap Up LE ,  02/26/2016 ,  08:18  
+  Strategy ,  Inside Bar LE ,  02/26/2016 ,  08:18  
+  Strategy ,  Inside Bar SE ,  02/26/2016 ,  08:19  
+  Strategy ,  Keltner Channel LE ,  02/26/2016 ,  08:20  
+  Strategy ,  Keltner Channel SE ,  02/26/2016 ,  08:19  
+  Strategy ,  Key Reversal LE ,  02/26/2016 ,  08:19  
+  Strategy ,  Key Reversal LX ,  02/26/2016 ,  08:22  
+  Strategy ,  Key Reversal SE ,  02/26/2016 ,  08:22  
+  Strategy ,  Key Reversal SX ,  02/26/2016 ,  08:22  
+  Strategy ,  MACD LE ,  02/26/2016 ,  08:22  
+  Strategy ,  MACD SE ,  02/26/2016 ,  08:24  
+  Strategy ,  Momentum LE ,  02/26/2016 ,  08:24  
+  Strategy ,  Momentum SE ,  02/26/2016 ,  08:24  
+  Strategy ,  MovAvg Cross LE ,  02/26/2016 ,  08:24  
+  Strategy ,  MovAvg Cross LX ,  02/26/2016 ,  08:32  
+  Strategy ,  MovAvg Cross SE ,  02/26/2016 ,  08:32  
+  Strategy ,  MovAvg Cross SX ,  02/26/2016 ,  08:32  
+  Strategy ,  MovAvg2Line Cross LE ,  03/14/2016 ,  11:16  
+  Strategy ,  MovAvg2Line Cross SE ,  03/14/2016 ,  11:16  
+  Strategy ,  MovAvg3Line Cross LE ,  03/14/2016 ,  11:16  
+  Strategy ,  MovAvg3Line Cross SE ,  03/14/2016 ,  11:16  
+  Strategy ,  New High LE ,  02/26/2016 ,  08:38  
+  Strategy ,  New Low SE ,  02/26/2016 ,  08:38  
+  Strategy ,  Outside Bar LE ,  02/26/2016 ,  08:38  
+  Strategy ,  Outside Bar SE ,  02/26/2016 ,  08:38  
+  Strategy ,  P/E OverVal SE ,  07/31/2014 ,  11:37  
+  Strategy ,  P/E OverVal SX ,  07/31/2014 ,  11:37  
+  Strategy ,  P/E UndVal LE ,  07/31/2014 ,  11:37  
+  Strategy ,  P/E UndVal LX ,  07/31/2014 ,  11:37  
+  Strategy ,  Parabolic_m Trail LX ,  02/26/2016 ,  08:44  
+  Strategy ,  Parabolic_m Trail SX ,  02/26/2016 ,  08:43  
+  Strategy ,  Parabolic LE ,  02/26/2016 ,  08:43  
+  Strategy ,  Parabolic SE ,  02/26/2016 ,  08:43  
+  Strategy ,  Percent Stop LX ,  02/26/2016 ,  08:48  
+  Strategy ,  Percent Stop SX ,  02/26/2016 ,  08:49  
+  Strategy ,  Percent Trailing ,  02/26/2016 ,  08:49  
+  Strategy ,  Percent Trailing LX ,  02/26/2016 ,  08:51  
+  Strategy ,  Percent Trailing SX ,  02/26/2016 ,  08:51  
+  Strategy ,  PercentR LE ,  02/26/2016 ,  08:53  
+  Strategy ,  PercentR SE ,  02/26/2016 ,  08:52  
+  Strategy ,  Pivot Extension LE ,  02/26/2016 ,  08:55  
+  Strategy ,  Pivot Extension SE ,  02/26/2016 ,  08:55  
+  Strategy ,  Pivot Reversal LE ,  02/26/2016 ,  08:55  
+  Strategy ,  Pivot Reversal SE ,  02/26/2016 ,  08:55  
+  Strategy ,  Point Stop LX ,  01/06/2017 ,  16:43  
+  Strategy ,  Point Stop SX ,  01/06/2017 ,  12:40  
+  Strategy ,  Price Channel LE ,  02/26/2016 ,  08:56  
+  Strategy ,  Price Channel SE ,  02/26/2016 ,  08:56  
+  Strategy ,  Profit Target ,  02/26/2016 ,  08:57  
+  Strategy ,  Profit Target LX ,  02/26/2016 ,  08:58  
+  Strategy ,  Profit Target SX ,  02/26/2016 ,  08:58  
+  Strategy ,  Profitable Closes LX ,  02/26/2016 ,  08:58  
+  Strategy ,  Profitable Closes SX ,  02/26/2016 ,  08:58  
+  Strategy ,  RSI LE ,  02/26/2016 ,  09:00  
+  Strategy ,  RSI SE ,  02/26/2016 ,  09:00  
+  Strategy ,  Stochastic Slow LE ,  02/26/2016 ,  09:00  
+  Strategy ,  Stochastic Slow SE ,  02/26/2016 ,  09:00  
+  Strategy ,  Stop Loss ,  07/31/2014 ,  11:39  
+  Strategy ,  Stop Loss LX ,  02/26/2016 ,  09:02  
+  Strategy ,  Stop Loss SX ,  02/26/2016 ,  09:02  
+  Strategy ,  TimeExit (Bars) LX ,  02/26/2016 ,  09:03  
+  Strategy ,  TimeExit (Bars) SX ,  02/26/2016 ,  09:04  
+  Strategy ,  TimeExit (Calndr) LX ,  02/26/2016 ,  09:04  
+  Strategy ,  TimeExit (Calndr) SX ,  02/26/2016 ,  09:04  
+  Strategy ,  Trendline LE ,  05/10/2018 ,  09:03  
+  Strategy ,  Trendline SE ,  05/10/2018 ,  09:03  
+  Strategy ,  Volty Expan Close LE ,  02/26/2016 ,  09:06  
+  Strategy ,  Volty Expan Close LX ,  02/26/2016 ,  09:06  
+  Strategy ,  Volty Expan Close SE ,  02/26/2016 ,  09:06  
+  Strategy ,  Volty Expan Close SX ,  02/26/2016 ,  09:08  
+  Strategy ,  Volty Expan Open LE ,  02/26/2016 ,  09:08  
+  Strategy ,  Volty Expan Open SE ,  02/26/2016 ,  09:08  
+  Indicator ,  %Chg ,  11/07/2014 ,  10:15  
+  Indicator ,  %R ,  01/18/2016 ,  08:48  
+  Indicator ,  52 Wk Channel ,  07/12/2017 ,  16:18  
+  Indicator ,  52 Wk High ,  06/14/2017 ,  14:50  
+  Indicator ,  52 Wk High-Low ,  08/02/2017 ,  14:10  
+  Indicator ,  52 Wk Low ,  06/14/2017 ,  14:51  
+  Indicator ,  Absolute Breadth ,  11/07/2014 ,  10:18  
+  Indicator ,  Accel Decel Oscillator ,  07/31/2014 ,  07:55  
+  Indicator ,  Accum Dist - BuyPr ,  07/31/2014 ,  07:56  
+  Indicator ,  Accum Dist - PrVol ,  04/25/2016 ,  10:40  
+  Indicator ,  Accum Swing Index ,  07/31/2014 ,  07:58  
+  Indicator ,  Advance-Decl Line ,  11/07/2014 ,  10:18  
+  Indicator ,  Advance-Decl Ratio ,  11/07/2014 ,  10:19  
+  Indicator ,  ADX ,  01/18/2016 ,  08:50  
+  Indicator ,  ADXR ,  04/25/2016 ,  10:41  
+  Indicator ,  Algo - Bracket Orders - Entry OCO with Exit Bracket ,  06/14/2017 ,  14:51  
+  Indicator ,  Algo - Bracket Orders WinForm - Entry OCO with OSO Exit ,  02/07/2018 ,  09:08  
+  Indicator ,  Algo - Pairs Trading ,  07/12/2017 ,  16:27  
+  Indicator ,  Algo - Simple Algos WinForm ,  02/07/2018 ,  09:08  
+  Indicator ,  Alligator ,  07/12/2017 ,  16:19  
+  Indicator ,  Arms Index (TRIN) ,  01/18/2016 ,  08:52  
+  Indicator ,  Aroon Indicator ,  04/13/2018 ,  09:32  
+  Indicator ,  Aroon Oscillator ,  04/13/2018 ,  09:32  
+  Indicator ,  Ask ,  02/26/2016 ,  07:18  
+  Indicator ,  Ask Date ,  07/31/2014 ,  08:11  
+  Indicator ,  Ask Exch ,  07/31/2014 ,  08:12  
+  Indicator ,  Ask Size ,  07/31/2014 ,  08:12  
+  Indicator ,  Ask Time ,  07/22/2015 ,  07:48  
+  Indicator ,  Average True Range ,  11/07/2014 ,  10:20  
+  Indicator ,  Awesome Oscillator ,  07/31/2014 ,  08:14  
+  Indicator ,  Balance Sheet MRQ ,  07/12/2017 ,  16:27  
+  Indicator ,  Bar Close ,  01/20/2015 ,  10:09  
+  Indicator ,  Bar High ,  11/07/2014 ,  10:21  
+  Indicator ,  Bar Low ,  11/07/2014 ,  10:22  
+  Indicator ,  Bar Open ,  11/07/2014 ,  10:22  
+  Indicator ,  Bar Volume ,  11/07/2014 ,  10:23  
+  Indicator ,  Beta ,  07/12/2017 ,  16:27  
+  Indicator ,  Bid ,  02/26/2016 ,  07:23  
+  Indicator ,  Bid & Ask ,  11/07/2014 ,  10:23  
+  Indicator ,  Bid & Ask Vol Ratio ,  07/12/2017 ,  16:27  
+  Indicator ,  Bid Date ,  07/31/2014 ,  08:24  
+  Indicator ,  Bid Dir ,  02/26/2016 ,  07:24  
+  Indicator ,  Bid Exch ,  07/31/2014 ,  08:26  
+  Indicator ,  Bid Size ,  07/31/2014 ,  08:26  
+  Indicator ,  Bid Time ,  07/22/2015 ,  07:48  
+  Indicator ,  Bid-Ask ,  02/26/2016 ,  07:25  
+  Indicator ,  Black-Scholes ,  07/31/2014 ,  08:28  
+  Indicator ,  Block Trade < Bid ,  06/14/2017 ,  14:51  
+  Indicator ,  Block Trade > Ask ,  06/14/2017 ,  14:51  
+  Indicator ,  Block Trades per Bar ,  07/12/2017 ,  16:27  
+  Indicator ,  Bollinger %B ,  03/20/2015 ,  09:12  
+  Indicator ,  Bollinger Bands ,  01/20/2015 ,  10:23  
+  Indicator ,  Bollinger Bandwidth ,  01/18/2016 ,  08:53  
+  Indicator ,  Breadth - Custom ,  10/20/2017 ,  07:37  
+  Indicator ,  Cash Flow ,  07/12/2017 ,  16:26  
+  Indicator ,  Category ,  03/23/2017 ,  09:49  
+  Indicator ,  CCI Average ,  11/07/2014 ,  10:50  
+  Indicator ,  Chaikin Money Flow ,  07/31/2014 ,  08:44  
+  Indicator ,  Chaikin Osc ,  07/31/2014 ,  08:45  
+  Indicator ,  Chaikin Volatility ,  07/31/2014 ,  08:45  
+  Indicator ,  Chande Momentum Osc ,  07/31/2014 ,  08:45  
+  Indicator ,  ChartTrading ,  12/21/2018 ,  12:57  
+  Indicator ,  Close ,  02/26/2016 ,  07:26  
+  Indicator ,  Comm Channel Index ,  07/31/2014 ,  08:46  
+  Indicator ,  Comm Sel Index ,  07/31/2014 ,  13:29  
+  Indicator ,  Corporate Margins ,  07/12/2017 ,  16:26  
+  Indicator ,  Correlation ,  07/31/2014 ,  08:47  
+  Indicator ,  Correlation RS ,  03/20/2015 ,  09:15  
+  Indicator ,  COT Net Position ,  07/12/2017 ,  16:26  
+  Indicator ,  COT Total Position ,  07/12/2017 ,  16:26  
+  Indicator ,  COT Total Position % ,  07/12/2017 ,  16:26  
+  Indicator ,  Country ,  07/31/2014 ,  08:47  
+  Indicator ,  Crossovers per Bar ,  07/31/2014 ,  08:48  
+  Indicator ,  Crossunders per Bar ,  07/31/2014 ,  08:48  
+  Indicator ,  Cup with Handle Pattern ,  03/07/2018 ,  07:55  
+  Indicator ,  Currency ,  01/29/2016 ,  05:23  
+  Indicator ,  Custom 1 Line ,  01/20/2015 ,  10:24  
+  Indicator ,  Custom 2 Lines ,  01/20/2015 ,  10:24  
+  Indicator ,  Custom 3 Lines ,  01/20/2015 ,  10:24  
+  Indicator ,  Custom 4 Lines ,  01/20/2015 ,  10:24  
+  Indicator ,  Custom Note ,  01/18/2016 ,  08:55  
+  Indicator ,  Custom Quote ,  07/31/2014 ,  13:31  
+  Indicator ,  Day Open-Hi-Lo Lines ,  07/25/2017 ,  16:02  
+  Indicator ,  Day Open-Hi-Lo RT ,  07/31/2014 ,  08:58  
+  Indicator ,  Day or Session Hi-Lo Lines ,  06/14/2017 ,  14:52  
+  Indicator ,  Death Cross ,  02/01/2017 ,  12:03  
+  Indicator ,  Description ,  11/29/2017 ,  14:00  
+  Indicator ,  Detrended Price Osc ,  07/31/2014 ,  08:58  
+  Indicator ,  Dividend ,  07/31/2014 ,  08:58  
+  Indicator ,  Dividends ,  07/12/2017 ,  16:26  
+  Indicator ,  DMI ,  02/19/2015 ,  15:35  
+  Indicator ,  Ease of Movement ,  07/31/2014 ,  08:59  
+  Indicator ,  EPS ,  07/12/2017 ,  16:26  
+  Indicator ,  EPS Basic MRQ ,  07/31/2014 ,  08:59  
+  Indicator ,  EPS Diluted MRQ ,  07/31/2014 ,  08:59  
+  Indicator ,  EPS Diluted TTM ,  07/31/2014 ,  08:59  
+  Indicator ,  Exch ,  07/31/2014 ,  09:00  
+  Indicator ,  Exp Date ,  02/26/2016 ,  07:27  
+  Indicator ,  Falter & Reverse Dn ,  01/18/2016 ,  08:56  
+  Indicator ,  Falter & Reverse Up ,  01/18/2016 ,  08:57  
+  Indicator ,  Fibonacci Retrace ,  03/20/2015 ,  09:17  
+  Indicator ,  Financial Strength ,  07/12/2017 ,  16:26  
+  Indicator ,  Floating Text ,  01/06/2017 ,  12:41  
+  Indicator ,  Floor Trader Pivots ,  06/14/2017 ,  14:52  
+  Indicator ,  Floor Trader Pivots Ex ,  01/19/2018 ,  11:01  
+  Indicator ,  FND ,  07/25/2017 ,  16:02  
+  Indicator ,  Formula OHLC ,  07/31/2014 ,  09:05  
+  Indicator ,  Fundamental to Avg Fundamental ,  07/12/2017 ,  16:26  
+  Indicator ,  Fundamntl Custom ,  07/12/2017 ,  16:26  
+  Indicator ,  Fundamntl Date ,  07/12/2017 ,  16:26  
+  Indicator ,  Fundamntl TTM ,  07/12/2017 ,  16:26  
+  Indicator ,  Fundamntl TTM Acc ,  07/31/2014 ,  09:06  
+  Indicator ,  Fundamntl TTM Mom ,  07/31/2014 ,  09:06  
+  Indicator ,  FX Roll Acct Value ,  06/14/2017 ,  14:52  
+  Indicator ,  FX Roll Rates ,  06/14/2017 ,  14:52  
+  Indicator ,  Gann HiLo Activator ,  02/19/2015 ,  15:34  
+  Indicator ,  Gap & Reverse Dn ,  03/20/2015 ,  09:18  
+  Indicator ,  Gap & Reverse Up ,  03/20/2015 ,  09:18  
+  Indicator ,  Gapless Bar Chart ,  07/31/2014 ,  09:07  
+  Indicator ,  Golden Cross ,  02/01/2017 ,  12:03  
+  Indicator ,  High ,  02/26/2016 ,  07:28  
+  Indicator ,  HPI ,  07/12/2017 ,  16:20  
+  Indicator ,  Ichimoku Cloud ,  07/12/2017 ,  16:26  
+  Indicator ,  Impl Volty - Stoch ,  07/12/2017 ,  16:20  
+  Indicator ,  Impl Volty- 1 Option ,  06/20/2018 ,  08:06  
+  Indicator ,  Impl Volty- 1 Option RS ,  06/20/2018 ,  08:04  
+  Indicator ,  Impl Volty- All Opts ,  05/23/2017 ,  08:25  
+  Indicator ,  Impl Volty- Osc ,  07/12/2017 ,  16:21  
+  Indicator ,  Impl Volty- ROC ,  03/20/2015 ,  09:22  
+  Indicator ,  Impl Volty/Historical Volty ,  08/02/2017 ,  14:10  
+  Indicator ,  Impl Volty/VoltySDev ,  07/12/2017 ,  16:21  
+  Indicator ,  Income Statement TTM ,  07/12/2017 ,  16:25  
+  Indicator ,  Industry ,  07/12/2017 ,  16:25  
+  Indicator ,  Institution Acc-Dist ,  02/26/2016 ,  07:31  
+  Indicator ,  Interval ,  02/26/2016 ,  07:33  
+  Indicator ,  Keltner Channel ,  07/31/2014 ,  09:28  
+  Indicator ,  Last ,  02/26/2016 ,  07:33  
+  Indicator ,  LBR Three-Ten Oscillator ,  07/31/2014 ,  09:28  
+  Indicator ,  Level II to Excel ,  02/07/2018 ,  09:06  
+  Indicator ,  Line at Ask ,  09/12/2018 ,  12:22  
+  Indicator ,  Line at Bid ,  09/12/2018 ,  12:22  
+  Indicator ,  Line at Price ,  09/12/2018 ,  12:22  
+  Indicator ,  Linear Reg Curve ,  07/31/2014 ,  09:29  
+  Indicator ,  Linear Reg Line ,  07/12/2017 ,  16:21  
+  Indicator ,  Low ,  02/26/2016 ,  07:34  
+  Indicator ,  LTD ,  03/20/2015 ,  09:23  
+  Indicator ,  MACD ,  01/16/2017 ,  16:37  
+  Indicator ,  Manage Efficient TTM ,  07/12/2017 ,  16:25  
+  Indicator ,  Market Cap M ,  07/12/2017 ,  16:25  
+  Indicator ,  Market Depth - Price Levels ,  01/06/2017 ,  12:40  
+  Indicator ,  Market Depth in RadarScreen ,  02/07/2018 ,  09:05  
+  Indicator ,  Market Thrust ,  07/31/2014 ,  09:37  
+  Indicator ,  Mass Index ,  07/31/2014 ,  09:37  
+  Indicator ,  McClellan Osc ,  07/31/2014 ,  09:37  
+  Indicator ,  Mid Range ,  03/20/2015 ,  09:24  
+  Indicator ,  Mkt Facilitation Idx ,  07/31/2014 ,  09:43  
+  Indicator ,  Momentum ,  01/06/2017 ,  12:40  
+  Indicator ,  Money Flow ,  03/20/2015 ,  09:24  
+  Indicator ,  Mov Avg 1 Line ,  12/30/2015 ,  15:42  
+  Indicator ,  Mov Avg 2 Lines ,  03/14/2016 ,  11:15  
+  Indicator ,  Mov Avg 3 Lines ,  03/14/2016 ,  11:15  
+  Indicator ,  Mov Avg Adaptive ,  12/30/2015 ,  15:44  
+  Indicator ,  Mov Avg DEMA ,  12/30/2015 ,  15:46  
+  Indicator ,  Mov Avg Envelopes ,  12/30/2015 ,  15:47  
+  Indicator ,  Mov Avg Exp 2 Lines ,  04/11/2017 ,  11:18  
+  Indicator ,  Mov Avg Exp 3 Lines ,  09/12/2018 ,  12:23  
+  Indicator ,  Mov Avg Exp Ribbon ,  12/30/2015 ,  15:47  
+  Indicator ,  Mov Avg Exponential ,  04/11/2017 ,  11:19  
+  Indicator ,  Mov Avg Hull ,  12/30/2015 ,  15:48  
+  Indicator ,  Mov Avg MAMA ,  12/30/2015 ,  15:49  
+  Indicator ,  Mov Avg QEMA ,  01/18/2016 ,  08:59  
+  Indicator ,  Mov Avg TEMA ,  12/30/2015 ,  15:50  
+  Indicator ,  Mov Avg Triangular ,  12/30/2015 ,  15:50  
+  Indicator ,  Mov Avg Volume-weighted ,  12/30/2015 ,  15:51  
+  Indicator ,  Mov Avg Weighted ,  12/30/2015 ,  15:51  
+  Indicator ,  Move AOP Lines ,  05/10/2018 ,  09:04  
+  Indicator ,  Moving Average Gap Ratio ,  02/07/2017 ,  15:05  
+  Indicator ,  Negative Volume Index ,  07/31/2014 ,  09:50  
+  Indicator ,  Net %Chg ,  08/19/2015 ,  15:52  
+  Indicator ,  Net %Chg (C) ,  11/29/2017 ,  14:03  
+  Indicator ,  Net %Chg Max Dn ,  08/19/2015 ,  15:53  
+  Indicator ,  Net %Chg Max Up ,  03/20/2015 ,  09:27  
+  Indicator ,  Net %Chg OMD ,  03/20/2015 ,  09:27  
+  Indicator ,  Net %Chg OMU ,  03/20/2015 ,  09:27  
+  Indicator ,  Net %Chg Open ,  03/20/2015 ,  09:27  
+  Indicator ,  Net Chg ,  02/26/2016 ,  07:35  
+  Indicator ,  Net Chg (C) ,  11/29/2017 ,  14:03  
+  Indicator ,  Net Chg Open ,  03/20/2015 ,  09:27  
+  Indicator ,  New 52 Wk High ,  06/14/2017 ,  14:55  
+  Indicator ,  New 52 Wk Low ,  06/14/2017 ,  14:55  
+  Indicator ,  New Intraday High ,  04/25/2016 ,  10:45  
+  Indicator ,  New Intraday Low ,  04/25/2016 ,  10:46  
+  Indicator ,  New N-Day High ,  07/31/2014 ,  09:54  
+  Indicator ,  New N-Day Low ,  07/31/2014 ,  09:54  
+  Indicator ,  Next 3rd Friday ,  07/31/2014 ,  09:55  
+  Indicator ,  OHLC Yesterday ,  06/14/2017 ,  14:55  
+  Indicator ,  On Balance Volume ,  07/31/2014 ,  09:59  
+  Indicator ,  Open ,  07/31/2014 ,  09:59  
+  Indicator ,  Open Gap ,  04/11/2016 ,  07:02  
+  Indicator ,  Open Gap % ,  04/11/2016 ,  07:58  
+  Indicator ,  Open Int ,  03/20/2015 ,  09:30  
+  Indicator ,  Open Int - All Opts ,  01/29/2016 ,  05:20  
+  Indicator ,  Open Int - Calls ,  07/31/2014 ,  10:00  
+  Indicator ,  Open Int - Puts ,  07/31/2014 ,  10:01  
+  Indicator ,  Open Interest ,  07/31/2014 ,  10:04  
+  Indicator ,  Open Order Information ,  02/07/2018 ,  09:05  
+  Indicator ,  Option Delta ,  07/31/2014 ,  10:04  
+  Indicator ,  Option Gamma ,  07/31/2014 ,  10:04  
+  Indicator ,  Option Price ,  07/31/2014 ,  13:34  
+  Indicator ,  Option Theta ,  07/31/2014 ,  10:05  
+  Indicator ,  Option Type ,  07/31/2014 ,  10:05  
+  Indicator ,  Option Vega ,  07/31/2014 ,  10:05  
+  Indicator ,  Parabolic SAR ,  04/25/2016 ,  10:47  
+  Indicator ,  Payout Ratios ,  07/12/2017 ,  16:25  
+  Indicator ,  Pennant Brkout Dn ,  07/31/2014 ,  10:09  
+  Indicator ,  Pennant Brkout Up ,  07/31/2014 ,  10:09  
+  Indicator ,  Polarized Fractal Efficiency ,  03/20/2015 ,  09:35  
+  Indicator ,  Position P/L ,  11/07/2014 ,  10:30  
+  Indicator ,  Position P/L % ,  11/07/2014 ,  10:31  
+  Indicator ,  Position P/L % Grad ,  07/31/2014 ,  10:09  
+  Indicator ,  Position P/L Auto ,  06/14/2017 ,  14:55  
+  Indicator ,  Position Value ,  11/07/2014 ,  10:32  
+  Indicator ,  Positive Volume Index ,  03/20/2015 ,  09:35  
+  Indicator ,  PPO Oscillator ,  01/16/2017 ,  16:38  
+  Indicator ,  Prev Close ,  07/31/2014 ,  10:10  
+  Indicator ,  Price Channel ,  07/31/2014 ,  10:10  
+  Indicator ,  Price Channel %PC ,  01/20/2015 ,  10:22  
+  Indicator ,  Price Earnings ,  07/12/2017 ,  16:25  
+  Indicator ,  Price Osc ,  07/31/2014 ,  10:11  
+  Indicator ,  Price Volume Trend ,  07/31/2014 ,  10:11  
+  Indicator ,  Price/Earnings ,  07/31/2014 ,  10:11  
+  Indicator ,  Psychological Line ,  03/20/2015 ,  09:36  
+  Indicator ,  Put/Call OI RatioAvg ,  03/20/2015 ,  09:36  
+  Indicator ,  Put/Call V Ratio Avg ,  03/20/2015 ,  09:36  
+  Indicator ,  QQE ,  04/11/2017 ,  11:18  
+  Indicator ,  Range ,  03/20/2015 ,  09:37  
+  Indicator ,  Range % ,  03/20/2015 ,  09:40  
+  Indicator ,  Rate of Chg ,  07/31/2014 ,  10:13  
+  Indicator ,  Rate of Chg (Risk-Adjusted) ,  09/12/2018 ,  12:22  
+  Indicator ,  Rate of Deviation ,  04/25/2016 ,  10:47  
+  Indicator ,  RCI (Spearman's RCC) ,  03/20/2015 ,  09:40  
+  Indicator ,  Relative Strength ,  06/14/2017 ,  14:54  
+  Indicator ,  Relative Strength (One Day) ,  03/20/2015 ,  09:40  
+  Indicator ,  RSI ,  07/31/2014 ,  10:39  
+  Indicator ,  RSI JP ,  03/20/2015 ,  09:42  
+  Indicator ,  S&P 500 Rel Strength ,  07/12/2017 ,  16:25  
+  Indicator ,  Sector ,  07/12/2017 ,  16:25  
+  Indicator ,  Spread - Diff ,  03/20/2015 ,  09:44  
+  Indicator ,  Spread - Ratio ,  03/20/2015 ,  09:44  
+  Indicator ,  Spread RS ,  03/20/2015 ,  09:44  
+  Indicator ,  Standard Error Bands ,  07/31/2014 ,  10:40  
+  Indicator ,  Stochastic Double Slow ,  06/09/2016 ,  10:25  
+  Indicator ,  Stochastic Fast ,  03/20/2015 ,  09:44  
+  Indicator ,  Stochastic Slow ,  03/20/2015 ,  09:44  
+  Indicator ,  Strategy Equity ,  11/15/2018 ,  11:09  
+  Indicator ,  Strike Price ,  07/31/2014 ,  10:41  
+  Indicator ,  Subsession OHLC ,  06/14/2017 ,  14:55  
+  Indicator ,  Swing Index ,  07/31/2014 ,  10:41  
+  Indicator ,  Time Remaining in Bar ,  02/07/2018 ,  09:02  
+  Indicator ,  Time Series Forecast ,  07/31/2014 ,  10:43  
+  Indicator ,  Total Shs Outstand M ,  07/12/2017 ,  16:25  
+  Indicator ,  Trade @ Bid/Ask ,  03/20/2015 ,  09:47  
+  Indicator ,  Trade Date ,  03/20/2015 ,  09:47  
+  Indicator ,  Trade Dir ,  06/14/2017 ,  14:54  
+  Indicator ,  Trade Exch ,  06/16/2015 ,  11:45  
+  Indicator ,  Trade Size ,  03/20/2015 ,  09:48  
+  Indicator ,  Trade Time ,  07/22/2015 ,  07:49  
+  Indicator ,  Trades ,  03/20/2015 ,  09:48  
+  Indicator ,  Trades Dn ,  11/29/2017 ,  14:05  
+  Indicator ,  Trades Dn % ,  03/20/2015 ,  09:48  
+  Indicator ,  Trades Unch ,  03/20/2015 ,  09:48  
+  Indicator ,  Trades Unch % ,  03/20/2015 ,  09:49  
+  Indicator ,  Trades Up ,  11/29/2017 ,  14:04  
+  Indicator ,  Trades Up % ,  03/20/2015 ,  09:49  
+  Indicator ,  Trades UpDn ,  06/14/2017 ,  14:54  
+  Indicator ,  TrendLines Automatic ,  01/06/2017 ,  12:39  
+  Indicator ,  TRIX ,  07/31/2014 ,  11:04  
+  Indicator ,  True Strength Index ,  06/20/2018 ,  07:52  
+  Indicator ,  Typical Price ,  03/20/2015 ,  09:49  
+  Indicator ,  Ulcer Index ,  03/20/2015 ,  09:49  
+  Indicator ,  Ultimate Osc ,  07/31/2014 ,  11:06  
+  Indicator ,  Vertical Horizontal Filter ,  04/25/2016 ,  10:48  
+  Indicator ,  Volatility ,  11/07/2014 ,  10:35  
+  Indicator ,  Volatility Std Dev ,  11/07/2014 ,  10:35  
+  Indicator ,  Volty SDev Stoch ,  07/12/2017 ,  16:22  
+  Indicator ,  Volume ,  03/09/2017 ,  11:29  
+  Indicator ,  Volume_Dn ,  08/19/2015 ,  15:57  
+  Indicator ,  Volume_Dn% ,  07/31/2014 ,  11:09  
+  Indicator ,  Volume_Unch ,  07/31/2014 ,  11:09  
+  Indicator ,  Volume_Unch% ,  07/31/2014 ,  11:10  
+  Indicator ,  Volume_Up ,  08/19/2015 ,  15:58  
+  Indicator ,  Volume_Up% ,  07/31/2014 ,  11:10  
+  Indicator ,  Volume - All Opts ,  03/20/2015 ,  09:50  
+  Indicator ,  Volume - All OptsOsc ,  07/31/2014 ,  11:07  
+  Indicator ,  Volume - All OptsROC ,  07/31/2014 ,  11:07  
+  Indicator ,  Volume - Calls ,  03/20/2015 ,  09:50  
+  Indicator ,  Volume - Puts ,  03/20/2015 ,  09:50  
+  Indicator ,  Volume Avg ,  03/09/2017 ,  11:29  
+  Indicator ,  Volume Custom ,  06/14/2017 ,  14:54  
+  Indicator ,  Volume Dn ,  03/09/2017 ,  11:29  
+  Indicator ,  Volume Osc ,  07/31/2014 ,  11:08  
+  Indicator ,  Volume Rate of Chg ,  07/31/2014 ,  11:08  
+  Indicator ,  Volume Ratio ,  04/25/2016 ,  10:49  
+  Indicator ,  Volume Ratio JP ,  03/20/2015 ,  09:51  
+  Indicator ,  Volume Today ,  07/31/2014 ,  11:09  
+  Indicator ,  Volume Up ,  03/09/2017 ,  11:29  
+  Indicator ,  Volume UpDn ,  06/14/2017 ,  14:56  
+  Indicator ,  VWAP ,  03/20/2015 ,  09:51  
+  Indicator ,  Weighted Close ,  07/31/2014 ,  11:10  
+  Indicator ,  ZigZag % ,  06/09/2016 ,  10:26  
+  Indicator ,  ZigZag Pnts ,  06/09/2016 ,  10:26  
+  Probability map ,  Normal Distribution ,  05/23/2017 ,  08:25  
+  Probability map ,  Normal Range ,  05/23/2017 ,  08:25  
+  Activity bar ,  Candlestick VolAccum ,  02/15/2016 ,  08:27  
+  Activity bar ,  Price Distribution ,  07/31/2014 ,  11:13  
+  Activity bar ,  Up vs Down Strength ,  09/03/2014 ,  13:04  
+  Activity bar ,  Volume Distribution ,  07/31/2014 ,  11:13  
+  Activity bar ,  Volume Strength ,  04/25/2016 ,  10:39  
+  Paintbar ,  % Decrease ,  11/07/2014 ,  10:50  
+  Paintbar ,  % Increase ,  11/07/2014 ,  10:49  
+  Paintbar ,  Avg Close < Avg Open ,  11/07/2014 ,  10:40  
+  Paintbar ,  Avg Close > Avg Open ,  11/07/2014 ,  10:50  
+  Paintbar ,  Count Criteria PB ,  11/07/2014 ,  10:50  
+  Paintbar ,  Cust Gradient- Bnd ,  11/07/2014 ,  10:48  
+  Paintbar ,  Cust Gradient- Unbnd ,  11/07/2014 ,  10:50  
+  Paintbar ,  Custom PaintBar ,  11/07/2014 ,  10:50  
+  Paintbar ,  Day of Week ,  11/07/2014 ,  10:49  
+  Paintbar ,  First Bar of Day ,  11/07/2014 ,  10:49  
+  Paintbar ,  First Bar of Month ,  11/07/2014 ,  10:49  
+  Paintbar ,  First Bar of Week ,  11/07/2014 ,  10:49  
+  Paintbar ,  First Bar of Year ,  11/07/2014 ,  10:49  
+  Paintbar ,  Fundamntl TTM Acc PB ,  11/07/2014 ,  10:49  
+  Paintbar ,  Fundamntl TTM Mom PB ,  11/07/2014 ,  10:49  
+  Paintbar ,  Impl Volty Extreme ,  11/07/2014 ,  10:49  
+  Paintbar ,  Impl Volty Gradient ,  05/23/2017 ,  08:24  
+  Paintbar ,  IV/VSD Extreme ,  05/23/2017 ,  08:25  
+  Paintbar ,  MACD Gradient ,  11/07/2014 ,  10:49  
+  Paintbar ,  Momentum Decreasing ,  11/07/2014 ,  10:49  
+  Paintbar ,  Momentum Increasing ,  11/07/2014 ,  10:48  
+  Paintbar ,  Mov Avg Crossover ,  03/14/2016 ,  11:16  
+  Paintbar ,  Mov Avg Exponential Crossover ,  04/11/2017 ,  11:43  
+  Paintbar ,  Price < Avg ,  11/07/2014 ,  10:48  
+  Paintbar ,  Price > Avg ,  11/07/2014 ,  10:48  
+  Paintbar ,  Put/Call OI Extreme ,  11/07/2014 ,  10:49  
+  Paintbar ,  Put/Call Vol Extreme ,  11/07/2014 ,  10:49  
+  Paintbar ,  Stochastic SlowK ,  03/20/2015 ,  09:45  
+  Paintbar ,  Volume Gradient ,  11/07/2014 ,  10:48  
+  Showme ,  Brkout of X Bar High ,  07/31/2014 ,  11:27  
+  Showme ,  Brkout of X Bar Low ,  07/31/2014 ,  11:27  
+  Showme ,  C_3WhSolds_3BlkCrows ,  07/31/2014 ,  11:27  
+  Showme ,  C_Abandoned Baby ,  07/31/2014 ,  11:26  
+  Showme ,  C_Advance Block ,  07/31/2014 ,  11:26  
+  Showme ,  C_BullEng_BearEng ,  07/31/2014 ,  11:26  
+  Showme ,  C_BullHar_BearHar ,  07/31/2014 ,  11:26  
+  Showme ,  C_Doji ,  12/22/2017 ,  11:22  
+  Showme ,  C_Hammer_HangingMan ,  07/31/2014 ,  11:26  
+  Showme ,  C_Harami Cross ,  07/31/2014 ,  11:26  
+  Showme ,  C_Inverted Hammer ,  07/31/2014 ,  11:26  
+  Showme ,  C_Kicking ,  07/31/2014 ,  11:26  
+  Showme ,  C_Marubozu ,  07/31/2014 ,  11:26  
+  Showme ,  C_Meeting Lines ,  07/31/2014 ,  11:26  
+  Showme ,  C_MornDoji_EveDoji ,  07/31/2014 ,  11:26  
+  Showme ,  C_MornStar_EveStar ,  07/31/2014 ,  11:25  
+  Showme ,  C_PierceLine_DkCloud ,  07/31/2014 ,  11:25  
+  Showme ,  C_ShootingStar ,  07/31/2014 ,  11:25  
+  Showme ,  C_Tasuki Gap ,  03/20/2015 ,  09:13  
+  Showme ,  C_Three Methods ,  07/31/2014 ,  11:25  
+  Showme ,  C_Three Stars in the South ,  07/31/2014 ,  11:25  
+  Showme ,  C_Tri Star ,  03/20/2015 ,  09:13  
+  Showme ,  Consecutive Downs ,  07/31/2014 ,  11:25  
+  Showme ,  Consecutive Ups ,  07/31/2014 ,  11:25  
+  Showme ,  Count Criteria SM ,  06/09/2016 ,  10:27  
+  Showme ,  Custom ShowMe ,  11/07/2014 ,  10:49  
+  Showme ,  EPS Postings ,  06/14/2017 ,  14:52  
+  Showme ,  Fractals ,  05/23/2017 ,  08:24  
+  Showme ,  Gap Dn Bar ,  07/31/2014 ,  11:24  
+  Showme ,  Gap Up Bar ,  07/31/2014 ,  11:24  
+  Showme ,  Head & Shoulders ,  06/09/2016 ,  10:27  
+  Showme ,  Impl Volty Consecs ,  07/31/2014 ,  11:24  
+  Showme ,  Impl Volty Pivots ,  03/20/2015 ,  09:21  
+  Showme ,  Inside Bar ,  06/09/2016 ,  10:27  
+  Showme ,  Island Reversal Dn ,  07/31/2014 ,  11:24  
+  Showme ,  Island Reversal Up ,  07/31/2014 ,  11:24  
+  Showme ,  Key Reversal Dn ,  07/31/2014 ,  11:24  
+  Showme ,  Key Reversal Up ,  07/31/2014 ,  11:24  
+  Showme ,  Megaphone Pattern ,  01/19/2018 ,  11:01  
+  Showme ,  Narrow Range Bar ,  03/20/2015 ,  09:25  
+  Showme ,  New High for Chart ,  07/31/2014 ,  11:24  
+  Showme ,  New High for Day ,  07/31/2014 ,  11:24  
+  Showme ,  New High for Month ,  07/31/2014 ,  11:24  
+  Showme ,  New High for Week ,  07/31/2014 ,  11:23  
+  Showme ,  New High for Year ,  07/31/2014 ,  11:23  
+  Showme ,  New Intraday HiLo ,  07/31/2014 ,  11:23  
+  Showme ,  New Low for Chart ,  07/31/2014 ,  11:23  
+  Showme ,  New Low for Day ,  07/31/2014 ,  11:23  
+  Showme ,  New Low for Month ,  07/31/2014 ,  11:23  
+  Showme ,  New Low for Week ,  07/31/2014 ,  11:23  
+  Showme ,  New Low for Year ,  07/31/2014 ,  11:23  
+  Showme ,  New N-Day HiLo ,  07/31/2014 ,  11:23  
+  Showme ,  Outside Bar ,  03/20/2015 ,  09:30  
+  Showme ,  Pennant Brkout ,  07/02/2016 ,  11:41  
+  Showme ,  Pivot High ,  01/06/2017 ,  12:40  
+  Showme ,  Pivot Low ,  01/06/2017 ,  12:40  
+  Showme ,  Pivot Rev Gen - Dn ,  06/09/2016 ,  10:31  
+  Showme ,  Pivot Rev Gen - Up ,  06/09/2016 ,  10:32  
+  Showme ,  Price Reversal ,  07/31/2014 ,  13:31  
+  Showme ,  Put/Call Vol Consecs ,  03/20/2015 ,  09:37  
+  Showme ,  Tops and Bottoms ,  05/10/2018 ,  09:04  
+  Showme ,  Triangle Pattern ,  06/20/2018 ,  07:50  
+  Showme ,  Vol All Opts Brkout ,  07/31/2014 ,  11:22  
+  Showme ,  Volume Brkout ,  07/31/2014 ,  11:22  

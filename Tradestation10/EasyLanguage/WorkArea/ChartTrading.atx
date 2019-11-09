@@ -1,0 +1,34 @@
+<Settings>
+	<ActiveHotKeyTemplate>Default</ActiveHotKeyTemplate>
+	<AllowMarketableStop>No</AllowMarketableStop>
+	<AskLineColor>Magenta</AskLineColor>
+	<BidLineColor>Yellow</BidLineColor>
+	<BracketBuyStopColor>RoyalBlue</BracketBuyStopColor>
+	<BracketBuyTargetColor>CornflowerBlue</BracketBuyTargetColor>
+	<BracketSellStopColor>Red</BracketSellStopColor>
+	<BracketSellTargetColor>DarkSalmon</BracketSellTargetColor>
+	<KeyboardBackPreviewColor>ThemeBackColor</KeyboardBackPreviewColor>
+	<KeyboardBorderWidth>3</KeyboardBorderWidth>
+	<KeyboardBuyPreviewColor>ThemeBuy</KeyboardBuyPreviewColor>
+	<KeyboardForePreviewColor>ThemeForeColor</KeyboardForePreviewColor>
+	<KeyboardIndicationColor>Yellow</KeyboardIndicationColor>
+	<KeyboardSellPreviewColor>ThemeSell</KeyboardSellPreviewColor>
+	<LastLineColor>Orange</LastLineColor>
+	<MapperRequiresModifier>1</MapperRequiresModifier>
+	<MoveAllOrdersAtSamePrice>No</MoveAllOrdersAtSamePrice>
+	<MoveLimitWithStop>Yes</MoveLimitWithStop>
+	<PreviewOCOOrders>No</PreviewOCOOrders>
+	<PreviewXLocPct>20</PreviewXLocPct>
+	<PreviewYLocPct>80</PreviewYLocPct>
+	<ShowFirstTimeHelp>Yes</ShowFirstTimeHelp>
+	<ShowKeyboardOrderConfirm>1</ShowKeyboardOrderConfirm>
+	<ShowLineAtAsk>No</ShowLineAtAsk>
+	<ShowLineAtAskLabel>Yes</ShowLineAtAskLabel>
+	<ShowLineAtBid>No</ShowLineAtBid>
+	<ShowLineAtBidLabel>Yes</ShowLineAtBidLabel>
+	<ShowLineAtLast>No</ShowLineAtLast>
+	<ShowLineAtLastLabel>Yes</ShowLineAtLastLabel>
+	<StockKeyLimitOffsetTicks>5</StockKeyLimitOffsetTicks>
+	<StockKeyStopOffsetTicks>5</StockKeyStopOffsetTicks>
+	<StockStopLimitOffset>1</StockStopLimitOffset>
+</Settings>

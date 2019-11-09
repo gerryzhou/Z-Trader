@@ -1,0 +1,2 @@
+MSFT, 18, #500, Market
+INTC, 18, #500, Market

@@ -1,0 +1,18 @@
+<TSXML>
+   <Template ID="Unique ID" Name="Template Name" Description="Template Description" Type="[OSO, OCO]" Version="2">
+      <Property Name="[Action, BRQ, BRQT]">[Entry, Exit] [Any integer] [Limit, Stop Market, Stop Limit]</Property>
+      <Collection Name="Order Name" Type="[Bracket, OCA]" REQWST="Rounding Value">
+         <Order Name="Order Name">
+            <Field Name="Type" Usage="[Exact]" Operation="[=]" Location="[Value]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">[Limit, Stop Market]</Field>
+            <Field Name="Action" Usage="[Exact, Inverse]" Operation="[=]" Location="[Key, Position, Value]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">[Buy To Open, Buy To Close, Sell To Open, Sell To Close, Enter, Exit]</Field>
+            <Field Name="Quantity" Usage="[Offset, Percentage, Exact]" Operation="[+, -, =]" Location="[Key, Position, Value]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">[Any integer or decimal value]</Field>
+            <Field Name="Price" Usage="[Offset, Percentage, Explicit]" Operation="[+, -, ~]" Location="[Key, Position, Last, Bid, Ask]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">
+               <Field Name="[Limit,Stop]" Usage="[Offset, Percentage]" Operation="[+, -, ~]" Location="[Key, Position, Last, Bid, Ask,Price.Stop, Price.Limit]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">[Any integer or decimal value]</Field>
+            </Field>
+            <Field Name="Route" Usage="[Exact]" Operation="[=]" Location="[Key, Value]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">[Intelligent, ARCX, BRUT, BTRD, INCA, INET, SuperMont, SuperDOT]</Field>
+            <Field Name="Duration" Usage="[Exact]" Operation="[=]" Location="[Key, Value]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">[Day, Day+, GTC, GTC+, GTD, GTD+, IOC, FOK, OPG, 1 Min, 3 Min, 5 Min]</Field>
+            <Field Name="Advanced" Usage="[Exact]" Operation="[=]" Location="[Key, Value]" MinValue="[Based on Field (Can be 0)]" MaxValue="[Based on Field (Must be greater than MinValue)]">[Advanced String]</Field>
+         </Order>
+      </Collection>
+   </Template>
+</TSXML>

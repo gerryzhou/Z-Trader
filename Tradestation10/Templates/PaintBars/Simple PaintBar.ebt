@@ -1,0 +1,29 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}. There is no need to erase these instructions  
+  when using EasyLanguage in order for it to function properly, because this text will 
+  be ignored. }
+
+{ STEP 1: Replace <CRITERIA> with the logical criteria that will trigger the placement 
+  of a PaintBar on the chart, such as Close > Average( Close, 9 ).  Note that 
+  Condition1 is a logical variable, a temporary holding place for the true-false result 
+  of your criteria. }
+
+Condition1 = <CRITERIA> ;
+
+{ OPTIONAL STEP: Replace HIGH and LOW with your own formulas for the high and low 
+  prices of the PaintBar.  Note that Value1 and Value2 are numeric variables, temporary 
+  holding places for the results of the numeric formulas. }
+
+Value1 = HIGH ;
+Value2 = LOW ;
+
+{ Leave the following as is.  The plot is not named because there is only one PaintBar 
+  plot - with two sub-plots - and the default names Plot1, Plot2 will be adequate.  The 
+  alert does not include a description because the alerting criteria and the plotting 
+  criteria are the same, and the description will be redundant. }
+
+if Condition1 then
+	begin
+	PlotPaintBar( Value1, Value2 ) ;
+	Alert ;
+	end ;	
