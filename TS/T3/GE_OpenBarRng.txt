@@ -6,7 +6,9 @@ inputs:
 	double LineValue( Close ) [
 		DisplayName = "LineValue", 
 		ToolTip = "Enter an EasyLanguage expression.  Enter the value at which to plot the horizontal line."],
-	
+	int RiskAmt (100) [ DisplayName = "RiskAmt",
+		ToolTip = "The $ amount risk at each trade." ],
+		
 	int LineColor( Yellow ) [
 		DisplayName = "LineColor", 
 		ToolTip = "Enter the color to use for the horizontal line."],
@@ -46,7 +48,9 @@ variables:
 	HorizontalLine HorizLineHi( NULL ),
 	HorizontalLine HorizLineLo( NULL ),
 	TextLabel TxtGapR(NULL),
-	double GapR(0);
+	double GapR(0),
+	double BarRng(0),
+	int SharesToTrade(0);
 		
 method HorizontalLine CreateHorizontalLine(int LnColor)
 variables:  HorizontalLine HL;
@@ -158,9 +162,13 @@ if ( BarType < 2 or BarType = 14 ) { ie, if tick, second or minute bars } and
 	//MoveHorizLine( HorizLine, LineValue );
 	
 	GapR = 100*(Open - Close[1])/Close[1];
-	Print("CurrentBar=" , Currentbar, ",Open=", Open, ",Close[1]=", Close[1], ",GapR=", GapR);
+	BarRng = GF_GetBarRange(0);
+	if(BarRng > 0) then
+		SharesToTrade = GF_SharesToTrade(RiskAmt, BarRng);
+	Print("CurrentBar=" , Currentbar, ",Open=", Open, ",Close[1]=", Close[1], ",GapR=", GapR, ", BarRng=", BarRng);
 	
-	TxtGapR = TextLabel.Create(BNPoint.Create(CurrentBar, Low), Numtostr(GapR, 2)+"%");
+	TxtGapR = TextLabel.Create(BNPoint.Create(CurrentBar, Low),
+		Numtostr(GapR, 2) + "%   " +  Numtostr(SharesToTrade, 0) + " / " + Numtostr(BarRng, 2));
 
 	DrawingObjects.Add(TxtGapR); 
 	Alert ;

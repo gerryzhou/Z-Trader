@@ -1,0 +1,6 @@
+inputs: BarsBack( numeric ) ;
+
+if Close[BarsBack] <> 0 then
+	GF_GetBarRange = Round2Fraction(High[BarsBack] - Low[BarsBack])
+Else
+	GF_GetBarRange = -1;
