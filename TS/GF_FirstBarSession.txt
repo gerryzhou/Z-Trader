@@ -1,0 +1,7 @@
+Input: SessionTimeStart( numericsimple );
+
+if ( BarType < 2 or BarType = 14 ) { ie, if tick, second or minute bars }
+and (SessionTimeStart = Time) then
+	GF_FirstBarSession = true
+Else
+	GF_FirstBarSession = false;

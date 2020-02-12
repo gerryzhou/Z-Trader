@@ -1,0 +1,6 @@
+inputs: GapDaysBack( numeric ) ;
+
+if Close[GapDaysBack+1] <> 0 then
+	GF_GapPercent = Round(100*(Open[GapDaysBack] - Close[GapDaysBack+1])/Close[GapDaysBack+1], 2)
+Else
+	GF_GapPercent = 0;

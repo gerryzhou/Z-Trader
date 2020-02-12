@@ -1,0 +1,10 @@
+{ Search Tag: GF-PercentChg }
+inputs: Price( numericseries ), BasePrice( numericsimple ) ;
+
+if BasePrice <> 0 then
+	GF_PercentChg = 100 * ( Price - BasePrice ) / BasePrice ;
+
+
+{ ** Copyright © TradeStation Technologies, Inc.  All Rights Reserved ** 
+  ** TradeStation reserves the right to modify or overwrite this analysis technique 
+     with each release. ** }

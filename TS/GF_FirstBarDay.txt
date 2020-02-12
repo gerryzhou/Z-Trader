@@ -1,0 +1,7 @@
+Input: DaysBack( numericsimple );
+
+if ( BarType < 2 or BarType = 14 ) { ie, if tick, second or minute bars }
+and	Date[DaysBack] <> Date[DaysBack+1] then
+	GF_FirstBarDay = true
+Else
+	GF_FirstBarDay = false;

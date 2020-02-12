@@ -1,0 +1,30 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}.  There is no need to erase these 
+  instructions when using EasyLanguage in order for it to function properly, because 
+  this text will be ignored. }
+
+{ STEP 1: Replace <CRITERIA> with the logical criteria that will trigger the placement 
+  of a ShowMe marker on the chart, such as Close > Close[1].  Note that Condition1 is a 
+  logical variable, a temporary holding place for the true-false result of your 
+  criteria. }
+Inputs: InputGapPercent (15),
+GapDaysBack(1);
+
+variables: GapPercent(0), GapCount(0);
+{ Leave the following as is.  The plot is not named because there is only one plot, and 
+  the default name Plot1 will be adequate.  The alert does not include a description 
+  because the alerting criteria and the plotting criteria are the same, and the 
+  description will be redundant. }
+GapPercent = GF_GapPercent(GapDaysBack);
+If (Currentbar > GapDaysBack +1) Then begin
+	if(absvalue(GapPercent) >= InputGapPercent) Then begin
+		Plot1(High) ;
+		GapCount += 1;
+		Print("Currentbar=", Currentbar, ", GapR=", GapPercent, "GapCount=", GapCount);
+	end
+	Else
+		NoPlot(1);	
+end;
+
+If LastBarOnChart And GapCount > 0 Then
+	Plot2(Low);

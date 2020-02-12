@@ -1,0 +1,6 @@
+inputs: RiskAmt( numeric ), PrcRange( numeric ) ;
+
+if PrcRange > 0 then
+	GF_SharesToTrade = RiskAmt/PrcRange
+Else
+	GF_SharesToTrade = -1;

@@ -1,0 +1,10 @@
+Input: SessionTimeStart( 830 );
+
+Print("SessionFirstBarTime, SessionTimeStart=", Numtostr(SessionFirstBarTime(1, 1), 0), ", ", SessionTimeStart, ", Time=", Numtostr(Time, 0) );
+{if ( BarType < 2 or BarType = 14 ) //ie, if tick, second or minute bars
+and (SessionTimeStart = Time) then}
+if GF_FirstBarSession(SessionTimeStart) then
+	begin
+		PlotPaintBar( High, Low, Open, Close, !( "FirstBar-Session" ) ) ;
+		Alert ;
+	end ;

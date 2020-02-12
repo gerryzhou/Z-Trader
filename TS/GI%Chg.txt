@@ -1,0 +1,231 @@
+{ Search Tag: %Chg with last Day close }
+
+{ 
+
+}
+using elsystem;
+
+inputs: 
+	Price( Close ) [DisplayName = "Price", ToolTip = 
+	 "Enter an EasyLanguage expression to use in the percentage change calculation."], 
+	Length( 1 ) [DisplayName = "Length", ToolTip = 
+	 "Enter number of bars over which to calculate percentage change."], 
+	BarsAgoHiTH( 1 ) [DisplayName = "BarsAgoHiTH", ToolTip = 
+	 "Enter number of bars over which to check Hi threshold for PctSpd."], 
+	BarsAgoLoTH( 0 ) [DisplayName = "BarsAgoLoTH", ToolTip = 
+	 "Enter number of bars over which to check Lo threshold for PctSpd."], 
+	CapRation( 2 ) [DisplayName = "CapRatio", ToolTip = 
+	 "Enter ratio of Data1 capital vs Data2 capital."], 
+	HiQAlert( 3 ) [DisplayName = "HiQAlert", ToolTip = 
+	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
+	HiVAlert( 13 ) [DisplayName = "HiVAlert", ToolTip = 
+	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
+	HiBAlert( 1 ) [DisplayName = "HiBAlert", ToolTip = 
+	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
+	HiThreshold( 10 ) [DisplayName = "HiThreshold", ToolTip = 
+	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
+	LoQAlert( -1 ) [DisplayName = "LoQAlert", ToolTip = 
+	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
+	LoVAlert( -1 ) [DisplayName = "LoVAlert", ToolTip = 
+	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
+	LoBAlert( -5 ) [DisplayName = "LoBAlert", ToolTip = 
+	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
+	LoThreshold( -5 ) [DisplayName = "LoThreshold", ToolTip = 
+	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
+	UpQColor( Cyan ) [DisplayName = "UpQColor", ToolTip = 
+	 "Enter plot color to use when percentage change is greater than HiAlert."], 
+ 	UpVColor( Magenta ) [DisplayName = "UpVColor", ToolTip = 
+	 "Enter plot color to use when percentage change is greater than HiAlert."], 
+	UpBColor( Yellow ) [DisplayName = "UpBColor", ToolTip = 
+	 "Enter plot color to use when percentage change is greater than HiAlert."], 
+	DnQColor( Cyan ) [DisplayName = "DnColor", ToolTip = 
+	 "Down Color.  Enter plot color to use when percentage change is less than LoAlert."],
+	DnVColor( Magenta ) [DisplayName = "DnColor", ToolTip = 
+	 "Down Color.  Enter plot color to use when percentage change is less than LoAlert."],
+	DnBColor( Yellow ) [DisplayName = "DnRColor", ToolTip = 
+	 "Down Color.  Enter plot color to use when percentage change is less than LoAlert."] ;
+	 
+variables:
+	PctSpd( 0 ),
+	PctRatio( 0 ),
+	PctChg1( 0 ),
+	PctChg2( 0 ),
+	PrcData1( 0 ),
+	PrcData2( 0 ),
+	BaseData1( 0 ),
+	BaseData2( 0),
+	BarNoStr(""),
+	UpColor(white),
+	DnColor(white),
+	HiAlert(0),
+	LoAlert(0),
+	PnL(1),
+	TotalBars(0),
+	TotalLoTH(0),
+	TotalHiTH(0),
+	int Status(0) ;
+
+{ Status: LowBand = 0, HiTH = 1, LoTH = -1
+}
+method int SetStatus(double spd)
+variables:  int status;
+begin
+	Status = status;
+	return status;
+end;
+
+{ Status: LowBand = 0, HiTH = 1, LoTH = -1
+}
+method bool CheckHiThreshold(int barsAgo)
+variables:  bool status, int i;
+begin
+	status = false;
+	for i=0 to barsAgo Begin
+		if(PctSpd[i] > HiThreshold) Then
+			status = true;
+	end;
+	return status;
+end;
+
+{ Status: LowBand = 0, HiTH = 1, LoTH = -1
+}
+method bool CheckLoThreshold(int barsAgo)
+variables:  bool status, int i;
+begin
+	status = false;
+	for i=0 to barsAgo Begin
+		if(PctSpd[i] <= LoThreshold) Then
+			status = true;
+	end;
+	return status;
+end;
+
+{ 
+
+method bool CheckSessionOpen()
+variables:  bool status;
+begin
+	status = false;
+	//if(Bartype = 2 or Dayofmonth(Date[0]) <> Dayofmonth(Date[1])) then
+	if(Bartype = 2 or GF_FirstBarDay(0)) then
+		status = true;
+	return status;
+end;
+
+
+method bool FirstBarOfDay()
+Variables: bool isFirstBar;
+Begin
+	isFirstBar = false;
+	if ( BarType < 2 or BarType = 14 )  //ie, if tick, second or minute bars 
+	and	Date <> Date[1] then isFirstBar = true;
+	return isFirstBar;
+End;
+}
+
+PrcData1 = Close of Data1;
+PrcData2 = Close of Data2;
+
+if(BarType < 2 or BarType = 14) then begin { ie, if tick, second or minute bars }
+	BaseData1 = CloseD(Length) of Data1;
+	BaseData2 = CloseD(Length) of Data2;
+End
+else Begin
+	BaseData1 = Close[Length] of Data1;
+	BaseData2 = Close[Length] of Data2;
+end;
+{BaseData1 = CloseD(Length) of Data1;
+BaseData2 = CloseD(Length) of Data2;
+}
+if(BaseData1 <> 0 and BaseData2 <> 0) then
+	begin
+		PctChg1 = GF_PercentChg( PrcData1, BaseData1 ) ;
+		PctChg2 = GF_PercentChg( PrcData2, BaseData2 ) ;
+		PctSpd = CapRation*PctChg1 + PctChg2;
+		if(PctChg1 > 0 and PctChg2 > 0) Then begin
+			UpColor = UpBColor;
+			DnColor = DnBColor;
+			HiAlert = HiBAlert;
+			LoAlert = LoBAlert;
+			//Print(Currentbar, "-Convergence: PctChg1, PctChg1=", PctChg1, ",", PctChg2, "  DT=", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
+			//Print("Currentbar=", Currentbar, ", PctSpd=", PctSpd, ", Symbol=", Symbol );
+			//PctSpd = 0;
+		end
+		else if(PctChg1 < 0 and PctChg2 < 0) Then begin
+			UpColor = UpBColor;
+			DnColor = DnBColor;
+			HiAlert = HiBAlert;
+			LoAlert = LoBAlert;
+		end
+		else if(PctChg1 > 0) then Begin
+				UpColor = UpQColor;
+				DnColor = DnQColor;
+				HiAlert = HiQAlert;
+				LoAlert = LoQAlert;
+		End
+		else if(PctChg2 > 0) then Begin
+				UpColor = UpVColor;
+				DnColor = DnVColor;
+				HiAlert = HiVAlert;
+				LoAlert = LoVAlert;
+		end;
+		{if (PctChg1 <> 0) Then
+			PctRatio = Absvalue(PctChg2/PctChg1);}
+		if(currentbar > 10) then begin //CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true) then //PctSpd > LoThreshold
+			if(( bartype = 2 and CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true) or GF_FirstBarDay(0)) then begin
+				PnL = PnL*(1 + PctSpd/100);
+				Print("PctSpd, PnL=", Numtostr(PctSpd, 2), ", ", Numtostr(PnL, 2), "  DT=", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
+			end;
+		end;
+		// Print("PctSpd, PnL=", Numtostr(PctSpd[1], 2), ", ", Numtostr(PnL[1], 2), "  DT=", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[1]));
+	end;
+BarNoStr = "%Chg" + Numtostr(BarNumber, 0) + "," + Numtostr(PctChg1, 0) + "," + Numtostr(PctChg2, 0);
+Plot1( PctSpd, !( "%Chg" ) ) ;
+
+{ Leave the next plot statement as is. This draws the horizontal zero (0) line. 
+			if(PctChg1 < 0) Then
+				PctSpd = Neg(PctSpd);}
+
+Plot2( 0, "ZeroLine" ) ;
+Plot3( PctChg1, !( "%PctChg1" ) ) ;
+Plot4( PctChg2, !( "%PctChg2" ) ) ;
+
+//Plot3( PctRatio, "PctRatio" ) ;
+
+
+{ color criteria }
+if PctSpd > HiAlert then 
+	SetPlotColor( 1, UpColor ) 
+else if PctSpd < LoAlert then 
+	SetPlotColor( 1, DnColor ) ;
+SetPlotColor( 3, White ) ;
+SetPlotColor( 4, White ) ;
+{
+if PctRatio > HiAlert then 
+	SetPlotColor( 3, UpRColor ) 
+else if PctRatio < LoAlert then 
+	SetPlotColor( 3, DnRColor ) ;
+}
+{ alert criteria }
+if AlertEnabled then
+	begin
+	if PctSpd crosses over HiAlert then
+		Alert( !( "Bullish alert" ) )
+	else if PctSpd crosses under LoAlert then
+		Alert( !( "Bearish alert" ) ) ;
+	end ;
+
+if(PctSpd > HiThreshold) Then
+	TotalHiTH += 1;
+if(PctSpd <= LoThreshold) Then
+	TotalLoTH += 1;
+
+if LastBarOnChart then Begin
+	TotalBars = Currentbar;
+	//Print("TotalBars, %LoTH, %HiTH = ", TotalBars, ",  ", Numtostr(100*TotalLoTH/TotalBars, 2), "%,  ", Numtostr(100*TotalHiTH/TotalBars, 2), "%");
+end;
+
+{ ** Copyright © TradeStation Technologies, Inc.  All Rights Reserved ** 
+  ** TradeStation reserves the right to modify or overwrite this analysis technique 
+     with each release. ** }
+	 
