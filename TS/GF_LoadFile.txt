@@ -1,0 +1,50 @@
+using elsystem;
+using elsystem.io;
+using elsystem.collections;
+using elsystem.net;
+
+input:
+FilePath(stringsimple),
+//oLineTxtArray[n](StringArrayRef),
+Vector oLineTxtVector(ObjectRef);//Array n=1,048,576 which is the max rows of Excel spreadsheet
+
+var:
+StreamReader myFile(null),
+string cmd(""),
+int lineCount(0),
+Vector oLnTxtVec(NULL),
+WebClient wc(NULL),
+Object obj_json(NULL),
+Dictionary dict_json(NULL);
+
+//Array_setmaxindex(oLineTxtArray, 1048576);
+//myFile = StreamReader.Create("c:/www/cmd/ztrader_cmd.json");
+wc = WebClient.Create();
+myFile = StreamReader.Create(FilePath);
+
+while not myFile.EndOfStream begin
+	cmd = myFile.ReadToEnd();// myFile.ReadLine();
+	try
+		obj_json = WebClient.ParseJSON(cmd); //return null if JSON is invalid, no exception thrown
+	catch (Exception ex)
+		Print("ParseJSON error: ");
+	end;
+	
+	//print("Line 1: ", cmd);
+	if (obj_json = NULL) then
+		print("JsonObj=NULL")
+	Else Begin
+		print("JsonObj=", obj_json.GetType().GetFullName());
+		dict_json = obj_json Astype Dictionary;
+		print("Strategy=", dict_json.Items["Strategy"].GetType().GetFullName());
+	end;
+	oLnTxtVec = oLineTxtVector Astype Vector;
+	oLnTxtVec.push_back(cmd);
+
+	//oLineTxtArray[lineCount] = cmd;
+	//lineCount += 1;
+	//print("Line 2: ",myFile.ReadLine());
+end;
+myFile.Close();
+
+GF_LoadFile = true;

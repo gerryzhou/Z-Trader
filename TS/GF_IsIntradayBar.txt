@@ -1,0 +1,4 @@
+if ( BarType < 2 or BarType = 14 ) then { ie, if tick, second or minute bars }
+GF_IsIntradayBar = true
+else
+GF_IsIntradayBar = false;

@@ -1,9 +1,9 @@
-Input: SessionTimeStart( numericsimple );
+Input: SessionTimeEnd( numericsimple );
 
 if GF_IsIntradayBar { ie, if tick, second or minute bars }
-and (Time[1] < SessionTimeStart and SessionTimeStart <= Time) then begin
-	GF_FirstBarSession = true;
-	Print( "GF_FirstBarSession=true,  ",
+and (Time[1] < SessionTimeEnd and SessionTimeEnd <= Time) then begin
+	GF_LastBarSession = true;
+	Print(
 	BarDateTime.ELDate:4:0, " ",
 	//BarDateTime.ELDateTimeEx, " ",
 	BarDateTime.ELTime:4:0, " ",
@@ -13,4 +13,4 @@ and (Time[1] < SessionTimeStart and SessionTimeStart <= Time) then begin
 	) ;
 end
 Else
-	GF_FirstBarSession = false;
+	GF_LastBarSession = false;
