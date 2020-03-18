@@ -1,7 +1,6 @@
 { Search Tag: %Chg with last Day close }
 
-{ 
-
+{
 }
 using elsystem;
 using elsystem.collections;
@@ -12,49 +11,76 @@ inputs:
 	 "Enter an EasyLanguage expression to use in the percentage change calculation."], 
 	Length( 1 ) [DisplayName = "Length", ToolTip = 
 	 "Enter number of bars over which to calculate percentage change."], 
+	PctChgMALen( 10 ) [DisplayName = "PctChgMALen", ToolTip = 
+	 "Enter number of bars over which to calculate summization of PctChg."], 
 	BarsAgoHiTH( 1 ) [DisplayName = "BarsAgoHiTH", ToolTip = 
 	 "Enter number of bars over which to check Hi threshold for PctSpd."], 
 	BarsAgoLoTH( 0 ) [DisplayName = "BarsAgoLoTH", ToolTip = 
 	 "Enter number of bars over which to check Lo threshold for PctSpd."], 
-	CapRatio( 3 ) [DisplayName = "CapRatio", ToolTip = 
+	CapRatio( 2.2 ) [DisplayName = "CapRatio", ToolTip = 
 	 "Enter ratio of Data1 capital vs Data2 capital."], 
-	HiQAlert( 3 ) [DisplayName = "HiQAlert", ToolTip = 
+	HedgeCapRatioAdj( 2 ) [DisplayName = "CapRatioAdj", ToolTip = 
+	 "Enter adjusted ratio of CapRatio giving to Data1 VS Data2 bull wing."],
+	HedgeCapRatioMax( 4 ) [DisplayName = "CapRatioMax", ToolTip = 
+	 "Enter min CapRatio allowed"],
+	HedgeCapRatioMin( 1 ) [DisplayName = "CapRatioMin", ToolTip = 
+	 "Enter max CapRatio allowed."],
+	CapRatioTimeStart( 300 ) [DisplayName = "CapRatioTimeStart", ToolTip = 
+	 "Enter the start time HHMM to caculate the CapRatio."],
+	CapRatioTimeEnd( 810 ) [DisplayName = "CapRatioTimeEnd", ToolTip = 
+	 "Enter the end time HHMM to caculate the CapRatio."],
+	KeyRevLengthPerH( 12 ) [DisplayName = "KeyRevLengthPerH", ToolTip = 
+	 "Enter number of bars per hour over which to calculate key veversal HiLo for PctSpread."], 
+	RateOfChgLen( 5 ) [DisplayName = "RateOfChgLen", ToolTip = 
+	 "Enter number of bars to calculate rate of change by dollar amount."],
+	RateOfChgAvgLen( 5 ) [DisplayName = "RateOfChgAvgLen", ToolTip = 
+	 "Enter number to calculate the average rate of change by dollar amount."],
+	ShareUnit( 10 ) [DisplayName = "ShareUnit", ToolTip = 
+	 "Enter unit amount to calculate the share ratio."],
+	HiQAlert( 7 ) [DisplayName = "HiQAlert", ToolTip = 
 	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
-	HiVAlert( 13 ) [DisplayName = "HiVAlert", ToolTip = 
+	HiVAlert( 7 ) [DisplayName = "HiVAlert", ToolTip = 
 	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
-	HiBAlert( 1 ) [DisplayName = "HiBAlert", ToolTip = 
+	HiBAlert( 5 ) [DisplayName = "HiBAlert", ToolTip = 
 	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
-	HiThreshold( 10 ) [DisplayName = "HiThreshold", ToolTip = 
+	HiThreshold( 7 ) [DisplayName = "HiThreshold", ToolTip = 
 	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
-	LoQAlert( -1 ) [DisplayName = "LoQAlert", ToolTip = 
+	LoQAlert( -2 ) [DisplayName = "LoQAlert", ToolTip = 
 	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
-	LoVAlert( -1 ) [DisplayName = "LoVAlert", ToolTip = 
+	LoVAlert( -2 ) [DisplayName = "LoVAlert", ToolTip = 
 	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
-	LoBAlert( -5 ) [DisplayName = "LoBAlert", ToolTip = 
+	LoBAlert( -1 ) [DisplayName = "LoBAlert", ToolTip = 
 	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
-	LoThreshold( -5 ) [DisplayName = "LoThreshold", ToolTip = 
+	LoThreshold( -2 ) [DisplayName = "LoThreshold", ToolTip = 
 	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
 	UpQColor( Cyan ) [DisplayName = "UpQColor", ToolTip = 
 	 "Enter plot color to use when percentage change is greater than HiAlert."], 
  	UpVColor( Magenta ) [DisplayName = "UpVColor", ToolTip = 
 	 "Enter plot color to use when percentage change is greater than HiAlert."], 
-	UpBColor( Yellow ) [DisplayName = "UpBColor", ToolTip = 
+	UpBColor( DarkGreen ) [DisplayName = "UpBColor", ToolTip = 
 	 "Enter plot color to use when percentage change is greater than HiAlert."], 
 	DnQColor( Cyan ) [DisplayName = "DnQColor", ToolTip = 
 	 "Down Color.  Enter plot color to use when percentage change is less than LoAlert."],
 	DnVColor( Magenta ) [DisplayName = "DnVColor", ToolTip = 
 	 "Down Color.  Enter plot color to use when percentage change is less than LoAlert."],
-	DnBColor( Yellow ) [DisplayName = "DnRColor", ToolTip = 
+	DnBColor( DarkGreen ) [DisplayName = "DnRColor", ToolTip = 
 	 "Down Color.  Enter plot color to use when percentage change is less than LoAlert."] ;
-	 
+
 variables:
 	PctSpd( 0 ),
-	PctSpd1( 0 ),
+	HedgeCapRatio( 1 ),
 	CurCapRatio( CapRatio ),
+	CapRatioMaLen( 20 ),
+	ShareRatio( 0 ),
 	PctChg1( 0 ),
 	PctChg2( 0 ),
 	PctChg11( 0 ),
 	PctChg22( 0 ),
+	RateOfChg1 (0),
+	RateOfChgAvg1 ( 0 ),
+	RateOfChg2 ( 0 ),
+	RateOfChgAvg2 ( 0 ),
+	RateOfChgRatio( 0 ),
 	PrcData1( 0 ),
 	PrcData2( 0 ),
 	BaseData1( 0 ),
@@ -62,6 +88,10 @@ variables:
 	BaseData11( 0 ),
 	BaseData22( 0),
 	BarNoStr(""),
+	KeyRevLowBar(-1),
+	KeyRevHighBar(-1),
+	oExtremeVal(0),
+	oExtremeBar(0),
 	UpColor(white),
 	DnColor(white),
 	HiAlert(0),
@@ -89,12 +119,63 @@ end;
 
 { Set capratio
 }
-method double SetCapRatio(double spd)
-variables:  double ratio;
+method void SetRateOfChgRatio()
+variables: int min, double d10, double d11, double d20, double d21;
 begin
-	ratio = CapRatio;
-	
-	return ratio;
+	if(CurrentBar > RateOfChgLen) then begin
+		d10 = Close of Data1;
+		d20 = Close of Data2;
+		d11 = Close[RateOfChgLen] of Data1;
+		d21 = Close[RateOfChgLen] of Data2;
+		RateOfChg1 = Absvalue(d11 - d10);
+		RateOfChg2 = Absvalue(d21 - d20);
+		RateOfChgAvg1 = Average(RateOfChg1, RateOfChgAvgLen);
+		RateOfChgAvg2 = Average(RateOfChg2, RateOfChgAvgLen);
+		if RateOfChgAvg1 <> 0 and RateOfChgAvg2 <> 0 Then
+			RateOfChgRatio = ShareUnit*RateOfChgAvg2/RateOfChgAvg1;
+	end;
+end;
+
+{ Set hedge cap ratio
+}
+method void SetHedgeCapRatio()
+variables: int min, double sum1, double sum2;
+begin
+	if(bartype = 1) then begin //1=minute
+		min = (TimeToMinutes(CapRatioTimeEnd) - TimeToMinutes(CapRatioTimeStart))/2;
+		CapRatioMaLen = min/BarInterval;
+
+		if(CapRatioMaLen > 0 and Currentbar > CapRatioMaLen) Then begin
+			sum1 = Summation(PctChg1, PctChgMALen); //HighestFC
+			sum2 = Summation(PctChg2, PctChgMALen);
+		if(sum1 <> 0 and sum2 <> 0) Then
+				HedgeCapRatio = Absvalue((PctChgMALen*HedgeCapRatioAdj - sum2)/sum1);
+{			if(sum1 <> 0 and sum2 > 0) Then
+				HedgeCapRatio = (PctChgMALen*CapRatioAdj - sum2)/sum1;
+			else if (sum1 > 0) Then
+				HedgeCapRatio = (PctChgMALen*CapRatioAdj - sum2)/sum1;}
+			//CurCapRatio = 1/Absvalue(XAverage(PctSpd, CapRatioMaLen));
+			if HedgeCapRatio > HedgeCapRatioMax Then
+				HedgeCapRatio = HedgeCapRatioMax;
+			if HedgeCapRatio < HedgeCapRatioMin Then
+				HedgeCapRatio = HedgeCapRatioMin;
+			if(sum1 <0) Then
+				HedgeCapRatio = Neg(HedgeCapRatio);
+		end;
+	end;
+end;
+
+{ Set ShareRatio
+Get share amount for data1 with 10 shares of data2
+}
+method double SetShareRatio()
+variables: double prc1, double prc2;
+begin
+	prc1= close of Data1;
+	prc2 = close of Data2;
+	if prc1 > 0 and prc2 >0 Then
+		ShareRatio = ShareUnit*prc2*CurCapRatio/prc1;
+	return ShareRatio;
 end;
 
 { Set capratio
@@ -133,6 +214,37 @@ begin
 	return status;
 end;
 
+{
+Get the spread key revesal low/high or the latest bars
+}
+method int GetPctSpdKeRevBar()
+begin
+	if time >= 700 and time[1] < 700 then begin
+	if 1 = Extremes(PctSpd, 4*KeyRevLengthPerH, 1, oExtremeVal, oExtremeBar) Then
+		KeyRevHighBar = oExtremeBar;
+	if 1 = Extremes(PctSpd, 4*KeyRevLengthPerH, -1, oExtremeVal, oExtremeBar) Then
+		KeyRevLowBar = oExtremeBar;
+	End;
+	if time >= 830 and time[1] < 830 then begin
+	if 1 = Extremes(PctSpd, 1.5*KeyRevLengthPerH, 1, oExtremeVal, oExtremeBar) Then
+		KeyRevHighBar = oExtremeBar;
+	if 1 = Extremes(PctSpd, 1.5*KeyRevLengthPerH, -1, oExtremeVal, oExtremeBar) Then
+		KeyRevLowBar = oExtremeBar;
+	End;
+	if time >= 1130 and time[1] < 1130 then begin
+	if 1 = Extremes(PctSpd, 3*KeyRevLengthPerH, 1, oExtremeVal, oExtremeBar) Then
+		KeyRevHighBar = oExtremeBar;
+	if 1 = Extremes(PctSpd, 3*KeyRevLengthPerH, -1, oExtremeVal, oExtremeBar) Then
+		KeyRevLowBar = oExtremeBar;
+	End;
+	if time >= 1500 and time[1] < 1500 then begin
+	if 1 = Extremes(PctSpd, 3.5*KeyRevLengthPerH, 1, oExtremeVal, oExtremeBar) Then
+		KeyRevHighBar = oExtremeBar;
+	if 1 = Extremes(PctSpd, 3.5*KeyRevLengthPerH, -1, oExtremeVal, oExtremeBar) Then
+		KeyRevLowBar = oExtremeBar;
+	End;
+	return -1;
+end;
 { 
 
 method bool CheckSessionOpen()
@@ -162,6 +274,37 @@ Begin
 	return isTime;
 End;
 
+method bool IsRegularSession()
+Variables: bool isTime;
+Begin
+	isTime = False;
+	if ( BarType < 2 or BarType = 14 ) then begin  //ie, if tick, second or minute bars 
+		if (Category = SecurityType.Stock and time <= 1500 and time >= 830) then
+			isTime = true;
+		if (Category = SecurityType.Future and time <= 1500 and time >= 830) Then Begin
+			isTime = true;
+			//Print("isTime = ", isTime);
+		end;
+	end;
+	//Print("NewDaySession=", isTime, ", Bartype=", Bartype);
+	return isTime;
+End;
+
+method bool IsPostMktSession()
+Variables: bool isTime;
+Begin
+	isTime = False;
+	if ( BarType < 2 or BarType = 14 ) then begin  //ie, if tick, second or minute bars 
+		if (Category = SecurityType.Stock and time <= 1900 and time >= 1500) then
+			isTime = true;
+		if (Category = SecurityType.Future and time <= 1900 and time >= 150) Then Begin
+			isTime = true;
+			//Print("isTime = ", isTime);
+		end;
+	end;
+	//Print("NewDaySession=", isTime, ", Bartype=", Bartype);
+	return isTime;
+End;
 //Array_setmaxindex(oCmdArray, 1048576);
 
 once begin 
@@ -208,12 +351,16 @@ if GF_IsIntradayBar then begin { ie, if tick, second or minute bars }
 		BaseData11 = CloseD(Length+1) of Data1;
 		BaseData22 = CloseD(Length+1) of Data2;
 	End;
-	//else Begin
-		PrcData1 = Close of Data1;
-		PrcData2 = Close of Data2;
-	//end;
-	BaseData1 = CloseD(Length) of Data1;//OpenD(0) of Data1;
-	BaseData2 = CloseD(Length) of Data2;//OpenD(0) of Data2;
+	PrcData1 = Close of Data1;
+	PrcData2 = Close of Data2;
+	if IsRegularSession() or IsPostMktSession() then Begin
+		BaseData1 = OpenD(0) of Data1;
+		BaseData2 = OpenD(0) of Data2;
+	end
+	else begin
+		BaseData1 = CloseD(Length) of Data1;//OpenD(0) of Data1;
+		BaseData2 = CloseD(Length) of Data2;//OpenD(0) of Data2;
+	end;
 End
 else Begin {Daily or higher timeframe}
 	PrcData1 = Open of Data1;
@@ -232,7 +379,7 @@ if(BaseData1 <> 0 and BaseData2 <> 0) then
 		if (GF_IsIntradayBar and BaseData1 <> 0 and BaseData2 <> 0) then Begin
 			PctChg11 = GF_PercentChg( PrcData1, BaseData11 ) ;
 			PctChg22 = GF_PercentChg( PrcData2, BaseData22 ) ;
-			PctSpd1 = CurCapRatio*PctChg11 + PctChg22;
+			//PctSpd1 = CurCapRatio*PctChg11 + PctChg22;
 		end;
 		if((PctChg1 * PctChg2) > 0) Then begin //Both are the same direction, both up or both dn, it's balanced;
 			UpColor = UpBColor;
@@ -260,45 +407,73 @@ if(BaseData1 <> 0 and BaseData2 <> 0) then
 		if(currentbar > Maxbarsback) then begin //CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true) then //PctSpd > LoThreshold
 			if(NewDaySession() or ( bartype = 2 and CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true)) then begin
 				PnL = PnL*(1 + PctSpd/100);
-				Print(String.Format("{0}	{1}	{2:MM/dd/yyyy}	{3}	{4}		{5}		{6}		{7}		{8}",
-					Numtostr(PctSpd, 2), Numtostr(PnL, 2), BarDateTime[0], Numtostr(PctChg1, 2), Numtostr(PrcData1, 2), Numtostr(BaseData1, 2),
-					 Numtostr(PctChg2, 2), Numtostr(CapRatio, 1), Numtostr(CurCapRatio, 1)));
 				//Print(Numtostr(PctSpd, 2), ", ", Numtostr(PnL, 2), ",", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
 			end;
 		end;
+{				Print(String.Format("{0} 	{1}		{2:MM/dd/yyyy} 	{3} 	{4}		{5}		{6}		{7}		{8}",
+					Numtostr(PctSpd, 2), Numtostr(PnL, 2), BarDateTime[0], Numtostr(PctChg1, 2), Numtostr(PrcData1, 2), Numtostr(BaseData1, 2),
+					 Numtostr(PctChg2, 2), Numtostr(CapRatio, 2), Numtostr(CurCapRatio, 2)));}
 		// Print("PctSpd, PnL=", Numtostr(PctSpd[1], 2), ", ", Numtostr(PnL[1], 2), "  DT=", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[1]));
 	end;
 BarNoStr = "%Chg" + Numtostr(BarNumber, 0) + "," + Numtostr(PctChg1, 0) + "," + Numtostr(PctChg2, 0);
 
+SetRateOfChgRatio();
+SetHedgeCapRatio();
+SetShareRatio();
+
 Plot1( PctSpd, !( "%Chg" ) ) ;
-Plot2( 0, "ZeroLine" ) ;
-Plot3( PctChg1, !( "%PctChg1" ) ) ;
-Plot4( PctChg2, !( "%PctChg2" ) ) ;
-if NewDaySession() then Begin
-	Print("NewDaySession Plot5=", Numtostr(PctSpd1, 2));
-	Plot5( PctSpd1, !( "%Chg[1]" ) ) ;
-	SetPlotColor( 5, White ) ;
+Plot2( HedgeCapRatioAdj, "MeanRevLine" ) ;
+Plot3( CurCapRatio, !( "CurCapRatio" ) ) ;
+Plot4( ShareRatio, !( "ShareRatio" ) ) ;
+
+if Currentbar > Maxbarsback then //NewDaySession() then
+Begin
+	//Print("HedgeCapRatio=", Numtostr(HedgeCapRatio, 2));
+	Plot5( HedgeCapRatio, !( "HedgeCapRatio" ) ) ;
+	SetPlotColor( 5, Yellow ) ;
 end
 else
 	NoPlot(5);
 
-//Plot3( PctRatio, "PctRatio" ) ;
-{SetPlotWidth(1, 2);
-SetPlotWidth(2, 1);
-SetPlotWidth(3, 1);
-SetPlotWidth(4, 1);
-}
+Plot6( PctChg1, !( "%PctChg1" ) ) ;
+Plot7( PctChg2, !( "%PctChg2" ) ) ;
 
+if Currentbar > RateOfChgLen then Begin
+	Plot8( RateOfChgRatio, !( "RateOfChgRatio" ) ) ;
+	Plot9( RateOfChgAvg1, !( "RateOfChgAvg1" ) ) ;
+	Plot10( RateOfChgAvg2, !( "RateOfChgAvg2" ) ) ;
+	SetPlotColor( 8, Yellow ) ;
+	SetPlotColor( 9, DarkGray ) ;
+	SetPlotColor( 10, DarkGray ) ;
+end;
+
+
+Print("CurCapRatio, HedgeCapRatio = (", Numtostr(CurCapRatio, 3), ", ", Numtostr(HedgeCapRatio, 2), "), ", 
+"ShareRatio = ",  Numtostr(ShareRatio, 1));
 
 { color criteria }
 if PctSpd > HiAlert then 
 	SetPlotColor( 1, UpColor ) 
 else if PctSpd < LoAlert then 
 	SetPlotColor( 1, DnColor ) ;
-SetPlotColor( 3, DarkGray ) ;
-SetPlotColor( 4, DarkGray ) ;
+SetPlotColor( 3, White ) ;
+SetPlotColor( 4, Magenta ) ;
+SetPlotColor( 6, DarkGray ) ;
+SetPlotColor( 7, DarkGray ) ;
 
-	
+if Currentbar > KeyRevLengthPerH then
+Begin
+	GetPctSpdKeRevBar();
+	if KeyRevHighBar > 0 then begin
+		SetPlotColor[KeyRevHighBar]( 1, Yellow ) ;
+		KeyRevHighBar = -1;
+	end;
+	if KeyRevLowBar > 0 then begin
+		SetPlotColor[KeyRevLowBar]( 1, Blue ) ;
+		KeyRevLowBar = -1;
+	end;
+end;
+
 {
 if PctRatio > HiAlert then 
 	SetPlotColor( 3, UpRColor ) 
