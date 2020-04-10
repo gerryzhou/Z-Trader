@@ -1,0 +1,11 @@
+inputs: PrcClose(numericseries), PrcHi(numericseries), PrcLo(numericseries), BarsBack( numeric ) ;
+Variables: double rngR(0);
+
+
+if Close[BarsBack] <> 0 then Begin
+	rngR = Round(100*(PrcHi - PrcLo)/PrcClose[BarsBack], 2);
+	Print("H,L,C,RngR=", PrcHi, ", ", PrcLo, ", ", PrcClose[BarsBack], ", ", rngR);
+	End
+Else
+	rngR = 0;
+GF_OpenRngPercent = rngR;

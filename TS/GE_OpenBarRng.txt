@@ -65,6 +65,9 @@ variables:
 	KeyRevHiBar(-1),
 	KeyRevLoVal(0),
 	KeyRevHiVal(0),
+	double CloseDS(0),
+	double HiDS(0),
+	double LoDS(0),
 	int SharesToTrade(0);
 		
 method HorizontalLine CreateHorizontalLine(int LnColor)
@@ -180,17 +183,39 @@ begin
 	return -1;
 end;
 
+Method double GetOpenRngPercent(int dataN, int BarsBack)
+Variables: string sym, double rngR, double rngRD,
+double PrcClose, double PrcHi, double PrcLo,
+double HiD, double LoD;
+Begin
+	sym = Symbol of Data(dataN);
+	PrcClose = C[BarsBack] of Data(dataN);
+	PrcHi = H of Data(dataN);
+	PrcLo = L of Data(dataN);
+	
+	HiD = HighD(0)[1] of Data(dataN);
+	LoD = LowD(0)[1] of Data(dataN);
+	if PrcClose <> 0 and (HiD - LoD <> 0) then Begin
+		rngR = Round(100*(PrcHi - PrcLo)/PrcClose, 2);
+		rngRD = Round(100*(PrcHi - PrcLo)/(HiD - LoD), 2);
+		Print(sym, ":H,L,C,HiD,LoD,RngR,rngRD=", PrcHi, "\t", PrcLo, "	", PrcClose, ", ", HiD, ", ", LoD, ", ", rngR, ", ", rngRD);
+		End
+	Else Begin
+		rngR = 0;
+		rngRD = 0;
+	end;
+	return rngR;
+end;
+
 method void GetOpenRngKeyRevSpdRatio()
-vars: string sym, double hid, double lod;
+vars: string sym, double cld, double hid, double lod, int dnum;
 begin
 	if KeyRevSpread <> 0 and BarRng <> 0 Then
 		Begin
-		sym = Symbol of Data(3);
-		hid = HighD(0) of Data(3);
-		lod = LowD(0) of Data(3);
-		Print(sym, ": Hi, Lo=", hid, ", ", lod);
-		OpenRngR = GF_OpenRngPercent(Close of Data(3), 1); //Round(BarRng/KeyRevSpread, 2)
-		end				
+			For dnum = 1 To 7 Begin
+				OpenRngR = GetOpenRngPercent(dnum, 1); //Round(BarRng/KeyRevSpread, 2)
+			End;
+		end
 	Else
 		OpenRngR = 0;
 end;
