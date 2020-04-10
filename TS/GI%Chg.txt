@@ -41,6 +41,8 @@ inputs:
 	 "Enter number to calculate the average rate of change by dollar amount."],
 	ShareUnit( 10 ) [DisplayName = "ShareUnit", ToolTip = 
 	 "Enter unit amount to calculate the share ratio."],
+	PreMktOpen( true ) [DisplayName = "PreMarketOpen", ToolTip = 
+	 "Display premarket open range."],
 	HiQAlert( 7 ) [DisplayName = "HiQAlert", ToolTip = 
 	 "Enter percentage amount above which an alert will be triggered.  Example:  10."],
 	HiVAlert( 7 ) [DisplayName = "HiVAlert", ToolTip = 

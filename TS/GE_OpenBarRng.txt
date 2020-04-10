@@ -8,7 +8,15 @@ inputs:
 		ToolTip = "Enter an EasyLanguage expression.  Enter the value at which to plot the horizontal line."],
 	int RiskAmt (10) [ DisplayName = "RiskAmt",
 		ToolTip = "The $ amount risk at each trade." ],
-		
+	bool ShowMarketOpen (true) [ DisplayName = "ShowMarketOpen",
+		ToolTip = "Show the session open bar/range." ],	
+	int TimeOpen (705) [ DisplayName = "TimeOpen",
+		ToolTip = "The time of market open." ],	
+	int HoursKeyRevLookback (1) [ DisplayName = "HoursKeyRevLookback",
+		ToolTip = "How many hours lookback to detect Key reversals." ],	
+	int KeyRevLengthPerH( 12 ) [DisplayName = "KeyRevLengthPerH", ToolTip = 
+	 "Enter number of bars per hour over which to calculate key veversal HiLo for PctSpread."], 
+
 	int LineColor( Yellow ) [
 		DisplayName = "LineColor", 
 		ToolTip = "Enter the color to use for the horizontal line."],
@@ -47,9 +55,15 @@ variables:
 	HorizontalLine HorizLine( NULL ),
 	HorizontalLine HorizLineHi( NULL ),
 	HorizontalLine HorizLineLo( NULL ),
-	TextLabel TxtGapR(NULL),
+	TextLabel TxtRegMktOpenGapR(NULL),
 	double GapR(0),
+	double OpenRngR(0), {OpenBarRng/KeyRevSpread}
 	double BarRng(0),
+	double KeyRevSpread(0),
+	KeyRevLoBar(-1),
+	KeyRevHiBar(-1),
+	KeyRevLoVal(0),
+	KeyRevHiVal(0),
 	int SharesToTrade(0);
 		
 method HorizontalLine CreateHorizontalLine(int LnColor)
@@ -144,7 +158,35 @@ method void MoveHorizLine( HorizontalLine HorizLineToMove, double HorizLinePrice
 begin
 	HorizLineToMove.Price = HorizLinePrice;
 end;
-		
+
+method int GetKeyRevSpread()
+variables: int barsBack;
+begin
+	barsBack = HoursKeyRevLookback*KeyRevLengthPerH;
+	KeyRevHiVal = 0;
+	KeyRevHiBar = -1;
+	KeyRevLoVal = 0;
+	KeyRevLoBar = -1;
+	KeyRevSpread = 0;
+	if 1 = Extremes(High, barsBack, 1, KeyRevHiVal, KeyRevHiBar) And
+	 	1 = Extremes(Low, barsBack, -1, KeyRevLoVal, KeyRevLoBar) Then
+	Begin
+		if KeyRevHiVal > 0 and KeyRevLoVal > 0 Then
+			KeyRevSpread = KeyRevHiVal - KeyRevLoVal;
+		if KeyRevHiBar >= 0 Then
+			Plot1[KeyRevHiBar]( High, !( "KeyRevHi" ) ) ;
+	End;
+	return -1;
+end;
+
+method void GetOpenRngKeyRevSpdRatio()
+begin
+	if KeyRevSpread <> 0 and BarRng <> 0 Then
+		OpenRngR = Round(BarRng/KeyRevSpread, 2)
+	Else
+		OpenRngR = 0;
+end;
+	
 once
 begin
 	HorizLineHi = CreateHorizontalLine(LineColorHi);
@@ -154,7 +196,7 @@ end;
 
 {if ( BarType < 2 or BarType = 14 ) and 
  Date <> Date[1] and Currentbar > 1 then }
- if GF_FirstBarDay(0) then
+ if GF_FirstBarSession(TimeOpen) then
 	begin
 	//PlotPaintBar( High, Low, Open, Close, !( "FirstBar-D" ) ) ;
 	MoveHorizLine( HorizLineHi, H );
@@ -162,15 +204,19 @@ end;
 	MoveHorizLine( HorizLine, MedianPrice );
 	//MoveHorizLine( HorizLine, LineValue );
 	
-	GapR = GF_GapPercent(0);//100*(Open - Close[1])/Close[1];
+	GapR = GF_GapPercent(0);{100*(Open - Close[1])/Close[1];}
 	BarRng = GF_GetBarRange(0);
 	if(BarRng > 0) then
 		SharesToTrade = GF_SharesToTrade(RiskAmt, BarRng);
 	//Print("CurrentBar=" , Currentbar, ",Open=", Open, ",Close[1]=", Close[1], ",GapR=", GapR, ", BarRng=", BarRng);
 	
-	TxtGapR = TextLabel.Create(BNPoint.Create(CurrentBar, Low),
+	TxtRegMktOpenGapR = 
+	TextLabel.Create(BNPoint.Create(CurrentBar, Low),
 		Numtostr(GapR, 2) + "%   " +  Numtostr(SharesToTrade, 0) + " / " + Numtostr(BarRng, 2));
 
-	DrawingObjects.Add(TxtGapR); 
+	DrawingObjects.Add(TxtRegMktOpenGapR);
+	GetKeyRevSpread();
+	GetOpenRngKeyRevSpdRatio();
+	Print("KeyRevSpread, OpenRng, R = ", KeyRevSpread, BarRng, OpenRngR);
 	Alert ;
 	end ;
