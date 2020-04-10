@@ -1,3 +1,4 @@
+
 using elsystem;
 using elsystem.drawingobjects;
 using elsystem.drawing;
@@ -173,16 +174,23 @@ begin
 	Begin
 		if KeyRevHiVal > 0 and KeyRevLoVal > 0 Then
 			KeyRevSpread = KeyRevHiVal - KeyRevLoVal;
-		if KeyRevHiBar >= 0 Then
-			Plot1[KeyRevHiBar]( High, !( "KeyRevHi" ) ) ;
+{		if KeyRevHiBar >= 0 Then
+			Plot1[KeyRevHiBar]( High, !( "KeyRevHi" ) ) ;}
 	End;
 	return -1;
 end;
 
 method void GetOpenRngKeyRevSpdRatio()
+vars: string sym, double hid, double lod;
 begin
 	if KeyRevSpread <> 0 and BarRng <> 0 Then
-		OpenRngR = Round(BarRng/KeyRevSpread, 2)
+		Begin
+		sym = Symbol of Data(3);
+		hid = HighD(0) of Data(3);
+		lod = LowD(0) of Data(3);
+		Print(sym, ": Hi, Lo=", hid, ", ", lod);
+		OpenRngR = GF_OpenRngPercent(Close of Data(3), 1); //Round(BarRng/KeyRevSpread, 2)
+		end				
 	Else
 		OpenRngR = 0;
 end;
