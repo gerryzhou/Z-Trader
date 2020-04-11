@@ -9,18 +9,28 @@ inputs:
 		ToolTip = "Enter an EasyLanguage expression.  Enter the value at which to plot the horizontal line."],
 	int RiskAmt (10) [ DisplayName = "RiskAmt",
 		ToolTip = "The $ amount risk at each trade." ],
-	bool ShowMarketOpen (true) [ DisplayName = "ShowMarketOpen",
-		ToolTip = "Show the session open bar/range." ],	
+	double PriceRatioLess (30) [ DisplayName = "PriceRatioLess",
+		ToolTip = "The ratio for price calculation from the Today's spread." ],
+	double PriceRatioMid (40) [ DisplayName = "PriceRatioMid",
+		ToolTip = "The ratio for price calculation from the Today's spread." ],
+	double PriceRatioMore (60) [ DisplayName = "PriceRatioMore",
+		ToolTip = "The ratio for price calculation from the Today's spread." ],
 	int DataNum (9) [ DisplayName = "DataNum",
-		ToolTip = "The amount of data series added to this chart." ],	
+		ToolTip = "The amount of data series added to this chart." ],
 	int TimeOpen (705) [ DisplayName = "TimeOpen",
-		ToolTip = "The time of market open." ],	
+		ToolTip = "The time of market open." ],
 	int TimeStartTrade (630) [ DisplayName = "TimeStartTrade",
-		ToolTip = "The time to start trade." ],	
+		ToolTip = "The time to start trade." ],
+	bool ShowMarketOpen (true) [ DisplayName = "ShowMarketOpen",
+		ToolTip = "Show the session open bar/range." ],
+	int RocLength (12) [ DisplayName = "RocLength",
+		ToolTip = "Rate of Change lookback length." ],
+	int RocMALength (12) [ DisplayName = "RocMALength",
+		ToolTip = "Rate of Change MA length." ],
 	int HoursKeyRevLookback (1) [ DisplayName = "HoursKeyRevLookback",
-		ToolTip = "How many hours lookback to detect Key reversals." ],	
+		ToolTip = "How many hours lookback to detect Key reversals." ],
 	int KeyRevLengthPerH( 12 ) [DisplayName = "KeyRevLengthPerH", ToolTip = 
-	 "Enter number of bars per hour over which to calculate key veversal HiLo for PctSpread."], 
+	 "Enter number of bars per hour over which to calculate key veversal HiLo for PctSpread."],
 
 	int LineColor( Yellow ) [
 		DisplayName = "LineColor", 
@@ -167,6 +177,22 @@ begin
 	HorizLineToMove.Price = HorizLinePrice;
 end;
 
+method void UpdateHorizLines()
+begin
+	MoveHorizLine( HorizLineHi, H );
+	MoveHorizLine( HorizLineLo, L );
+	MoveHorizLine( HorizLine, MedianPrice );
+	//MoveHorizLine( HorizLine, LineValue );	
+end;
+
+method void UpdateText()
+begin
+	MoveHorizLine( HorizLineHi, H );
+	MoveHorizLine( HorizLineLo, L );
+	MoveHorizLine( HorizLine, MedianPrice );
+	//MoveHorizLine( HorizLine, LineValue );
+end;
+
 method int GetKeyRevSpread()
 variables: int barsBack;
 begin
@@ -187,10 +213,11 @@ begin
 	return -1;
 end;
 
-Method double GetOpenRngPercent(int dataN, int BarsBack, out string oSymbol, out double oPctChg, out double oRngR, out double oRngRD)
+Method double GetOpenRngPercent(int dataN, int BarsBack, out string oSymbol,
+ out double oPctChg, out double oRocMa, out double oRngR, out double oWickRD, out double oRngRD, out double oWickR)
 Variables:
 double PrcClose, double LastDClose, double PrcHi, double PrcLo,
-double HiD, double LoD;
+double HiD, double LoD, double trueRng;
 Begin
 	oSymbol = Symbol of Data(dataN);
 	PrcClose = C[BarsBack] of Data(dataN);
@@ -200,12 +227,23 @@ Begin
 	HiD = HighD(0)[1] of Data(dataN);
 	LoD = LowD(0)[1] of Data(dataN);
 	LastDClose = CloseD(1) of Data(dataN);
+	oRocMa = GF_RocMA(C, RocLength, RocMALength) of Data(dataN);
+	if oRocMa > 0 then
+		trueRng = (C[1] - L) of data(dataN)
+	else if oRocMa < 0 Then
+		trueRng = (H - C[1]) of data(dataN)
+	Else
+		trueRng = 0;
 	if LastDClose <> 0 and PrcClose <> 0 and (HiD - LoD <> 0) then Begin
 		oPctChg = Round(Absvalue(100*(PrcClose - LastDClose)/LastDClose), 2);
-		oRngR = Round(100*(PrcHi - PrcLo)/PrcClose, 2);
+		oWickRD = Round(100*trueRng/(HiD - LoD), 2);		
 		oRngRD = Round(100*(PrcHi - PrcLo)/(HiD - LoD), 2);
-		Print(oSymbol, ":	H,L,C,HiD,LoD,oPctChg,RngR,rngRD	=",
-		 PrcHi, "	", PrcLo, "	", PrcClose, "	", HiD, "	", LoD, "	", oPctChg, "	", oRngR, "	", oRngRD);
+		
+		oRngR = Round(100*(PrcHi - PrcLo)/PrcClose, 2);
+		oWickR = Round(100*trueRng/PrcClose, 2);
+		
+		Print(oSymbol, "		", PrcHi, "	", PrcLo, "	", PrcClose, "	", HiD, "	", LoD, "		",
+		  oPctChg, "	", oRocMa, "	", oWickRD, "	", oRngRD, "	", oRngR, "	", oWickR);
 		End
 	Else Begin
 		oRngR = 0;
@@ -217,12 +255,14 @@ end;
 {Sort: max Long, max short, min Long, min Short;
 related: %chg/LastDClose}
 method void GetOpenRngKeyRevSpdRatio()
-vars: string sym, double pctChg, double rngRb, double rngRd, double ret, int dnum;
+vars: string sym,  double ret, int dnum,
+double pctChg, double rocMa, double rngRb, double wickRd, double rngRd, double wickR;
 begin
 	if BarRng <> 0 Then
 		Begin
+			Print("Symb		_High	__Low	Close	HighD	_LowD		PtChg	RocMa	WikRD	RngRD	_RngR	WickR");
 			For dnum = 1 To DataNum Begin
-				ret = GetOpenRngPercent(dnum, 1, sym, pctChg, rngRb, rngRd); //Round(BarRng/KeyRevSpread, 2)
+				ret = GetOpenRngPercent(dnum, 1, sym, pctChg, rocMa, rngRb, wickrd, rngRd, wickR); //Round(BarRng/KeyRevSpread, 2)
 			End;
 		end;
 end;
@@ -276,10 +316,6 @@ End;
  if GF_FirstBarSession(TimeOpen) then
 	begin
 	//PlotPaintBar( High, Low, Open, Close, !( "FirstBar-D" ) ) ;
-	MoveHorizLine( HorizLineHi, H );
-	MoveHorizLine( HorizLineLo, L );
-	MoveHorizLine( HorizLine, MedianPrice );
-	//MoveHorizLine( HorizLine, LineValue );
 	
 	GapR = GF_GapPercent(0);{100*(Open - Close[1])/Close[1];}
 	BarRng = GF_GetBarRange(0);
@@ -297,3 +333,4 @@ End;
 	Print("KeyRevSpread, OpenRng, R = ", KeyRevSpread, BarRng, OpenRngR);
 	Alert ;
 	end ;
+

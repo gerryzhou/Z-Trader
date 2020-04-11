@@ -1,0 +1,6 @@
+inputs: Price( numericseries ), LengthRoc( numericsimple ), LengthMA( numericsimple ) ;
+
+if Price[LengthRoc] <> 0 then 
+	GF_RocMA = XAverage(RateOfChange( Price, LengthRoc), LengthMA)
+else
+	GF_RocMA = 0 ;
