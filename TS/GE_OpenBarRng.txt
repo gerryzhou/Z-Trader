@@ -11,6 +11,8 @@ inputs:
 		ToolTip = "The $ amount risk at each trade." ],
 	bool ShowMarketOpen (true) [ DisplayName = "ShowMarketOpen",
 		ToolTip = "Show the session open bar/range." ],	
+	int DataNum (9) [ DisplayName = "DataNum",
+		ToolTip = "The amount of data series added to this chart." ],	
 	int TimeOpen (705) [ DisplayName = "TimeOpen",
 		ToolTip = "The time of market open." ],	
 	int HoursKeyRevLookback (1) [ DisplayName = "HoursKeyRevLookback",
@@ -183,41 +185,44 @@ begin
 	return -1;
 end;
 
-Method double GetOpenRngPercent(int dataN, int BarsBack)
-Variables: string sym, double rngR, double rngRD,
-double PrcClose, double PrcHi, double PrcLo,
+Method double GetOpenRngPercent(int dataN, int BarsBack, out string oSymbol, out double oPctChg, out double oRngR, out double oRngRD)
+Variables:
+double PrcClose, double LastDClose, double PrcHi, double PrcLo,
 double HiD, double LoD;
 Begin
-	sym = Symbol of Data(dataN);
+	oSymbol = Symbol of Data(dataN);
 	PrcClose = C[BarsBack] of Data(dataN);
 	PrcHi = H of Data(dataN);
 	PrcLo = L of Data(dataN);
 	
 	HiD = HighD(0)[1] of Data(dataN);
 	LoD = LowD(0)[1] of Data(dataN);
-	if PrcClose <> 0 and (HiD - LoD <> 0) then Begin
-		rngR = Round(100*(PrcHi - PrcLo)/PrcClose, 2);
-		rngRD = Round(100*(PrcHi - PrcLo)/(HiD - LoD), 2);
-		Print(sym, ":H,L,C,HiD,LoD,RngR,rngRD=", PrcHi, "\t", PrcLo, "	", PrcClose, ", ", HiD, ", ", LoD, ", ", rngR, ", ", rngRD);
+	LastDClose = CloseD(1) of Data(dataN);
+	if LastDClose <> 0 and PrcClose <> 0 and (HiD - LoD <> 0) then Begin
+		oPctChg = Round(Absvalue(100*(PrcClose - LastDClose)/LastDClose), 2);
+		oRngR = Round(100*(PrcHi - PrcLo)/PrcClose, 2);
+		oRngRD = Round(100*(PrcHi - PrcLo)/(HiD - LoD), 2);
+		Print(oSymbol, ":	H,L,C,HiD,LoD,oPctChg,RngR,rngRD	=",
+		 PrcHi, "	", PrcLo, "	", PrcClose, "	", HiD, "	", LoD, "	", oPctChg, "	", oRngR, "	", oRngRD);
 		End
 	Else Begin
-		rngR = 0;
-		rngRD = 0;
+		oRngR = 0;
+		oRngRD = 0;
 	end;
-	return rngR;
+	return 1;
 end;
 
+{Sort: max Long, max short, min Long, min Short;
+related: %chg/LastDClose}
 method void GetOpenRngKeyRevSpdRatio()
-vars: string sym, double cld, double hid, double lod, int dnum;
+vars: string sym, double pctChg, double rngRb, double rngRd, double ret, int dnum;
 begin
-	if KeyRevSpread <> 0 and BarRng <> 0 Then
+	if BarRng <> 0 Then
 		Begin
-			For dnum = 1 To 7 Begin
-				OpenRngR = GetOpenRngPercent(dnum, 1); //Round(BarRng/KeyRevSpread, 2)
+			For dnum = 1 To DataNum Begin
+				ret = GetOpenRngPercent(dnum, 1, sym, pctChg, rngRb, rngRd); //Round(BarRng/KeyRevSpread, 2)
 			End;
-		end
-	Else
-		OpenRngR = 0;
+		end;
 end;
 	
 once

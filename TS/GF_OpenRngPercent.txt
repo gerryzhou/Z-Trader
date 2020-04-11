@@ -1,11 +1,27 @@
-inputs: PrcClose(numericseries), PrcHi(numericseries), PrcLo(numericseries), BarsBack( numeric ) ;
-Variables: double rngR(0);
+{The ratio of open bar range over prior bar close, and open bar range over today's Hi-Lo range}
+inputs: DataN(numeric), BarsBack( numeric ),
+oSymbol(stringref),
+oRngR(numericref), oRngRD(numericref) ;
 
+Variables: double PrcClose(0), double PrcHi(0), double PrcLo(0),
+double HiD(0), double LoD(0) ;
 
-if Close[BarsBack] <> 0 then Begin
-	rngR = Round(100*(PrcHi - PrcLo)/PrcClose[BarsBack], 2);
-	Print("H,L,C,RngR=", PrcHi, ", ", PrcLo, ", ", PrcClose[BarsBack], ", ", rngR);
-	End
-Else
-	rngR = 0;
-GF_OpenRngPercent = rngR;
+	oSymbol = Symbol of Data(dataN);
+	PrcClose = C[BarsBack] of Data(dataN);
+	PrcHi = H of Data(dataN);
+	PrcLo = L of Data(dataN);
+	
+	HiD = HighD(0)[1] of Data(dataN);
+	LoD = LowD(0)[1] of Data(dataN);
+	if PrcClose <> 0 and (HiD - LoD <> 0) then Begin
+		oRngR = Round(100*(PrcHi - PrcLo)/PrcClose, 2);
+		oRngRD = Round(100*(PrcHi - PrcLo)/(HiD - LoD), 2);
+		Print(oSymbol, ":H,L,C,HiD,LoD,RngR,rngRD=",
+		 PrcHi, "	", PrcLo, "	", PrcClose, "	", HiD, "	", LoD, "	", oRngR, "	", oRngRD);
+		End
+	Else Begin
+		oRngR = 0;
+		oRngRD = 0;
+	end;
+
+GF_OpenRngPercent = 1;
