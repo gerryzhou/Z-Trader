@@ -9,11 +9,13 @@ inputs:
 		ToolTip = "Enter an EasyLanguage expression.  Enter the value at which to plot the horizontal line."],
 	int RiskAmt (10) [ DisplayName = "RiskAmt",
 		ToolTip = "The $ amount risk at each trade." ],
-	double PriceRatioLess (30) [ DisplayName = "PriceRatioLess",
+	int CapAmt (20000) [ DisplayName = "CapAmt",
+		ToolTip = "The total $ amount at each trade." ],
+	double PriceRatioLess (20) [ DisplayName = "PriceRatioLess",
 		ToolTip = "The ratio for price calculation from the Today's spread." ],
-	double PriceRatioMid (40) [ DisplayName = "PriceRatioMid",
+	double PriceRatioMid (30) [ DisplayName = "PriceRatioMid",
 		ToolTip = "The ratio for price calculation from the Today's spread." ],
-	double PriceRatioMore (60) [ DisplayName = "PriceRatioMore",
+	double PriceRatioMore (45) [ DisplayName = "PriceRatioMore",
 		ToolTip = "The ratio for price calculation from the Today's spread." ],
 	int DataNum (9) [ DisplayName = "DataNum",
 		ToolTip = "The amount of data series added to this chart." ],
@@ -25,9 +27,9 @@ inputs:
 		ToolTip = "The time to start trade." ],
 	bool ShowMarketOpen (true) [ DisplayName = "ShowMarketOpen",
 		ToolTip = "Show the session open bar/range." ],
-	int RocLength (12) [ DisplayName = "RocLength",
+	int RocLength (8) [ DisplayName = "RocLength",
 		ToolTip = "Rate of Change lookback length." ],
-	int RocMALength (12) [ DisplayName = "RocMALength",
+	int RocMALength (8) [ DisplayName = "RocMALength",
 		ToolTip = "Rate of Change MA length." ],
 	int HoursKeyRevLookback (1) [ DisplayName = "HoursKeyRevLookback",
 		ToolTip = "How many hours lookback to detect Key reversals." ],
@@ -271,60 +273,70 @@ begin
 		end;
 end;
 
-method int GetEnExitPrice()
-variables: string txtLbl, double PrcOri, double RocMA, double PrcLess, double PrcMid, double PrcMore,
-double HiD, double LoD, double SpdD, double LastDClose, double PctChg, double PctSpd;
+method int GetEnExitPriceDataN(int dataN, int BarsBack, out string oSymbol, out double oPrcOri,
+out double oHiD, out double oLoD, out double oSpdD, out double oPctChg, out double oPctSpd, out double oRocMa,
+out double oPrcLess, out double oPrcMid, out double oPrcMore)
+variables: string txtLbl, double LastDClose;
 begin
-	PrcOri = Close;
-	HiD = HighD(0);
-	LoD = LowD(0);
-	LastDClose = CloseD(1);
-	SpdD = HiD - LoD;
-	RocMa = GF_RocMA(C, RocLength, RocMALength);
-	if LastDClose <> 0 and SpdD <> 0 then Begin
-		PctChg = Round(Absvalue(100*(PrcOri - LastDClose)/LastDClose), 2);
-		PctSpd = Round(100*SpdD/LastDClose, 2);
+	oSymbol = Symbol of Data(dataN); 
+	oPrcOri = Close of Data(dataN);
+	oHiD = HighD(0) of Data(dataN);
+	oLoD = LowD(0) of Data(dataN);
+	LastDClose = CloseD(1) of Data(dataN);
+	oSpdD = oHiD - oLoD;
+	oRocMa = GF_RocMA(C, RocLength, RocMALength) of Data(dataN);
+	if LastDClose <> 0 and oSpdD <> 0 then Begin
+		oPctChg = Round(Absvalue(100*(oPrcOri - LastDClose)/LastDClose), 2);
+		oPctSpd = Round(100*oSpdD/LastDClose, 2);
 	End;
-	if RocMa > 0 Then Begin
-		PrcLess = PrcOri - Round2Fraction(PriceRatioLess*SpdD/100);
-		PrcMid = PrcOri - Round2Fraction(PriceRatioMid*SpdD/100);
-		PrcMore = PrcOri - Round2Fraction(PriceRatioMore*SpdD/100);
+	if oRocMa > 0 Then Begin
+		oPrcLess = oPrcOri - PriceRatioLess*oSpdD/100;
+		oPrcMid = oPrcOri - PriceRatioMid*oSpdD/100;
+		oPrcMore = oPrcOri - PriceRatioMore*oSpdD/100;
 	End
-	Else if RocMa < 0 Then Begin
-		PrcLess = PrcOri + Round2Fraction(PriceRatioLess*SpdD/100);
-		PrcMid = PrcOri + Round2Fraction(PriceRatioMid*SpdD/100);
-		PrcMore = PrcOri + Round2Fraction(PriceRatioMore*SpdD/100);
-	End;
-	Print("-Date--", "	", "Time", "	", "Symb", "	", "HiD", "	", "LowD", "	",
-	"SpdD", "	", "PtChg", "	", "PtSpd", "	", "RocMA", "	", "Price", "	",
-	Numtostr(PriceRatioLess, 0), "% 	",
-	Numtostr(PriceRatioMid, 0), "% 	",
-	Numtostr(PriceRatioMore, 0), "% 	" );
-	
-	Print(Numtostr(Date,0), "	", Numtostr(Time,0), "	", Symbol, "	", HiD, "	", LoD, "	", SpdD,
-	"	", PctChg, "	", PctSpd, "	", RocMa, "	", PrcOri,
-	"	", PrcLess,	"	", PrcMid, "	", PrcMore);
-	
-	if TxtRegMktOpenGapR <> NULL Then
-		TxtRegMktOpenGapR.TextString = 
-		Numtostr(Time, 0) + ": " + Numtostr(SpdD, 2)
-		+ Newline + Symbol + "= " + Numtostr(PrcOri, 2) 
-		+ Newline + Numtostr(PriceRatioLess, 0) + "% = " + Numtostr(PrcLess, 2)
-		+ Newline + Numtostr(PriceRatioMid, 0) + "% = " + Numtostr(PrcMid, 2)
-		+ Newline + Numtostr(PriceRatioMore, 0) + "% = " + Numtostr(PrcMore, 2);
+	Else if oRocMa < 0 Then Begin
+		oPrcLess = oPrcOri + PriceRatioLess*oSpdD/100;
+		oPrcMid = oPrcOri + PriceRatioMid*oSpdD/100;
+		oPrcMore = oPrcOri + PriceRatioMore*oSpdD/100;
+	End;	
 
 	return -1;
 end;
 
 {TODO: add dataN for TextLabel}
-method int GetEnExitPriceDataN(int dataN, int BarsBack, out string oSymbol, out double oPctChg)
-variables: double PrcClose, double LastDClose, double PrcHi, double PrcLo,
-double HiD, double LoD, double SpdD;
+method int GetEnExitPrice()
+variables: int dnum, int ret, string Sym, double PrcOri, int ShareTd, double SpdD, double PctChg, double PctSpd, double RocMa,
+double PrcLess, double PrcMid, double PrcMore,
+double PrcClose, double LastDClose, double HiD, double LoD;
 begin
-	HiD = HighD(0);
-	LoD = LowD(0);
-	SpdD = HiD - LoD;
-	Print(Date, "	", Time, ", ", HiD , "	", LoD, "	", SpdD);
+	
+	Print("--Date--", "	", "-Time", "	", "Symbol", "	", "HighD", "	", "LowD", "	",
+	"SpdD", "	", "PctChg", "	", "PctSpd", "	", "RocMa", "	", "-Price", "	", "Share", "	",
+	Numtostr(PriceRatioLess, 0), "%- 	-",
+	Numtostr(PriceRatioMid, 0), "%- 	-",
+	Numtostr(PriceRatioMore, 0), "%-" );
+	if TxtRegMktOpenGapR <> NULL Then
+		TxtRegMktOpenGapR.TextString = 
+		Numtostr(Time, 0) + ": " + Numtostr(Date, 0) + " $=" + Numtostr(CapAmt, 0);
+		
+	For dnum = 1 To DataNum Begin
+		ret = GetEnExitPriceDataN(dnum, 1, Sym, PrcOri, HiD, LoD, SpdD, PctChg, PctSpd, RocMa,
+			PrcLess, PrcMid, PrcMore);
+		PrcLess = Round2Fraction(PrcLess);
+		PrcMid = Round2Fraction(PrcMid);
+		PrcMore = Round2Fraction(PrcMore);
+		ShareTd = CapAmt/PrcOri;
+	Print(Numtostr(Date,0), "	", Numtostr(Time,0), "	", Sym, "	", HiD, "	", LoD, "	", SpdD,
+	"	[", PctChg, "	", PctSpd, "	", RocMa, "]	", PrcOri, "	[", Numtostr(ShareTd, 0),
+	"]	", PrcLess,	"	", PrcMid, "	", PrcMore);
+	
+	if TxtRegMktOpenGapR <> NULL Then
+		TxtRegMktOpenGapR.TextString = TxtRegMktOpenGapR.TextString	
+		+ Newline + Sym + "=" + Numtostr(PrcOri, 2) + "[" + Numtostr(ShareTd, 0) + "] "
+		+ ", " + Numtostr(PriceRatioLess, 0) + "%=" + Numtostr(PrcLess, 2)
+		+ ", " + Numtostr(PriceRatioMid, 0) + "%=" + Numtostr(PrcMid, 2)
+		+ ", " + Numtostr(PriceRatioMore, 0) + "%=" + Numtostr(PrcMore, 2);
+	End;
 	return -1;
 end;
 
