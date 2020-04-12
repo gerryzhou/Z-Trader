@@ -21,6 +21,8 @@ inputs:
 		ToolTip = "The time of market open." ],
 	int TimeStartTrade (630) [ DisplayName = "TimeStartTrade",
 		ToolTip = "The time to start trade." ],
+	int TimeShowText (530) [ DisplayName = "TimeStartTrade",
+		ToolTip = "The time to start trade." ],
 	bool ShowMarketOpen (true) [ DisplayName = "ShowMarketOpen",
 		ToolTip = "Show the session open bar/range." ],
 	int RocLength (12) [ DisplayName = "RocLength",
@@ -70,7 +72,7 @@ variables:
 	HorizontalLine HorizLine( NULL ),
 	HorizontalLine HorizLineHi( NULL ),
 	HorizontalLine HorizLineLo( NULL ),
-	TextLabel TxtRegMktOpenGapR(NULL),
+	TextLabel TxtRegMktOpenGapR( NULL ),
 	double GapR(0),
 	double OpenRngR(0), {OpenBarRng/KeyRevSpread}
 	double BarRng(0),
@@ -214,10 +216,10 @@ begin
 end;
 
 Method double GetOpenRngPercent(int dataN, int BarsBack, out string oSymbol,
- out double oPctChg, out double oRocMa, out double oRngR, out double oWickRD, out double oRngRD, out double oWickR)
+ out double oPctChg, out double oPctSpd, out double oRocMa, out double oRngR, out double oWickRD, out double oRngRD, out double oWickR)
 Variables:
 double PrcClose, double LastDClose, double PrcHi, double PrcLo,
-double HiD, double LoD, double trueRng;
+double HiD, double LoD, double SpdD, double trueRng;
 Begin
 	oSymbol = Symbol of Data(dataN);
 	PrcClose = C[BarsBack] of Data(dataN);
@@ -226,6 +228,7 @@ Begin
 	
 	HiD = HighD(0)[1] of Data(dataN);
 	LoD = LowD(0)[1] of Data(dataN);
+	SpdD = HiD - LoD;
 	LastDClose = CloseD(1) of Data(dataN);
 	oRocMa = GF_RocMA(C, RocLength, RocMALength) of Data(dataN);
 	if oRocMa > 0 then
@@ -236,14 +239,15 @@ Begin
 		trueRng = 0;
 	if LastDClose <> 0 and PrcClose <> 0 and (HiD - LoD <> 0) then Begin
 		oPctChg = Round(Absvalue(100*(PrcClose - LastDClose)/LastDClose), 2);
-		oWickRD = Round(100*trueRng/(HiD - LoD), 2);		
-		oRngRD = Round(100*(PrcHi - PrcLo)/(HiD - LoD), 2);
+		oPctSpd = Round(Absvalue(100*SpdD/LastDClose), 2);
+		oWickRD = Round(100*trueRng/SpdD, 2);		
+		oRngRD = Round(100*(PrcHi - PrcLo)/SpdD, 2);
 		
 		oRngR = Round(100*(PrcHi - PrcLo)/PrcClose, 2);
 		oWickR = Round(100*trueRng/PrcClose, 2);
 		
 		Print(oSymbol, "		", PrcHi, "	", PrcLo, "	", PrcClose, "	", HiD, "	", LoD, "		",
-		  oPctChg, "	", oRocMa, "	", oWickRD, "	", oRngRD, "	", oRngR, "	", oWickR);
+		  oPctChg, "	", oPctSpd, "	", oRocMa, "	", oWickRD, "	", oRngRD, "	", oRngR, "	", oWickR);
 		End
 	Else Begin
 		oRngR = 0;
@@ -256,25 +260,63 @@ end;
 related: %chg/LastDClose}
 method void GetOpenRngKeyRevSpdRatio()
 vars: string sym,  double ret, int dnum,
-double pctChg, double rocMa, double rngRb, double wickRd, double rngRd, double wickR;
+double pctChg, double pctSpd, double rocMa, double rngRb, double wickRd, double rngRd, double wickR;
 begin
 	if BarRng <> 0 Then
 		Begin
-			Print("Symb		_High	__Low	Close	HighD	_LowD		PtChg	RocMa	WikRD	RngRD	_RngR	WickR");
+			Print("Symb		_High	__Low	Close	HighD	_LowD		PtChg	PtSpd	RocMa	WikRD	RngRD	_RngR	WickR");
 			For dnum = 1 To DataNum Begin
-				ret = GetOpenRngPercent(dnum, 1, sym, pctChg, rocMa, rngRb, wickrd, rngRd, wickR); //Round(BarRng/KeyRevSpread, 2)
+				ret = GetOpenRngPercent(dnum, 1, sym, pctChg, pctSpd, rocMa, rngRb, wickrd, rngRd, wickR); //Round(BarRng/KeyRevSpread, 2)
 			End;
 		end;
 end;
 
 method int GetEnExitPrice()
-variables: double PrcClose, double LastDClose, double PrcHi, double PrcLo,
-double HiD, double LoD;
+variables: string txtLbl, double PrcOri, double RocMA, double PrcLess, double PrcMid, double PrcMore,
+double HiD, double LoD, double SpdD, double LastDClose, double PctChg, double PctSpd;
 begin
-	Print(Date, "	", Time, ", ", Symbol, "	", HighD(0), "	", LowD(0));
+	PrcOri = Close;
+	HiD = HighD(0);
+	LoD = LowD(0);
+	LastDClose = CloseD(1);
+	SpdD = HiD - LoD;
+	RocMa = GF_RocMA(C, RocLength, RocMALength);
+	if LastDClose <> 0 and SpdD <> 0 then Begin
+		PctChg = Round(Absvalue(100*(PrcOri - LastDClose)/LastDClose), 2);
+		PctSpd = Round(100*SpdD/LastDClose, 2);
+	End;
+	if RocMa > 0 Then Begin
+		PrcLess = PrcOri - Round2Fraction(PriceRatioLess*SpdD/100);
+		PrcMid = PrcOri - Round2Fraction(PriceRatioMid*SpdD/100);
+		PrcMore = PrcOri - Round2Fraction(PriceRatioMore*SpdD/100);
+	End
+	Else if RocMa < 0 Then Begin
+		PrcLess = PrcOri + Round2Fraction(PriceRatioLess*SpdD/100);
+		PrcMid = PrcOri + Round2Fraction(PriceRatioMid*SpdD/100);
+		PrcMore = PrcOri + Round2Fraction(PriceRatioMore*SpdD/100);
+	End;
+	Print("-Date--", "	", "Time", "	", "Symb", "	", "HiD", "	", "LowD", "	",
+	"SpdD", "	", "PtChg", "	", "PtSpd", "	", "RocMA", "	", "Price", "	",
+	Numtostr(PriceRatioLess, 0), "% 	",
+	Numtostr(PriceRatioMid, 0), "% 	",
+	Numtostr(PriceRatioMore, 0), "% 	" );
+	
+	Print(Numtostr(Date,0), "	", Numtostr(Time,0), "	", Symbol, "	", HiD, "	", LoD, "	", SpdD,
+	"	", PctChg, "	", PctSpd, "	", RocMa, "	", PrcOri,
+	"	", PrcLess,	"	", PrcMid, "	", PrcMore);
+	
+	if TxtRegMktOpenGapR <> NULL Then
+		TxtRegMktOpenGapR.TextString = 
+		Numtostr(Time, 0) + ": " + Numtostr(SpdD, 2)
+		+ Newline + Symbol + "= " + Numtostr(PrcOri, 2) 
+		+ Newline + Numtostr(PriceRatioLess, 0) + "% = " + Numtostr(PrcLess, 2)
+		+ Newline + Numtostr(PriceRatioMid, 0) + "% = " + Numtostr(PrcMid, 2)
+		+ Newline + Numtostr(PriceRatioMore, 0) + "% = " + Numtostr(PrcMore, 2);
+
 	return -1;
 end;
 
+{TODO: add dataN for TextLabel}
 method int GetEnExitPriceDataN(int dataN, int BarsBack, out string oSymbol, out double oPctChg)
 variables: double PrcClose, double LastDClose, double PrcHi, double PrcLo,
 double HiD, double LoD, double SpdD;
@@ -306,6 +348,17 @@ begin
 		ClearPrintLog;
 end;
 
+if GF_FirstBarSession(TimeShowText) Then
+Begin
+	//DrawingObjects.Delete(TxtRegMktOpenGapR);
+	Print(CurrentBar, ":", Time, "	TimeShowText=", TimeShowText);
+	TxtRegMktOpenGapR = 
+	TextLabel.Create(DTPoint.Create(BarDateTime[1], LowD(0)), //BNPoint.Create(CurrentBar, Low),
+		Numtostr(CurrentBar, 0) + ":	" +  Numtostr(Time, 0) + " / " + Numtostr(OpenD(0), 2));
+	
+	DrawingObjects.Add(TxtRegMktOpenGapR);
+End;
+
 if IsTradeTime() Then
 Begin
 	GetEnExitPrice();
@@ -323,11 +376,11 @@ End;
 		SharesToTrade = GF_SharesToTrade(RiskAmt, BarRng);
 	//Print("CurrentBar=" , Currentbar, ",Open=", Open, ",Close[1]=", Close[1], ",GapR=", GapR, ", BarRng=", BarRng);
 	
-	TxtRegMktOpenGapR = 
+{	TxtRegMktOpenGapR = 
 	TextLabel.Create(BNPoint.Create(CurrentBar, Low),
 		Numtostr(GapR, 2) + "%   " +  Numtostr(SharesToTrade, 0) + " / " + Numtostr(BarRng, 2));
 
-	DrawingObjects.Add(TxtRegMktOpenGapR);
+	DrawingObjects.Add(TxtRegMktOpenGapR);}
 	GetKeyRevSpread();
 	GetOpenRngKeyRevSpdRatio();
 	Print("KeyRevSpread, OpenRng, R = ", KeyRevSpread, BarRng, OpenRngR);

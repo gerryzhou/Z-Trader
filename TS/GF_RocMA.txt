@@ -1,3 +1,4 @@
+{ Search Tag: WA-RateOfChange }
 inputs: Price( numericseries ), LengthRoc( numericsimple ), LengthMA( numericsimple ) ;
 
 if Price[LengthRoc] <> 0 then 
