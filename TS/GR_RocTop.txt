@@ -1,0 +1,80 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}. There is no need to erase these instructions  
+  when using EasyLanguage in order for it to function properly, because this text will 
+  be ignored. }
+
+{ STEP 1: Replace <FORMULA1> and <FORMULA2> with the formulas you wish to plot.  Note 
+  that Value1 and Value2 are numeric variables, temporary holding places for the 
+  results of your numeric formulas.  To assign non-generic names to your plots, you may 
+  replace "Plot1" and "Plot2"  (leaving the quotes) with names you choose.  The 
+  specified names will appear in the chart analysis data window. }
+inputs:
+	double LineValue( Close ) [
+		DisplayName = "LineValue", 
+		ToolTip = "Enter an EasyLanguage expression.  Enter the value at which to plot the horizontal line."],
+	int TimeOpen (300) [ DisplayName = "TimeOpen",
+		ToolTip = "The open time." ],
+	int RocLenPrice (7) [ DisplayName = "RocLenPrice",
+		ToolTip = "The bars back for Price ROC." ],
+	int RocLenVolume (3) [ DisplayName = "RocLenVolume",
+		ToolTip = "The bars back for Volume ROC." ],
+	int AvgLenVolume (3) [ DisplayName = "AvgLenVolume",
+		ToolTip = "The bars back for Volume average." ],
+	double PriceMin( 2 ) [
+		DisplayName = "PriceMin", 
+		ToolTip = "Enter the min price to triger the alert."],
+	Printout (false) [ DisplayName = "Printout",
+		ToolTip = "Printout the console or not." ],
+	EnableAlert (true) [ DisplayName = "EnableAlert",
+		ToolTip = "Enable Alert or not." ],
+	int CapAmt (20000) [ DisplayName = "CapAmt",
+		ToolTip = "The total $ amount at each trade." ];
+
+variables:
+	int BarsSinceOpen (0), 
+	TimeFirsBarSession(TimeOpen),
+	int AvgVol(0),
+	double DayHi(999999),
+	double DayLo(-999999);
+	
+Value1 = RateOfChange(Close, RocLenPrice) ;
+Plot1( Value1, "RocP" ) ;
+
+Value2 = RateOfChange(Average(Volume,AvgLenVolume), RocLenVolume) ;
+Plot2( Value2, "RocV" ) ;
+
+
+{3:00 Open price}
+if GF_FirstBarDay(0) Then Begin
+	Value3 = Open[0] ;
+End;
+Plot3( Value3, "OpenD" ) ;
+
+{ OPTIONAL STEPS: To specify alert criteria that will sound an audible alert when 
+  triggered, replace FALSE with your criteria.  To specify a brief alert description 
+  that will be included in the alert notification pop-up window, insert your 
+  description between the quotes ( "" ).  Note that Condition1 is a logical variable, a 
+  temporary holding place for the true-false result of the criteria. }
+{ if Date <> Date[1] Then
+ 	TimeFirsBarSession = Time[0];
+if BarType = 1 Then Begin
+	BarsSinceOpen = (TimeToMinutes(Time) - TimeToMinutes(TimeFirsBarSession))/BarInterval;
+	DayHi = Highest(High, BarsSinceOpen)[0];
+	DayLo = Lowest(Low, BarsSinceOpen)[0];
+End;}
+if Printout then
+	Print(Symbol, ":", Currentbar, ": ", Close[205], ", HiD=", Dailyhigh, ", LoD=", Dailylow, ", Time=", Time,
+	 "TimeFirsBarSession=", TimeFirsBarSession, ", MaxBarsBack=", Maxbarsback, ", BarsSinceOpen", BarsSinceOpen);
+Condition1 = FALSE ;
+
+if EnableAlert and Close >= PriceMin then Begin
+	if Close cross Over Dailyhigh then Begin
+		Print(Symbol, ": Breakout UP- ", Close, ",", DayHi);
+		Alert( "Breakout UP! RocP=" + Numtostr(Value1,2) + ", RocV=" + Numtostr(Value2,2) ) ;
+	End;
+	if Close cross Under Dailylow then Begin
+		Print(Symbol, ": Breakout DOWN- ", Close, ",", DayLo);
+		Alert( "Breakout DOWN! RocP=" + Numtostr(Value1,2) + ", RocV=" + Numtostr(Value2,2) ) ;
+	End;
+	
+End;
