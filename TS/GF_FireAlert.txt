@@ -1,0 +1,7 @@
+input: Source(Stringsimple), Message(stringsimple), PrintConsole(truefalsesimple);
+Begin
+	Alert(!(Message));
+	if PrintConsole Then
+		Print(Source, ":", Message);
+	GF_FireAlert = true;
+End;

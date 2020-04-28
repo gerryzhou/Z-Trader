@@ -1,0 +1,108 @@
+{ Search Tag: WA-Golden Cross }
+ 
+using elsystem;
+
+inputs:
+	double Price( Close ) [DisplayName = "Price", ToolTip = 
+	 "Enter an EasyLanguage expression to use in the moving average calculations."],
+	int FastLength( 5 ) [DisplayName = "FastLength", ToolTip = 
+	 "Enter number of bars to use in calculation of shorter length moving average."],
+	int SlowLength( 20 ) [DisplayName = "SlowLength", ToolTip = 
+	 "Enter number of bars to use in calculation of longer length moving average."],
+	int AlertIfRecent( 1 ) [DisplayName = "AlertIfRecent", ToolTip = 
+	 "Enter 1 if it is desired for an alert to be triggered if a cross occurred in the most recent several bars; specify the number of bars by using the AlertIfBarsSinceCrossLessThan input."],
+	int AlertIfBarsSinceCrossLessThan( 1 ) 
+	 [DisplayName = "AlertIfBarsSinceCrossLessThan", ToolTip = 
+	 "Enter a number of bars.  If a cross occurred fewer bars ago than specified by this input, and the AlertIfRecent input is set to 1, the indicator will alert.  Example: Enter 1 to be alerted if a cross occurs on the most recently completed bar."],
+	int AlertIfImminent( 1 ) [DisplayName = "AlertIfImminent", ToolTip = 
+	 "Enter 1 if it is desired for an alert to be triggered if the fast moving average is above the slow moving average and within a certain percentage of it; specify the percentage using the ImminentPercentageMax input."],
+	double ImminentPercentageMax( 1 ) 
+	 [DisplayName = "ImminentPercentageMax", ToolTip = 
+	 "Enter a percentage amount.  Example:  enter 3 for 3 percent.  If the percentage difference between the two moving averages is less than or equal to this amount, and the AlertIfImminent input is set to 1, an alert will be triggered."],
+	double PlotPrice( MedianPrice ) [DisplayName = "PlotPrice", ToolTip = 
+	 "This input specifies the price at which the marker (dot) is placed in a chart when the scan criteria are met."],
+	bool ColorCellBGOnAlert( true ) [DisplayName = "ColorCellBGOnAlert", ToolTip = 
+	 "Color Cell Background On Alert.  Enter true to color RadarScreen cell background when alert occurs.  Enter false to not color cell background."],
+	int BackgroundColorAlertCell( DarkGray ) 
+	 [DisplayName = "BackgroundColorAlertCell", ToolTip = 
+	 "Enter the color to use for cell background in RadarScreen when an alert occurs."];
+
+variables:
+	DateTime GoldenCrossDateTime( NULL ),
+	intrabarpersist bool InAChart( false ),
+	intrabarpersist bool OkToPlot( false ),
+	double FastMAValue( 0 ),
+	double SlowMAValue( 0 ),
+	bool GoldenCross( false ),
+	bool MaCross( false ),
+	int BarsSinceCross( 0 ),
+	double PctDiff( 0 ),
+	bool IsAlert(false);
+
+once 
+begin
+	InAChart = GetAppInfo( aiApplicationType ) = cChart;
+end;
+
+FastMAValue = XAverage( Price, FastLength ); 
+SlowMAValue = XAverage( Price, SlowLength );
+GoldenCross = FastMAValue crosses over SlowMAValue;
+MaCross		= Low crosses Under SlowMAValue;
+
+once ( CurrentBar > 1 and MaCross )
+begin
+	OkToPlot = true;
+end;
+	
+if OkToPlot then
+begin	
+	if MaCross then
+	begin
+		BarsSinceCross = 0;
+		GoldenCrossDateTime = BarDateTime;
+		
+		if InAChart then 
+			Plot1( PlotPrice, !( "MA-Crs" ) );
+	end
+	else
+	begin
+		BarsSinceCross += 1;
+	end;
+			
+	if AlertIfRecent = 1 and BarsSinceCross < AlertIfBarsSinceCrossLessThan then
+	begin
+		IsAlert = GF_FireAlert("GI_MaCross", Symbol + " Recent MA cross", true ) ;		
+
+		if ColorCellBGOnAlert then
+		begin
+			SetPlotBGColor( 1, BackgroundColorAlertCell );
+			SetPlotBGColor( 2, BackgroundColorAlertCell );
+		end;
+	end;
+		
+	if SlowMAValue > 0 then
+		PctDiff = 100 * ( SlowMAValue - Low ) / SlowMAValue; 
+		//PctDiff = 100 * ( SlowMAValue - FastMAValue ) / SlowMAValue; 
+	
+	if AlertIfImminent = 1
+		and Low > SlowMAValue
+		and PctDiff <= ImminentPercentageMax then
+	begin
+		IsAlert = GF_FireAlert("GI_MaCross", Symbol + " Imminent MA cross", true );	
+
+		if ColorCellBGOnAlert then
+			SetPlotBGColor( 2, BackgroundColorAlertCell );
+	end;
+	
+	if InAChart = false then
+	begin
+		Plot1( BarsSinceCross, !( "MA-Crs" ) );
+		//Plot2( GoldenCrossDateTime.ELDate, !( "M-CrsDate" ) );
+		Plot2( GoldenCrossDateTime.ELTime, !( "M-CrsTime" ) );
+	end;
+end;
+
+
+{ ** Copyright © TradeStation Technologies, Inc.  All Rights Reserved ** 
+  ** TradeStation reserves the right to modify or overwrite this analysis technique 
+     with each release. ** }

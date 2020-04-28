@@ -1,0 +1,61 @@
+{ Search Tag: WA-Mov Avg Exponential }
+{
+MA-Length:
+TSLA: 5m/35
+
+
+}
+inputs:
+	double Price( Close ) [DisplayName = "Price", ToolTip = 
+	 "Enter an EasyLanguage expression to use in the exponential moving average calculation."],
+	double Length( 35 ) [DisplayName = "Length", ToolTip = 
+	 "Enter the number of bars used in the calculation of the smoothing factor used in the calculation of the moving average."],
+	bool AlertCross( true ) [DisplayName = "AlertCross", ToolTip = 
+	 "Alert if the price cross the EMA."],
+	bool AlertTrend( false ) [DisplayName = "AlertTrend", ToolTip = 
+	 "Alert if the trend by the EMA."],
+	int AlertIfImminent( 0 ) [DisplayName = "AlertIfImminent", ToolTip = 
+	 "Enter 1 if it is desired for an alert to be triggered if the fast moving average is above the slow moving average and within a certain percentage of it; specify the percentage using the ImminentPercentageMax input."],
+	double ImminentPercentageMax( 0.1 ) 
+	 [DisplayName = "ImminentPercentageMax", ToolTip = 
+	 "Enter a percentage amount.  Example:  enter 3 for 3 percent.  If the percentage difference between the two moving averages is less than or equal to this amount, and the AlertIfImminent input is set to 1, an alert will be triggered."],
+	int Displace( 0 ) [DisplayName = "Displace", ToolTip = 
+	 "Displacement.  Enter the number of bars by which plots will be displaced.  Displacement may be positive (left) or negative (right)."];
+
+variables:
+	double AvgExp( 0 ),
+	double PctDiff( 0 ),
+	bool IsAlert(false);
+
+AvgExp = XAverage( Price, Length );
+if AvgExp > 0 then Begin
+	if AvgExp < Low Then
+		PctDiff = 100 * ( Low - AvgExp ) / AvgExp
+	else if AvgExp > High Then
+		PctDiff = 100 * ( AvgExp - High ) / AvgExp ;
+End;
+
+if Displace >= 0 or CurrentBar > AbsValue( Displace ) then 
+begin
+	Plot1[Displace]( AvgExp, !( "AvgExp" ) );
+
+	{ alert criteria }
+	if AlertEnabled and Displace <= 0 then 
+	begin
+		if AlertTrend and Price > AvgExp and AvgExp > AvgExp[1] and AvgExp[1] <= AvgExp[2] then
+			IsAlert = GF_FireAlert("GIEMA", Symbol + " turning up", true ) 
+		else if AlertTrend and Price < AvgExp and AvgExp < AvgExp[1] and AvgExp[1] >= AvgExp[2] then
+			IsAlert = GF_FireAlert("GIEMA", Symbol + " turning down" , true );
+		if AlertCross and AlertIfImminent = 1 and PctDiff <= ImminentPercentageMax Then
+			IsAlert = GF_FireAlert("GIEMA", Symbol + " Imminent EMA cross" , true ) 
+		else if AlertCross and High cross Over AvgExp then
+			IsAlert = GF_FireAlert("GIEMA", Symbol + " Cross over EMA" , true ) 
+		else if AlertCross and Low cross Under AvgExp then
+			IsAlert = GF_FireAlert("GIEMA", Symbol + " Cross under EMA" , true );
+	end;
+end;
+
+
+{ ** Copyright © TradeStation Technologies, Inc.  All Rights Reserved ** 
+  ** TradeStation reserves the right to modify or overwrite this analysis technique 
+     with each release. ** }

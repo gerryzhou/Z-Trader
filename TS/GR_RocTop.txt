@@ -35,7 +35,8 @@ variables:
 	TimeFirsBarSession(TimeOpen),
 	int AvgVol(0),
 	double DayHi(999999),
-	double DayLo(-999999);
+	double DayLo(-999999),
+	bool IsAlert(false);
 	
 Value1 = RateOfChange(Close, RocLenPrice) ;
 Plot1( Value1, "RocP" ) ;
@@ -69,12 +70,15 @@ Condition1 = FALSE ;
 
 if EnableAlert and Close >= PriceMin then Begin
 	if Close cross Over Dailyhigh then Begin
-		Print(Symbol, ": Breakout UP- ", Close, ",", DayHi);
-		Alert( "Breakout UP! RocP=" + Numtostr(Value1,2) + ", RocV=" + Numtostr(Value2,2) ) ;
+		//Print(Symbol, ": Breakout UP- ", Close, ",", DayHi);
+		IsAlert = GF_FireAlert("GR_RocTop", 
+		Symbol + " Breakout UP DayHi=" + Numtostr(DayHi, 2) + Newline
+		+ ", RocP=" + Numtostr(Value1,2) + ", RocV=" + Numtostr(Value2,2), true ) ;
 	End;
 	if Close cross Under Dailylow then Begin
-		Print(Symbol, ": Breakout DOWN- ", Close, ",", DayLo);
-		Alert( "Breakout DOWN! RocP=" + Numtostr(Value1,2) + ", RocV=" + Numtostr(Value2,2) ) ;
+		IsAlert = GF_FireAlert("GR_RocTop", 
+		Symbol + " Breakout DOWN DayLo=" + Numtostr(DayLo, 2) + Newline
+		+ ", RocP=" + Numtostr(Value1,2) + ", RocV=" + Numtostr(Value2,2), true ) ;		
 	End;
 	
 End;
