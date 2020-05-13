@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Vertical Line</Title>
+			<Shortcut>dv</Shortcut>
+			<Description>Plots a vertical line on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyVerticalLine"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>barsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>brush</ID>
+					<Default>Brushes.Blue</Default>
+					<ToolTip>Brush for vertical line</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.VerticalLine(this, $tag$, $barsAgo$, $brush$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

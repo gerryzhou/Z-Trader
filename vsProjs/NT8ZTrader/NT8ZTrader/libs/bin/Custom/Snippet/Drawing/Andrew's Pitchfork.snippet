@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Andrew's Pitchfork</Title>
+			<Shortcut>dap</Shortcut>
+			<Description>Plots an Andrew's Pitchfork on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyAndrewsPitchfork"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isAutoScale</ID>
+					<Default>false</Default>
+					<ToolTip>If true, the drawing tool will call CalculateMinMax() in order to determine the drawing tool's MinValue and MaxValue value used to scale the Y-axis of the chart.</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor1BarsAgo</ID>
+					<Default>10</Default>
+					<ToolTip>Number of bars ago for anchor 1</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor1Y</ID>
+					<Default>Close[10]</Default>
+					<ToolTip>y-Axis value for anchor 1</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor2BarsAgo</ID>
+					<Default>5</Default>
+					<ToolTip>Number of bars ago for anchor 2</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor2Y</ID>
+					<Default>High[5]</Default>
+					<ToolTip>y-Axis value for anchor 2</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor3BarsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago for anchor 3</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor3Y</ID>
+					<Default>Low[5]</Default>
+					<ToolTip>y-Axis value for anchor 3</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>brush</ID>
+					<Default>Brushes.Blue</Default>
+					<ToolTip>Brush for Andrew's Pitchfork</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>dashStyleHelper</ID>
+					<Default>DashStyleHelper.Solid</Default>
+					<ToolTip>Dash style for Andrew's Pitchfork</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>width</ID>
+					<Default>1</Default>
+					<ToolTip>Width for Andrew's Pitchfork</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.AndrewsPitchfork(this, $tag$, $isAutoScale$, $anchor1BarsAgo$, $anchor1Y$, $anchor2BarsAgo$, $anchor2Y$, $anchor3BarsAgo$, $anchor3Y$, $brush$, $dashStyleHelper$, $width$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <section name="unity" type="Microsoft.Practices.Unity.Configuration.UnityConfigurationSection,
+                                CQG.NinjaTrader.API, Version=2.0.414.0"/>
+  </configSections>
+
+  <unity>
+
+    <sectionExtension type="CQG.Trader.Core.ComponentFramework.XmlConfigurationUnityExtension, CQG.NinjaTrader.API" />
+    <sectionExtension type="CQG.Trader.DataAccess.Network.Unicaster.Configuration.UnicasterConfigurationUnityExtension, CQG.NinjaTrader.API" />
+
+    <typeAliases>
+      <!-- Lifetime managerss -->
+      <typeAlias alias="singleton" type="Microsoft.Practices.Unity.ContainerControlledLifetimeManager, CQG.NinjaTrader.API" />
+
+      <!-- Interfaces -->
+      <typeAlias alias="ILogger" type="CQG.Trader.Core.Logger.ILogger, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IUnicasterFramework" type="CQG.Trader.DataAccess.Network.Unicaster.IUnicasterFramework, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ISessionManager" type="CQG.Trader.DataAccess.SessionManager.ISessionManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IAuthServiceProxy" type="CQG.Trader.DataAccess.SessionManager.LoginServices.AuthService.IAuthServiceProxy, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IAuthServiceWrapper" type="CQG.Trader.DataAccess.SessionManager.LoginServices.AuthService.IAuthServiceWrapper, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IConnectionStatusMonitor" type="CQG.Trader.DataAccess.SessionManager.ConnectionState.IConnectionStatusMonitor, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ISCWebService" type="CQG.Trader.DataAccess.SessionManager.LoginServices.SmartClientwebService.ISCWebService, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IImsSession" type="CQG.Trader.DataAccess.IMS.IImsSession, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IDataServerSession" type="CQG.Trader.DataAccess.DataServer.IDataServerSession, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IDataLineParserFactory" type="CQG.Trader.DataAccess.DataServer.IDataLineParserFactory, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ILogicalSession" type="CQG.Trader.DataAccess.SessionManager.Session.ILogicalSession, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IFeatureEnablementsManager" type="CQG.Trader.DataAccess.SessionManager.FeatureEnablement.IFeatureEnablementsManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IInstrumentManager" type="CQG.Trader.Domain.Instruments.InstrumentManager.IInstrumentManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ISubscriptionManager" type="CQG.Trader.Domain.Instruments.Subscription.ISubscriptionManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IMetadataAccess" type="CQG.Trader.Domain.Instruments.Data.Metadata.IMetadataAccess, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ISymbolEnablementProvider" type="CQG.Trader.Domain.Instruments.SymbolEnablement.ISymbolEnablementProvider, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IOrderEnablementProvider" type="CQG.Trader.Domain.OrderRouting.OrderEnablement.IOrderEnablementProvider, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ITimeManager" type="CQG.Trader.Domain.Instruments.TimeManager.ITimeManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IGatewaySession" type="CQG.Trader.DataAccess.Gateway.IGatewaySession, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IAccountManager" type="CQG.Trader.Domain.OrderRouting.Account.IAccountManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IOrderManager" type="CQG.Trader.Domain.OrderRouting.Order.IOrderManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IQueryManager" type="CQG.Trader.Domain.OrderRouting.Queries.IQueryManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IGatewayTransformer" type="CQG.Trader.DataAccess.Gateway.IGatewayTransformer, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IManualFillsAdapter" type="CQG.Trader.Domain.OrderRouting.TradeMatching.IManualFillsAdapter, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IOrderRoutingSettings" type="CQG.Trader.Domain.OrderRouting.Utility.IOrderRoutingSettings, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IInstrumentParser" type="CQG.Trader.DataAccess.DataServer.IInstrumentParser, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IGatewayAuthentificationManager" type="CQG.Trader.DataAccess.Gateway.GatewayAuthentificationManager.IGatewayAuthentificationManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IUENameProvider" type="CQG.Trader.DataAccess.Gateway.Protocol.UEName.IUENameProvider, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IOrderNotificationMonitor" type="CQG.Trader.Domain.OrderRouting.Order.NotificationPreferences.IOrderNotificationMonitor, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IPositionManager" type="CQG.Trader.Domain.OrderRouting.Position.IPositionManager, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IMarginProvider" type="CQG.Trader.Domain.OrderRouting.Margins.IMarginProvider, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IThrottleTimerFactory" type="CQG.Trader.Core.Utility.IThrottleTimerFactory, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IUnitsValuesProvider" type="CQG.Trader.Domain.Instruments.Units.IUnitsValuesProvider, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IEnvironmentChangeMediator" type="CQG.Trader.Domain.OrderRouting.EnvironmentChange.IEnvironmentChangeMediator, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IEnvironmentChangeProcessor" type="CQG.Trader.Domain.OrderRouting.EnvironmentChange.IEnvironmentChangeProcessor, CQG.NinjaTrader.API"/>
+      <typeAlias alias="IAccountAuthorizationNotifier" type="CQG.Trader.Domain.OrderRouting.Account.IAccountAuthorizationNotifier, CQG.NinjaTrader.API"/>
+
+
+      <!-- Components -->
+      <typeAlias alias="Logger" type="CQG.Trader.Core.Logger.Log4NetWrapperLoggerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="UnicasterFramework" type="CQG.Trader.DataAccess.Network.Unicaster.UnicasterFramework, CQG.NinjaTrader.API"/>
+      <typeAlias alias="SessionManager" type="CQG.Trader.DataAccess.SessionManager.SessionManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="AuthServiceProxy" type="CQG.Trader.DataAccess.SessionManager.LoginServices.AuthService.AuthServiceProxyImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="AuthServiceWrapper" type="CQG.Trader.DataAccess.SessionManager.LoginServices.AuthService.AuthServiceWrapperImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ConnectionStatusMonitor" type="CQG.Trader.DataAccess.SessionManager.ConnectionState.ConnectionStatusMonitorImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="SCWebService" type="CQG.Trader.DataAccess.SessionManager.LoginServices.SmartClientwebService.SCWebServiceImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ImsSession" type="CQG.Trader.DataAccess.IMS.ImsSessionImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="DataServerSession" type="CQG.Trader.DataAccess.DataServer.DataServerSessionImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="DataLineParserFactory" type="CQG.Trader.DataAccess.DataServer.DataLineParserFactory, CQG.NinjaTrader.API"/>
+      <typeAlias alias="FeatureEnablementsManager" type="CQG.Trader.DataAccess.SessionManager.FeatureEnablement.FeatureEnablementsManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="InstrumentManager" type="CQG.Trader.Domain.Instruments.InstrumentManager.InstrumentManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="SubscriptionManager" type="CQG.Trader.Domain.Instruments.Subscription.ClientSubscriptionManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="MetadataAccess" type="CQG.Trader.Domain.Instruments.Data.Metadata.ClientMetadataAccessImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="TimeManager" type="CQG.Trader.Domain.Instruments.TimeManager.TimeManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="GatewaySessionImpl" type="CQG.Trader.DataAccess.Gateway.GatewaySessionImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="OrderEnablementProviderImpl" type="CQG.Trader.Domain.OrderRouting.OrderEnablement.OrderEnablementProviderImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="AccountManagerImpl" type="CQG.Trader.Domain.OrderRouting.Account.AccountManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="OrderManagerImpl" type="CQG.Trader.Domain.OrderRouting.Order.OrderManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="QueryManagerImpl" type="CQG.Trader.Domain.OrderRouting.Queries.QueryManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="GatewayTransformerImpl" type="CQG.Trader.DataAccess.Gateway.XmlTransformerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ManualFillsAdapterStub" type="CQG.Trader.Domain.OrderRouting.TradeMatching.ManualFillsAdapterStub, CQG.NinjaTrader.API"/>
+      <typeAlias alias="OrderRoutingSettingsStub" type="CQG.Trader.Domain.OrderRouting.Utility.OrderRoutingSettingsStub, CQG.NinjaTrader.API"/>
+      <typeAlias alias="InstrumentParserImpl" type="CQG.Trader.Domain.Instruments.InstrumentManager.InstrumentParserImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="GatewayAuthentificationManagerImpl" type="CQG.Trader.DataAccess.Gateway.GatewayAuthentificationManager.GatewayAuthentificationManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ApiUENameProvider" type="CQG.Trader.DataAccess.Gateway.Protocol.UEName.ApiUENameProvider, CQG.NinjaTrader.API"/>
+      <typeAlias alias="OrderNotificationMonitor" type="CQG.Trader.Domain.OrderRouting.Order.NotificationPreferences.OrderNotificationMonitorStub, CQG.NinjaTrader.API"/>
+      <typeAlias alias="PositionManagerImpl" type="CQG.Trader.Domain.OrderRouting.Position.PositionManagerImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="MarginProviderImpl" type="CQG.Trader.Domain.OrderRouting.Margins.MarginProviderImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="ThrottleTimerFactoryImpl" type="CQG.Trader.Core.Utility.ThrottleTimerFactoryImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="UnitsValuesProviderImpl" type="CQG.Trader.Domain.Instruments.Units.UnitsValuesProviderImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="EnvironmentChangeMediatorImpl" type="CQG.Trader.Domain.OrderRouting.EnvironmentChange.EnvironmentChangeMediatorImpl, CQG.NinjaTrader.API"/>
+      <typeAlias alias="AccountAuthorizationNotifier" type="CQG.Trader.Domain.OrderRouting.Account.AccountAuthorizationNotifierStub, CQG.NinjaTrader.API"/>
+
+
+      <!-- Service interfaces -->
+      <typeAlias alias="runnable" type="CQG.Trader.Core.ComponentFramework.IRunnableComponent, CQG.NinjaTrader.API"/>
+
+      <typeAlias alias="IPathProvider" type="CQG.Trader.Core.ComponentFramework.IPathProvider, CQG.NinjaTrader.API"/>
+      <typeAlias alias="PathProviderImpl" type="CQG.Trader.Core.ComponentFramework.CommonPathProvider, CQG.NinjaTrader.API"/>
+
+      <!-- Parameter types-->
+      <typeAlias alias="strings" type="System.String[], mscorlib"/>
+      <typeAlias alias="unicaster-channels" type="CQG.Trader.DataAccess.Network.Unicaster.Configuration.UnicasterConfigurationSection, CQG.NinjaTrader.API"/>
+    </typeAliases>
+
+    <containers>
+      <container>
+        <types>
+
+          <!-- Unicaster -->
+          <type name="Unicaster" type="IUnicasterFramework" mapTo="UnicasterFramework">
+            <lifetime type="singleton" />
+          </type>
+          <type name="Unicaster" type="runnable" mapTo="UnicasterFramework">
+            <lifetime type="singleton" />
+            <constructor>
+              <param name="channels" type="unicaster-channels">
+                <!-- Place configuration section here -->
+                <unicaster>
+                  <parameters>
+                    <!--parameter name="ParamName" value="ParamValue"/-->
+                    <parameter name="SSL_CL" value="MEDIUM:LOW:!ADH:!eNULL:!aNULL"/>
+                  </parameters>
+                  <!-- channel name="Name" remotehost="RemoteHost" port="2823" targetsubsystem="21" compressed="false" secure="true"-->
+                  <!-- failover remotehost="RemoteHost" port="2823" targetsubsystem="21" compressed="false" secure="true"/-->
+                  <!--/channel-->
+                </unicaster>
+              </param>
+              <param name="pathProvider" type="IPathProvider"/>
+            </constructor>
+          </type>
+
+          <!-- Logger -->
+          <type name ="Logger" type="ILogger" mapTo="Logger">
+            <lifetime type="singleton" />
+            <constructor>
+              <param name="configFile" type="System.String">
+                <value value=".\Log4NetConfig.xml"/>
+              </param>
+              <param name="pathProvider" type="IPathProvider">
+                <dependency/>
+              </param>
+            </constructor>
+          </type>
+
+          <type name="SessionManager" type="ISessionManager" mapTo="SessionManager">
+            <lifetime type="singleton" />
+          </type>
+          <type name="SessionManager" type="runnable" mapTo="SessionManager">
+            <lifetime type="singleton" />
+          </type>
+
+          <type name="AuthServiceProxy" type="IAuthServiceProxy" mapTo="AuthServiceProxy">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Auth Service Wrapper-->
+          <type name="AuthServiceWrapper" type="IAuthServiceWrapper" mapTo="AuthServiceWrapper">
+            <lifetime type="singleton" />
+            <constructor>
+              <param name="urlList" type="strings">
+                <array>
+                  <!-- value value = "http://" -->
+                </array>
+              </param>
+            </constructor>
+          </type>
+
+          <!-- Smart Client Web Service -->
+          <type name="SCWebService" type="ISCWebService" mapTo="SCWebService">
+            <lifetime type="singleton" />
+            <constructor>
+              <param name="urlList" type="strings">
+                <array>
+                  <!-- value value = "http://" -->
+                </array>
+              </param>
+              <param name="urlDemoList" type="strings">
+                <array>
+                  <!-- value value = "http://" -->
+                </array>
+              </param>
+            </constructor>
+          </type>
+          <type name="SCWebService" type="runnable" mapTo="SCWebService">
+            <lifetime type="singleton" />
+          </type>
+
+          <type name="SCWebService" type="runnable" mapTo="SCWebService">
+            <lifetime type="singleton" />
+          </type>
+
+          <type name="ConnectionStatusMonitor" type="IConnectionStatusMonitor" mapTo="ConnectionStatusMonitor">
+            <lifetime type="singleton" />
+          </type>
+          <type name ="ConnectionStatusMonitor" type="runnable" mapTo="ConnectionStatusMonitor">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- IMS session -->
+          <type name ="ImsSession" type="IImsSession" mapTo="ImsSession">
+            <lifetime type="singleton" />
+          </type>
+          <type name ="ImsSession" type="ILogicalSession" mapTo="ImsSession">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Data Server session -->
+          <type name ="DataServerSession" type="IDataServerSession" mapTo="DataServerSession">
+            <lifetime type="singleton" />
+          </type>
+          <type name ="DataServerSession" type="ILogicalSession" mapTo="DataServerSession">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Feature enablement manager -->
+          <type name ="FeatureEnablementsManager" type="IFeatureEnablementsManager" mapTo="FeatureEnablementsManager">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Dataline parser factory -->
+          <type name ="DataLineParserFactory" type="IDataLineParserFactory" mapTo="DataLineParserFactory">
+            <lifetime type="singleton" />
+          </type>
+          <type name ="DataLineParserFactory" type="runnable" mapTo="DataLineParserFactory">
+            <lifetime type="singleton" />
+          </type>
+
+          <type name="MetadataAccess" type="IMetadataAccess" mapTo="MetadataAccess">
+            <lifetime type="singleton" />
+          </type>
+          <type name ="MetadataAccess" type="runnable" mapTo="MetadataAccess">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Order and Symbol enablement provider. Are implemented by the same class -->
+          <type name="EnablementProvider" type="ISymbolEnablementProvider" mapTo="OrderEnablementProviderImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="EnablementProvider" type="IOrderEnablementProvider" mapTo="OrderEnablementProviderImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="EnablementProvider" type="runnable" mapTo="OrderEnablementProviderImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Instrument Manager -->
+          <type name="InstrumentManager" type="IInstrumentManager" mapTo="InstrumentManager">
+            <lifetime type="singleton" />
+          </type>
+          <type name="InstrumentManager" type="runnable" mapTo="InstrumentManager">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Subscription Manager -->
+          <type name="SubscriptionManager" type="ISubscriptionManager" mapTo="SubscriptionManager">
+            <lifetime type="singleton" />
+          </type>
+          <type name="SubscriptionManager" type="runnable" mapTo="SubscriptionManager">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Time Manager -->
+          <type name="TimeManager" type="ITimeManager" mapTo="TimeManager">
+            <lifetime type="singleton" />
+          </type>
+          <type name="TimeManager" type="runnable" mapTo="TimeManager">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Mock Gateway Data Provider -->
+          <type name="GatewaySession" type="IGatewaySession" mapTo="GatewaySessionImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name ="GatewaySession" type="ILogicalSession" mapTo="GatewaySessionImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Account Manager -->
+          <type name="AccountManager" type="IAccountManager" mapTo="AccountManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="AccountManager" type="IEnvironmentChangeProcessor" mapTo="AccountManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="AccountManager" type="runnable" mapTo="AccountManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Order Manager -->
+          <type name="OrderManager" type="IOrderManager" mapTo="OrderManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="OrderManager" type="IEnvironmentChangeProcessor" mapTo="OrderManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="OrderManager" type="runnable" mapTo="OrderManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Environment Change Mediator -->
+          <type name="EnvironmentChangeMediator" type="IEnvironmentChangeMediator" mapTo="EnvironmentChangeMediatorImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="EnvironmentChangeMediator" type="runnable" mapTo="EnvironmentChangeMediatorImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- UE Name Provider -->
+          <type name="UENameProvider" type="IUENameProvider" mapTo="ApiUENameProvider">
+            <lifetime type="singleton" />
+            <constructor>
+              <!-- This value must be 3 latin alphabetic characters in upercase or empty string -->
+              <param name="ueApplicationNamePrefix" type="System.String">
+                <value value = "" />
+              </param>
+            </constructor>
+          </type>
+
+          <!-- Query Manager -->
+          <type name="QueryManager" type="IQueryManager" mapTo="QueryManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="QueryManager" type="runnable" mapTo="QueryManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Gateway Messages Transformer-->
+          <type name="GatewayTransformer" type="IGatewayTransformer" mapTo="GatewayTransformerImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Instrument Parser -->
+          <type name="InstrumentParser" type="IInstrumentParser" mapTo="InstrumentParserImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!--Gateway Authentification Manager-->
+          <type name ="GatewayAuthentificationManager" type="IGatewayAuthentificationManager" mapTo="GatewayAuthentificationManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Order Notification Monitor-->
+          <type name ="OrderNotificationMonitor" type="IOrderNotificationMonitor" mapTo="OrderNotificationMonitor">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Position Manager -->
+          <type name ="PositionManager" type="IPositionManager" mapTo="PositionManagerImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Account Authorization Notifier -->
+          <type name ="AccountAuthorizationNotifier" type="IAccountAuthorizationNotifier" mapTo="AccountAuthorizationNotifier">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Margin provider -->
+          <type name="MarginProvider" type="runnable" mapTo="MarginProviderImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="MarginProvider" type="IEnvironmentChangeProcessor" mapTo="MarginProviderImpl">
+            <lifetime type="singleton" />
+          </type>
+          <type name="MarginProvider" type="IMarginProvider" mapTo="MarginProviderImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- ThrottleTimer Factory -->
+          <type name ="ThrottleTimerFactory" type="IThrottleTimerFactory" mapTo="ThrottleTimerFactoryImpl">
+            <lifetime type="singleton" />
+          </type>
+
+          <!-- Manual Fills Adapter -->
+          <type name="ManualFillsAdapter" type="IManualFillsAdapter" mapTo="ManualFillsAdapterStub"/>
+          <!-- Order Routing Settings -->
+          <type name="OrderRoutingSettings" type="IOrderRoutingSettings" mapTo="OrderRoutingSettingsStub"/>
+
+          <!-- Path settings for logging and preferences -->
+          <type type="IPathProvider" mapTo="PathProviderImpl">
+            <lifetime type="singleton"/>
+            <constructor>
+              <param name="logFilesFolderTemplate" type="System.String">
+                <value value="[MyDocuments]/NinjaTrader 8/trace"/>
+              </param>
+              <param name="settingsFolderTemplate" type="System.String">
+                <value value="[LocalApplicationData]\[Organization]\[ApplicationName]\"/>
+              </param>
+            </constructor>
+          </type>
+
+          <!-- Units provider -->
+          <type name="UnitsValuesProvider" type="IUnitsValuesProvider" mapTo="UnitsValuesProviderImpl">
+            <lifetime type="singleton" />
+          </type>
+
+        </types>
+      </container>
+    </containers>
+  </unity>
+</configuration>

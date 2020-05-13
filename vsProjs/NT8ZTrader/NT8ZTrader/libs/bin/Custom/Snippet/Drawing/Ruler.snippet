@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Ruler</Title>
+			<Shortcut>dru</Shortcut>
+			<Description>Plots a ruler on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyRuler"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isAutoScale</ID>
+					<Default>true</Default>
+					<ToolTip>If true, the drawing tool will call CalculateMinMax() in order to determine the drawing tool's MinValue and MaxValue value used to scale the Y-axis of the chart.</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>startBarsAgo</ID>
+					<Default>4</Default>
+					<ToolTip>Number of bars ago for start</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yStart</ID>
+					<Default>Low[4]</Default>
+					<ToolTip>y-Axis value for entry start</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>endBarsAgo</ID>
+					<Default>3</Default>
+					<ToolTip>Number of bars ago for end</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yEnd</ID>
+					<Default>High[3]</Default>
+					<ToolTip>y-Axis value for end point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>textBarsAgo</ID>
+					<Default>1</Default>
+					<ToolTip>Number of bars ago for text</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yText</ID>
+					<Default>Low[3]</Default>
+					<ToolTip>y-Axis value for end text</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.Ruler(this, $tag$, $isAutoScale$, $startBarsAgo$, $yStart$, $endBarsAgo$, $yEnd$, $textBarsAgo$, $yText$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

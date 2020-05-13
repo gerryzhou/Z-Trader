@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Region</Title>
+			<Shortcut>dre</Shortcut>
+			<Description>Plots a region on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyRegion"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>startBarsAgo</ID>
+					<Default>CurrentBar</Default>
+					<ToolTip>Number of bars ago for start</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>endBarsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago for end</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>series1</ID>
+					<Default>Bollinger(2, 14).Upper</Default>
+					<ToolTip>Series for top of region</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>series2</ID>
+					<Default>Bollinger(2, 14).Lower</Default>
+					<ToolTip>Series for bottom of region</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>outlineBrush</ID>
+					<Default>Brushes.Green</Default>
+					<ToolTip>Brush for region outline</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>areaBrush</ID>
+					<Default>Brushes.Blue</Default>
+					<ToolTip>Brush for region area</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>areaOpacity</ID>
+					<Default>50</Default>
+					<ToolTip>Opacity for area</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.Region(this, $tag$, $startBarsAgo$, $endBarsAgo$, $series1$, $series2$, $outlineBrush$, $areaBrush$, $areaOpacity$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

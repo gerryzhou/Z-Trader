@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>OnCalculateMinMax</Title>
+      <Author>5280</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>minmax</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="false">
+          <ID>OnCalculateMinMax</ID>
+          <ToolTip>Called when the chart scale is updated.</ToolTip>
+          <Default>
+          </Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[public override void OnCalculateMinMax()
+		{
+			// It is important to set MinValue and MaxValue to the min/max Y values your drawing tool uses if you want it to support auto scale
+		}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

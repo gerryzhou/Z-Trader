@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Arc</Title>
+			<Shortcut>da</Shortcut>
+			<Description>Plots an arc on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyArc"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isAutoScale</ID>
+					<Default>false</Default>
+					<ToolTip>If true, the drawing tool will call CalculateMinMax() in order to determine the drawing tool's MinValue and MaxValue value used to scale the Y-axis of the chart.</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>startBarsAgo</ID>
+					<Default>10</Default>
+					<ToolTip>Number of bars ago for start</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yStart</ID>
+					<Default>Close[10]</Default>
+					<ToolTip>y-Axis value for start</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>endBarsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago for end</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yEnd</ID>
+					<Default>Close[0]</Default>
+					<ToolTip>y-Axis value for end</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>brush</ID>
+					<Default>Brushes.LimeGreen</Default>
+					<ToolTip>Brush for arc</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>dashStyleHelper</ID>
+					<Default>DashStyleHelper.Dot</Default>
+					<ToolTip>Dash style for arc</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>width</ID>
+					<Default>2</Default>
+					<ToolTip>Width for arc</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.Arc(this, $tag$, $isAutoScale$, $startBarsAgo$, $yStart$, $endBarsAgo$, $yEnd$, $brush$, $dashStyleHelper$, $width$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

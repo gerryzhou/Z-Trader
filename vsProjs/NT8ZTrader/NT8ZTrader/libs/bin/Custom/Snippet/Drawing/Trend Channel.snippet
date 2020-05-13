@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Trend Channel</Title>
+			<Shortcut>dtc</Shortcut>
+			<Description>Plots a Trend Channel on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyTrendChannel"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isAutoScale</ID>
+					<Default>true</Default>
+					<ToolTip>If true, the drawing tool will call CalculateMinMax() in order to determine the drawing tool's MinValue and MaxValue value used to scale the Y-axis of the chart.</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor1BarsAgo</ID>
+					<Default>10</Default>
+					<ToolTip>Number of bars ago for anchor 1</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor1Y</ID>
+					<Default>Low[10]</Default>
+					<ToolTip>y-Axis value for anchor 1</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor2BarsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago for anchor 2</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor2Y</ID>
+					<Default>High[0]</Default>
+					<ToolTip>y-Axis value for anchor 2</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor3BarsAgo</ID>
+					<Default>10</Default>
+					<ToolTip>Number of bars ago for anchor 3</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>anchor3Y</ID>
+					<Default>High[10] + 5 * TickSize</Default>
+					<ToolTip>y-Axis value for anchor 3</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.TrendChannel(this, $tag$, $isAutoScale$, $anchor1BarsAgo$, $anchor1Y$, $anchor2BarsAgo$, $anchor2Y$, $anchor3BarsAgo$, $anchor3Y$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

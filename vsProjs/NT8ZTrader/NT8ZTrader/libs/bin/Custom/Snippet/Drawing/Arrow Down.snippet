@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Arrow Down</Title>
+			<Shortcut>dd</Shortcut>
+			<Description>Plots a down arrow on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyArrowDown"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isAutoScale</ID>
+					<Default>false</Default>
+					<ToolTip>If true, the drawing tool will call CalculateMinMax() in order to determine the drawing tool's MinValue and MaxValue value used to scale the Y-axis of the chart.</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>barsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>y</ID>
+					<Default>High[0]</Default>
+					<ToolTip>y-Axis value</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>brush</ID>
+					<Default>Brushes.Red</Default>
+					<ToolTip>Brush for arrow down</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.ArrowDown(this, $tag$, $isAutoScale$, $barsAgo$, $y$, $brush$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

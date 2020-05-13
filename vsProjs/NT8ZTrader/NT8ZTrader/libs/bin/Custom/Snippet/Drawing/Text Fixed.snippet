@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Text Fixed</Title>
+			<Shortcut>dxf</Shortcut>
+			<Description>Plots fixed text on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyTextFixed"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>text</ID>
+					<Default>"Text to draw"</Default>
+					<ToolTip>The text to be drawn</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>position</ID>
+					<Default>TextPosition.TopRight</Default>
+					<ToolTip>The position of the text</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.TextFixed(this, $tag$, $text$, $position$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

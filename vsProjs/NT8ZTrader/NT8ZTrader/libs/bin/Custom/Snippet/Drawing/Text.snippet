@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Text</Title>
+			<Shortcut>dx</Shortcut>
+			<Description>Plots a text on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyText"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>text</ID>
+					<Default>"Sample text"</Default>
+					<ToolTip>text</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>barsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>y</ID>
+					<Default>High[0] + 2 * TickSize</Default>
+					<ToolTip>y-Axis value</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>brush</ID>
+					<Default>Brushes.Blue</Default>
+					<ToolTip>Brush for dot</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.Text(this, $tag$, $text$, $barsAgo$, $y$, $brush$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

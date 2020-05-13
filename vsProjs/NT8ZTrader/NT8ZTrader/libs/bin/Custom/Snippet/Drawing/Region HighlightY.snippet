@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Region Highlight Y</Title>
+			<Shortcut>dry</Shortcut>
+			<Description>Plots a Region Highlight Y on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyRegionHighlightY"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yStart</ID>
+					<Default>High[0]</Default>
+					<ToolTip>y-Axis value for start point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yEnd</ID>
+					<Default>Low[0]</Default>
+					<ToolTip>y-Axis value for end point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>brush</ID>
+					<Default>Brushes.Blue</Default>
+					<ToolTip>Brush for outline</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>areaBrush</ID>
+					<Default>Brushes.Green</Default>
+					<ToolTip>Brush for area</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>opacity</ID>
+					<Default>20</Default>
+					<ToolTip>Opacity</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.RegionHighlightY(this, $tag$, $yStart$, $yEnd$, $brush$, $areaBrush$, $opacity$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

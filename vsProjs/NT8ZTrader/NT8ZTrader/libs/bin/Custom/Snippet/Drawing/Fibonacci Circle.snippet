@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Fibonacci Circle</Title>
+			<Shortcut>dfc</Shortcut>
+			<Description>Plots Fibonacci circle on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyFibonacciCircle"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isAutoScale</ID>
+					<Default>true</Default>
+					<ToolTip>If true, the drawing tool will call CalculateMinMax() in order to determine the drawing tool's MinValue and MaxValue value used to scale the Y-axis of the chart.</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>barsAgoStart</ID>
+					<Default>10</Default>
+					<ToolTip>Number of bars ago for start point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yStart</ID>
+					<Default>Close[10]</Default>
+					<ToolTip>y-Axis value for start point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>barsAgoEnd</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago for end point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yEnd</ID>
+					<Default>Close[0]</Default>
+					<ToolTip>y-Axis value for end point</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.FibonacciCircle(this, $tag$, $isAutoScale$, $barsAgoStart$, $yStart$, $barsAgoEnd$, $yEnd$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

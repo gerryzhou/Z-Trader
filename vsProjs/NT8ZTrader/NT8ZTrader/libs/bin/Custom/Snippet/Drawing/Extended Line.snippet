@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Extended Line</Title>
+			<Shortcut>di</Shortcut>
+			<Description>Plots an extended line on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyExtendedLine"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>barsAgoStart</ID>
+					<Default>10</Default>
+					<ToolTip>Number of bars ago for start point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yStart</ID>
+					<Default>Close[10]</Default>
+					<ToolTip>y-Axis value for start point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>barsAgoEnd</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago for end point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yEnd</ID>
+					<Default>Close[0]</Default>
+					<ToolTip>y-Axis value for endpoint</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>brush</ID>
+					<Default>Brushes.Blue</Default>
+					<ToolTip>Brush for dot</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.ExtendedLine(this, $tag$, $barsAgoStart$, $yStart$, $barsAgoEnd$, $yEnd$, $brush$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

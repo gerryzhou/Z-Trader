@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Risk Reward</Title>
+			<Shortcut>drr</Shortcut>
+			<Description>Plots a Risk Reward on the chart</Description>
+			<Author>NinjaTrader, LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>tag</ID>
+					<Default>"MyRiskReward"</Default>
+					<ToolTip>tag</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isAutoScale</ID>
+					<Default>false</Default>
+					<ToolTip>If true, the drawing tool will call CalculateMinMax() in order to determine the drawing tool's MinValue and MaxValue value used to scale the Y-axis of the chart.</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>entryBarsAgo</ID>
+					<Default>0</Default>
+					<ToolTip>Number of bars ago for entry</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yEntry</ID>
+					<Default>High[0]</Default>
+					<ToolTip>y-Axis value for entry point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>endBarsAgo</ID>
+					<Default>10</Default>
+					<ToolTip>Number of bars ago for end</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>yEnd</ID>
+					<Default>Low[0]</Default>
+					<ToolTip>y-Axis value for end point</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>ratio</ID>
+					<Default>2</Default>
+					<ToolTip>ratio</ToolTip>
+				</Literal>
+				<Literal>
+					<ID>isStop</ID>
+					<Default>true</Default>
+					<ToolTip>Is stop</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+<![CDATA[Draw.RiskReward(this, $tag$, $isAutoScale$, $entryBarsAgo$, $yEntry$, $endBarsAgo$, $yEnd$, $ratio$, $isStop$);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
