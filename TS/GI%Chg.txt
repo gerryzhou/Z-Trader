@@ -1,6 +1,8 @@
 { Search Tag: %Chg with last Day close }
 
-{
+{TODO: find the time of peak/valley of the day;
+Use weekly close as base;
+simulation of stoploss?
 }
 using elsystem;
 using elsystem.collections;
@@ -11,17 +13,25 @@ inputs:
 	 "Enter an EasyLanguage expression to use in the percentage change calculation."], 
 	Length( 1 ) [DisplayName = "Length", ToolTip = 
 	 "Enter number of bars over which to calculate percentage change."], 
-	Hedging( -1 ) [DisplayName = "Hedging", ToolTip = 
+	Hedging1( 1 ) [DisplayName = "Hedging1", ToolTip = 
 	 "Enter 1 or -1 to identify the pair is hedging or not."], 
+	Hedging2( 1 ) [DisplayName = "Hedging2", ToolTip = 
+	 "Enter 1 or -1 to identify the pair is hedging or not."], 
+	int DataNum (2) [ DisplayName = "DataNum",
+		ToolTip = "The number of data series to trigger alert." ],
 	PctChgMALen( 10 ) [DisplayName = "PctChgMALen", ToolTip = 
 	 "Enter number of bars over which to calculate summization of PctChg."], 
 	BarsAgoHiTH( 1 ) [DisplayName = "BarsAgoHiTH", ToolTip = 
 	 "Enter number of bars over which to check Hi threshold for PctSpd."], 
 	BarsAgoLoTH( 0 ) [DisplayName = "BarsAgoLoTH", ToolTip = 
 	 "Enter number of bars over which to check Lo threshold for PctSpd."], 
-	PctCapRatio( 2.2 ) [DisplayName = "PctCapRatio", ToolTip = 
+	PctCapRatio1( 2.2 ) [DisplayName = "PctCapRatio1", ToolTip = 
 	 "Enter ratio of Data1 capital vs Data2 capital for PctChg."], 
-	PntCapRatio( 1 ) [DisplayName = "PntCapRatio", ToolTip = 
+	PctCapRatio2( 2.2 ) [DisplayName = "PctCapRatio2", ToolTip = 
+	 "Enter ratio of Data1 capital vs Data2 capital for PctChg."], 
+	PntCapRatio1( 1 ) [DisplayName = "PntCapRatio1", ToolTip = 
+	 "Enter ratio of Data1 capital vs Data2 capital for PntChg."], 
+	PntCapRatio2( 1 ) [DisplayName = "PntCapRatio2", ToolTip = 
 	 "Enter ratio of Data1 capital vs Data2 capital for PntChg."], 
 	HedgeCapRatioAdj( 0 ) [DisplayName = "CapRatioAdj", ToolTip = 
 	 "Enter adjusted ratio of CapRatio giving to Data1 VS Data2 bull wing."],
@@ -29,10 +39,6 @@ inputs:
 	 "Enter min CapRatio allowed"],
 	HedgeCapRatioMin( 0.5 ) [DisplayName = "CapRatioMin", ToolTip = 
 	 "Enter max CapRatio allowed."],
-	CapRatioTimeStart( 300 ) [DisplayName = "CapRatioTimeStart", ToolTip = 
-	 "Enter the start time HHMM to caculate the CapRatio."],
-	CapRatioTimeEnd( 810 ) [DisplayName = "CapRatioTimeEnd", ToolTip = 
-	 "Enter the end time HHMM to caculate the CapRatio."],
 	KeyRevLengthPerH( 12 ) [DisplayName = "KeyRevLengthPerH", ToolTip = 
 	 "Enter number of bars per hour over which to calculate key veversal HiLo for PctSpread."], 
 	RateOfChgLen( 5 ) [DisplayName = "RateOfChgLen", ToolTip = 
@@ -41,6 +47,8 @@ inputs:
 	 "Enter number to calculate the average rate of change by dollar amount."],
 	ShareUnit( 10 ) [DisplayName = "ShareUnit", ToolTip = 
 	 "Enter unit amount to calculate the share ratio."],
+	TimeAlert( 1025 ) [DisplayName = "TimeAlert", ToolTip = 
+	 "Time to alert."],
 	PreMktOpen( true ) [DisplayName = "PreMarketOpen", ToolTip = 
 	 "Display premarket open range."],
 	HiQAlert( 7 ) [DisplayName = "HiQAlert", ToolTip = 
@@ -62,7 +70,21 @@ inputs:
 	LoThreshold( -2 ) [DisplayName = "LoThreshold", ToolTip = 
 	 "Enter percentage amount below which an alert will be triggered.  Example:  -10."],
 	LoPrcAlert( 6000 ) [DisplayName = "LoPriceAlert", ToolTip = 
-	 "Enter price below which an alert will be triggered.  Example:  6925."],
+	 "Enter price below which an alert will be triggered.  Example: 6925."],
+	PctBaseTimeframe (0) [ DisplayName = "PctBaseTimeframe",
+		ToolTip = "The timeframe for %Chg base, 0=lastD Close, -1=lastD Open(rollover at 18:00), -2=lastW Close, 1=today open." ],
+	PctBaseRollover (1800) [ DisplayName = "PctBaseRollover",
+		ToolTip = "The time for %Chg base rollover when -1=lastD Open(rollover at 18:00)" ],
+	CapRatioTimeStart( 300 ) [DisplayName = "CapRatioTimeStart", ToolTip = 
+	 "Enter the start time HHMM to caculate the CapRatio."],
+	CapRatioTimeEnd( 810 ) [DisplayName = "CapRatioTimeEnd", ToolTip = 
+	 "Enter the end time HHMM to caculate the CapRatio."],
+	PctSpdEntryTime( 415 ) [DisplayName = "PctSpdEntryTime", ToolTip = 
+	 "Enter entry time HHMM to have the PctSpd."],
+	PctSpdExitTime( 835 ) [DisplayName = "PctSpdExitTime", ToolTip = 
+	 "Enter exit time HHMM to have the PctSpd."],
+	Printout (false) [ DisplayName = "Printout",
+		ToolTip = "Printout the console or not." ],
 	UpQColor( Cyan ) [DisplayName = "UpQColor", ToolTip = 
 	 "Enter plot color to use when percentage change is greater than HiAlert."], 
  	UpVColor( Magenta ) [DisplayName = "UpVColor", ToolTip = 
@@ -80,8 +102,10 @@ variables:
 	PctSpd( 0 ),
 	AbsSpd( 0 ),
 	HedgeCapRatio( 1 ),
-	CurPctCapRatio( PctCapRatio ),
-	CurPntCapRatio( PntCapRatio ),
+	CurPctCapRatio1( PctCapRatio1 ),
+	CurPntCapRatio1( PntCapRatio1 ),
+	CurPctCapRatio2( PctCapRatio2 ),
+	CurPntCapRatio2( PntCapRatio2 ),
 	CapRatioMaLen( 20 ),
 	ShareRatio( 0 ),
 	PctChg1( 0 ),
@@ -101,6 +125,7 @@ variables:
 	BaseData2( 0),
 	BaseData11( 0 ),
 	BaseData22( 0),
+	PrcDataN(DataNum),
 	BarNoStr(""),
 	KeyRevLowBar(-1),
 	KeyRevHighBar(-1),
@@ -112,6 +137,9 @@ variables:
 	LoAlert(0),
 	string tagSpd("%Spd"),
 	PnL(1),
+	PctSpdEn(0),
+	PctSpdEx(0),
+	PctSpdGap(0),
 	TotalBars(0),
 	TotalLoTH(0),
 	TotalHiTH(0),
@@ -123,8 +151,7 @@ variables:
 
 //Array: oCmdArray[]("");
 
-{ Status: LowBand = 0, HiTH = 1, LoTH = -1
-}
+{ Status: LowBand = 0, HiTH = 1, LoTH = -1 }
 method int SetStatus(double spd)
 variables:  int status;
 begin
@@ -151,8 +178,7 @@ begin
 	end;
 end;
 
-{ Set hedge cap ratio
-}
+{ Set hedge cap ratio}
 method void SetHedgeCapRatio()
 variables: int min, double sum1, double sum2;
 begin
@@ -189,7 +215,7 @@ begin
 	prc1= close of Data1;
 	prc2 = close of Data2;
 	if prc1 > 0 and prc2 >0 Then
-		ShareRatio = ShareUnit*prc2*CurPctCapRatio/prc1;
+		ShareRatio = ShareUnit*prc2*CurPctCapRatio1/(prc1*CurPctCapRatio2);
 	return ShareRatio;
 end;
 
@@ -209,9 +235,9 @@ begin
 		bv2 = Bigpointvalue of Data2;
 		if bv2 <> 0 and bv1 <> 0 then begin
 			if bv1 >= bv2 then
-				AbsSpd = CurPntCapRatio*PntChg1 + Hedging*bv2*PntChg2/bv1
+				AbsSpd = Hedging1*CurPntCapRatio1*PntChg1 + Hedging2*bv2*PntChg2/bv1
 			else if bv1 < bv2 Then
-				AbsSpd = CurPntCapRatio*bv1*PntChg1/bv2 + Hedging*PntChg2;
+				AbsSpd = Hedging1*CurPntCapRatio1*bv1*PntChg1/bv2 + Hedging2*PntChg2;
 		end;
 	end
 	else //if (Category = SecurityType.Future) Then
@@ -220,9 +246,9 @@ begin
 		bv2 = base2;
 		if bv2 <> 0 and bv1 <> 0 then begin
 			if bv1 >= bv2 then
-				AbsSpd = CurPntCapRatio*bv2*PntChg1/bv1 + Hedging*PntChg2
+				AbsSpd = Hedging1*CurPntCapRatio1*bv2*PntChg1/bv1 + Hedging2*PntChg2
 			else if bv1 < bv2 Then
-				AbsSpd = CurPntCapRatio*PntChg1 + Hedging*bv1*PntChg2/bv2;
+				AbsSpd = Hedging1*CurPntCapRatio1*PntChg1 + Hedging2*bv1*PntChg2/bv2;
 		end;
 	end;
 	return AbsSpd;
@@ -233,7 +259,25 @@ set percent spread
 }
 method double SetPctSpd(double pc1, double pc2)
 begin
-	PctSpd = CurPctCapRatio*pc1 + Hedging*pc2;
+	PctSpd = Hedging1*CurPctCapRatio1*pc1 + Hedging2*CurPctCapRatio2*pc2;
+	if not GF_IsIntradayBar Then Begin {Daily bar}
+		PctSpdEn = PctSpd[1];
+		PctSpdEx = PctSpd;
+		if PctSpdEn <> 0 and PctSpdEx <> 0 then
+			PctSpdGap = PctSpdEx - PctSpdEn;
+		return PctSpd;
+	End;
+	{Intraday bar }
+	if GF_FirstBarSession(PctSpdEntryTime, false) Then Begin
+		PctSpdEn = PctSpd;
+		Print(Numtostr(PctSpdEn, 2), "	", Numtostr(PctSpdEx, 2), "	", Numtostr(PctSpdGap, 2), "	",  Numtostr(PnL, 2), "	", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
+	End;
+	if GF_FirstBarSession(PctSpdExitTime, false) Then Begin
+		PctSpdEx = PctSpd;
+		if PctSpdEn <> 0 and PctSpdEx <> 0 then
+			PctSpdGap = PctSpdEx - PctSpdEn;
+		Print(Numtostr(PctSpdEn, 2), "	", Numtostr(PctSpdEx, 2), "	", Numtostr(PctSpdGap, 2), "	",  Numtostr(PnL, 2), "	", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
+	End;
 	return PctSpd;
 end;
 
@@ -247,13 +291,41 @@ begin
 	PntChg2 = prc2 - base2;
 end;
 
-{ Set capratio
-}
-method double GetBasePrice(int len)
+{ Set base price for %Chg}
+method double SetBasePrice()
 variables:  double prc;
 begin
 	prc = Close;
-	
+	if GF_IsIntradayBar then begin { ie, if tick, second or minute bars }
+		if IsBaseRolloverTime() or IsPreMktSession() then Begin
+			BaseData1 = CloseSession(1, 0) of Data1;//OpenD(0) of Data1;
+			BaseData2 = CloseSession(1, 0) of Data2;//OpenD(0) of Data2;
+		End
+		else Begin
+			BaseData1 = CloseSession(1, Length) of Data1;//OpenD(0) of Data1;
+			BaseData2 = CloseSession(1, Length) of Data2;//OpenD(0) of Data2;
+		End;
+	end
+	else Begin {Daily or higher timeframe}
+		BaseData1 = Close[Length] of Data1;
+		BaseData2 = Close[Length] of Data2;
+	end;
+	//Print("[", Date[0], ",", Time[0], "] BaseData1=", Numtostr(BaseData1, 2), ", BaseData2=", Numtostr(BaseData2, 2));
+	return prc;
+end;
+
+method double SetCurrentPrice()
+variables:  double prc;
+begin
+	prc = Close;
+	if GF_IsIntradayBar then begin { ie, if tick, second or minute bars }
+		PrcData1 = Close of Data1;
+		PrcData2 = Close of Data2;		
+	End
+	else Begin {Daily or higher timeframe}
+		PrcData1 = Open of Data1;
+		PrcData2 = Open of Data2;
+	end;
 	return prc;
 end;
 
@@ -286,7 +358,7 @@ end;
 {
 Get the spread key revesal low/high or the latest bars
 }
-method int GetPctSpdKeRevBar()
+method int GetPctSpdKeyRevBar()
 begin
 	if time >= 700 and time[1] < 700 then begin
 	if 1 = Extremes(PctSpd, 4*KeyRevLengthPerH, 1, oExtremeVal, oExtremeBar) Then
@@ -314,6 +386,48 @@ begin
 	End;
 	return -1;
 end;
+
+method void SetPctSpdColor()
+begin
+	if((PctChg1 * PctChg2) > 0) Then begin //Both are the same direction, both up or both dn, it's balanced;
+		UpColor = UpBColor;
+		DnColor = DnBColor;
+		HiAlert = HiBAlert;
+		LoAlert = LoBAlert;
+		//Print(Currentbar, "-Convergence: PctChg1, PctChg1=", PctChg1, ",", PctChg2, "  DT=", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
+		//Print("Currentbar=", Currentbar, ", PctSpd=", PctSpd, ", Symbol=", Symbol );
+		//PctSpd = 0;
+	end
+	else if(PctChg1 > 0) then Begin
+			UpColor = UpQColor;
+			DnColor = DnQColor;
+			HiAlert = HiQAlert;
+			LoAlert = LoQAlert;
+	End
+	else if(PctChg2 > 0) then Begin
+			UpColor = UpVColor;
+			DnColor = DnVColor;
+			HiAlert = HiVAlert;
+			LoAlert = LoVAlert;
+	end;
+end;
+
+{Check PnL by spd gap}
+method int CheckPnL()
+begin
+	if(currentbar > Maxbarsback) then begin //CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true) then //PctSpd > LoThreshold
+		//if(NewDaySession() or ( bartype = 2 and CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true)) then begin
+		if PctSpdGap <> 0 and ( not GF_IsIntradayBar or GF_FirstBarSession(PctSpdExitTime, false)) Then Begin
+			//PctSpdGap = PctSpd - PctSpd[1];
+			PnL = PnL[1]*(1 + PctSpdGap/100);
+			//Print(Numtostr(PctSpd, 2), ", ", Numtostr(PnL, 2), ",", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
+			Print(Numtostr(PctSpdEn, 2), "	", Numtostr(PctSpdEx, 2), "	", Numtostr(PctSpdGap, 2), "	",  Numtostr(PnL, 2), "	", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
+			return 1;
+		end;
+	end;
+	return -1;
+End;
+
 { 
 
 method bool CheckSessionOpen()
@@ -331,10 +445,10 @@ method bool NewDaySession()
 Variables: bool isTime;
 Begin
 	isTime = False;
-	if ( BarType < 2 or BarType = 14 ) then begin  //ie, if tick, second or minute bars 
+	if GF_IsIntradayBar then begin  //ie, if tick, second or minute bars 
 		if (Category = SecurityType.Stock and GF_FirstBarDay(0)) then
 			isTime = true;
-		if (Category = SecurityType.Future and GF_FirstBarSession(Sessionstarttime(0, 3))) Then Begin
+		if (Category = SecurityType.Future and GF_FirstBarSession(Sessionstarttime(0, 3), false)) Then Begin
 			isTime = true;		
 		end;
 	end;
@@ -345,7 +459,7 @@ method bool IsRegularSession()
 Variables: bool isTime;
 Begin
 	isTime = False;
-	if ( BarType < 2 or BarType = 14 ) then begin  //ie, if tick, second or minute bars 
+	if GF_IsIntradayBar then begin  //ie, if tick, second or minute bars 
 		if (Category = SecurityType.Stock and time <= 1500 and time >= 830) then
 			isTime = true;
 		if (Category = SecurityType.Future and time <= 1500 and time >= 830) Then Begin
@@ -359,7 +473,7 @@ method bool IsPostMktSession()
 Variables: bool isTime;
 Begin
 	isTime = False;
-	if ( BarType < 2 or BarType = 14 ) then begin  //ie, if tick, second or minute bars 
+	if GF_IsIntradayBar then begin  //ie, if tick, second or minute bars 
 		if (Category = SecurityType.Stock and time <= 1900 and time > 1500) then
 			isTime = true;
 		if (Category = SecurityType.Future and 
@@ -374,16 +488,30 @@ method bool IsPreMktSession()
 Variables: bool isTime;
 Begin
 	isTime = False;
-	if ( BarType < 2 or BarType = 14 ) then begin  //ie, if tick, second or minute bars 
-		if (Category = SecurityType.Stock and time < 830 and time >= 400) then
+	if GF_IsIntradayBar then begin  //ie, if tick, second or minute bars 
+		if (Category = SecurityType.Stock and time <= SessionStartTime(1,1) and time >= SessionStartTime(0,3)) then
 			isTime = true;
-		if (Category = SecurityType.Future and time < 830 and time >= 400) Then Begin
+		if (Category = SecurityType.Future and time <= SessionStartTime(1,1) and time >= 400) Then Begin
 			isTime = true;
 		end;
 	end;
 	return isTime;
 End;
 //Array_setmaxindex(oCmdArray, 1048576);
+
+method bool IsBaseRolloverTime()
+Variables: bool isTime;
+Begin
+	isTime = False;
+	if GF_IsIntradayBar then begin  //ie, if tick, second or minute bars 
+		if (Category = SecurityType.Stock and time >= PctBaseRollover) then
+			isTime = true;
+		if (Category = SecurityType.Future and time >= PctBaseRollover) Then Begin
+			isTime = true;
+		end;
+	end;
+	return isTime;
+End;
 
 if Currentbar = 1 then once Begin
 	oCmdVector = Vector.Create();
@@ -413,38 +541,15 @@ end;
 
 PrcData1 = Close of Data1;
 PrcData2 = Close of Data2;
+PrcdataN = Close of Data(DataNum);
 
-if GF_IsIntradayBar then begin { ie, if tick, second or minute bars }
-	if NewDaySession() then begin
-		Print("NewDaySession:", time);
-		PrcData1 = Open of Data1;
-		PrcData2 = Open of Data2;
-		BaseData11 = CloseD(Length+1) of Data1;
-		BaseData22 = CloseD(Length+1) of Data2;
-	End;
-	PrcData1 = Close of Data1;
-	PrcData2 = Close of Data2;
-	if IsRegularSession() or IsPostMktSession() then Begin
-		Print("IsRegularSession or IsPostMktSession:", time, ", BaseData1=", BaseData1);
-		BaseData1 = OpenD(0) of Data1;
-		BaseData2 = OpenD(0) of Data2;
-	end
-	else begin		
-		BaseData1 = CloseD(Length) of Data1;//OpenD(0) of Data1;
-		BaseData2 = CloseD(Length) of Data2;//OpenD(0) of Data2;
-		Print("IsPreMktSession:", time, ", BaseData1=", BaseData1);
-	end;
-End
-else Begin {Daily or higher timeframe}
-	PrcData1 = Open of Data1;
-	PrcData2 = Open of Data2;
-	BaseData1 = Close[Length] of Data1;
-	BaseData2 = Close[Length] of Data2;
-end;
+SetBasePrice();
+SetCurrentPrice();
+
 {BaseData1 = CloseD(Length) of Data1;
 BaseData2 = CloseD(Length) of Data2;
 }
-if(BaseData1 <> 0 and BaseData2 <> 0) then
+if(BaseData1 > 0 and BaseData2 > 0) then
 	begin
 		PctChg1 = GF_PercentChg( PrcData1, BaseData1 ) ;
 		PctChg2 = GF_PercentChg( PrcData2, BaseData2 ) ;
@@ -456,35 +561,10 @@ if(BaseData1 <> 0 and BaseData2 <> 0) then
 			PctChg22 = GF_PercentChg( PrcData2, BaseData22 ) ;
 			//PctSpd1 = CurCapRatio*PctChg11 + PctChg22;
 		end;
-		if((PctChg1 * PctChg2) > 0) Then begin //Both are the same direction, both up or both dn, it's balanced;
-			UpColor = UpBColor;
-			DnColor = DnBColor;
-			HiAlert = HiBAlert;
-			LoAlert = LoBAlert;
-			//Print(Currentbar, "-Convergence: PctChg1, PctChg1=", PctChg1, ",", PctChg2, "  DT=", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
-			//Print("Currentbar=", Currentbar, ", PctSpd=", PctSpd, ", Symbol=", Symbol );
-			//PctSpd = 0;
-		end
-		else if(PctChg1 > 0) then Begin
-				UpColor = UpQColor;
-				DnColor = DnQColor;
-				HiAlert = HiQAlert;
-				LoAlert = LoQAlert;
-		End
-		else if(PctChg2 > 0) then Begin
-				UpColor = UpVColor;
-				DnColor = DnVColor;
-				HiAlert = HiVAlert;
-				LoAlert = LoVAlert;
-		end;
+		SetPctSpdColor();
 		{if (PctChg1 <> 0) Then
 			PctRatio = Absvalue(PctChg2/PctChg1);}
-		if(currentbar > Maxbarsback) then begin //CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true) then //PctSpd > LoThreshold
-			if(NewDaySession() or ( bartype = 2 and CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true)) then begin
-				PnL = PnL*(1 + PctSpd/100);
-				//Print(Numtostr(PctSpd, 2), ", ", Numtostr(PnL, 2), ",", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
-			end;
-		end;
+		CheckPnL();
 {				Print(String.Format("{0} 	{1}		{2:MM/dd/yyyy} 	{3} 	{4}		{5}		{6}		{7}		{8}",
 					Numtostr(PctSpd, 2), Numtostr(PnL, 2), BarDateTime[0], Numtostr(PctChg1, 2), Numtostr(PrcData1, 2), Numtostr(BaseData1, 2),
 					 Numtostr(PctChg2, 2), Numtostr(CapRatio, 2), Numtostr(CurCapRatio, 2)));}
@@ -507,7 +587,7 @@ else if PctSpd < LoAlert then
 	SetPlotColor( 2, DnColor ) ;
 	
 Plot3( HedgeCapRatioAdj, !("MeanRevLine") ) ;
-Plot4( CurPctCapRatio, !( "CurPctCapRatio" ) ) ;
+Plot4( CurPctCapRatio1, !( "CurPctCapRatio1" ) ) ;
 Plot5( ShareRatio, !( "ShareRatio" ) ) ;
 SetPlotColor( 4, White ) ;
 SetPlotColor( 5, Magenta ) ;
@@ -536,7 +616,6 @@ SetPlotColor( 9, DarkGray ) ;
 SetPlotColor( 10, DarkGray ) ;
 {end;}
 
-
 if Currentbar > RateOfChgLen then Begin
 	Plot11( RateOfChgRatio, !( "RateOfChgRatio" ) ) ;
 	Plot12( RateOfChgAvg1, !( "RateOfChgAvg1" ) ) ;
@@ -546,14 +625,14 @@ if Currentbar > RateOfChgLen then Begin
 	SetPlotColor( 13, DarkGray ) ;
 end;
 
-
-Print("CurCapRatio, HedgeCapRatio = (", Numtostr(CurPctCapRatio, 3), ", ", Numtostr(HedgeCapRatio, 2), "), ", 
+if Printout then
+Print("CurCapRatio1, HedgeCapRatio = (", Numtostr(CurPctCapRatio1, 3), ", ", Numtostr(HedgeCapRatio, 2), "), ", 
 "ShareRatio = ",  Numtostr(ShareRatio, 1));
 
 
 if Currentbar > KeyRevLengthPerH then
 Begin
-	GetPctSpdKeRevBar();
+	GetPctSpdKeyRevBar();
 	if KeyRevHighBar > 0 then begin
 		SetPlotColor[KeyRevHighBar]( 1, Yellow ) ;
 		KeyRevHighBar = -1;
@@ -573,15 +652,19 @@ else if PctRatio < LoAlert then
 { alert criteria }
 if AlertEnabled then
 	begin
-	if PctSpd crosses over HiAlert then
-		Alert( !( "Bullish alert: " + Numtostr(HiAlert,2) ) )
-	else if PctSpd crosses under LoAlert then
-		Alert( !( "Bearish alert: "+  Numtostr(LoAlert,2) ) ) ;
+		if PctSpd crosses over HiAlert then
+			Alert( !( "Bullish alert: " + Numtostr(HiAlert,2) ) )
+		else if PctSpd crosses under LoAlert then
+			Alert( !( "Bearish alert: "+  Numtostr(LoAlert,2) ) ) ;
+			
+		if Time >= TimeAlert and Time[1] < TimeAlert then
+			Alert( !( "Timeout alert: " + Numtostr(TimeAlert,0) ) );
+
+		if PrcDataN crosses over HiPrcAlert then
+			Alert( !( Symbol of Data(DataNum) + "- Price UP alert: " + Numtostr(HiPrcAlert,2) ) )
+		else if PrcDataN crosses under LoPrcAlert then
+			Alert( !( Symbol of Data(DataNum) + "- Price DOWN alert: " + Numtostr(LoPrcAlert,2) ) ) ;
 		
-	if Close crosses over HiPrcAlert then
-		Alert( !( "Price up alert: " + Numtostr(HiPrcAlert,2) ) )
-	else if Close crosses under LoPrcAlert then
-		Alert( !( "Price down alert: " + Numtostr(LoPrcAlert,2) ) ) ;
 	end ;
 
 if(PctSpd > HiThreshold) Then
@@ -592,7 +675,7 @@ if(PctSpd <= LoThreshold) Then
 if LastBarOnChart then Begin
 	TotalBars = Currentbar;
 	//Print("TotalBars, %LoTH, %HiTH = ", TotalBars, ",  ", Numtostr(100*TotalLoTH/TotalBars, 2), "%,  ", Numtostr(100*TotalHiTH/TotalBars, 2), "%");
-	once begin 
+	if Printout then begin 
 		//CurPctCapRatio = PctCapRatio;
 		Print("Category=", Category, ",  SecurityType.Future=", SecurityType.Future, ",  Stock=", SecurityType.Stock);
 		Print("SessionStartTime auto=", SessionStartTime(0,1), ",", SessionStartTime(0,2), ",", SessionStartTime(0,3));

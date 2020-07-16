@@ -12,19 +12,21 @@ inputs:
 	 "Enter an EasyLanguage expression to use in the percentage change calculation."], 
 	Length( 1 ) [DisplayName = "Length", ToolTip = 
 	 "Enter number of bars over which to calculate percentage change."], 
-	PctChgMALen( 20 ) [DisplayName = "PctChgMALen", ToolTip = 
+	PctChgMALen( 10 ) [DisplayName = "PctChgMALen", ToolTip = 
 	 "Enter number of bars over which to calculate summization of PctChg."], 
 	BarsAgoHiTH( 1 ) [DisplayName = "BarsAgoHiTH", ToolTip = 
 	 "Enter number of bars over which to check Hi threshold for PctSpd."], 
 	BarsAgoLoTH( 0 ) [DisplayName = "BarsAgoLoTH", ToolTip = 
 	 "Enter number of bars over which to check Lo threshold for PctSpd."], 
-	CapRatio( 3 ) [DisplayName = "CapRatio", ToolTip = 
+	CapRatio1( 3 ) [DisplayName = "CapRatio1", ToolTip = 
 	 "Enter ratio of Data1 capital vs Data2 capital."],
-	CapRatioAdj( 1.2 ) [DisplayName = "CapRatioAdj", ToolTip = 
+	CapRatio2( 1.5 ) [DisplayName = "CapRatio2", ToolTip = 
+	 "Enter ratio of Data1 capital vs Data2 capital."],
+	HedgeCapRatioAdj( 2 ) [DisplayName = "CapRatioAdj", ToolTip = 
 	 "Enter adjusted ratio of CapRatio giving to Data1 VS Data2 bull wing."],
-	CapRatioMax( 4 ) [DisplayName = "CapRatioMax", ToolTip = 
+	HedgeCapRatioMax( 4 ) [DisplayName = "CapRatioMax", ToolTip = 
 	 "Enter min CapRatio allowed"],
-	CapRatioMin( 1 ) [DisplayName = "CapRatioMin", ToolTip = 
+	HedgeCapRatioMin( 1 ) [DisplayName = "CapRatioMin", ToolTip = 
 	 "Enter max CapRatio allowed."],
 	CapRatioTimeStart( 300 ) [DisplayName = "CapRatioTimeStart", ToolTip = 
 	 "Enter the start time HHMM to caculate the CapRatio."],
@@ -60,10 +62,12 @@ inputs:
 	 "Down Color.  Enter plot color to use when percentage change is less than LoAlert."] ;
 	 
 variables:
-	PctSpd( 0 ),
 	PctSpd1( 0 ),
-	CurCapRatio( CapRatio ),
-	CapRatioMaLen( 20 ),
+	PctSpd2( 0 ),
+	HedgeCapRatio( 1 ),
+	CurCapRatio1( CapRatio1 ),
+	CurCapRatio2( CapRatio2 ),
+	CapRatioMaLen( 10 ),
 	PctChg1( 0 ),
 	PctChg2( 0 ),
 	PctChg11( 0 ),
@@ -113,16 +117,16 @@ begin
 			sum1 = Summation(PctChg1, PctChgMALen); //HighestFC
 			sum2 = Summation(PctChg2, PctChgMALen);
 			if(sum1 <> 0 and sum2 <> 0) Then
-				CurCapRatio = Absvalue(sum2/sum1);
+				CurCapRatio1 = Absvalue(sum2/sum1);
 			if(sum2 > 0) Then
-				CurCapRatio = CurCapRatio/CapRatioAdj
+				CurCapRatio1 = CurCapRatio1/HedgeCapRatioAdj
 			else if (sum1 > 0) Then
-				CurCapRatio = CurCapRatio*CapRatioAdj;
+				CurCapRatio1 = CurCapRatio1*HedgeCapRatioAdj;
 			//CurCapRatio = 1/Absvalue(XAverage(PctSpd, CapRatioMaLen));
-			if CurCapRatio > CapRatioMax Then
-				CurCapRatio = CapRatioMax;
-			if CurCapRatio < CapRatioMin Then
-				CurCapRatio = CapRatioMin;
+			if CurCapRatio1 > HedgeCapRatioMax Then
+				CurCapRatio1 = HedgeCapRatioMax;
+			if CurCapRatio1 < HedgeCapRatioMin Then
+				CurCapRatio1 = HedgeCapRatioMin;
 		end;
 	end;
 end;
@@ -144,7 +148,7 @@ variables:  bool status, int i;
 begin
 	status = false;
 	for i=0 to barsAgo Begin
-		if(PctSpd[i] > HiThreshold) Then
+		if(PctSpd1[i] > HiThreshold) Then
 			status = true;
 	end;
 	return status;
@@ -157,7 +161,7 @@ variables:  bool status, int i;
 begin
 	status = false;
 	for i=0 to barsAgo Begin
-		if(PctSpd[i] <= LoThreshold) Then
+		if(PctSpd1[i] <= LoThreshold) Then
 			status = true;
 	end;
 	return status;
@@ -217,7 +221,7 @@ PrcData1 = Close of Data1;
 PrcData2 = Close of Data2;
 
 if GF_IsIntradayBar then begin { ie, if tick, second or minute bars }
-	if GF_FirstBarSession(Sessionstarttime(0, 2)) then
+	if GF_FirstBarSession(Sessionstarttime(0, 2), False) then
 		SetCapRatio();
 	if(GF_FirstBarDay(0)) then begin
 		PrcData1 = Open of Data1;
@@ -245,11 +249,12 @@ if(BaseData1 <> 0 and BaseData2 <> 0) then
 	begin
 		PctChg1 = GF_PercentChg( PrcData1, BaseData1 ) ;
 		PctChg2 = GF_PercentChg( PrcData2, BaseData2 ) ;
-		PctSpd = CurCapRatio*PctChg1 + PctChg2;
+		PctSpd1 = CurCapRatio1*PctChg1 + PctChg2;
+		PctSpd2 = CurCapRatio2*PctChg1 + PctChg2;
 		if (GF_IsIntradayBar and BaseData1 <> 0 and BaseData2 <> 0) then Begin
 			PctChg11 = GF_PercentChg( PrcData1, BaseData11 ) ;
 			PctChg22 = GF_PercentChg( PrcData2, BaseData22 ) ;
-			PctSpd1 = CurCapRatio*PctChg11 + PctChg22;
+			PctSpd1 = CurCapRatio1*PctChg11 + PctChg22;
 		end;
 		if((PctChg1 * PctChg2) > 0) Then begin //Both are the same direction, both up or both dn, it's balanced;
 			UpColor = UpBColor;
@@ -276,10 +281,10 @@ if(BaseData1 <> 0 and BaseData2 <> 0) then
 			PctRatio = Absvalue(PctChg2/PctChg1);}
 		if(currentbar > Maxbarsback) then begin //CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true) then //PctSpd > LoThreshold
 			if(( bartype = 2 and CheckLoThreshold(BarsAgoLoTH) <> true and CheckHiThreshold(BarsAgoHiTH) <> true) or GF_FirstBarDay(0)) then begin
-				PnL = PnL*(1 + PctSpd/100);
+				PnL = PnL*(1 + PctSpd1/100);
 				Print(String.Format("{0}	{1}	{2:MM/dd/yyyy}	{3}	{4}		{5}		{6}		{7}		{8}",
-					Numtostr(PctSpd, 2), Numtostr(PnL, 2), BarDateTime[0], Numtostr(PctChg1, 2), Numtostr(PrcData1, 2), Numtostr(BaseData1, 2),
-					 Numtostr(PctChg2, 2), Numtostr(CapRatio, 1), Numtostr(CurCapRatio, 1)));
+					Numtostr(PctSpd1, 2), Numtostr(PnL, 2), BarDateTime[0], Numtostr(PctChg1, 2), Numtostr(PrcData1, 2), Numtostr(BaseData1, 2),
+					 Numtostr(PctChg2, 2), Numtostr(CapRatio1, 1), Numtostr(CurCapRatio1, 1)));
 				//Print(Numtostr(PctSpd, 2), ", ", Numtostr(PnL, 2), ",", string.Format("{0:MM/dd/yyyy HH:mm:ss}", BarDateTime[0]));
 			end;
 		end;
@@ -287,19 +292,19 @@ if(BaseData1 <> 0 and BaseData2 <> 0) then
 	end;
 BarNoStr = "%Chg" + Numtostr(BarNumber, 0) + "," + Numtostr(PctChg1, 0) + "," + Numtostr(PctChg2, 0);
 
-Plot1( PctSpd, !( "%Chg" ) ) ;
-Plot2( 0, "ZeroLine" ) ;
+Plot1( PctSpd1, !( "%Spd1" ) ) ;
+Plot2( PctSpd2, !( "%Spd2" ) ) ;
 Plot3( PctChg1, !( "%PctChg1" ) ) ;
 Plot4( PctChg2, !( "%PctChg2" ) ) ;
 if GF_IsIntradayBar then Begin
-	if GF_FirstBarSession(Sessionstarttime(0, 2)) or GF_LastBarSession(Sessionendtime(0, 3)) then Begin
-		Plot5( CurCapRatio, !( "CurCapRatio" ) ) ;
+	if GF_FirstBarSession(Sessionstarttime(0, 2), False) or GF_LastBarSession(Sessionendtime(0, 3)) then Begin
+		Plot5( CurCapRatio1, !( "CurCapRatio1" ) ) ;
 		SetPlotColor( 5, White ) ;
 	end
 	else
 		Noplot(5);
 end;
-
+Plot6( HedgeCapRatioAdj, "MeanRevLine" ) ;
 
 //Plot3( PctRatio, "PctRatio" ) ;
 {SetPlotWidth(1, 2);
@@ -310,14 +315,14 @@ SetPlotWidth(4, 1);
 
 
 { color criteria }
-if PctSpd > HiAlert then 
+if PctSpd1 > HiAlert then 
 	SetPlotColor( 1, UpColor ) 
-else if PctSpd < LoAlert then 
+else if PctSpd1 < LoAlert then 
 	SetPlotColor( 1, DnColor ) ;
 SetPlotColor( 3, DarkGray ) ;
 SetPlotColor( 4, DarkGray ) ;
+//SetPlotColor( 6, Magenta ) ;
 
-	
 {
 if PctRatio > HiAlert then 
 	SetPlotColor( 3, UpRColor ) 
@@ -327,15 +332,15 @@ else if PctRatio < LoAlert then
 { alert criteria }
 if AlertEnabled then
 	begin
-	if PctSpd crosses over HiAlert then
+	if PctSpd1 crosses over HiAlert then
 		Alert( !( "Bullish alert"+Numtostr(HiAlert,2) ) )
-	else if PctSpd crosses under LoAlert then
+	else if PctSpd1 crosses under LoAlert then
 		Alert( !( "Bearish alert"+Numtostr(LoAlert,2) ) ) ;
 	end ;
 
-if(PctSpd > HiThreshold) Then
+if(PctSpd1 > HiThreshold) Then
 	TotalHiTH += 1;
-if(PctSpd <= LoThreshold) Then
+if(PctSpd1 <= LoThreshold) Then
 	TotalLoTH += 1;
 
 if LastBarOnChart then Begin

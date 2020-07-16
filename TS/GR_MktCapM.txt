@@ -1,0 +1,51 @@
+{ Search Tag: WA-Market Cap M }
+
+{ 
+Displays market capitalization, in millions.
+
+If an error occurs retrieving a fundamental value, or if the value is not applicable
+or non-meaningful, a blank cell will be displayed.
+
+This indicator is designed for use in grid-based applications, such as RadarScreen.
+}
+
+inputs:
+	VolLength( 100 ) [DisplayName = "VolLength", ToolTip = 
+	 "Enter length to calculate average volume."], 
+	HiAlert( 1000000 ) [DisplayName = "HiAlert", ToolTip = 
+	 "Enter the Market Capitalization level at or above which an alert will be triggered."], 
+	LoAlert( -1000000 ) [DisplayName = "LoAlert", ToolTip = 
+	 "Enter the Market Capitalization level at or below which an alert will be triggered."];
+
+variables:  
+	int MktCap( 0 ), 
+	oErrorCode( 0 ),
+	int volAvg(0);
+
+oErrorCode = 0;
+MktCap = FundValue( "MKTCAP", 0, oErrorCode );
+//MktCap = FundValue( "QCURAST", 0, oErrorCode );
+volAvg = Average(Volume, VolLength);
+Print(Symbol, ": oErrorCode=", oErrorCode, ", AverageVolume()=", volAvg);
+
+if volAvg > 0 or oErrorCode <> fdrOk then
+	MktCap = Close[1]*volAvg/1000;
+if MktCap > 0 then
+begin
+	Plot1( MktCap, !( "MktCap M" ) );
+if volAvg > 0 or oErrorCode <> fdrOk then
+	SetPlotColor(1, Yellow); 
+	{ market capitalization alerts }
+if AlertEnabled then
+	begin
+		if MktCap >= HiAlert then
+			Alert( !( "Market cap >= " ) + NumtoStr( HiAlert, 0 ) )
+		else if MktCap <= LoAlert then
+			Alert( !( "Market cap <= " ) + NumtoStr( LoAlert, 0 ) );
+	end;
+end;
+
+
+{ ** Copyright © TradeStation Technologies, Inc.  All Rights Reserved ** 
+  ** TradeStation reserves the right to modify or overwrite this analysis technique 
+     with each release. ** }
