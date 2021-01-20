@@ -1,0 +1,149 @@
+
+{ Search Tag: WA-Spread RS }
+
+{  
+This grid indicator plots the spread between any two symbols as both a difference
+and a ratio.
+
+This study illustrates how quote fields for symbols other than the symbol to which
+a study is applied can be obtained and used.  
+}
+
+using elsystem ;
+using tsdata.marketdata ;
+
+inputs:
+{	string Symbol1( Symbol ) [DisplayName = "Symbol1", ToolTip = 
+	 "Enter the first symbol used in the spread calculation."],
+	string Symbol2( "SPY" ) [DisplayName = "Symbol2", ToolTip = 
+	 "Enter the second symbol used in the spread calculation."],}
+	bool DiffOrRatio( true ) [DisplayName = "DiffOrRatio", ToolTip = 
+	 "Plot the diff or ratio of the spread, true=diff, false=ratio"],
+	double DiffHiAlert( 1000000 ) [DisplayName = "DiffHiAlert", ToolTip = 
+	 "Difference High Alert.  Enter the spread difference value for the high alert level."],
+	double DiffLoAlert( -1000000 ) [DisplayName = "DiffLoAlert", ToolTip = 
+	 "Difference Low Alert.  Enter the spread difference value for the low alert level."],
+	double RatioHiAlert( 1000000 ) [DisplayName = "RatioHiAlert", ToolTip = 
+	 "Ratio High Alert.  Enter the spread ratio value at or above which an alert is triggered."],
+	double RatioLoAlert( -1 ) [DisplayName = "RatioLoAlert", ToolTip = 
+	 "Ratio Low Alert.  Enter the spread ratio value at or below which an alert is triggered."],
+	
+	double BollingerPrice( Close ) [
+		DisplayName = "BollingerPrice", ToolTip = "Enter an EasyLanguage expression."],
+	
+	double TestPriceUBand( Close ) [
+		DisplayName = "TestPriceUBand", 
+		ToolTip = "Test Price Upper Band.  Enter an EasyLanguage expression.  If this value crosses under the upper band, an alert is triggered."],
+	
+	double TestPriceLBand( Close ) [
+		DisplayName = "TestPriceLBand", 
+		ToolTip = "Test Price Lower Band.  Enter an EasyLanguage expression.  If this value crosses over the lower band, an alert is triggered."],
+	
+	int Length( 20 ) [
+		DisplayName = "Length", 
+		ToolTip = "Enter the number of bars to use in the calculation of the Bollinger bands."],
+
+	double DiffRatio( 2 ) [
+		DisplayName = "DiffRatio", 
+		ToolTip = "Ratio for Price Diff between two large different prices."],
+	
+	double NumDevsUp( 1.6 ) [
+		DisplayName = "NumDevsUp", 
+		ToolTip = "Number of Standard Deviations Up.  Enter the number of standard deviations to use in the calculation of the upper Bollinger band."],
+	
+	double NumDevsDn( -1.6 ) [
+		DisplayName = "NumDevsDn", 
+		ToolTip = "Number of Standard Deviations Down.  Enter the number of standard deviations to use in the calculation of the lower Bollinger band."] ;
+
+variables:
+	intrabarpersist double Symbol1Last( 0 ),
+	intrabarpersist double Symbol2Last( 0 ),
+	intrabarpersist double Symbol1OpenD( 0 ),
+	intrabarpersist double Symbol2OpenD( 0 ),
+	intrabarpersist double DifRat( 0 ),
+	double Avg( 0 ),
+	double SDev( 0 ),
+	double LowerBand( 0 ),
+	double UpperBand( 0 ) //intrabarpersist double Ratio( 0 ),
+	;
+	
+method void UpdateCalcs()
+	begin
+		{ 
+		The following statements assign values of the "Last" quote field to
+		variables.  Quote is an "indexed" collection of Quotes, which is provided by
+		the QuotesProvider, QPSym1.  To obtain the desired quote field from the
+		Quote collection, the name of the desired quote field is provided in
+		brackets (QuoteFields.Last is the name of the desired quote field).  The
+		Quote class has two properties that can return numeric values -	IntegerValue
+		and DoubleValue.  In this case, since the desired number is not	expected to
+		be an integer (it is a price), DoubleValue is used to obtain the value of
+		the quote field.
+		}  
+		Symbol1Last = Close of Data1;// QPSym1.Quote[QuoteFields.Last].DoubleValue ;
+		Symbol2Last = Close of Data2;//QPSym2.Quote[QuoteFields.Last].DoubleValue ;
+		
+		if(DiffOrRatio) then begin
+				Symbol1OpenD = OpenD(0) of Data1;
+				Symbol2OpenD = OpenD(0) of Data2;
+				//Print("Symbol1OpenD=", Symbol1OpenD , "Symbol2OpenD=", Symbol2OpenD);
+				if Symbol1OpenD <> 0 and Symbol2OpenD <> 0 Then begin
+					if Symbol1Last >= Symbol2Last then
+						DifRat = (100*(Symbol2OpenD*Symbol1Last/Symbol1OpenD - Symbol2Last))/Symbol2OpenD
+					else
+						DifRat = (100*(Symbol1Last - Symbol1OpenD*Symbol2Last/Symbol2OpenD))/Symbol1OpenD;
+				end
+					else DifRat = 0;
+
+			end
+		else if Symbol2Last <> 0 then
+			DifRat = Symbol1Last / Symbol2Last ;
+			
+		Avg = AverageFC( DifRat, Length );
+		SDev = StandardDev( DifRat, Length, 1 );
+		UpperBand = Avg + NumDevsUp * SDev;
+		LowerBand = Avg + NumDevsDn * SDev;
+	end ;
+
+method void PlotOutputs()
+	begin
+	Plot1( DifRat, !( "DifRat" ) ) ;
+	Plot2( UpperBand, !( "UpperBand" ) );
+	Plot3( LowerBand, !( "LowerBand" ) );
+	Plot4( Avg, !( "Mean" ) );
+	{Plot2( Symbol1Last, !( "Sym1Last" ) ) ;
+	Plot3( Symbol2, !( "Sym2" ) ) ;
+	Plot4( Symbol2Last, !( "Sym2Last" ) ) ;
+	Plot5( Diff, !( "Sym1-Sym2" ) ) ;
+	Plot6( Ratio, !( "Sym1/Sym2" ) ) ;}
+	end ;
+
+once
+	begin
+	{CreateQuotesProviders() ;}
+	
+	{ create a "bar reference" in the code to enable the option to
+  	  trigger alerts once per bar }
+	//Value99 = Ticks ; 
+ 	{ update the calculations for the initial plot of the values }
+ 	//UpdateCalcs() ;
+ 	end ;
+
+UpdateCalcs() ;
+PlotOutputs() ; 
+if AlertEnabled then
+	begin
+	if DifRat >= DiffHiAlert then
+		Alert( !( "Spread diff >= " ) + NumToStr( DiffHiAlert, 5 ) )
+	else if DifRat <= DiffLoAlert then
+		Alert( !( "Spread diff <= " ) + NumToStr( DiffLoAlert, 5 ) ) ;
+
+	if DifRat >= RatioHiAlert then
+		Alert( !( "Spread ratio >= " ) + NumToStr( RatioHiAlert, 5 ) )
+	else if DifRat <= RatioLoAlert then
+		Alert( !( "Spread ratio <= " ) + NumToStr( RatioLoAlert, 5 ) ) ;
+	end ; 
+ 
+{ ** Copyright © TradeStation Technologies, Inc.  All Rights Reserved ** 
+  ** TradeStation reserves the right to modify or overwrite this analysis technique 
+     with each release. ** }
