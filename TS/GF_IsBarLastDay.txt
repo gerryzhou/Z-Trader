@@ -1,0 +1,8 @@
+Input: BarsBack( numericsimple );
+
+if GF_IsIntradayBar { ie, if tick, second or minute bars }
+and CurrentBar > BarsBack
+and	Date[BarsBack] <> Date[0] then
+	GF_IsBarLastDay = true
+Else
+	GF_IsBarLastDay = false;

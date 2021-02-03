@@ -1,0 +1,50 @@
+{ Helpful instructions on the use of EasyLanguage, such as this, appear below and are 
+  contained within French curly braces {}.  There is no need to erase these 
+  instructions when using EasyLanguage in order for it to function properly, because 
+  this text will be ignored. }
+
+{ STEP 1: Replace <FORMULA> with the oscillator formula you wish to plot.  Note that 
+  Value1 is a numeric variable, a temporary holding place for the result of your 
+  numeric formula.  To assign a non-generic name to your plot, you may replace 
+  "Oscillator" (leaving the quotes) with a name you choose.  The specified name will 
+  appear in the chart analysis data window. }
+input:
+	double LevRatio( 1 ) [
+		DisplayName = "LevRatio", 
+		ToolTip = "Leverage Ratio for ETFs."],
+	int Length( 20 ) [
+		DisplayName = "Length", 
+		ToolTip = "Enter the number of bars to use in the calculation of the MA."];
+
+variables:  
+	Avg( 0 );
+	
+Avg = AverageFC( Close, Length );
+
+if GF_IsBarLastDay(Length) Then
+	Value1 = Dailyopen
+else
+	Value1 = Avg;//Open;//OpenD(0) ;
+	
+if Value1 <> 0 then
+	Value2 = (Close-Value1)/(Value1*LevRatio)
+else 
+	Value2 = 0;
+Plot1( Value2, "OP%Chg" ) ;
+
+once 
+Print(Symbol , "= ", Value1, ", ", Close, ", ", Value2);
+
+{ Leave the next plot statement as is. This draws the horizontal zero (0) line. }
+
+//Plot2( 0, "ZeroLine" ) ;
+
+{ OPTIONAL STEPS: To specify alert criteria that will sound an audible alert when 
+  triggered, replace FALSE with your criteria.  To specify a brief alert description 
+  that will be included in the alert notification pop-up window, insert your 
+  description between the quotes ( "" ).  Note that Condition1 is a logical variable, a 
+  temporary holding place for the true-false result of the criteria. }
+
+{Condition1 = FALSE ;
+if Condition1 then
+	Alert( "" ) ;}
