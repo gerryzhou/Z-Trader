@@ -1,0 +1,323 @@
+
+{ Search Tag: WA-Spread RS }
+
+{  
+This grid indicator plots the spread between any two symbols as both a difference
+and a ratio.
+
+This study illustrates how quote fields for symbols other than the symbol to which
+a study is applied can be obtained and used.  
+}
+
+using elsystem ;
+using tsdata.marketdata ;
+
+inputs:
+{	string Symbol1( Symbol ) [DisplayName = "Symbol1", ToolTip = 
+	 "Enter the first symbol used in the spread calculation."],
+	string Symbol2( "SPY" ) [DisplayName = "Symbol2", ToolTip = 
+	 "Enter the second symbol used in the spread calculation."],}
+	bool DiffOrRatio( true ) [DisplayName = "DiffOrRatio", ToolTip = 
+	 "Plot the diff or ratio of the spread, true=diff, false=ratio"],
+	double DiffHiAlert( 1000000 ) [DisplayName = "DiffHiAlert", ToolTip = 
+	 "Difference High Alert.  Enter the spread difference value for the high alert level."],
+	double DiffLoAlert( -1000000 ) [DisplayName = "DiffLoAlert", ToolTip = 
+	 "Difference Low Alert.  Enter the spread difference value for the low alert level."],
+	double RatioHiAlert( 1000000 ) [DisplayName = "RatioHiAlert", ToolTip = 
+	 "Ratio High Alert.  Enter the spread ratio value at or above which an alert is triggered."],
+	double RatioLoAlert( -1 ) [DisplayName = "RatioLoAlert", ToolTip = 
+	 "Ratio Low Alert.  Enter the spread ratio value at or below which an alert is triggered."],
+	
+	double BollingerPrice( Close ) [
+		DisplayName = "BollingerPrice", ToolTip = "Enter an EasyLanguage expression."],
+	
+	double TestPriceUBand( Close ) [
+		DisplayName = "TestPriceUBand", 
+		ToolTip = "Test Price Upper Band.  Enter an EasyLanguage expression.  If this value crosses under the upper band, an alert is triggered."],
+	
+	double TestPriceLBand( Close ) [
+		DisplayName = "TestPriceLBand", 
+		ToolTip = "Test Price Lower Band.  Enter an EasyLanguage expression.  If this value crosses over the lower band, an alert is triggered."],
+
+	int DataNum( 3 ) [
+		DisplayName = "DataNum", 
+		ToolTip = "Enter the total number of symbols"],
+	
+	int Length( 20 ) [
+		DisplayName = "Length", 
+		ToolTip = "Enter the number of bars to use in the calculation of the Bollinger bands."],
+
+	double LevRatio1( 1 ) [
+		DisplayName = "LevRatio1", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio2( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+	
+	double LevRatio3( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio4( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio5( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio6( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio7( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio8( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio9( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio10( 1 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double NumDevsUpMin( 2 ) [
+		DisplayName = "NumDevsUpMin", 
+		ToolTip = "Number of Standard Deviations Up for min band.  Enter the number of standard deviations to use in the calculation of the upper Bollinger band."],
+	
+	double NumDevsDnMin( -2 ) [
+		DisplayName = "NumDevsDnMin", 
+		ToolTip = "Number of Standard Deviations Down for min band.  Enter the number of standard deviations to use in the calculation of the lower Bollinger band."],
+	
+	double NumDevsUpMax( 1 ) [
+		DisplayName = "NumDevsUpMax", 
+		ToolTip = "Number of Standard Deviations Up for max band.  Enter the number of standard deviations to use in the calculation of the upper Bollinger band."],
+	
+	double NumDevsDnMax( -1 ) [
+		DisplayName = "NumDevsDnMax", 
+		ToolTip = "Number of Standard Deviations Down for max band.  Enter the number of standard deviations to use in the calculation of the lower Bollinger band."],
+	{}
+	{color names: "azure", "chartreuse", "orange", "rose", "springgreen", "violet".}
+	{Black,Blue,Cyan,Green,Magenta,Red,Yellow,White,
+	DarkBlue,DarkCyan,DarkGreen,DarkMagenta,DarkRed,DarkBrown,DarkGray,LightGray}
+	Int Data1Color( DarkGray ) [
+		DisplayName = "Data1Color", 
+		ToolTip = "Data1Color."],
+	Int Data2Color( White ) [
+		DisplayName = "Data2Color", 
+		ToolTip = "Data2Color."],
+	Int Data3Color( Yellow ) [
+		DisplayName = "Data3Color", 
+		ToolTip = "Data3Color."],
+	Int Data4Color( MyColors("orange") ) [
+		DisplayName = "Data4Color", 
+		ToolTip = "Data4Color."],
+	Int Data5Color( Green ) [
+		DisplayName = "Data5Color", 
+		ToolTip = "Data5Color."],
+	Int Data6Color( Magenta ) [
+		DisplayName = "Data6Color", 
+		ToolTip = "Data6Color."],
+	Int Data7Color( Red ) [
+		DisplayName = "Data7Color", 
+		ToolTip = "Data7Color."],
+	Int Data8Color( MyColors("violet") ) [
+		DisplayName = "Data8Color", 
+		ToolTip = "Data8Color."],
+	Int Data9Color( Cyan ) [
+		DisplayName = "Data9Color", 
+		ToolTip = "Data9Color."],
+	Int Data10Color( DarkBlue ) [
+		DisplayName = "Data10Color", 
+		ToolTip = "Data10Color."]
+	;
+
+	Array: Int TextColors[10](Data3Color);
+	
+variables:
+	double AvgAll(0),
+	double SDevAll(0),
+	double SDevMin( 99999 ),
+	double SDevMax( -99999 ),
+	intrabarpersist double LowerBBMin( 0 ),
+	intrabarpersist double LowerBBMax( 0 ),
+	intrabarpersist double UpperBBMin( 0 ),
+	intrabarpersist double UpperBBMax( 0 ), //intrabarpersist double Ratio( 0 ),
+	intrabarpersist double LowerBBMinIdx( 0 ),	
+	intrabarpersist double LowerBBMaxIdx( 0 ),
+	intrabarpersist double UpperBBMinIdx( 0 ),
+	intrabarpersist double UpperBBMaxIdx( 0 ) //intrabarpersist double Ratio( 0 ),
+	;
+Array:
+	intrabarpersist double SymbolLast[10]( 0 ),
+	intrabarpersist double SymbolOpenD[10]( 0 ),
+	intrabarpersist double DifRat[10]( 0 ),
+	double Avg[10]( 0 ),
+	double SDev[10]( 0 ),
+	double LowerBB[10]( 0 ),
+	double UpperBB[10]( 0 );
+	
+method void InitTextColors() Begin
+	TextColors[0] = Data1Color;
+	TextColors[1] = Data2Color;
+	TextColors[2] = Data3Color;
+	TextColors[3] = Data4Color;
+	TextColors[4] = Data5Color;
+	TextColors[5] = Data6Color;
+	TextColors[6] = Data7Color;
+	TextColors[7] = Data8Color;
+	TextColors[8] = Data9Color;
+	TextColors[9] = Data10Color;
+End;
+
+method void UpdateCalcs() begin
+	{ 
+	The following statements assign values of the "Last" quote field to
+	variables.  Quote is an "indexed" collection of Quotes, which is provided by
+	the QuotesProvider, QPSym1.  To obtain the desired quote field from the
+	Quote collection, the name of the desired quote field is provided in
+	brackets (QuoteFields.Last is the name of the desired quote field).  The
+	Quote class has two properties that can return numeric values -	IntegerValue
+	and DoubleValue.  In this case, since the desired number is not	expected to
+	be an integer (it is a price), DoubleValue is used to obtain the value of
+	the quote field.
+	}  
+	SymbolLast[0] = Close of Data(1);// QPSym1.Quote[QuoteFields.Last].DoubleValue ;
+	SymbolOpenD[0] = OpenD(0) of Data(1);//QPSym2.Quote[QuoteFields.Last].DoubleValue ;
+	
+	for Value1 = 1 to DataNum-1 Begin
+		if(DiffOrRatio) then begin
+			SymbolLast[Value1] = Close of Data(Value1+1);
+			SymbolOpenD[Value1] = OpenD(0) of Data(Value1+1);
+				//Symbol2OpenD = OpenD(0) of Data2;
+				//Print("Symbol1OpenD=", Symbol1OpenD , "Symbol2OpenD=", Symbol2OpenD);
+			if SymbolOpenD[0] <> 0 and SymbolOpenD[Value1] <> 0 Then begin
+				if SymbolLast[Value1] >= SymbolLast[0] then
+					DifRat[Value1] = (100*(SymbolLast[Value1] - SymbolOpenD[Value1]*SymbolLast[0]/SymbolOpenD[0]))/SymbolOpenD[Value1]
+				else
+					DifRat[Value1] = (100*(SymbolOpenD[0]*SymbolLast[Value1]/SymbolOpenD[Value1] - SymbolLast[0]))/SymbolOpenD[0];
+			end
+				else DifRat[Value1] = 0;
+
+		end
+		else if SymbolLast[0] <> 0 then
+			DifRat[Value1] = SymbolLast[Value1] / SymbolLast[0] ;
+				
+		Avg[Value1] = AverageFC( DifRat[Value1], Length );
+		SDev[Value1] = StandardDev( DifRat[Value1], Length, 1 );
+		//SDevMin = Minlist(SDevMin, SDev[Value1]);		
+		SDevMax = Maxlist(SDevMax, SDev[Value1]);
+	End; //for loop
+	AvgAll = AverageArray(Avg, DataNum);
+	SDevAll = AverageArray(SDev, DataNum);
+	UpperBBMin = AvgAll + NumDevsUpMin * SDevAll;
+	UpperBBMax = AvgAll + NumDevsUpMax * SDevMax;
+	LowerBBMin = AvgAll + NumDevsDnMin * SDevAll;
+	LowerBBMax = AvgAll + NumDevsDnMax * SDevMax;
+end ;
+
+method void PlotOutputs() begin
+	Plot1( DifRat[1], !( "DifRat1" ) ) ;
+	if DataNum > 2 Then
+		Plot2( DifRat[2], !( "DifRat2" ) ) ;
+	if DataNum > 3 Then
+		Plot3( DifRat[3], !( "DifRat3" ) ) ;
+	if DataNum > 4 Then
+		Plot4( DifRat[4], !( "DifRat4" ) ) ;
+	if DataNum > 5 Then
+		Plot5( DifRat[5], !( "DifRat5" ) ) ;
+	if DataNum > 6 Then
+		Plot6( DifRat[6], !( "DifRat6" ) ) ;
+	if DataNum > 7 Then
+		Plot7( DifRat[7], !( "DifRat7" ) ) ;
+	if DataNum > 8 Then
+		Plot8( DifRat[8], !( "DifRat8" ) ) ;
+	if DataNum > 9 Then
+		Plot9( DifRat[9], !( "DifRat9" ) ) ;
+	if DataNum > 10 Then
+		Plot10( DifRat[10], !( "DifRat10" ) ) ;
+	
+	Plot11( UpperBBMax, !( "UpperBBMax" ) );
+	Plot12( LowerBBMax, !( "LowerBBMax" ) );
+	Plot13( UpperBBMin, !( "UpperBBMin" ) );
+	Plot14( LowerBBMin, !( "LowerBBMin" ) );
+	Plot15( AvgAll, !( "MeanAll" ) );
+	{Plot2( Symbol1Last, !( "Sym1Last" ) ) ;
+	Plot3( Symbol2, !( "Sym2" ) ) ;
+	Plot4( Symbol2Last, !( "Sym2Last" ) ) ;
+	Plot5( Diff, !( "Sym1-Sym2" ) ) ;
+	Plot6( Ratio, !( "Sym1/Sym2" ) ) ;}
+	SetDataNColors();
+end ;
+
+method void SetDataNColors() Begin
+	try
+		If BarNumber = 1 Then Begin
+			Value2 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data2);
+			Text_setcolor(Value2, Data2Color);
+			Value3 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data3);
+{			Value4 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data4);
+			Value5 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data5);
+			Value6 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data6);
+			Value7 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data7);
+			Value8 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data8);
+			Value9 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data9);
+			Value10 = Text_New(Date, Time, Close + Range*.25, GetSymbolName of Data10);}
+ 		End
+ 		else Begin
+ 			Value12 = Text_SetLocation(Value2, Date, Time, Close + Range*.25);
+ 		end;
+ 	catch(Exception ex)
+ 		Print("SetDataNColors");
+ 	end;
+end;
+
+once
+	begin
+	{CreateQuotesProviders() ;}
+	
+	{ create a "bar reference" in the code to enable the option to
+  	  trigger alerts once per bar }
+	//Value99 = Ticks ; 
+ 	{ update the calculations for the initial plot of the values }
+ 	//UpdateCalcs() ;
+ 		try
+  		// statements to be tested for anexception
+ 			for Value20 = 1 to DataNum 
+				Begin
+					if Getsymbolname of Data(Value10) <> "" Then
+						Value21 = Value21 + 1;
+				End;
+		catch (exception ex)
+   			// statements that handle ageneral exception
+   			Print(DataNum, " symbols expected", );
+		finally
+   		// statements that always executedafter any try or catch statements are executed
+   			Print("Total symbols=", Value21);
+   		end;
+ 	end ;
+
+UpdateCalcs() ;
+PlotOutputs() ; 
+if AlertEnabled then
+	begin
+	if DifRat[1] >= DiffHiAlert then
+		Alert( !( "Spread diff >= " ) + NumToStr( DiffHiAlert, 5 ) )
+	else if DifRat[1] <= DiffLoAlert then
+		Alert( !( "Spread diff <= " ) + NumToStr( DiffLoAlert, 5 ) ) ;
+
+	if DifRat[1] >= RatioHiAlert then
+		Alert( !( "Spread ratio >= " ) + NumToStr( RatioHiAlert, 5 ) )
+	else if DifRat[1] <= RatioLoAlert then
+		Alert( !( "Spread ratio <= " ) + NumToStr( RatioLoAlert, 5 ) ) ;
+	end ; 
+ 
+{ ** Copyright © TradeStation Technologies, Inc.  All Rights Reserved ** 
+  ** TradeStation reserves the right to modify or overwrite this analysis technique 
+     with each release. ** }
