@@ -8,6 +8,8 @@ and a ratio.
 This study illustrates how quote fields for symbols other than the symbol to which
 a study is applied can be obtained and used.  
 }
+DefineDLLFunc:  "NtDirect.dll", lpstr, "GetSpecialFolder", int;
+[LegacyColorValue = true]; 
 
 using elsystem ;
 using tsdata.marketdata ;
@@ -43,9 +45,13 @@ inputs:
 		DisplayName = "Length", 
 		ToolTip = "Enter the number of bars to use in the calculation of the Bollinger bands."],
 
-	double DiffRatio( 2 ) [
-		DisplayName = "DiffRatio", 
-		ToolTip = "Ratio for Price Diff between two large different prices."],
+	double LevRatio1( 2 ) [
+		DisplayName = "LevRatio1", 
+		ToolTip = "Leverage Ratio for ETFs."],
+
+	double LevRatio2( 2 ) [
+		DisplayName = "LevRatio2", 
+		ToolTip = "Leverage Ratio for ETFs."],
 	
 	double NumDevsUp( 1.6 ) [
 		DisplayName = "NumDevsUp", 
@@ -60,12 +66,23 @@ variables:
 	intrabarpersist double Symbol2Last( 0 ),
 	intrabarpersist double Symbol1OpenD( 0 ),
 	intrabarpersist double Symbol2OpenD( 0 ),
+	intrabarpersist double Symbol1CloseD1( 0 ), {Day close of last Day}
+	intrabarpersist double Symbol2CloseD1( 0 ),
+	intrabarpersist double Symbol1CloseD2( 0 ), {Day close of the Day before last}
+	intrabarpersist double Symbol2CloseD2( 0 ),
 	intrabarpersist double DifRat( 0 ),
 	double Avg( 0 ),
 	double SDev( 0 ),
-	double LowerBand( 0 ),
-	double UpperBand( 0 ) //intrabarpersist double Ratio( 0 ),
-	;
+	double LowerBB( 0 ),
+	double UpperBB( 0 ), //intrabarpersist double Ratio( 0 ),
+	double DifRatDMax(-99999), {Intraday max DifRat}
+	double DifRatDMin(99999), {Intraday min DifRat}
+	double Symbol1PctD(0),
+	double Symbol2PctD(0),
+	buffer(""),               	{ output buffer }
+	linesInBuffer(0),            { actual # of lines in output buffer }
+	maxLinesInBuffer(1000),       { max. # of lines in output buffer }
+	outputFile("")	;
 	
 method void UpdateCalcs()
 	begin
@@ -84,14 +101,14 @@ method void UpdateCalcs()
 		Symbol2Last = Close of Data2;//QPSym2.Quote[QuoteFields.Last].DoubleValue ;
 		
 		if(DiffOrRatio) then begin
-				Symbol1OpenD = OpenD(0) of Data1;
-				Symbol2OpenD = OpenD(0) of Data2;
+				Symbol1OpenD = OpenD(0) of Data(1);
+				Symbol2OpenD = OpenD(0) of Data(2);
 				//Print("Symbol1OpenD=", Symbol1OpenD , "Symbol2OpenD=", Symbol2OpenD);
 				if Symbol1OpenD <> 0 and Symbol2OpenD <> 0 Then begin
 					if Symbol1Last >= Symbol2Last then
-						DifRat = (100*(Symbol2OpenD*Symbol1Last/Symbol1OpenD - Symbol2Last))/Symbol2OpenD
+						DifRat = (100*(Symbol1Last - Symbol1OpenD*Symbol2Last/Symbol2OpenD))/Symbol1OpenD
 					else
-						DifRat = (100*(Symbol1Last - Symbol1OpenD*Symbol2Last/Symbol2OpenD))/Symbol1OpenD;
+						DifRat = (100*(Symbol2OpenD*Symbol1Last/Symbol1OpenD - Symbol2Last))/Symbol2OpenD;
 				end
 					else DifRat = 0;
 
@@ -101,33 +118,72 @@ method void UpdateCalcs()
 			
 		Avg = AverageFC( DifRat, Length );
 		SDev = StandardDev( DifRat, Length, 1 );
-		UpperBand = Avg + NumDevsUp * SDev;
-		LowerBand = Avg + NumDevsDn * SDev;
+		UpperBB = Avg + NumDevsUp * SDev;
+		LowerBB = Avg + NumDevsDn * SDev;
+		if GF_FirstBarDay(0) then Begin
+			Symbol1CloseD1 = Close[1] of Data(1);
+			Symbol2CloseD1 = Close[1] of Data(2);
+			Symbol1CloseD2 = CloseD(2) of Data(1);
+			Symbol2CloseD2 = CloseD(2) of Data(2);
+			Symbol1PctD = GF_PercentChg(Symbol1CloseD1, Symbol1CloseD2);
+			Symbol2PctD = GF_PercentChg(Symbol2CloseD1, Symbol2CloseD2);
+			buffer = buffer + GF_GetDateStr(1) + "	" 
+				+ NumToStr (DifRatDMin, 2) + "	" 
+				+ NumToStr (DifRatDMax, 2) + "	" 
+				+ NumToStr (Symbol1PctD, 2) + ":" + NumToStr (Symbol2PctD, 2) 
+				+ "	" + NewLine;
+			Print(Date[1], ": Symbol1CloseD1,D2=(", Symbol1CloseD1, ",", Symbol1CloseD2, "), Symbol2CloseD1,D2=(", Symbol2CloseD1, ",", Symbol2CloseD2, ")");
+			linesInBuffer = linesInBuffer + 1;
+			FlushToFile();
+			DifRatDMax = -99999;
+			DifRatDMin = 99999;
+		End
+		Else Begin
+			DifRatDMax = Maxlist(DifRat, DifRatDMax);
+			DifRatDMin = Minlist(DifRat, DifRatDMin);
+		End;
 	end ;
 
-method void PlotOutputs()
-	begin
+method void PlotOutputs() begin
 	Plot1( DifRat, !( "DifRat" ) ) ;
-	Plot2( UpperBand, !( "UpperBand" ) );
-	Plot3( LowerBand, !( "LowerBand" ) );
+	Plot2( UpperBB, !( "UpperBB" ) );
+	Plot3( LowerBB, !( "LowerBB" ) );
 	Plot4( Avg, !( "Mean" ) );
 	{Plot2( Symbol1Last, !( "Sym1Last" ) ) ;
 	Plot3( Symbol2, !( "Sym2" ) ) ;
 	Plot4( Symbol2Last, !( "Sym2Last" ) ) ;
 	Plot5( Diff, !( "Sym1-Sym2" ) ) ;
 	Plot6( Ratio, !( "Sym1/Sym2" ) ) ;}
-	end ;
+end ;
 
-once
-	begin
+method void FlushToFile() Begin	
+	if linesInBuffer > maxLinesInBuffer or LastBarOnChart then begin
+		try 
+	 		FileAppend(outputFile, buffer);
+	 		linesInBuffer = 0;
+	 		buffer = "";
+	 	catch (elsystem.exception ex)
+	 		print("FileAppend error:", ex.Message);
+	 	end;
+	end;
+End;
+
+once if Currentbar of Data(1) = 1 then begin
 	{CreateQuotesProviders() ;}
-	
+	if outputFile = "" then begin
+	 		outputFile = GetSpecialFolder(0) + "\xx\TD\Bright\Pair\SemiCond\" + GetSymbolName of Data(1) + "-" + Symbol of Data(2) + ".txt";
+	End;
 	{ create a "bar reference" in the code to enable the option to
   	  trigger alerts once per bar }
 	//Value99 = Ticks ; 
  	{ update the calculations for the initial plot of the values }
  	//UpdateCalcs() ;
- 	end ;
+end ;
+
+if LastBarOnChart then Begin
+	Print("outputFile=" , outputFile, " ", GF_GetDateStr(0));//string.Format("{0:yyyy-MM-dd}", BarDateTime[0])
+	FlushToFile();
+End;
 
 UpdateCalcs() ;
 PlotOutputs() ; 

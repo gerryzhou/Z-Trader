@@ -1,0 +1,9 @@
+inputs: BarsBack( numeric ) ;
+
+if Date[BarsBack] <> 0 then
+	GF_GetDateStr = string.Format("{0:yyyy-MM-dd}", BarDateTime[BarsBack])
+	{Numtostr(Year(Date[BarsBack]),0) + "-" 
+		+ Numtostr(Month(Date[BarsBack]),0) + "-" 
+		+ Numtostr(Day(Date[BarsBack]),0)}
+Else
+	GF_GetDateStr = "";
