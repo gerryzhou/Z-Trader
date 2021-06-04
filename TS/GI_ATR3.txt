@@ -1,0 +1,149 @@
+inputs:
+	ATRLength( 20 ) [
+		DisplayName = "ATRLength", 
+		ToolTip = "Average True Range Length.  Enter the number of bars to use in the moving average of true range."],
+	PrcBackBarsSlow( 5 ) [
+		DisplayName = "PrcBackBarsSlow", 
+		ToolTip = "PrcBackBarsSlow Length.  Enter the number of bars to lookback the price"],
+	PrcBackBarsFast( 1 ) [
+		DisplayName = "PrcBackBarsFast", 
+		ToolTip = "PrcBackBarsFast Length.  Enter the number of bars to lookback the price"],
+	CapRatio1( 2 ) [
+		DisplayName = "CapRatio1", 
+		ToolTip = "CapRatio1."],
+	CapRatio2( 1 ) [
+		DisplayName = "CapRatio2", 
+		ToolTip = "CapRatio2."],
+	CapDollars( 5000 ) [
+		DisplayName = "CapDollars", 
+		ToolTip = "CapDollars."],
+	CapLeverage( 1 ) [
+		DisplayName = "CapLeverage", 
+		ToolTip = "CapLeverage."]
+		;
+
+vars: 
+bpValue1(0),
+bpValue2(0),
+ATRValRatio(0),
+CapRatio11(CapRatio1),
+CapRatio22(CapRatio2),
+ATR1( 0 ),
+ATR2( 0 ),
+MA1(-1),
+MA2(-1),
+CloseD1(0),
+CloseD2(0),
+SlowPrcChg1( 0 ),
+SlowPrcChg2( 0 ),
+FastPrcChg1( 0 ),
+FastPrcChg2( 0 ),
+DifRatFast(0),
+DifRatSlow(0)
+;
+
+once Begin
+	bpValue1 = Bigpointvalue of data(1);
+	bpValue2 = Bigpointvalue of data(2);
+End;
+
+ATR1 = AvgTrueRange( ATRLength ) of data(1);
+ATR2 = AvgTrueRange( ATRLength ) of data(2);
+
+MA1 = AverageFC(Close of Data(1), ATRLength) ;
+MA2 = AverageFC(Close of Data(2), ATRLength) ;
+
+CloseD1 = CloseD(1) of Data(1);
+CloseD2 = CloseD(1) of Data(2);
+
+FastPrcChg1 = Close of data(1) - Close[PrcBackBarsFast] of data(1);
+FastPrcChg2 = Close of data(2) - Close[PrcBackBarsFast] of data(2);
+
+SlowPrcChg1 = Close of data(1) - Close[PrcBackBarsSlow] of data(1);
+SlowPrcChg2 = Close of data(2) - Close[PrcBackBarsSlow] of data(2);
+
+Value1 =  bpValue1*FastPrcChg1;
+Value2 =  bpValue2*FastPrcChg2;
+
+Value3 =  bpValue1*SlowPrcChg1;
+Value4 =  bpValue2*SlowPrcChg2;
+
+if Category = 0 Then //0=Futures, 2=Stock
+	Begin
+		if bpValue2 = 0 or ATR2 = 0 then Begin
+			ATRValRatio = 0;
+			End
+		else Begin
+			ATRValRatio = (100*bpValue1*ATR1)/(bpValue2*ATR2) ;			
+		End;
+	End
+else Begin
+		if MA1 = 0 or MA2=0 then Begin
+			ATRValRatio = 0;
+		End
+		Else Begin
+			ATRValRatio = (100*ATR1*MA2)/(ATR2*MA1); //Standerized ATR ratio
+		End;
+	End;
+
+if ATRValRatio > 0 and ATRValRatio < 40 Then Begin
+	CapRatio11 = 3;
+	CapRatio22 = 1;
+	End
+else if ATRValRatio < 60 Then Begin
+	CapRatio11 = 2;
+	CapRatio22 = 1;
+	End
+else if ATRValRatio < 90 Then Begin
+	CapRatio11 = 3;
+	CapRatio22 = 2;
+	End
+else Begin
+	CapRatio11 = 1;
+	CapRatio22 = 1;
+	End;
+
+if Category = 0 Then //0=Futures, 2=Stock
+	Begin
+		if Value1 <> 0 and Value2 <> 0 Then begin
+			DifRatFast = (CapRatio11*Value1 - CapRatio22*Value2)/CapLeverage;
+		end
+			else DifRatFast = 0;
+		
+		if Value3 <> 0 and Value4 <> 0 Then begin
+			DifRatSlow = (CapRatio11*Value3 - CapRatio22*Value4)/CapLeverage;
+		end
+			else DifRatSlow = 0;
+	End
+else Begin
+		if CloseD1 <> 0 and CloseD2 <> 0 Then Begin
+			if Value1 <> 0 and Value2 <> 0 and CloseD1 <> 0 and CloseD2 <> 0 Then begin
+				DifRatFast = CapDollars*(CapRatio11*Value1/CloseD1 - CapRatio22*Value2/CloseD2)/CapLeverage;
+			end
+				else DifRatFast = 0;
+			
+			if Value3 <> 0 and Value4 <> 0  and CloseD1 <> 0 and CloseD2 <> 0 Then begin
+				DifRatSlow = CapDollars*(CapRatio11*Value3/CloseD1 - CapRatio22*Value4/CloseD2)/CapLeverage;
+			end
+				else DifRatSlow = 0;
+		End
+		else Begin
+			DifRatFast = 0;
+			DifRatSlow = 0;
+		End;
+	End;
+
+if ATRValRatio <> 0 Then
+	Plot1( ATRValRatio, !("ATRValRatio") ) 
+else Noplot(1);
+Plot2( DifRatFast, !( "DifRatFast" ) );
+Plot3( DifRatSlow, !( "DifRatSlow" ) );
+
+Plot4( Value1, !( "CapFastChg1" ) ); 
+Plot5( Value2, !( "CapFastChg2" ) ); 
+
+Plot6( Value3, !( "CapSlowChg1" ) ); 
+Plot7( Value4, !( "CapSlowChg2" ) ); 
+
+//print(Date[0], "- ATR1=", ATR1, ", ATR2=", ATR2, ", bpValue1=", bpValue1, ", bpValue2=", bpValue2,
+ // ", Value1=", Value1, "Value2=", Value2, "ATRValRatio=", Value3);
