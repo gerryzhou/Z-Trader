@@ -2,12 +2,15 @@ inputs:
 	ATRLength( 20 ) [
 		DisplayName = "ATRLength", 
 		ToolTip = "Average True Range Length.  Enter the number of bars to use in the moving average of true range."],
-	PrcBackBarsSlow( 5 ) [
+	PrcBackBarsSlow( -5 ) [
 		DisplayName = "PrcBackBarsSlow", 
-		ToolTip = "PrcBackBarsSlow Length.  Enter the number of bars to lookback the price"],
+		ToolTip = "PrcBackBarsSlow Length. Enter the number of bars to lookback the price, negative then back to OpenD"],
 	PrcBackBarsFast( 1 ) [
 		DisplayName = "PrcBackBarsFast", 
-		ToolTip = "PrcBackBarsFast Length.  Enter the number of bars to lookback the price"],
+		ToolTip = "PrcBackBarsFast Length. Enter the number of bars to lookback the price"],
+	SessionOpenTime( 830 ) [
+		DisplayName = "SessionOpenTime", 
+		ToolTip = "Enter the morning session open time"],
 	CapRatio1( 2 ) [
 		DisplayName = "CapRatio1", 
 		ToolTip = "CapRatio1."],
@@ -34,6 +37,8 @@ MA1(-1),
 MA2(-1),
 CloseD1(0),
 CloseD2(0),
+OpenD1(0),
+OpenD2(0),
 SlowPrcChg1( 0 ),
 SlowPrcChg2( 0 ),
 FastPrcChg1( 0 ),
@@ -56,11 +61,26 @@ MA2 = AverageFC(Close of Data(2), ATRLength) ;
 CloseD1 = CloseD(1) of Data(1);
 CloseD2 = CloseD(1) of Data(2);
 
+if GF_FirstBarSession(SessionOpenTime, false) and Category = 0 Then Begin
+	OpenD1 = Open[0] of Data(1);
+	OpenD2 = Open[0] of Data(2);
+End
+Else if Category <> 0 then Begin
+	OpenD1 = OpenD(0) of Data(1);
+	OpenD2 = OpenD(0) of Data(2);
+End;
+
 FastPrcChg1 = Close of data(1) - Close[PrcBackBarsFast] of data(1);
 FastPrcChg2 = Close of data(2) - Close[PrcBackBarsFast] of data(2);
 
-SlowPrcChg1 = Close of data(1) - Close[PrcBackBarsSlow] of data(1);
-SlowPrcChg2 = Close of data(2) - Close[PrcBackBarsSlow] of data(2);
+if PrcBackBarsSlow > 0 And Category = 0 Then Begin
+	SlowPrcChg1 = Close of data(1) - Close[PrcBackBarsSlow] of data(1);
+	SlowPrcChg2 = Close of data(2) - Close[PrcBackBarsSlow] of data(2);
+End
+else Begin
+	SlowPrcChg1 = Close of data(1) - OpenD1;
+	SlowPrcChg2 = Close of data(2) - OpenD2;
+End;
 
 Value1 =  bpValue1*FastPrcChg1;
 Value2 =  bpValue2*FastPrcChg2;
@@ -86,22 +106,24 @@ else Begin
 		End;
 	End;
 
-if ATRValRatio > 0 and ATRValRatio < 40 Then Begin
-	CapRatio11 = 3;
-	CapRatio22 = 1;
-	End
-else if ATRValRatio < 60 Then Begin
-	CapRatio11 = 2;
-	CapRatio22 = 1;
-	End
-else if ATRValRatio < 90 Then Begin
-	CapRatio11 = 3;
-	CapRatio22 = 2;
-	End
-else Begin
-	CapRatio11 = 1;
-	CapRatio22 = 1;
-	End;
+if Category = 0 then Begin
+	if ATRValRatio > 0 and ATRValRatio < 40 Then Begin
+		CapRatio11 = 3;
+		CapRatio22 = 1;
+		End
+	else if ATRValRatio < 60 Then Begin
+		CapRatio11 = 2;
+		CapRatio22 = 1;
+		End
+	else if ATRValRatio < 90 Then Begin
+		CapRatio11 = 3;
+		CapRatio22 = 2;
+		End
+	else Begin
+		CapRatio11 = 1;
+		CapRatio22 = 1;
+		End;
+End;
 
 if Category = 0 Then //0=Futures, 2=Stock
 	Begin
@@ -147,3 +169,4 @@ Plot7( Value4, !( "CapSlowChg2" ) );
 
 //print(Date[0], "- ATR1=", ATR1, ", ATR2=", ATR2, ", bpValue1=", bpValue1, ", bpValue2=", bpValue2,
  // ", Value1=", Value1, "Value2=", Value2, "ATRValRatio=", Value3);
+print(Date[0], "- ", Time[0], "- OpenD1=", OpenD1, ", OpenD2=", OpenD2 )
